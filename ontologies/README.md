@@ -26,9 +26,19 @@ mongoimport --db ontologies --collection trait < trait.Term.json
 ```
 $ mongo
 > use ontologies
-> db.go.ensureIndex( { "LR" : "2d" }, { min: 0, max: 10000000 } )
+> db.go.ensureIndex({name:"text",synonym:"text",def:"text",comment:"text"},{name:"TextIndex"})
+> db.ncbitaxon.ensureIndex({name:"text",synonym:"text",def:"text",comment:"text"},{name:"TextIndex"})
+> db.plant_ontology.ensureIndex({name:"text",synonym:"text",def:"text",comment:"text"},{name:"TextIndex"})
+> db.trait.ensureIndex({name:"text",synonym:"text",def:"text",comment:"text"},{name:"TextIndex"})
+> db.go.ensureIndex( { LR : "2d" }, { min: 0, max: 10000000 } )
 > db.ncbitaxon.ensureIndex( { "LR" : "2d" }, { min: 0, max: 10000000 } )
 > db.plant_ontology.ensureIndex( { "LR" : "2d" }, { min: 0, max: 10000000 } )
 > db.trait.ensureIndex( { "LR" : "2d" }, { min: 0, max: 10000000 } )
 > exit
+```
+## Example queries
+
+```
+> db.go.find({ $text: { $search: "H3-K9 methylation" }},{ name:1,namespace:1,score: { $meta: "textScore"}}).sort({score: {$meta: "textScore"}})
+db.go.find( { LR : { $geoWithin : { $box : [[836731,0],[836742,836742]] } } } )
 ```
