@@ -64,8 +64,12 @@ while (<>) {
                 push @{$theRoots{$key}}, $hsh{id} unless $hsh{is_obsolete};
             }
             # use the id field as the mongo _id
-            $hsh{_id} = $hsh{id};
-            delete $hsh{id};
+            if ($hsh{id} =~ m/^.*:0*(\d+)$/) {
+                $hsh{_id} = $1;
+            }
+            else {
+                $hsh{_id} = $hsh{id};
+            }
             # save a copy for later
             %{$ontology{$key}{$hsh{_id}}} = %hsh;
         }
@@ -90,6 +94,9 @@ for my $okey (keys %ontology) {
             }
             delete $v->{L};
             delete $v->{R};
+        }
+        if (exists $v->{_id} and $v->{_id} =~ m/^\d+$/) {
+            $v->{_id} += 0;
         }
         print $fh encode_json($v), "\n";
     }
