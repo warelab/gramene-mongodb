@@ -699,10 +699,13 @@ sub geneLineJSON {
       $content{$gt}=1;
   }
   while (my ($db,$hsh) = each %{$data{xrefs}}) {
-      next if ($SKIP_XREF{$db});
+      if ($SKIP_XREF{$db}) {
+          delete $data{xrefs}{$db};
+          next;
+      }
       my @k = keys %$hsh;
       for my $id (@k) {
-	  $content{$id}=1;
+	      $content{$id}=1;
       }
       $data{xrefs}{$db} = \@k;
   }
@@ -710,8 +713,8 @@ sub geneLineJSON {
   for my $domain (@{$data{domains}}) {
       $content{$domain}=1;
   }
-
-  $data{content} = join(" ",keys %content);
+  # The content field is unnecessary since you can ensureIndex({"$**":"text"},{name:"allFields"})
+  # $data{content} = join(" ",keys %content);
 
   my $json = encode_json \%data;
 
