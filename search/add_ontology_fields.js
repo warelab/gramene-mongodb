@@ -46,6 +46,7 @@ var collectionLUT = {
 
 var MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
+var async = require('async');
 var filename = process.argv[2];
 
 // given a list of terms, this is how you get the
@@ -93,44 +94,61 @@ function termsToInts(terms) {
 // connect to the ontologies database
 MongoClient.connect('mongodb://127.0.0.1:27017/ontologies', function(err, db) {
     if(err) throw err;
-        
+
     // setup reader
     require('readline').createInterface({
         input: fs.createReadStream(filename),
         terminal: false
     }).on('line', function(line) { // one JSON object per line
        var obj = JSON.parse(line);
-       for(var field in collectionLUT) {
-           var terms = getField(obj,field.split(':'));
-           if (terms) {
-               if (typeof terms[0] === "string") {
-                   terms = termsToInts(terms);
+
+       // Parallel ontology query functions
+       var queryFunctions = [];
+
+       // Functor necessary to ensure 'field' variable closure
+       function queryFunctor(field) {
+           "use strict";
+           return function (done) {
+               var terms = getField(obj, field.split(':'));
+               var coll;
+               if (terms) {
+                   if (typeof terms[0] === "string") {
+                       terms = termsToInts(terms);
+                   }
+
+                   // increment numGenes.direct based on terms
+
+                   console.log(field,terms);
+                   coll = db.collection(collectionLUT[field].ontology);
                }
+               done(null, coll);
+           };
+       }
 
-               // increment numGenes.direct based on terms
-               
-               console.log(field,terms);
-               var coll = db.collection(collectionLUT[field].ontology);
-
-               // this doesn't work because it is asynchronous
-               // when aggregate fires the callback function
-               // field and terms have changed
+       // Populate query functions
+       for(var field in collectionLUT) {
+           queryFunctions.push(queryFunctor(field));
+       }
+       
+       // Run queries in parallel
+       async.parallel(queryFunctions, function (err, collections) {
+           collections.forEach(function (coll) {
                coll.aggregate(LRQuery(terms), function(err, result) {
                    console.log("after aggregate",field,terms,result[0].LR);
                    // set the appropriate LRfield
                    obj[collectionLUT[field].LRfield] = result[0].LR;
                    // increment numGenes.subgraph based on result[0].LR
                });
-           }
-       }
-       // now that the object has been updated, output it as JSON
-       // this can't happen until obj has been updated.
-       console.log(JSON.stringify(obj));
+           });
+           // now that the object has been updated, output it as JSON
+           // this can't happen until obj has been updated.
+           console.log(JSON.stringify(obj));
+       });
     }).on('close', function() {
         // close the database connection, but give the currently running commands
-        // some time to finish - PS I don't like this. 
+        // some time to finish - PS I don't like this.
         setTimeout(function() {
             db.close();
         }, 5000);
-    });    
+    });
 });
