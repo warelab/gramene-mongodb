@@ -93,7 +93,7 @@ function termsToInts(terms) {
 
 // connect to the ontologies database
 MongoClient.connect('mongodb://127.0.0.1:27017/ontologies', function(err, db) {
-    if(err) throw err;
+    if (err) throw err;
 
     // setup reader
     require('readline').createInterface({
@@ -103,50 +103,45 @@ MongoClient.connect('mongodb://127.0.0.1:27017/ontologies', function(err, db) {
        var obj = JSON.parse(line);
 
        // Parallel ontology query functions
-       var queryFunctions = [];
+       var queryFunctions = {};
 
-       // Functor necessary to ensure 'field' variable closure
-       function queryFunctor(field) {
+       // Functor necessary for variable closure
+       function aggregateFunctor(coll,pipeline) {
            "use strict";
            return function (done) {
-               var terms = getField(obj, field.split(':'));
-               var coll;
-               if (terms) {
-                   if (typeof terms[0] === "string") {
-                       terms = termsToInts(terms);
-                   }
-
-                   // increment numGenes.direct based on terms
-
-                   console.log(field,terms);
-                   coll = db.collection(collectionLUT[field].ontology);
-               }
-               done(null, coll);
+               coll.aggregate(pipeline, function(err,result) {
+                   if (result) done(null, result[0].LR);
+                   else done(null, null);
+               });
            };
        }
 
        // Populate query functions
        for(var field in collectionLUT) {
-           queryFunctions.push(queryFunctor(field));
+           var terms = getField(obj, field.split(':'));
+           if (terms) {
+               if (typeof terms[0] === "string") {
+                   terms = termsToInts(terms);
+               }
+               var o = collectionLUT[field];
+               queryFunctions[o.LRfield] =
+                   aggregateFunctor(db.collection(o.ontology),LRQuery(terms));
+           }
        }
-       
-       // Run queries in parallel
-       async.parallel(queryFunctions, function (err, collections) {
-           collections.forEach(function (coll) {
-               coll.aggregate(LRQuery(terms), function(err, result) {
-                   console.log("after aggregate",field,terms,result[0].LR);
-                   // set the appropriate LRfield
-                   obj[collectionLUT[field].LRfield] = result[0].LR;
-                   // increment numGenes.subgraph based on result[0].LR
-               });
+
+       if (queryFunctions) {
+           // Run queries in parallel
+           async.parallel(queryFunctions, function (err, LR) {
+               if (err) throw err;
+               obj.LR = LR;
+               console.log(JSON.stringify(obj));
            });
-           // now that the object has been updated, output it as JSON
-           // this can't happen until obj has been updated.
-           console.log(JSON.stringify(obj));
-       });
+       }
+       else {
+           console.log(line);
+       }
     }).on('close', function() {
         // close the database connection, but give the currently running commands
-        // some time to finish - PS I don't like this.
         setTimeout(function() {
             db.close();
         }, 5000);
