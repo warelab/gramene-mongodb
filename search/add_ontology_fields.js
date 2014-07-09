@@ -80,7 +80,8 @@ function getField(o,keys) {
             return undefined;
         }
     }
-    return subObj;
+    if (typeof subObj === "object") return subObj;
+    return [subObj];
 }
 
 // convert a list of ontology terms from strings to integers
