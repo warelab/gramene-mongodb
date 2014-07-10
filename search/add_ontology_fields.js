@@ -80,16 +80,26 @@ function getField(o,keys) {
             return undefined;
         }
     }
-    if (typeof subObj === "object") return subObj;
-    return [subObj];
+    return subObj;
 }
 
 // convert a list of ontology terms from strings to integers
 function termsToInts(terms) {
-    for(var i in terms) {
-        terms[i] = parseInt(terms[i].replace(/[A-Z]+:0*/, ""));
+    var ints = [];
+    if (typeof terms === "object") {
+        for(var i in terms) {
+            if (typeof terms[i] === "string") {
+                ints.push(parseInt(terms[i].replace(/[A-Z]+:0*/, "")));
+            }
+            else {
+                ints.push(terms[i]);
+            }
+        }
     }
-    return terms;
+    else {
+        ints.push(terms);
+    }
+    return ints;
 }
 
 // connect to the ontologies database
@@ -121,12 +131,10 @@ MongoClient.connect('mongodb://127.0.0.1:27017/ontologies', function(err, db) {
        for(var field in collectionLUT) {
            var terms = getField(obj, field.split(':'));
            if (terms) {
-               if (typeof terms[0] === "string") {
-                   terms = termsToInts(terms);
-               }
+               var ints = termsToInts(terms);
                var o = collectionLUT[field];
                queryFunctions[o.LRfield] =
-                   aggregateFunctor(db.collection(o.ontology),LRQuery(terms));
+                   aggregateFunctor(db.collection(o.ontology),LRQuery(ints));
            }
        }
 
