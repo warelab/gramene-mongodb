@@ -27,8 +27,7 @@ my $prefix = shift @ARGV;
 my %hsh;
 my $key="Global";
 open (my $fh, ">", "$prefix.$key.json");
-my %children;
-my %theRoots;
+my %parent;
 my %ontology;
 while (<>) {
     if (/^\[(\S+)\]$/) { # new [Term] [Typedef], [etc.]
@@ -57,11 +56,8 @@ while (<>) {
             if (exists $hsh{is_a}) {
                 for (my $i=0;$i<@{$hsh{is_a}};$i++) {
                     $hsh{is_a}[$i] =~ s/\s!\s.*//;
-                    push @{$children{$key}{$hsh{is_a}[$i]}}, $hsh{id} unless $hsh{is_obsolete};
+                    $parent{$hsh{id}}{$hsh{is_a}[$i]}=1;
                 }
-            }
-            else {
-                push @{$theRoots{$key}}, $hsh{id} unless $hsh{is_obsolete};
             }
             # use the id field as the mongo _id
             $hsh{_id} = $hsh{id};
@@ -78,38 +74,29 @@ while (<>) {
 close $fh;
 
 for my $okey (keys %ontology) {
-    next unless $children{$okey};
-    $children{$okey}{$okey} = $theRoots{$okey};
-    preorder_traversal($okey,$children{$okey},$ontology{$okey},1);
     open($fh, ">", "$prefix.$okey.json");
     while (my ($k,$v) = each %{$ontology{$okey}}) {
-        if ($v->{L} and $v->{R}) {
-            $v->{LR} = [];
-            for(my $i=0;$i<@{$v->{L}}; $i++) {
-                push @{$v->{LR}}, [$v->{L}[$i], $v->{R}[$i]]; 
+        if ($okey eq "Term") {
+            if (exists $v->{_id} and $v->{_id} =~ m/^\S+:0*(\d+)$/) {
+                $v->{_id} = $1 + 0;
             }
-            delete $v->{L};
-            delete $v->{R};
+
+            # populate ancestors
+            my @S = ($k);
+            my %p;
+            while (@S) {
+                my $t = pop @S;
+                if ($t =~ m/^\S+:0*(\d+)$/) {
+                    $p{$1}=1;
+                    push @S, keys %{$parent{$t}} if ($parent{$t});
+                }
+            }
+            delete $p{$okey};
+            my @a = sort {$a <=> $b} map { s/^\S+:0*//; $_ + 0 } keys %p;
+            $v->{ancestors} = \@a;
         }
-        if (exists $v->{_id} and $v->{_id} =~ m/^\S+:0*(\d+)$/) {
-            $v->{_id} = $1 + 0;
-        }
-        $v->{numGenes} = {direct => 0, subgraph => 0};
         print $fh encode_json($v), "\n";
     }
     close $fh;
 }
 
-sub preorder_traversal {
-    my ($node, $children, $term, $count) = @_;
-    push @{$term->{$node}{L}}, $count;
-    $count++;
-    if (exists $children->{$node}) {
-        for my $child (@{$children->{$node}}) {
-            $count = preorder_traversal($child, $children, $term, $count);
-        }
-    }
-    push @{$term->{$node}{R}}, $count;
-    $count++;
-    return $count;
-}
