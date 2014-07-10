@@ -94,6 +94,7 @@ for my $okey (keys %ontology) {
         if (exists $v->{_id} and $v->{_id} =~ m/^\S+:0*(\d+)$/) {
             $v->{_id} = $1 + 0;
         }
+        $v->{numGenes} = {direct => 0, subgraph => 0};
         print $fh encode_json($v), "\n";
     }
     close $fh;
