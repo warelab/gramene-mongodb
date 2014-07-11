@@ -680,10 +680,10 @@ sub geneLineJSON {
   $data{description} = $xml_data->{description};
   $data{system_name} = $xml_data->{'system_name'};
   $data{species}     = $species;
-  $data{seq_region}  = $xml_data->{seq_region_name};
-  if ($xml_data->{location} =~ m/:(\d+)-(\d+)$/) {
-      $data{start} = $1 + 0;
-      $data{end}   = $2 + 0;
+  if ($xml_data->{location} =~ m/^(.+):(\d+)-(\d+)$/) {
+      $data{location}{seq_region} = $1;
+      $data{location}{start}      = $2 + 0;
+      $data{location}{end}        = $3 + 0;
   }
   $data{xrefs}       = $xml_data->{external_identifiers};
   $data{taxon_id}    = $xml_data->{'taxon_id'}+0;
@@ -691,37 +691,19 @@ sub geneLineJSON {
 
   @{$data{domains}}  = keys %{$xml_data->{'domains'}};
 
-  my %content; # labels, text, synonyms for free text search field
-  $content{$data{gene_id}}=1;
-  $content{$data{name}}=1;
-  $content{$data{description}}=1;
-  for my $gt (@{$data{genetrees}}) {
-      $content{$gt}=1;
-  }
   while (my ($db,$hsh) = each %{$data{xrefs}}) {
       if ($SKIP_XREF{$db}) {
           delete $data{xrefs}{$db};
           next;
       }
       my @k = keys %$hsh;
-      for my $id (@k) {
-	      $content{$id}=1;
-      }
       $data{xrefs}{$db} = \@k;
   }
 
-  for my $domain (@{$data{domains}}) {
-      $content{$domain}=1;
-  }
-  # The content field is unnecessary since you can ensureIndex({"$**":"text"},{name:"allFields"})
-  # $data{content} = join(" ",keys %content);
-
   my $json = encode_json \%data;
-
 
   $counter->();
   return $json;
-
 }
 
 sub geneLineXML {

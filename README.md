@@ -2,7 +2,7 @@ gramene-mongodb
 ===============
 
 # databases
-## ontologies
+## ontology
 ## search
 ## maps
 ## users
