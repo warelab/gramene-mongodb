@@ -4,15 +4,17 @@ may be annotated with terms from an ontology such as the NCBI taxonomy, GO, or P
 A user may wish to find genes with a specific term or to broaden the search to
 include genes annotated with the query term or any more specific descendant term.
 
-The ontologies db has a collection of terms for each ontology. The _id of
+The ontology db has a collection of terms for each ontology. The _id of
 a term is just the numerical portion (e.g., "GO:0001234" becomes 1234) and the
 ancestors field holds the transitive closure of more general terms.
 
 In order to make the subtree queries possible in the genes collection, we have to
-add ancestors fields from the ontologies db. This script reads each gene document from
+add ancestors fields from the ontology db. This script reads each gene document from
 a stream of JSON documents (one per line), looks up the ancestors for the
 annotated term(s), and outputs an updated JSON document for the gene.
 */
+
+var mongoURL = 'mongodb://127.0.0.1:27017/ontology';
 
 var collectionLUT = {
     'xrefs:goslim_goa' : 'GO',
@@ -86,7 +88,7 @@ function termsToIntsReplace(terms) {
 }
 
 // connect to the ontologies database
-MongoClient.connect('mongodb://127.0.0.1:27017/ontology', function(err, db) {
+MongoClient.connect(mongoURL, function(err, db) {
     if (err) throw err;
 
     // setup reader
