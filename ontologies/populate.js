@@ -8,28 +8,33 @@ var ontologies = {
     'EO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/plant_environment/environment_ontology.obo',
     'GO'        : 'http://geneontology.org/ontology/go.obo',
     'GRO'       : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo',
-    'GR_tax'    : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/taxonomy/GR_tax-ontology.obo',
-    'NCBITaxon' : 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
+    // 'GR_tax'    : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/taxonomy/GR_tax-ontology.obo',
+    // 'NCBITaxon' : 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
     'PO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/tags/live/plant_ontology.obo',
     'SO'        : 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
     'TO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/traits/trait.obo',
 };
 
+var outDir = process.argv[2];
+if (! outDir) outDir = '.';
+
 function parseLoad(o) {
-    var cmd = './obo2json.pl '+o+' '+o+'.obo';
+    var cmd = './obo2json.pl '+o+' '+outDir+' < '+outDir+'/'+o+'.obo';
+    console.log(cmd);
     var parse = exec(cmd, function (error, stdout, stderr) {
         if (error !== null) {
             console.log('error running [' + cmd + '] ' + error);
         }
         else {
             console.log('parsed '+o+'.obo');
-            cmd = 'mongoimport --db ontology --drop --collection ' + o + ' < ' + o+'.Term.json';
+            cmd = 'mongoimport --db ontology --drop --collection ' + o + ' < '+outDir+'/' + o+'.Term.json';
+            console.log(cmd);
             var load = exec(cmd, function (error, stdout, stderr) {
                 if (error !== null) {
                     console.log('error running [' + cmd + '] ' + error);
                 }
                 else {
-                    console.log('imported '+o+'.Term.json to mongodb');
+                    console.log('imported '+outDir+'/'+o+'.Term.json to mongodb');
                 }
             });
         }
@@ -37,13 +42,14 @@ function parseLoad(o) {
 }
 
 function downloadParseLoad(o,url) {
+    console.log(o,url);
     http.get(url, function(res) {
         var obo = '';
         res.on('data',function (chunk) {
             obo += chunk;
         });
         res.on('end', function (err) {
-            fs.writeFile(o + '.obo', obo, function (err) {
+            fs.writeFile(outDir + '/' + o + '.obo', obo, function (err) {
                 if (err) throw err;
                 console.log('downloaded ' + o + '.obo');
                 parseLoad(o);

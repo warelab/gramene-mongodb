@@ -23,10 +23,13 @@ Readonly my %MULTI = map { $_ , 1 } qw(
 );
 
 my $prefix = shift @ARGV;
+my $outDir = shift @ARGV;
+$outDir ||= '.';
+$outDir =~ s/\/+$//;
 
 my %hsh;
 my $key="Global";
-open (my $fh, ">", "$prefix.$key.json");
+open (my $fh, ">", "$outDir/$prefix.$key.json");
 my %parent;
 my %ontology;
 while (<>) {
@@ -35,7 +38,7 @@ while (<>) {
         if ($key ne $1) {
             close $fh;
             $key = $1;
-            open($fh, ">", "$prefix.$key.json");
+            open($fh, ">", "$outDir/$prefix.$key.json");
         }
     }
     elsif (my($k,$v) = /^(\S+):\s*(.+)$/) { # parse key-value pair
@@ -76,7 +79,7 @@ while (<>) {
 close $fh;
 
 for my $okey (keys %ontology) {
-    open($fh, ">", "$prefix.$okey.json");
+    open($fh, ">", "$outDir/$prefix.$okey.json");
     while (my ($k,$v) = each %{$ontology{$okey}}) {
         if ($okey eq "Term") {
             # populate ancestors

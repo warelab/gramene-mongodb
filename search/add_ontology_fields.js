@@ -15,11 +15,11 @@ annotated term(s), and outputs an updated JSON document for the gene.
 */
 
 var collectionLUT = {
-    'xrefs:goslim_goa' : {Afield: 'GO', ontology: 'go'},
-    'xrefs:GO' : {Afield: 'GO', ontology: 'go'},
-    'xrefs:TO' : {Afield: 'TO', ontology: 'trait'},
-    'xrefs:PO' : {Afield: 'PO', ontology: 'plant_ontology'},
-    'taxon_id' : {Afield: 'taxon', ontology: 'ncbitaxon'}
+    'xrefs:goslim_goa' : 'GO',
+    'xrefs:GO' : 'GO',
+    'xrefs:TO' : 'TO',
+    'xrefs:PO' : 'PO',
+    'taxon_id' : 'NCBITaxon'
 };
 
 var MongoClient = require('mongodb').MongoClient;
@@ -116,8 +116,8 @@ MongoClient.connect('mongodb://127.0.0.1:27017/ontology', function(err, db) {
                // var ints = termsToInts(terms);
                var ints = termsToIntsReplace(terms);
                var o = collectionLUT[field];
-               var coll = db.collection(o.ontology)
-               queryFunctions[o.Afield] = aggregateFunctor(coll,Ancestors(ints));
+               var coll = db.collection(o);
+               queryFunctions[o] = aggregateFunctor(coll,Ancestors(ints));
            }
        }
 
