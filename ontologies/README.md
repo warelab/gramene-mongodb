@@ -1,25 +1,56 @@
-# Ontologies database (MongoDB)
-This ontologies database holds the terms as documents. The database is intended to provide information on ontology terms and support more complex queries of annotated genes or other objects. A preorder traversal of each ontology allows one to retrieve a subgraph rooted at some query node. This is useful when searching for genes associated with a query term (or any more specific descendant term). A gene document may contain GO annotations, so this database is consulted to convert the set of GO identifiers into a set of preorder LR indexes. This approach has been replaced by storing a list of ancestor nodes in each term document. That way, a subtree query for genes annotated with GO:0016746 (transferase activity, transferring acyl groups) is db.genes.find({"ancestors.GO":16746}).
-## Download obo files
+# Ontology database
+The ontology database holds terms as documents. The database is intended to provide information on ontology terms and support more complex queries of annotated genes or other objects. The is_a relationships are traversed to form a list of ancestor nodes in each term document. That way, a subtree query for genes annotated with GO:0016746 | transferase activity, transferring acyl groups is `db.genes.find({"ancestors.GO":16746})`.
+## Populating the ontology database
+### one liner
 ```
-/bin/sh download.sh
+mkdir tmp; ./populate.js tmp; mongo ontology < index.js
 ```
-## Parse the ontologies into JSON
+### manual
+#### Download obo files
 ```
-/bin/sh parse.sh
+curl http://geneontology.org/ontology/go.obo > GO.obo 
+curl http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo > GRO.obo
+curl http://palea.cgrb.oregonstate.edu/viewsvn/Poc/tags/live/plant_ontology.obo > PO.obo
+curl http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/traits/trait.obo > TO.obo
+curl http://www.berkeleybop.org/ontologies/ncbitaxon.obo > NCBITaxon.obo
+curl http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw > SO.obo
+curl http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/plant_environment/environment_ontology.obo > EO.obo
 ```
-## Import JSON into MongoDB
+#### Parse the ontologies into JSON
 ```
-/bin/sh import.sh
+./obo2json GO < GO.obo
+./obo2json GRO < GRO.obo
+./obo2json PO < PO.obo
+./obo2json TO < TO.obo
+./obo2json SO < SO.obo
+./obo2json EO < EO.obo
+./obo2json NCBITaxon < NCBITaxon.obo
 ```
-## Setup indexes
+#### Import JSON into MongoDB
 ```
-db.go.ensureIndex({"$**":"text"})
+mongoimport --db ontology --collection GO < GO.Term.json
+mongoimport --db ontology --collection GRO < GRO.Term.json
+mongoimport --db ontology --collection EO < EO.Term.json
+mongoimport --db ontology --collection PO < PO.Term.json
+mongoimport --db ontology --collection SO < SO.Term.json
+mongoimport --db ontology --collection TO < TO.Term.json
+mongoimport --db ontology --collection NCBITaxon < NCBITaxon.Term.json
+```
+#### Setup indexes
+```
+mongo ontology
+db.GO.ensureIndex({"$**":"text"})
+db.GRO.ensureIndex({"$**":"text"})
+db.EO.ensureIndex({"$**":"text"})
+db.PO.ensureIndex({"$**":"text"})
+db.SO.ensureIndex({"$**":"text"})
+db.TO.ensureIndex({"$**":"text"})
+db.NCBITaxon.ensureIndex({"$**":"text"})
 ```
 ## Example queries
 ```
 $ mongo ontology
-> db.go.find({_id:16746})
-> db.go.find({_ancestors:16746}).count()
-> db.go.find({ $text: { $search: "H3-K9 methylation" }},{ name:1,namespace:1,score: { $meta: "textScore"}}).sort({score: {$meta: "textScore"}})
+> db.GO.find({_id:16746})
+> db.GO.find({_ancestors:16746}).count()
+> db.GO.find({ $text: { $search: "H3-K9 methylation" }},{ name:1,namespace:1,score: { $meta: "textScore"}}).sort({score: {$meta: "textScore"}})
 ```

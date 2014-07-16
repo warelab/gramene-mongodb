@@ -9,7 +9,7 @@ var ontologies = {
     'GO'        : 'http://geneontology.org/ontology/go.obo',
     'GRO'       : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo',
     // 'GR_tax'    : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/taxonomy/GR_tax-ontology.obo',
-    // 'NCBITaxon' : 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
+    'NCBITaxon' : 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
     'PO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/tags/live/plant_ontology.obo',
     'SO'        : 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
     'TO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/traits/trait.obo',
