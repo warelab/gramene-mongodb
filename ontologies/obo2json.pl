@@ -40,6 +40,9 @@ while (<>) {
     }
     elsif (my($k,$v) = /^(\S+):\s*(.+)$/) { # parse key-value pair
         $v =~ s/^"(.+)".*/$1/; # strip off quotes and qualifiers(?)
+        if ($v =~ m/^${prefix}:0*(\d+)/) {
+            $v = $1+0;
+        }
         if ($MULTI{$k}) {
             push @{$hsh{$k}}, $v;
         }
@@ -55,13 +58,12 @@ while (<>) {
             # clean up the is_a entries  
             if (exists $hsh{is_a}) {
                 for (my $i=0;$i<@{$hsh{is_a}};$i++) {
-                    $hsh{is_a}[$i] =~ s/\s!\s.*//;
                     $parent{$hsh{id}}{$hsh{is_a}[$i]}=1;
                 }
             }
             # use the id field as the mongo _id
             $hsh{_id} = $hsh{id};
-            # delete $hsh{id};
+            delete $hsh{id};
             # save a copy for later
             %{$ontology{$key}{$hsh{_id}}} = %hsh;
         }
@@ -77,23 +79,26 @@ for my $okey (keys %ontology) {
     open($fh, ">", "$prefix.$okey.json");
     while (my ($k,$v) = each %{$ontology{$okey}}) {
         if ($okey eq "Term") {
-            if (exists $v->{_id} and $v->{_id} =~ m/^\S+:0*(\d+)$/) {
-                $v->{_id} = $1 + 0;
-            }
-
             # populate ancestors
             my @S = ($k);
             my %p;
             while (@S) {
                 my $t = pop @S;
-                if ($t =~ m/^\S+:0*(\d+)$/) {
-                    $p{$1}=1;
+                if ($t =~ m/^\d+$/) {
+                    $p{$t}=1;
                     push @S, keys %{$parent{$t}} if ($parent{$t});
                 }
             }
             delete $p{$okey};
-            my @a = sort {$a <=> $b} map { s/^\S+:0*//; $_ + 0 } keys %p;
+            my @a = sort {$a <=> $b} map {$_+0} keys %p;
             $v->{ancestors} = \@a;
+        }
+        if ($v->{_id} =~ m/^\d+$/) {
+            $v->{_id} += 0;
+        }
+        if ($v->{is_a}) {
+            my @a = sort {$a <=> $b} map {$_+0} @{$v->{is_a}};
+            $v->{is_a} = \@a;
         }
         print $fh encode_json($v), "\n";
     }
