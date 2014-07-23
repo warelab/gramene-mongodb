@@ -48,7 +48,8 @@ var MongoAPI = {
     }
 };
 // hard-coded databases/collections to query
-// require('databases')
+// TODO: move all this out of app.js and read from a config file
+
 var mongoURL = 'mongodb://brie.cshl.edu:27017/';
 var databases = {
     search: {
@@ -71,6 +72,7 @@ var databases = {
     }
 };
 
+// the actual mongodb queries for each API command
 var MongoCommand = {
     select : function(coll,params,schema,res) {
         var query = {};
@@ -106,6 +108,8 @@ var MongoCommand = {
         if (query.length !== 0) {
             pipeline.push({$match : query});
         }
+        // this doesn't work for multi valued fields
+        // if the field is multi valued you have to $unwind(?) it first
         pipeline.push({$group : {_id: '$'+params['field'], count: {$sum:1}}});
         pipeline.push({$sort  : {count:-1}});
         console.log("pipeline",pipeline);
