@@ -94,8 +94,8 @@ var MongoCommand = {
             res.send(result);
         });
     },
-    facet : function(coll,params,schema) {
-        var pipeline = {};
+    facet : function(coll,params,schema,res) {
+        var pipeline = [];
         var query = {};
         if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
         for (var p in params) {
@@ -104,13 +104,14 @@ var MongoCommand = {
             }
         }
         if (query.length !== 0) {
-            pipeline['$match'] = query;
+            pipeline.push({$match : query});
         }
-        pipeline['$group'] = {_id: p['field'], count: {$sum:1}};
-        pipeline['$sort'] = {count:-1};
-
+        pipeline.push({$group : {_id: '$'+params['field'], count: {$sum:1}}});
+        pipeline.push({$sort  : {count:-1}});
+        console.log("pipeline",pipeline);
         coll.aggregate(pipeline,function(err,result) {
-           return result;
+           if (err) throw err;
+           res.send(result);
         });
     }
 };
