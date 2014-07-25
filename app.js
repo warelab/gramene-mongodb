@@ -1,9 +1,23 @@
 // setup some dependencies
 var express  = require('express'),
-    app      = express(),
-    cache    = require('web-cache'),
+    compression = require('compression'),
+    cookieParser = require('cookie-parser'),
+    session = require('express-session'),
+    MongoStore = require('connect-mongo')(session),
     validate = require('conform').validate,
     MongoClient  = require('mongodb').MongoClient;
+
+var settings = require('./config/settings.json');
+
+var app = express();
+app.use(compression());
+app.use(cookieParser(settings.cookie_secret));
+app.use(session({
+    store: new MongoStore(settings.session),
+    secret: settings.cookie_secret,
+    resave: false,
+    saveUninitialized: true
+}));
 
 // a few standard mongodb commands (mimic solr)
 var MongoAPI = {
@@ -47,34 +61,13 @@ var MongoAPI = {
         }
     }
 };
-// hard-coded databases/collections to query
-// TODO: move all this out of app.js and read from a config file
 
-var mongoURL = 'mongodb://brie.cshl.edu:27017/';
-var databases = {
-    search: {
-        url : mongoURL + 'search41',
-        collections : {
-            'genes' : MongoAPI
-        }
-    },
-    ontology: {
-        url : mongoURL + 'ontology',
-        collections : {
-            'EO' : MongoAPI,
-            'GO' : MongoAPI,
-            'GRO' : MongoAPI,
-            'NCBITaxon' : MongoAPI,
-            'PO' : MongoAPI,
-            'SO' : MongoAPI,
-            'TO' : MongoAPI,
-        }
-    }
-};
+var mongoURL = 'mongodb://' + settings.mongo.host + ':' + settings.mongo.port + '/';
+var databases = settings.databases;
 
 // the actual mongodb queries for each API command
 var MongoCommand = {
-    select : function(coll,params,schema,res) {
+    select : function(coll,params,schema,req,res) {
         var query = {};
         if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
         for (var p in params) {
@@ -82,21 +75,35 @@ var MongoCommand = {
                 query[p] = params[p];
             }
         }
-        var options = {};
-        if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
-        if (params.hasOwnProperty('start')) options['skip'] = params['start'];
-        if (params.hasOwnProperty('sort')) {
-            options['sort'] = {};
-        }
-        if (params.hasOwnProperty('fl')) {
-            options['fields'] = {};
-        }
-        coll.find(query,options).toArray(function(err,result) {
+        var time = process.hrtime();
+        coll.count(query, function(err,count) {
             if (err) throw err;
-            res.send(result);
+            var diff = process.hrtime(time);
+            var ms = diff[0] * 1e3 + diff[1]/1e6;
+            var remember = {
+                timestamp : Date.now()/1000,
+                query : query,
+                count : count
+            };
+            if (req.session.history) req.session.history.push(remember);
+            else req.session.history = [remember];
+
+            var options = {};
+            if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
+            if (params.hasOwnProperty('start')) options['skip'] = params['start'];
+            if (params.hasOwnProperty('sort')) {
+                options['sort'] = {};
+            }
+            if (params.hasOwnProperty('fl')) {
+                options['fields'] = {};
+            }
+            coll.find(query,options).toArray(function(err,result) {
+                if (err) throw err;
+                res.send({time: ms, count: count, response:result});
+            });
         });
     },
-    facet : function(coll,params,schema,res) {
+    facet : function(coll,params,schema,req,res) {
         var pipeline = [];
         var query = {};
         if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
@@ -123,7 +130,7 @@ var MongoCommand = {
 // open database connections
 for (var dbname in databases) {
     (function(dbname) {
-        MongoClient.connect(databases[dbname].url, function(err,db) {
+        MongoClient.connect(mongoURL + databases[dbname].url, function(err,db) {
             if (err) throw err;
             databases[dbname].db = db;
         });
@@ -131,13 +138,6 @@ for (var dbname in databases) {
 }
 
 var port = process.argv.length > 2 ? process.argv[2] : 3000;
-
-app.use(express.logger());
-app.use(express.compress());
-app.use(cache.middleware({
-    clean: true
-}));
-app.use(app.router);
 
 // define routes
 app.get('/', function (req,res,next) {
@@ -147,6 +147,10 @@ app.get('/', function (req,res,next) {
         dbinfo[dbname] = databases[dbname].collections;
     }
     res.json(dbinfo);
+});
+
+app.get('/history', function (req,res,next) {
+    res.json(req.session.history);
 });
 
 app.get('/:dbname', function (req, res, next) {
@@ -168,7 +172,7 @@ app.get('/:dbname/:collection', function (req, res, next) {
 	var collection = req.params.collection;
     if (databases.hasOwnProperty(dbname)
     && databases[dbname].collections.hasOwnProperty(collection)) {
-        res.json(databases[dbname].collections[collection]);
+        res.json(MongoAPI);
     }
     else {
         res.json({"error":"collection '"+dbname+"."+collection+"' not found"});
@@ -181,21 +185,20 @@ app.get('/:dbname/:collection/:command', function (req, res, next) {
    var cmd = req.params.command;
    if (databases.hasOwnProperty(dbname)
    && databases[dbname].collections.hasOwnProperty(collection)) {
-       var api = databases[dbname].collections[collection];
-       if (api.hasOwnProperty(cmd)) {
+       if (MongoAPI.hasOwnProperty(cmd)) {
            // validate command
-           var check = validate(req.query, api[cmd], {cast:true,castSource:true});
+           var check = validate(req.query, MongoAPI[cmd], {cast:true,castSource:true});
            if (check['valid']) {
                // run command
                var db = databases[dbname].db;
                var coll = db.collection(collection);
-               MongoCommand[cmd](coll,req.query,api[cmd].properties,res);
+               MongoCommand[cmd](coll,req.query,MongoAPI[cmd].properties,req,res);
            } else {
                res.json(api[cmd].properties);
            }
        }
        else {
-           res.json({"error": "command '"+cmd+"' not defined in api", api:api});
+           res.json({"error": "command '"+cmd+"' not defined in api", api:MongoAPI});
        }
    }
    else {
@@ -203,5 +206,6 @@ app.get('/:dbname/:collection/:command', function (req, res, next) {
    }
 });
 
-app.listen(port);
-console.log("server listening on port " + port);
+var server = app.listen(port, function() {
+    console.log('Listening on port %d', server.address().port);
+});
