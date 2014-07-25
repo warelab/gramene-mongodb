@@ -65,16 +65,22 @@ var MongoAPI = {
 var mongoURL = 'mongodb://' + settings.mongo.host + ':' + settings.mongo.port + '/';
 var databases = settings.databases;
 
+function buildQuery(params,schema) {
+    var query = {};
+    if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
+    for (var p in params) {
+        if (!schema.hasOwnProperty(p)) {
+            if (Number(params[p]) === NaN) query[p] = params[p];
+            else query[p] = Number(params[p]);
+        }
+    }
+    return query;
+}
+
 // the actual mongodb queries for each API command
 var MongoCommand = {
     select : function(coll,params,schema,req,res) {
-        var query = {};
-        if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
-        for (var p in params) {
-            if (!schema.hasOwnProperty(p)) {
-                query[p] = params[p];
-            }
-        }
+        var query = buildQuery(params,schema);
         var time = process.hrtime();
         coll.count(query, function(err,count) {
             if (err) throw err;
@@ -107,13 +113,7 @@ var MongoCommand = {
     },
     facet : function(coll,params,schema,req,res) {
         var pipeline = [];
-        var query = {};
-        if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
-        for (var p in params) {
-            if (!schema.hasOwnProperty(p)) {
-                query[p] = params[p];
-            }
-        }
+        var query = buildQuery(params,schema);
         if (query.length !== 0) {
             pipeline.push({$match : query});
         }
