@@ -82,6 +82,8 @@ var MongoCommand = {
             var ms = diff[0] * 1e3 + diff[1]/1e6;
             var remember = {
                 timestamp : Date.now()/1000,
+                db : req.params.dbname,
+                collection : req.params.collection,
                 query : query,
                 count : count
             };
