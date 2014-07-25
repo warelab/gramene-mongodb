@@ -121,7 +121,6 @@ var MongoCommand = {
         // if the field is multi valued you have to $unwind(?) it first
         pipeline.push({$group : {_id: '$'+params['field'], count: {$sum:1}}});
         pipeline.push({$sort  : {count:-1}});
-        console.log("pipeline",pipeline);
         coll.aggregate(pipeline,function(err,result) {
            if (err) throw err;
            res.send(result);
@@ -196,7 +195,7 @@ app.get('/:dbname/:collection/:command', function (req, res, next) {
                var coll = db.collection(collection);
                MongoCommand[cmd](coll,req.query,MongoAPI[cmd].properties,req,res);
            } else {
-               res.json(api[cmd].properties);
+               res.json(MongoAPI[cmd].properties);
            }
        }
        else {
