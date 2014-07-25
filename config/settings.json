@@ -1,0 +1,32 @@
+{
+  "cookie_secret" : "i like plants",
+  "session" : {
+    "db" : "gramene",
+    "host" : "brie.cshl.edu",
+    "port" : 27017
+  },
+  "mongo" : {
+    "host" : "brie.cshl.edu",
+    "port" : 27017
+  },
+  "databases" : {
+    "search" : {
+      "url" : "search41",
+      "collections" : {
+        "genes" : 1
+      }
+    },
+    "ontology" : {
+      "url" : "ontology",
+      "collections" : {
+        "EO" : 1,
+        "GO" : 1,
+        "GRO": 1,
+        "NCBITaxon" : 1,
+        "PO" : 1,
+        "SO" : 1,
+        "TO" : 1
+      }
+    }
+  }
+}
