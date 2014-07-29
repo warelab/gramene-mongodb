@@ -2,16 +2,16 @@
 
 Lets first define some terms
 
-map: a linear representation of something like DNA. e.g., chromosome, scaffold, contig, etc.
-mapSet: a collection of related maps. e.g. a genome assembly
-feature: an annotated interval on a map
-featureSet: a collection of features from the same mapSet with the same format. e.g., methylation data set x
-featureFormat: format of features in a featureSet
-correspondence: a pair of features that are linked somehow
-correspondenceSet: A set of correspondences between features on 2 featureSets.
-correspondenceType: the type of correspondence e.g., synteny
-virtualMap: a map defined by a set of features, e.g., promoter regions (-2000,500) relative to TSS
-remapper: a function that defines a relation from one map to another (usu. virtualMap, also whole genome alignments)
+- map: a linear representation of something like DNA. e.g., chromosome, scaffold, contig, etc.
+- mapSet: a collection of related maps. e.g. a genome assembly
+- feature: an annotated interval on a map
+- featureSet: a collection of features from the same mapSet with the same format. e.g., methylation data set x
+- featureFormat: format of features in a featureSet
+- correspondence: a pair of features that are linked somehow
+- correspondenceSet: A set of correspondences between features on 2 featureSets.
+- correspondenceType: the type of correspondence e.g., synteny
+- virtualMap: a map defined by a set of features, e.g., promoter regions (-2000,500) relative to TSS
+- remapper: a function that defines a relation from one map to another (usu. virtualMap, also whole genome alignments)
 
 ###Data can be stored in MongoDB and FastBit.
 
@@ -103,5 +103,4 @@ Example virtualMap document
 ```
 
 store the function in a fastbit partition. Since features on a map are sorted (check .part.txt), doing the projection is linear in the number of
-intervals in the function and the number of features on the map. Otherwise, n lg m where lg m is at most ~15. Have the code decide whether to do the linear scan
-or the binary search based on m and n? if n << m, do binary search, otherwise linear scan.
+intervals in the function and the number of features on the map.
