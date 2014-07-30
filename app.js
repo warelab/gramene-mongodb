@@ -86,8 +86,9 @@ var MongoCommand = {
             if (err) throw err;
             var diff = process.hrtime(time);
             var ms = diff[0] * 1e3 + diff[1]/1e6;
+            var now = new Date(Date.now());
             var remember = {
-                timestamp : Date.now()/1000,
+                timestamp : now.toISOString(),
                 db : req.params.dbname,
                 collection : req.params.collection,
                 query : query,
@@ -104,6 +105,12 @@ var MongoCommand = {
             }
             if (params.hasOwnProperty('fl')) {
                 options['fields'] = {};
+                var want_id=false;
+                params['fl'].split(',').forEach(function(f) {
+                    options['fields'][f] = 1;
+                    if (f === '_id') want_id=true;
+                });
+                if (!want_id) options['fields']['_id'] = 0;
             }
             coll.find(query,options).toArray(function(err,result) {
                 if (err) throw err;
