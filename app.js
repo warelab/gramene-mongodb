@@ -1,5 +1,6 @@
 // setup some dependencies
 var express  = require('express'),
+    cors = require('cors'),
     compression = require('compression'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
@@ -9,7 +10,16 @@ var express  = require('express'),
 
 var settings = require('./config/settings.json');
 
+var corsOptionsDelegate = function(req, callback){
+  var corsOptions = {credentials: true, origin: false};
+  if(settings.CORS.indexOf(req.header('Origin')) !== -1){
+    corsOptions.origin = true; // reflect (enable) the requested origin in the CORS response
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
 var app = express();
+app.use(cors(corsOptionsDelegate));
 app.use(compression());
 app.use(cookieParser(settings.cookie_secret));
 app.use(session({

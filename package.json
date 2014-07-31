@@ -27,6 +27,7 @@
     "express-session": "^1.7.0",
     "connect-mongo": "^0.4.1",
     "compression": "^1.0.9",
+    "cors": "^2.4.1",
     "conform": "^0.2.5"
   }
 }
