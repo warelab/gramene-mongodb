@@ -1,6 +1,6 @@
 {
   "cookie_secret" : "i like plants",
-  "CORS" : ["http://localhost:8080", "http://brie:8080"],
+  "CORS" : ["http://localhost:8080", "http://brie:8080", "http://brie.cshl.edu:8080"],
   "session" : {
     "db" : "gramene",
     "host" : "brie.cshl.edu",
