@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>History</title>
+<script src="jquery-2.1.1.min.js"></script>
+<script src="jquery.timeago.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<div id="body">
+  <div id="history" class="list"></div>
+</div>
+
+<script>
+jQuery(document).ready(function() {
+	$.ajax({url: "http://brie:3000/history", xhrFields: {withCredentials: true}})
+	.done(function(data) {
+		var html = '<table class="table table-striped">'
+		+'<thead>'
+		+'<tr><th>db</th><th>collection</th><th>query</th><th>count</th><th>timeago</th></tr>'
+		+'</thead><tbody>';
+		data.forEach(function(d,i) {
+			html += '<tr>';
+			html += '<td>'+d['db']+'</td>';
+			html += '<td>'+d['collection']+'</td>';
+			html += '<td><pre>'+JSON.stringify(d['query'])+'</]re></td>';
+			html += '<td>'+d['count']+'</td>';
+			var laDate = new Date(d['timestamp']);
+			html += '<td><abbr class="timeago" title="'+d['timestamp']+'">'+laDate+'</abbr></td>';
+			html += '</tr>';
+		});
+		html += '</tbody></table>';
+		$('#history').append(html);
+	  jQuery("abbr.timeago").timeago();
+	});
+});
+</script>
