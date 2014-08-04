@@ -109,6 +109,7 @@ var MongoCommand = {
 
             var options = {};
             if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
+            else options['limit'] = 20;
             if (params.hasOwnProperty('start')) options['skip'] = params['start'];
             if (params.hasOwnProperty('sort')) {
                 options['sort'] = {};
