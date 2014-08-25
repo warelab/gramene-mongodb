@@ -20,7 +20,7 @@ while (<>) {
     $content = substr $content, length($name)+1;
     my $class;
     ($class,$content) = $content =~ m/(\S+)\s*(.*)/;
-    print qq{"object_id":$obj_id,"pathway_id":$pathway_id,"species_id":$species_id,"taxon_id":$taxonomy};
+    print qq{{"object_id":$obj_id,"pathway_id":$pathway_id,"species_id":$species_id,"taxon_id":$taxonomy};
     print qq{,"type":"$type","system_name":"$system_name","name":"$name","pathway":"$pathway"};
     if ($content) {
         if ($class eq "Reaction" or $class eq "Pathway") {
@@ -30,5 +30,5 @@ while (<>) {
         }
     }
     print qq{,"content":"$content"} if $content;
-    print qq{,"class":"$class"\n};
+    print qq{,"class":"$class"\n}};
 }
