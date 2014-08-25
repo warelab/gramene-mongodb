@@ -80,7 +80,7 @@ function buildQuery(params,schema) {
     if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
     for (var p in params) {
         if (!schema.hasOwnProperty(p)) {
-            if (Number(params[p]) === NaN) query[p] = params[p];
+            if (Number.isNaN(params[p])) query[p] = params[p];
             else query[p] = Number(params[p]);
         }
     }
