@@ -24,7 +24,7 @@ while (<>) {
     if ($content) {
         if ($class eq "Reaction" or $class eq "Pathway") {
             my $location;
-            ($location,$content) = $content =~ m/(cytosol|cytoplasm|nucleoplasm|plastid stroma|mitochondrial matrix|endoplasmic reticulum membrane|plasma membrane)\s*(\s*)/;
+            ($location,$content) = $content =~ m/(cytosol|cytoplasm|nucleoplasm|plastid stroma|mitochondrial matrix|endoplasmic reticulum membrane|plasma membrane)\s*(.*)/;
             print ",\"location\":\"$location\"" if $location;
         }
     }
