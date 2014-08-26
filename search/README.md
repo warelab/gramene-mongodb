@@ -7,8 +7,9 @@ https://github.com/EnsemblGenomes/eg-web-common/blob/master/utils/search_dump.pl
 The EnsemblGenomes team uses this to output xml formatted files for use in the ensembl
 search tool. Since we are using mongodb, it is more convient to work with JSON files.
 The following repository was forked from EnsemblGenomes/eg-web-common and includes
-some modifications to the search_dump.pl script for output in JSON format.
-
+some modifications to the search_dump.pl script for output in JSON format. It may
+be necessary to sync the fork with the EnsemblGenomes latest in case of db schema
+changes.
 ```
 git clone https://github.com/ajo2995/eg-web-common.git
 cd eg-web-common/utils
@@ -22,6 +23,14 @@ gzip -cd /scratch/olson/build41/Gene_* | node add_ontology_fields.js /dev/fd/0 |
 Final step is to build indexes
 ```
 mongo search41 < indexCommands.js
+```
+## Populating the reactome collection
+```
+reactome_solr_to_json.pl plant_reactome_solr_dump_082114.tab | mongoimport --db search41 --collection reactome
+```
+## Populating the cyc pathways collection
+```
+pathways_tab_to_json.pl /path/to/pathways | mongoimport --db search41 --collection cyc
 ```
 ## Example queries
 ```
