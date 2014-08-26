@@ -174,7 +174,7 @@ app.get('/', function (req,res,next) {
 });
 
 app.get('/history', function (req,res,next) {
-    if (req.params.hasOwnProperty('clear')) {
+    if (req.params.clear) {
         req.session.history = [];
     }
     res.json(req.session.history);
