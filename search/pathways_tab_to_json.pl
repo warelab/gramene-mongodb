@@ -29,6 +29,9 @@ for my $fname (keys %LUT) {
             "\"system_name\":\"$system_name\""
         );
         for (my $i=0;$i<@fields;$i++) {
+            if ($fields[$i] eq 'ec') {
+                $c[$i] =~ s/ec-//i;
+            }
             push @fv, "\"$fields[$i]\":\"$c[$i]\"";
         }
         print "{",join(",",@fv),"}\n";
