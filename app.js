@@ -53,6 +53,10 @@ var MongoAPI = {
             sort: {
                 type: 'string',
                 description: 'sort criteria'
+            },
+            nohist: {
+                type: 'boolean',
+                description: 'suppress history'
             }
         }
     },
@@ -97,16 +101,17 @@ var MongoCommand = {
             var diff = process.hrtime(time);
             var ms = diff[0] * 1e3 + diff[1]/1e6;
             var now = new Date(Date.now());
-            var remember = {
-                timestamp : now.toISOString(),
-                db : req.params.dbname,
-                collection : req.params.collection,
-                query : query,
-                count : count
-            };
-            if (req.session.history) req.session.history.push(remember);
-            else req.session.history = [remember];
-
+            if (!params.hasOwnProperty('nohist')) {
+                var remember = {
+                    timestamp : now.toISOString(),
+                    db : req.params.dbname,
+                    collection : req.params.collection,
+                    query : query,
+                    count : count
+                };
+                if (req.session.history) req.session.history.push(remember);
+                else req.session.history = [remember];
+            }
             var options = {};
             if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
             else options['limit'] = 20;
