@@ -14,7 +14,9 @@
     "search" : {
       "url" : "search41",
       "collections" : {
-        "genes" : 1
+        "genes" : 1,
+	"reactome" : 1,
+	"cyc" : 1
       }
     },
     "ontology" : {
@@ -27,6 +29,13 @@
         "PO" : 1,
         "SO" : 1,
         "TO" : 1
+      }
+    },
+    "cmap" : {
+      "url" : "cmap",
+      "collections" : {
+        "map" : 1,
+	"mapSet" : 1
       }
     }
   }
