@@ -18,7 +18,7 @@
 
 <script>
 jQuery(document).ready(function() {
-	$.ajax({url: "http://brie:3000/history", xhrFields: {withCredentials: true}})
+	$.ajax({url: "http://data.gramene.org/history", xhrFields: {withCredentials: true}})
 	.done(function(data) {
 		var html = '<table class="table table-striped">'
 		+'<thead>'
