@@ -54,9 +54,9 @@ var MongoAPI = {
                 type: 'string',
                 description: 'sort criteria'
             },
-            nohist: {
-                type: 'boolean',
-                description: 'suppress history'
+            hist: {
+                type: 'string',
+                description: 'save history'
             }
         }
     },
@@ -101,7 +101,7 @@ var MongoCommand = {
             var diff = process.hrtime(time);
             var ms = diff[0] * 1e3 + diff[1]/1e6;
             var now = new Date(Date.now());
-            if (!params.hasOwnProperty('nohist')) {
+            if (params.hasOwnProperty('hist')) {
                 var remember = {
                     timestamp : now.toISOString(),
                     db : req.params.dbname,
@@ -179,6 +179,8 @@ app.get('/history', function (req,res,next) {
     }
     res.json(req.session.history);
 });
+
+// insert fastbit routes here
 
 app.get('/:dbname', function (req, res, next) {
     // return a list of collections in the given database
