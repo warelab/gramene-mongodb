@@ -12,30 +12,30 @@
   },
   "databases" : {
     "search" : {
-      "url" : "search41",
+      "url" : "search42",
       "collections" : {
-        "genes" : 1,
-	"reactome" : 1,
-	"cyc" : 1
+        "genes" : "ensembl gene data",
+        "reactome" : "pathways, reactions, reactants, and catalysts",
+        "cyc" : "pathways"
       }
     },
     "ontology" : {
       "url" : "ontology",
       "collections" : {
-        "EO" : 1,
-        "GO" : 1,
-        "GRO": 1,
-        "NCBITaxon" : 1,
-        "PO" : 1,
-        "SO" : 1,
-        "TO" : 1
+        "EO" : "plant environmental ontology",
+        "GO" : "gene ontology",
+        "GRO": "cereal plant growth stage ontology",
+        "NCBITaxon" : "ncbi taxonomy (pruned to only gramene species)",
+        "PO" : "plant ontology",
+        "SO" : "sequence ontology",
+        "TO" : "trait ontology"
       }
     },
     "cmap" : {
       "url" : "cmap",
       "collections" : {
-        "map" : 1,
-	"mapSet" : 1
+        "mapSet" : "sets of maps e.g., a genome assembly",
+        "map" : "a linear object usu corresponding to DNA"
       }
     }
   }
