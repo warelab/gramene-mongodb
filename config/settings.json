@@ -11,6 +11,12 @@
     "port" : 27017
   },
   "databases" : {
+    "x" : {
+      "url" : "search42a",
+      "collections" : {
+        "genes" : "ensembl gene data"
+      }
+    },
     "search" : {
       "url" : "search42",
       "collections" : {

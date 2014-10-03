@@ -73,6 +73,28 @@ var MongoAPI = {
                 required: true
             }
         }
+    },
+    suggest : {
+      description: "type ahead service",
+      properties: {
+        t: {
+          required: true,
+          type: 'string',
+          description: 'type ahead query string'
+        },
+        rows: {
+            type: 'integer',
+            description: 'number of rows to return'
+        },
+        start: {
+            type: 'integer',
+            description: 'return documents starting at row'
+        },
+        fl: {
+            type: 'string',
+            description: 'list of fields to return'
+        }
+      }
     }
 };
 
@@ -132,6 +154,44 @@ var MongoCommand = {
                 if (err) throw err;
                 res.send({time: ms, count: count, response:result});
             });
+        });
+    },
+    suggest : function(coll,params,schema,req,res) {
+        var query = buildQuery(params,schema);
+        var qterm = params['t'].toLowerCase();
+        query['_terms'] = {'$regex':'^' + qterm};
+        var options = {};
+        if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
+        else options['limit'] = 10;
+        if (params.hasOwnProperty('start')) options['skip'] = params['start'];
+        if (params.hasOwnProperty('sort')) {
+            options['sort'] = {};
+        }
+        var want_terms = false;
+        if (params.hasOwnProperty('fl')) {
+            options['fields'] = {};
+            var want_id=false;
+            params['fl'].split(',').forEach(function(f) {
+                options['fields'][f] = 1;
+                if (f === '_id') want_id=true;
+                if (f === '_terms') want_terms = true;
+            });
+            if (!want_id) options['fields']['_id'] = 0;
+        }
+        coll.find(query,options).toArray(function(err,result) {
+            if (err) throw err;
+            if (want_terms) {
+              var re = new RegExp('^'+qterm);
+              // filter the result _terms
+              result.forEach(function(doc) {
+                var matches = [];
+                doc._terms.forEach(function(term) {
+                  if (term.match(re)) matches.push(term);
+                });
+                doc._terms = matches;
+              });
+            }
+            res.send(result);
         });
     },
     facet : function(coll,params,schema,req,res) {
