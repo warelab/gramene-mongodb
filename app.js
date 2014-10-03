@@ -160,38 +160,44 @@ var MongoCommand = {
         var query = buildQuery(params,schema);
         var qterm = params['t'].toLowerCase();
         query['_terms'] = {'$regex':'^' + qterm};
-        var options = {};
-        if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
-        else options['limit'] = 10;
-        if (params.hasOwnProperty('start')) options['skip'] = params['start'];
-        if (params.hasOwnProperty('sort')) {
-            options['sort'] = {};
-        }
-        var want_terms = false;
-        if (params.hasOwnProperty('fl')) {
-            options['fields'] = {};
-            var want_id=false;
-            params['fl'].split(',').forEach(function(f) {
-                options['fields'][f] = 1;
-                if (f === '_id') want_id=true;
-                if (f === '_terms') want_terms = true;
-            });
-            if (!want_id) options['fields']['_id'] = 0;
-        }
-        coll.find(query,options).toArray(function(err,result) {
-            if (err) throw err;
-            if (want_terms) {
-              var re = new RegExp('^'+qterm);
-              // filter the result _terms
-              result.forEach(function(doc) {
-                var matches = [];
-                doc._terms.forEach(function(term) {
-                  if (term.match(re)) matches.push(term);
-                });
-                doc._terms = matches;
+        var time = process.hrtime();
+        coll.count(query, function(err,count) {
+          if (err) throw err;
+          var options = {};
+          if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
+          else options['limit'] = 10;
+          if (params.hasOwnProperty('start')) options['skip'] = params['start'];
+          if (params.hasOwnProperty('sort')) {
+              options['sort'] = {};
+          }
+          var want_terms = false;
+          if (params.hasOwnProperty('fl')) {
+              options['fields'] = {};
+              var want_id=false;
+              params['fl'].split(',').forEach(function(f) {
+                  options['fields'][f] = 1;
+                  if (f === '_id') want_id=true;
+                  if (f === '_terms') want_terms = true;
               });
-            }
-            res.send(result);
+              if (!want_id) options['fields']['_id'] = 0;
+          }
+          coll.find(query,options).toArray(function(err,result) {
+              if (err) throw err;
+              if (want_terms) {
+                var re = new RegExp('^'+qterm);
+                // filter the result _terms
+                result.forEach(function(doc) {
+                  var matches = [];
+                  doc._terms.forEach(function(term) {
+                    if (term.match(re)) matches.push(term);
+                  });
+                  doc._terms = matches;
+                });
+              }
+              var diff = process.hrtime(time);
+              var ms = diff[0] * 1e3 + diff[1]/1e6;
+              res.send({time: ms, count: count, response:result});
+          });
         });
     },
     facet : function(coll,params,schema,req,res) {
