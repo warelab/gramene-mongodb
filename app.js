@@ -102,15 +102,21 @@ var mongoURL = 'mongodb://' + settings.mongo.host + ':' + settings.mongo.port + 
 var databases = settings.databases;
 
 function buildQuery(params,schema) {
-    var query = {};
-    if (params.hasOwnProperty('q')) query['$text'] = {'$search':params['q']};
-    for (var p in params) {
-        if (!schema.hasOwnProperty(p)) {
-            query[p] = params[p];
-            if (!isNaN(params[p])) query[p] = +params[p];
-        }
+  var qExprs = [];
+  if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search':params['q']}});
+  if (schema.hasOwnProperty('t') && params.hasOwnProperty('t')) {
+    params['t'].toLowerCase().split(/[^\w\d-]+/).forEach(function(word) {
+      qExprs.push({'_terms':{'$regex':'^' + word}});
+    });
+  }
+  for (var p in params) {
+    if (!schema.hasOwnProperty(p)) {
+      var q = {};
+      q[p] = isNaN(params[p]) ? params[p] : +params[p];
+      qExprs.push(q);
     }
-    return query;
+  }
+  return {'$and':qExprs};
 }
 
 // the actual mongodb queries for each API command
@@ -120,8 +126,6 @@ var MongoCommand = {
         var time = process.hrtime();
         coll.count(query, function(err,count) {
             if (err) throw err;
-            var diff = process.hrtime(time);
-            var ms = diff[0] * 1e3 + diff[1]/1e6;
             var now = new Date(Date.now());
             if (params.hasOwnProperty('hist')) {
                 var remember = {
@@ -152,14 +156,14 @@ var MongoCommand = {
             }
             coll.find(query,options).toArray(function(err,result) {
                 if (err) throw err;
+                var diff = process.hrtime(time);
+                var ms = diff[0] * 1e3 + diff[1]/1e6;
                 res.send({time: ms, count: count, response:result});
             });
         });
     },
     suggest : function(coll,params,schema,req,res) {
         var query = buildQuery(params,schema);
-        var qterm = params['t'].toLowerCase();
-        query['_terms'] = {'$regex':'^' + qterm};
         var time = process.hrtime();
         coll.count(query, function(err,count) {
           if (err) throw err;
@@ -184,12 +188,21 @@ var MongoCommand = {
           coll.find(query,options).toArray(function(err,result) {
               if (err) throw err;
               if (want_terms) {
-                var re = new RegExp('^'+qterm);
+                var reList = [];
+                params['t'].toLowerCase().split(/[^\w\d-]+/).forEach(function(word) {
+                  reList.push(new RegExp('^'+word));
+                });
                 // filter the result _terms
                 result.forEach(function(doc) {
                   var matches = [];
                   doc._terms.forEach(function(term) {
-                    if (term.match(re)) matches.push(term);
+                    function termMatches(t,reList) {
+                      for(var i=0;i<reList.length;i++) {
+                        if (t.match(reList[i])) return true;
+                      }
+                      return false;
+                    }
+                    if (termMatches(term,reList)) matches.push(term);
                   });
                   doc._terms = matches;
                 });
