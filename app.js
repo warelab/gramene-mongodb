@@ -116,7 +116,9 @@ function buildQuery(params,schema) {
       qExprs.push(q);
     }
   }
-  return {'$and':qExprs};
+  if (qExprs.length > 1) return {'$and':qExprs};
+  else if (qExprs.length == 1) return qExprs[0];
+  else return {};
 }
 
 // the actual mongodb queries for each API command
