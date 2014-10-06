@@ -5,6 +5,7 @@ var express  = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     MongoStore = require('connect-mongo')(session),
+    cache    = require('web-cache'),
     validate = require('conform').validate,
     MongoClient  = require('mongodb').MongoClient;
 
@@ -27,6 +28,9 @@ app.use(session({
     secret: settings.cookie_secret,
     resave: false,
     saveUninitialized: true
+}));
+app.use(cache.middleware({
+    clean: true
 }));
 
 // a few standard mongodb commands (mimic solr)
