@@ -36,12 +36,7 @@ function buildQuery(params,api) {
   if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search':params['q']}});
   for (var p in params) {
     if (!api.hasOwnProperty(p)) {
-      // BUG: this fails on string fields containing numbers
-      // should ideally have a collection schema that
-      // validates the query params and does the type casting
-      var q = {};
-      q[p] = isNaN(params[p]) ? params[p] : +params[p];
-      qExprs.push(q);
+      qExprs.push({p:params[p]});
     }
   }
   if (qExprs.length > 1) return {'$and':qExprs};
