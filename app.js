@@ -35,9 +35,7 @@ function buildQuery(params,api) {
   var qExprs = [];
   if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search':params['q']}});
   for (var p in params) {
-    if (!api.hasOwnProperty(p)) {
-      qExprs.push({p:params[p]});
-    }
+    if (!api.hasOwnProperty(p)) qExprs.push({p:params[p]});
   }
   if (qExprs.length > 1) return {'$and':qExprs};
   else if (qExprs.length == 1) return qExprs[0];

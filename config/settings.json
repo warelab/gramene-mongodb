@@ -1,6 +1,6 @@
 {
   "cookie_secret" : "i like plants",
-  "CORS" : ["http://localhost:8080", "http://brie:8080", "http://brie.cshl.edu:8080"],
+  "CORS" : ["http://localhost:8080", "http://data.gramene.org"],
   "session" : {
     "db" : "gramene",
     "host" : "brie.cshl.edu",
@@ -9,34 +9,5 @@
   "mongo" : {
     "host" : "brie.cshl.edu",
     "port" : 27017
-  },
-  "databases" : {
-    "search" : {
-      "url" : "search",
-      "collections" : {
-        "genes" : "ensembl gene data",
-        "reactome" : "pathways, reactions, reactants, and catalysts",
-        "cyc" : "pathways"
-      }
-    },
-    "ontology" : {
-      "url" : "ontology",
-      "collections" : {
-        "EO" : "plant environmental ontology",
-        "GO" : "gene ontology",
-        "GRO": "cereal plant growth stage ontology",
-        "NCBITaxon" : "ncbi taxonomy (pruned to only gramene species)",
-        "PO" : "plant ontology",
-        "SO" : "sequence ontology",
-        "TO" : "trait ontology"
-      }
-    },
-    "cmap" : {
-      "url" : "cmap",
-      "collections" : {
-        "mapSet" : "sets of maps e.g., a genome assembly",
-        "map" : "a linear object usu corresponding to DNA"
-      }
-    }
   }
 }
