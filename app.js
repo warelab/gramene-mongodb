@@ -14,30 +14,50 @@ var settings = require('./config/settings.json');
 var collections = require('./config/collections').collections;
 var MongoAPI = require('./config/api').api;
 
+// add mongodb collections to the external services
+var services = settings.externalServices;
+for (var c in collections) {
+  services['/' + c] = collections[c].description;
+}
+
 // setup mongodb collections
-var mongoURL = 'mongodb://' + settings.mongo.host + ':' + settings.mongo.port + '/';
 var databases = {};
 for (var coll in collections) {
   var c = collections[coll];
-  if (! databases.hasOwnProperty(c.dbName)) { // open database connection
-    (function(c) {
-      MongoClient.connect(mongoURL + c.dbName, function(err,db) {
-        if (err) throw err;
-        databases[c.dbName] = db;
-        c.coll = databases[c.dbName].collection(c.collectionName);
-      });
-    })(c);
+  if (databases.hasOwnProperty(c.dbName)) {
+    databases[c.dbName].colls.push(coll);
   }
-  else c.coll = databases[c.dbName].collection(c.collectionName);
+  else {
+    databases[c.dbName] = {
+      url: 'mongodb://' + c.host + ':' + c.port + '/' + c.dbName,
+      colls: [coll]
+    };
+  }
+}
+for (var dbName in databases) {
+  (function(url, colls) {
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      console.log('connected to ' + url, colls);
+      colls.forEach(function (coll) {
+        var c = collections[coll];
+        c.coll = db.collection(c.collectionName);
+      });
+    });
+  })(databases[dbName].url, databases[dbName].colls);
 }
 
-function buildQuery(params,api) {
+function buildQuery(params, cmd) {
   var qExprs = [];
-  if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search':params['q']}});
+  if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search': params['q']}});
   for (var p in params) {
-    if (!api.hasOwnProperty(p)) qExprs.push({p:params[p]});
+    if (!cmd.hasOwnProperty(p)) {
+      var o = {};
+      o[p] = params[p];
+      qExprs.push(o);
+    }
   }
-  if (qExprs.length > 1) return {'$and':qExprs};
+  if (qExprs.length > 1) return {'$and': qExprs};
   else if (qExprs.length == 1) return qExprs[0];
   else return {};
 }
@@ -47,10 +67,10 @@ var MongoCommand = {
   describe: function(c, params, req, res) {
     res.send(c.properties);
   },
-  select : function(c,params,req,res) {
-    var query = buildQuery(params,MongoAPI.select.properties);
+  select : function(c, params, req,  res) {
+    var query = buildQuery(params, MongoAPI.select.properties);
     var time = process.hrtime();
-    c.coll.count(query, function(err,count) {
+    c.coll.count(query, function(err, count) {
       if (err) throw err;
       var options = {};
       if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
@@ -68,11 +88,12 @@ var MongoCommand = {
         });
         if (!want_id) options['fields']['_id'] = 0;
       }
-      c.coll.find(query,options).toArray(function(err,result) {
+      c.coll.find(query, options).toArray(function(err, result) {
         if (err) throw err;
         var diff = process.hrtime(time);
         var ms = diff[0] * 1e3 + diff[1]/1e6;
         res.send({time: ms, count: count, response:result});
+        // save query to search history
         if (params.hasOwnProperty('hist')) {
           var now = new Date(Date.now());
           var remember = {
@@ -87,9 +108,9 @@ var MongoCommand = {
       });
     });
   },
-  facet : function(c,params,req,res) {
+  facet : function(c, params, req, res) {
     var pipeline = [];
-    var query = buildQuery(params,MongoAPI.facet.properties);
+    var query = buildQuery(params, MongoAPI.facet.properties);
     if (query.length !== 0) {
       pipeline.push({$match : query});
     }
@@ -97,7 +118,7 @@ var MongoCommand = {
     // if the field is multi valued you have to $unwind(?) it first
     pipeline.push({$group : {_id: '$'+params['field'], count: {$sum:1}}});
     pipeline.push({$sort  : {count:-1}});
-    c.coll.aggregate(pipeline,function(err,result) {
+    c.coll.aggregate(pipeline, function(err, result) {
        if (err) throw err;
        res.send(result);
     });
@@ -132,12 +153,8 @@ app.use(cache.middleware({
 var port = process.argv.length > 2 ? process.argv[2] : 3000;
 
 // define routes
-app.get('/', function (req,res,next) { // return top level info
-  var info = { '/ensembl' : "ensembl REST API" };
-  for (var c in collections) {
-    info['/' + c] = collections[c].description;
-  }
-  res.json(info);
+app.get('/', function (req, res, next) { // return top level info
+  res.json(services);
 });
 
 app.get('/history', function (req,res,next) {

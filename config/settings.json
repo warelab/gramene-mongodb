@@ -6,8 +6,7 @@
     "host" : "brie.cshl.edu",
     "port" : 27017
   },
-  "mongo" : {
-    "host" : "brie.cshl.edu",
-    "port" : 27017
+  "externalServices" : {
+    "/ensembl" : "Ensembl REST API"
   }
 }

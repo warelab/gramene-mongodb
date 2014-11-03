@@ -133,66 +133,88 @@ for (var field in ['type','system_name','name','pathway','content','class']) {
 
 exports.collections = {
   genes : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "search",
     collectionName : "genes",
     description    : "ensembl gene data",
     properties     : gene_schema
   },
   reactions : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "search",
     collectionName : "reactome",
     description    : "reactome data",
     properties     : reactome_schema
   },
   pathways : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "search",
     collectionName : "cyc",
     description    : "cyc pathway data",
     properties     : cyc_schema
   },
   EO : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "EO",
     description    : "plant environmental ontology",
     properties     : ontology_schema
   },
   GO : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "GO",
     description    : "gene ontology",
     properties     : ontology_schema
   },
   GRO : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "GRO",
     description    : "cereal plant growth stage ontology",
     properties     : ontology_schema
   },
   taxonomy : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "NCBITaxon",
     description    : "NCBI taxonomy (pruned to cover gramene species)",
     properties     : ontology_schema
   },
   PO : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "PO",
     description    : "plant ontology",
     properties     : ontology_schema
   },
   SO : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "SO",
     description    : "sequence ontology",
     properties     : ontology_schema
   },
   TO : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "ontology",
     collectionName : "TO",
     description    : "trait ontology",
     properties     : ontology_schema
   },
   maps : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
     dbName         : "cmap",
     collectionName : "map",
     description    : "a collection of maps",
