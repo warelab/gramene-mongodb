@@ -212,6 +212,14 @@ exports.collections = {
     description    : "trait ontology",
     properties     : ontology_schema
   },
+  domains : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
+    dbName         : "ontology",
+    collectionName : "interpro",
+    description    : "intepro domains",
+    properties     : ontology_schema
+  },
   maps : {
     host           : "brie.cshl.edu",
     port           : 27017,
