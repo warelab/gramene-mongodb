@@ -118,18 +118,22 @@ var cyc_schema = {
   }
 };
 
-for (var field in ['species', 'system_name', 'gene_name', 'enzyme_name', 'reaction_id', 'reaction_name', 'pathway_id', 'pathway_name']) {
+var fields = ['species', 'system_name', 'gene_name', 'enzyme_name', 'reaction_id', 'reaction_name', 'pathway_id', 'pathway_name'];
+fields.forEach(function(field) {
   cyc_schema[field] = { type : 'string', description : field };
-}
+});
 
 var reactome_schema = {};
 
-for (var field in ['object_id', 'pathway_id', 'species_id', 'taxon_id']) {
+fields = ['object_id', 'pathway_id', 'species_id', 'taxon_id'];
+fields.forEach(function(field) {
   reactome_schema[field] = { type : 'integer', description : field };
-}
-for (var field in ['type','system_name','name','pathway','content','class']) {
+});
+
+fields = ['type','system_name','name','pathway','content','class'];
+fields.forEach(function(field) {
   reactome_schema[field] = { type : 'string', description : field };
-}
+});
 
 exports.collections = {
   genes : {
