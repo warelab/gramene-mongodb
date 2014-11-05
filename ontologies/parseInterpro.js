@@ -39,9 +39,9 @@ require('readline').createInterface({
     obj._id = parseInt(item.$.id.match(/\d+/));
     obj.ancestors = (ancestors[obj._id]) ? ancestors[obj._id] : [obj._id];
     obj.id = item.$.id;
-    obj.short_name = item.$.short_name;
+    obj.name = item.$.short_name;
     obj.type = item.$.type;
-    obj.name = item.name;
+    obj.description = item.name;
     if (item.hasOwnProperty('abstract') && item.abstract.hasOwnProperty('p')) obj.abstract = item.abstract.p.$text;
     if (item.hasOwnProperty('member_list') && item.member_list.hasOwnProperty('db_xref')) {
       item.member_list.db_xref.forEach(function(xref) {
