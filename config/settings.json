@@ -1,11 +1,5 @@
 {
-  "cookie_secret" : "i like plants",
   "CORS" : ["http://localhost:8080", "http://data.gramene.org"],
-  "session" : {
-    "db" : "gramene",
-    "host" : "brie.cshl.edu",
-    "port" : 27017
-  },
   "externalServices" : {
     "/ensembl" : "Ensembl REST API"
   }

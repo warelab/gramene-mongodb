@@ -20,14 +20,6 @@ exports.api = {
       fl: {
         type: "string",
         description: "list of fields to return"
-      },
-      sort: {
-        type: "string",
-        description: "sort criteria"
-      },
-      hist: {
-        type: "string",
-        description: "save history"
       }
     }
   },

@@ -2,9 +2,6 @@
 var express  = require('express'),
     cors = require('cors'),
     compression = require('compression'),
-    cookieParser = require('cookie-parser'),
-    session = require('express-session'),
-    MongoStore = require('connect-mongo')(session),
     cache    = require('web-cache'),
     validate = require('conform').validate,
     MongoClient  = require('mongodb').MongoClient;
@@ -93,18 +90,6 @@ var MongoCommand = {
         var diff = process.hrtime(time);
         var ms = diff[0] * 1e3 + diff[1]/1e6;
         res.send({time: ms, count: count, response:result});
-        // save query to search history
-        if (params.hasOwnProperty('hist')) {
-          var now = new Date(Date.now());
-          var remember = {
-            timestamp : now.toISOString(),
-            collection : req.params.collection,
-            query : query,
-            count : count
-          };
-          if (req.session.history) req.session.history.push(remember);
-          else req.session.history = [remember];
-        }
       });
     });
   },
@@ -138,16 +123,8 @@ var corsOptionsDelegate = function(req, callback){
 
 app.use(cors(corsOptionsDelegate));
 app.use(compression());
-app.use(cookieParser(settings.cookie_secret));
-app.use(session({
-  store: new MongoStore(settings.session),
-  secret: settings.cookie_secret,
-  resave: false,
-  saveUninitialized: true
-}));
 app.use(cache.middleware({
-  clean: true,
-  exclude: [ /^\/history/ ]
+  clean: true
 }));
 
 var port = process.argv.length > 2 ? process.argv[2] : 3000;
@@ -155,11 +132,6 @@ var port = process.argv.length > 2 ? process.argv[2] : 3000;
 // define routes
 app.get('/', function (req, res, next) { // return top level info
   res.json(services);
-});
-
-app.get('/history', function (req,res,next) {
-  if (req.query.hasOwnProperty('clear')) req.session.history = [];
-  res.json(req.session.history);
 });
 
 app.get('/:collection', function (req, res, next) {
