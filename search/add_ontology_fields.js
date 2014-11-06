@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
 The genes collection of the search db contains a document for each gene. A gene
 may be annotated with terms from an ontology such as the NCBI taxonomy, GO, or PO.
@@ -21,7 +22,8 @@ var collectionLUT = {
     'xrefs:GO' : 'GO',
     'xrefs:TO' : 'TO',
     'xrefs:PO' : 'PO',
-    'taxon_id' : 'NCBITaxon'
+    'taxon_id' : 'NCBITaxon',
+    'protein_features:interpro' : 'interpro'
 };
 
 var MongoClient = require('mongodb').MongoClient;
@@ -61,7 +63,7 @@ function termsToInts(terms) {
     if (typeof terms === "object") {
         for(var i in terms) {
             if (typeof terms[i] === "string") {
-                ints.push(parseInt(terms[i].replace(/[A-Z]+:0*/, "")));
+                ints.push(parseInt(terms[i].match(/\d+/)));
             }
             else {
                 ints.push(terms[i]);
@@ -79,7 +81,8 @@ function termsToIntsReplace(terms) {
     if (typeof terms === "object") {
         for(var i in terms) {
             if (typeof terms[i] === "string") {
-                terms[i] = parseInt(terms[i].replace(/[A-Z]+:0*/, ""));
+                // terms[i] = parseInt(terms[i].replace(/[A-Z]+:0*/, ""));
+                terms[i] = parseInt(terms[i].match(/\d+/));
             }
         }
         return terms;

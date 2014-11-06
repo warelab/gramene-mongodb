@@ -2,9 +2,11 @@
 The ontology database holds terms as documents. The database is intended to provide information on ontology terms and support more complex queries of annotated genes or other objects. The is_a relationships are traversed to form a list of ancestor nodes in each term document. That way, a subtree query for genes annotated with GO:0016746 | transferase activity, transferring acyl groups is `db.genes.find({"ancestors.GO":16746})`.
 ## Populating the ontology database
 ### special case InterPro
-Download xml file, parse, and import documents
+Download files, parse, and import documents
 ```
-curl -s ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz | gzip -cd | node parseInterpro.js /dev/fd/0 | mongoimport --db ontology --collection interpro
+mkdir tmp
+curl -s ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt > tmp/ParentChildTreeFile.txt
+curl -s ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz | gzip -cd | node parseInterpro.js tmp/ParentChildTreeFile.txt /dev/fd/0 | mongoimport --db ontology --collection interpro
 
 mongo ontology
 > db.interpro.ensureIndex({"$**":"text"})

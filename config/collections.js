@@ -139,7 +139,7 @@ exports.collections = {
   genes : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "search",
+    dbName         : "search42",
     collectionName : "genes",
     description    : "ensembl gene data",
     properties     : gene_schema
@@ -163,7 +163,7 @@ exports.collections = {
   EO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "EO",
     description    : "plant environmental ontology",
     properties     : ontology_schema
@@ -171,7 +171,7 @@ exports.collections = {
   GO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "GO",
     description    : "gene ontology",
     properties     : ontology_schema
@@ -179,7 +179,7 @@ exports.collections = {
   GRO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "GRO",
     description    : "cereal plant growth stage ontology",
     properties     : ontology_schema
@@ -187,7 +187,7 @@ exports.collections = {
   taxonomy : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "NCBITaxon",
     description    : "NCBI taxonomy (pruned to cover gramene species)",
     properties     : ontology_schema
@@ -195,7 +195,7 @@ exports.collections = {
   PO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "PO",
     description    : "plant ontology",
     properties     : ontology_schema
@@ -203,7 +203,7 @@ exports.collections = {
   SO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "SO",
     description    : "sequence ontology",
     properties     : ontology_schema
@@ -211,7 +211,7 @@ exports.collections = {
   TO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "TO",
     description    : "trait ontology",
     properties     : ontology_schema
@@ -219,7 +219,7 @@ exports.collections = {
   domains : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology42",
     collectionName : "interpro",
     description    : "intepro domains",
     properties     : ontology_schema
