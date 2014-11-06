@@ -9,6 +9,11 @@ exports.api = {
         type: "string",
         description: "query string"
       },
+      l: {
+        type: "string",
+        pattern: '^[^:]+:[^:]+:[0-9]+:[0-9]+$',
+        description: "query location"
+      },
       rows: {
         type: "integer",
         description: "number of rows to return"

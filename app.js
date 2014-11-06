@@ -47,6 +47,14 @@ for (var dbName in databases) {
 function buildQuery(params, cmd) {
   var qExprs = [];
   if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search': params['q']}});
+  if (params.hasOwnProperty('l')) {
+    var mrse = params['l'].split(':');
+    qExprs.push(
+      {'location.map':mrse[0]},
+      {'location.region':mrse[1]},
+      {'location.start':{'$lte': +mrse[3]}},
+      {'location.end':{'$gte': +mrse[2]}});
+  }
   for (var p in params) {
     if (!cmd.hasOwnProperty(p)) {
       var o = {};
