@@ -48,12 +48,13 @@ function buildQuery(params, cmd) {
   var qExprs = [];
   if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search': params['q']}});
   if (params.hasOwnProperty('l')) {
-    var mrse = params['l'].split(':');
+    var a = params['l'].split(':');
+    var m = a[0], r = a[1], s = a[2], e = a[3];
     qExprs.push(
-      {'location.map':mrse[0]},
-      {'location.region':mrse[1]},
-      {'location.start':{'$lte': +mrse[3]}},
-      {'location.end':{'$gte': +mrse[2]}});
+      {'location.map':m},
+      {'location.region':r},
+      {'location.start':{'$lte': +e}},
+      {'location.end':{'$gte': +s}});
   }
   for (var p in params) {
     if (!cmd.hasOwnProperty(p)) {
