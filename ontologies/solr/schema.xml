@@ -151,8 +151,8 @@
        RESTRICTION: the glob-like pattern in the name attribute must have
        a "*" only at the start or the end.  -->
    
-   <dynamicField name="*_s"  type="string" indexed="true" stored="true"  multiValued="false"/>
-   <dynamicField name="*_ss" type="string" indexed="true" stored="true"  multiValued="true"/>
+   <dynamicField name="*_s"  type="text_general" indexed="true" stored="true"  multiValued="false"/>
+   <dynamicField name="*_ss" type="text_general" indexed="true" stored="true"  multiValued="true"/>
    <dynamicField name="*_i"  type="int"    indexed="true" stored="true"  multiValued="false"/>
    <dynamicField name="*_is" type="int"    indexed="true" stored="true"  multiValued="true"/>
 

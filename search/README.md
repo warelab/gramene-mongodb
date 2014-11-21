@@ -38,3 +38,9 @@ db.genes.find({"ancestors.GO":4321}).count()
 db.genes.find({$text : {$search : "kinase"}}).count()
 db.genes.aggregate({$match: {$text: {$search: "kinase"}}},{$group : {_id: "$species", count: {$sum:1}}},{$sort: {"count":-1}})
 ```
+## exporting the genes collection for use in solr
+```
+cd solr
+mongoexport -d search -c genes | node mongo2solr.js /dev/fd/0 > genes.json
+curl 'http://localhost:8983/solr/genes/update?commit=true' --data-binary @genes.json -H 'Content-type:application/json'
+```

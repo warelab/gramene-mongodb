@@ -1,22 +1,12 @@
 var fs = require('fs');
 var filename = process.argv[2];
 
-function add_xrefs(dest, src) {
-  for(var db in src) {
-    if (typeof(src[db][0]) === 'number') {
-      dest[db + '_xrefi'] = src[db];
-    }
-    else {
-      dest[db + '_xrefs'] = src[db];
-    }
-  }
-}
-
-function add_ancestors(dest, src) {
-  for(var db in src) {
-    dest[db + '_ancestors'] = src[db];
-  }
-}
+var skipField = [];
+skipField['created_by']=1;
+skipField['ancestors']=1;
+skipField['relationship']=1;
+skipField['creation_date']=1;
+skipField['is_a']=1;
 
 // setup reader
 var n=0;
@@ -31,8 +21,12 @@ require('readline').createInterface(
   solr.id = mongo._id;
   for (var k in mongo) {
     if (k === "_id") solr.id = mongo._id;
-    else {
-      if      (typeof(mongo[k]) === 'number') solr[k+'_i'] = mongo[k];
+    else if (! skipField.hasOwnProperty(k)) {
+      if (k === 'property_value') {
+        var a = mongo[k].split(':');
+        if (a[0] === 'has_rank NCBITaxon') solr['rank_s'] = a[1];
+      }
+      else if (typeof(mongo[k]) === 'number') solr[k+'_i'] = mongo[k];
       else if (typeof(mongo[k]) === 'string') solr[k+'_s'] = mongo[k];
       else if (typeof(mongo[k]) === 'object') {
         var numbers=0;

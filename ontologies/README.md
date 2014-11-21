@@ -74,3 +74,20 @@ There are over 1 million terms in the NCBITaxon ontology, but Gramene only hosts
 > db.NCBITaxon.remove({_id: {$nin: [ 4577, 3602, 29760, 91834, 4113, 147428, 4555, 147369, 147370, 3700, 3243, 3246, 3244, 3245, 4637, 3745, 3699, 721805, 147429, 38820, 3694, 3193, 4070, 3051, 39947, 4572, 4530, 3646, 40149, 4554, 3754, 4641, 40148, 4618, 4533, 2759, 65489, 147367, 4537, 4513, 4640, 403667, 4069, 214687, 171637, 91835, 3803, 4512, 78536, 3847, 3701, 3242, 163735, 1437183, 45156, 91827, 424574, 359160, 147385, 2763, 4557, 2797, 45157, 980083, 1437201, 33090, 71240, 3711, 3814, 3398, 3688, 3846, 4479, 147389, 15367, 147368, 3702, 4538, 15368, 238069, 3041, 981071, 4081, 51351, 280699, 91836, 131567, 39946, 265316, 71275, 3603, 58024, 71274, 4107, 261009, 232365, 91888, 13332, 3055, 4480, 81972, 3042, 163742, 59689, 1, 3166, 4527, 1437197, 72025, 4564, 88036, 131221, 4558, 424551, 35493, 3760, 4734, 3705, 37682, 3880, 22097, 49274, 3744, 4575, 3689, 4536, 4447, 3052, 1462606, 4565, 265318, 13333, 58023, 3877, 147380, 112509 ]}})
 > db.repairDatabase()
 ```
+
+## Setting up Solr cores for each collection
+The solr subdirectory contains a script that will convert a stream of JSON documents exported from mongodb into a list of JSON documents that can be imported into solr. The schema.xml and solrconfig.xml files can be used to set up the core.
+#### export and convert mongodb docs for solr
+```
+mongoexport -d ontology -c GO | node ontology2solr.js /dev/fd/0 > GO.json
+mongoexport -d ontology -c PO | node ontology2solr.js /dev/fd/0 > PO.json
+mongoexport -d ontology -c NCBITaxon | node ontology2solr.js /dev/fd/0 > taxonomy.json
+mongoexport -d ontology -c interpro | node ontology2solr.js /dev/fd/0 > interpro.json
+```
+#### import into a running solr instance
+```
+curl 'http://localhost:8983/solr/GO/update?commit=true' --data-binary @GO.json -H 'Content-type:application/json'
+curl 'http://localhost:8983/solr/PO/update?commit=true' --data-binary @PO.json -H 'Content-type:application/json'
+curl 'http://localhost:8983/solr/taxonomy/update?commit=true' --data-binary @taxonomy.json -H 'Content-type:application/json'
+curl 'http://localhost:8983/solr/interpro/update?commit=true' --data-binary @interpro.json -H 'Content-type:application/json'
+```
