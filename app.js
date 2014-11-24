@@ -58,9 +58,12 @@ function buildQuery(params, cmd) {
   }
   for (var p in params) {
     if (!cmd.hasOwnProperty(p)) {
-      var o = {};
-      o[p] = params[p];
-      qExprs.push(o);
+      if (p === 'idList') qExprs.push({'_id': {'$in': params['idList'].split(',').map(function(x) {return +x;})}});
+      else {
+        var o = {};
+        o[p] = params[p];
+        qExprs.push(o);
+      }
     }
   }
   if (qExprs.length > 1) return {'$and': qExprs};
