@@ -28,23 +28,24 @@ require('readline').createInterface(
 ).on('line', function(line) { // one JSON object per line
   var mongo = JSON.parse(line);
   var solr = {};
-  solr.id = mongo._id.$oid;
-  solr.gene_id = mongo.gene_id;
-  solr.database = mongo.database;
+//  solr.id = mongo._id.$oid;
+  solr.id          = mongo._id;
+  solr.database    = mongo.database;
   solr.system_name = mongo.system_name;
-  solr.taxon_id = mongo.taxon_id;
-  solr.species = mongo.species;
-  solr.name = mongo.name;
+  solr.biotype     = mongo.biotype;
+  solr.taxon_id    = mongo.taxon_id;
+  solr.species     = mongo.species;
+  solr.name        = mongo.name;
   solr.description = mongo.description;
-  solr.biotype = mongo.biotype;
-  solr.map = mongo.location.map;
-  solr.region = mongo.location.region;
-  solr.start = mongo.location.start;
-  solr.end = mongo.location.end;
-  solr.strand = mongo.location.strand;
-  if (mongo.genetrees.length > 0) solr.genetrees = mongo.genetrees;
-  // if (mongo.pathways) solr.pathways = mongo.pathways;
-  // if (mongo.reactions) solr.reactions = mongo.reactions;
+  solr.map         = mongo.location.map;
+  solr.region      = mongo.location.region;
+  solr.start       = mongo.location.start;
+  solr.end         = mongo.location.end;
+  solr.strand      = mongo.location.strand;
+  if (mongo.hasOwnProperty("eg_gene_tree"))  solr.eg_gene_tree  = mongo.eg_gene_tree;
+  if (mongo.hasOwnProperty("epl_gene_tree")) solr.epl_gene_tree = mongo.epl_gene_tree;
+  if (mongo.hasOwnProperty("pathways"))      solr.pathways      = mongo.pathways;
+  if (mongo.hasOwnProperty("reactions"})     solr.reactions     = mongo.reactions;
 
   // now deal with xrefs and protein_features
   add_xrefs(solr,mongo.xrefs);

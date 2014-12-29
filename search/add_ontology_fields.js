@@ -118,11 +118,25 @@ MongoClient.connect(mongoURL, function(err, db) {
        for(var field in collectionLUT) {
            var terms = getField(obj, field.split(':'));
            if (terms) {
+             // terms might now be an object where keys are evidence codes, and values are arrays of terms
+             if (Array.isArray(terms) || typeof terms !== "object") { // nope, just an array or a non-object
                // var ints = termsToInts(terms);
                var ints = termsToIntsReplace(terms);
                var o = collectionLUT[field];
                var coll = db.collection(o);
                queryFunctions[o] = aggregateFunctor(coll,Ancestors(ints));
+             }
+             else { // object with evidence code keys
+               var allInts = [];
+               var o = collectionLUT[field];
+               var coll = db.collection(o);
+               for (var ec in terms) {
+                 var ints = termsToIntsReplace(terms[ec]);
+                 queryFunctions[o+"_"+ec] = aggregateFunctor(coll,Ancestors(ints));
+                 ints.forEach(function(i) {allInts.push(i)});
+               }
+               queryFunctions[o] = aggregateFunctor(coll,Ancestors(allInts));
+             }
            }
        }
 

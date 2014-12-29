@@ -121,7 +121,6 @@
      installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
    -->   
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> <!-- mongodb's _id -->
-   <field name="gene_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    <field name="database" type="string" stored="true" required="true" multiValued="false"/>
    <field name="system_name" type="string" stored="true" required="true" multiValued="false"/>
    <field name="taxon_id" type="int" indexed="true" stored="true" multiValued="false" required="true"/>
@@ -148,7 +147,8 @@
    protein_features we also use *_xrefs
    protein_features.PANTHER -> PANTHER_xrefs
 -->
-	 <field name="genetrees" type="string" indexed="true" stored="true" multiValued="true"/>
+	 <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="true"/>
+	 <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="pathways" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="reactions" type="string" indexed="true" stored="true" multiValued="true"/>
 <!-- consider using *_ss fields here because they are like xrefs -->
