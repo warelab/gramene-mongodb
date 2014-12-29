@@ -18,7 +18,7 @@ annotated term(s), and outputs an updated JSON document for the gene.
 var mongoURL = 'mongodb://127.0.0.1:27017/ontology';
 
 var collectionLUT = {
-    'xrefs:goslim_goa' : 'GO',
+    // 'xrefs:goslim_goa' : 'GO', // skipped because it is a subset of GO
     'xrefs:GO' : 'GO',
     'xrefs:TO' : 'TO',
     'xrefs:PO' : 'PO',
@@ -127,15 +127,15 @@ MongoClient.connect(mongoURL, function(err, db) {
                queryFunctions[o] = aggregateFunctor(coll,Ancestors(ints));
              }
              else { // object with evidence code keys
-               var allInts = [];
+               var allInts = {};
                var o = collectionLUT[field];
                var coll = db.collection(o);
                for (var ec in terms) {
                  var ints = termsToIntsReplace(terms[ec]);
                  queryFunctions[o+"_"+ec] = aggregateFunctor(coll,Ancestors(ints));
-                 ints.forEach(function(i) {allInts.push(i)});
+                 ints.forEach(function(i) { allInts[i]=1; });
                }
-               queryFunctions[o] = aggregateFunctor(coll,Ancestors(allInts));
+               queryFunctions[o] = aggregateFunctor(coll,Ancestors(Object.keys(allInts)));
              }
            }
        }
