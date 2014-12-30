@@ -45,7 +45,7 @@ require('readline').createInterface(
   if (mongo.hasOwnProperty("eg_gene_tree"))  solr.eg_gene_tree  = mongo.eg_gene_tree;
   if (mongo.hasOwnProperty("epl_gene_tree")) solr.epl_gene_tree = mongo.epl_gene_tree;
   if (mongo.hasOwnProperty("pathways"))      solr.pathways      = mongo.pathways;
-  if (mongo.hasOwnProperty("reactions"})     solr.reactions     = mongo.reactions;
+  if (mongo.hasOwnProperty("reactions"))     solr.reactions     = mongo.reactions;
 
   // now deal with xrefs and protein_features
   add_xrefs(solr,mongo.xrefs);

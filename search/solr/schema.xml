@@ -147,11 +147,12 @@
    protein_features we also use *_xrefs
    protein_features.PANTHER -> PANTHER_xrefs
 -->
-	 <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="true"/>
-	 <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="true"/>
+	 <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+	 <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+   <!-- these fields are dynamic fields which reference reactome and pathway cores
    <field name="pathways" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="reactions" type="string" indexed="true" stored="true" multiValued="true"/>
-<!-- consider using *_ss fields here because they are like xrefs -->
+   -->
 
    <!-- Main body of document extracted by SolrCell.
         NOTE: This field is not indexed by default, since it is also copied to "text"
@@ -226,9 +227,10 @@
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
 
-   <copyField source="gene_id" dest="text"/>
+   <copyField source="id" dest="text"/>
    <copyField source="name" dest="text"/>
    <copyField source="description" dest="text"/> <!-- save for 2nd level suggester? -->
+   <copyField source="*_gene_tree" dest="text"/>
    <copyField source="*_xrefs" dest="text"/>
 	
    <!-- Above, multiple source fields are copied to the [text] field. 
