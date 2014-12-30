@@ -133,9 +133,10 @@ MongoClient.connect(mongoURL, function(err, db) {
                for (var ec in terms) {
                  var ints = termsToIntsReplace(terms[ec]);
                  queryFunctions[o+"_"+ec] = aggregateFunctor(coll,Ancestors(ints));
-                 ints.forEach(function(i) { allInts[i]=1; });
+                 for(var i=0; i < ints.length; i++) { allInts[ints[i]]=1; };
                }
-               queryFunctions[o] = aggregateFunctor(coll,Ancestors(Object.keys(allInts)));
+               var intarray = Object.keys(allInts).map(function(x){return +x});
+               queryFunctions[o] = aggregateFunctor(coll,Ancestors(intarray));
              }
            }
        }
