@@ -3,11 +3,24 @@ var filename = process.argv[2];
 
 function add_xrefs(dest, src) {
   for(var db in src) {
-    if (typeof(src[db][0]) === 'number') {
-      dest[db + '_xrefi'] = src[db];
+    if (Array.isArray(src[db])) {
+      if (typeof(src[db][0]) === 'number') {
+        dest[db + '_xrefi'] = src[db];
+      }
+      else {
+        dest[db + '_xrefs'] = src[db];
+      }
     }
     else {
-      dest[db + '_xrefs'] = src[db];
+      // its an object with evidence code keys
+      var any = {};
+      for (var ec in src[db]) {
+        dest[db + '_' + ec + '_xrefi'] = src[db][ec];
+        for(var i=0; i < src[db][ec].length; i++) {
+          any[src[db][ec][i]]=1;
+        }
+      }
+      dest[db + '_xrefi'] = Object.keys(any).map(function(x){return +x});
     }
   }
 }
