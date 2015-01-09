@@ -12,25 +12,53 @@ var http = require('http');
 var rest_api = process.argv[2];
 var output = process.argv[3];
 
-function fetchAssembly(species,assembly,mapSet) {
-    http.get(rest_api + '/info/assembly/'+species+'?content-type=application/json', function(res) {
-        var assemblyJSON = '';
-        res.on('data', function (chunk) {
-            assemblyJSON += chunk;
-        });
-        res.on('end', function (err) {
-            var assemblyObj = JSON.parse(assemblyJSON);
-            if (assemblyObj.assembly_name === assembly) {
-                for (var j in assemblyObj.top_level_region) {
-                    var sr = assemblyObj.top_level_region[j];
-                    sr.mapSet = mapSet;
-                    console.log(JSON.stringify(sr));
-                }
-            }
-        });
-    }).on('error', function(e) {
-        console.log("Got error: " + e.message);
+function fetchAssembly(system_name,taxon,assembly) {
+  http.get(rest_api + '/info/assembly/'+system_name+'?content-type=application/json', function(res) {
+    var assemblyJSON = '';
+    res.on('data', function (chunk) {
+      assemblyJSON += chunk;
     });
+    res.on('end', function (err) {
+      var assemblyObj = JSON.parse(assemblyJSON);
+      var map = {
+        _id : assemblyObj.assembly_accession,
+        taxon_id : taxon,
+        system_name : system_name,
+        type : "genome",
+        length : 0
+      };
+      if (assemblyObj.assembly_accession === assembly) {
+        map.regions = {};
+        map.regions.names = assemblyObj.karyotype;
+        map.regions.lengths = [];
+        var rlen = {};
+        map.regions.names.forEach(function(r) {
+          rlen[r] = 0;
+        });
+        for (var j in assemblyObj.top_level_region) {
+          var sr = assemblyObj.top_level_region[j];
+          if (!rlen.hasOwnProperty(sr.name)) {
+            if (rlen.hasOwnProperty("Un")) rlen.Un += sr.length;
+            else rlen.Un = sr.length;
+          }
+          rlen[sr.name] = sr.length;
+          map.length += sr.length;
+        }
+        if (rlen.hasOwnProperty("Un")) {
+          map.regions.names.push("Un");
+        }
+        map.regions.names.forEach(function(name) {
+          map.regions.lengths.push(rlen[name]);
+        });
+        console.log(JSON.stringify(map));
+      }
+      else {
+        console.log("ERROR matching assembly_name to assembly "+system_name+" -- "+assembly);
+      }
+    });
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
 }
 
 
@@ -43,13 +71,12 @@ http.get(rest_api + '/info/species?content-type=application/json', function(res)
         var obj = JSON.parse(speciesJSON);
         for (var i in obj.species) {
             var species = obj.species[i];
-            species._id = species.taxon_id + '_' + species.assembly;
             species.taxon_id = +species.taxon_id;
             if (output === 'species') {
                 console.log(JSON.stringify(species));
             }
             else {
-                fetchAssembly(species.name,species.assembly,species._id);
+                fetchAssembly(species.name,species.taxon_id,species.accession);
             }
         }
     });
