@@ -2,59 +2,107 @@
 
 Lets first define some terms
 
-- map: a linear representation of something like DNA. e.g., chromosome, scaffold, contig, etc.
-- mapSet: a collection of related maps. e.g. a genome assembly
+- map: a linear representation of DNA.
 - feature: an annotated interval on a map
-- featureSet: a collection of features from the same mapSet with the same format. e.g., methylation data set x
-- featureFormat: format of features in a featureSet
+- featureFormat: the format of a feature
+- featureSet: a collection of features on the same map with the same format
+- remapper: a function than can project features from one map to another
 - correspondence: a pair of features that are linked somehow
-- correspondenceSet: A set of correspondences between features on 2 featureSets.
+- correspondenceSet: A set of correspondences between features from 2 featureSets.
 - correspondenceType: the type of correspondence e.g., synteny
-- virtualMap: a map defined by a set of features, e.g., promoter regions (-2000,500) relative to TSS
-- remapper: a function that defines a relation from one map to another (usu. virtualMap, also whole genome alignments)
 
 ###Data can be stored in MongoDB and FastBit.
 
-MongoDB collections: mapSet, featureSet, featureFormat, and correspondenceSet
+MongoDB collections: maps, features, correspondences, formats, and remappers
 
-The features are stored in FastBit tables partitioned by featureSet and map.
-All features in a featureSet have the same format. The featureFormat determines what columns are stored.
+Each featureSet is stored in a FastBit partition.
 
-Correspondences between features on maps A and B are stored as a linearized bit matrix. you only have
-to store the positions of the set bits. Since it is very sparse, that would be more compact and 
-efficient to work with than a CmpBitVec. The reason correspondences are partitioned by the 4-tuple
-(featureSetA, featureSetB, mapA, mapB) is so you can extract the features from mapA and mapB quickly
-by creating bit vector masks for use on the featureSetA/mapA and featureSetB/mapB FastBit partitions
+Correspondences between features from featureSets A and B are stored as a linearized bit matrix. Only
+store the positions of the set bits. Since it is very sparse, that would be more compact and 
+easy to work with than a CmpBitVec.
 
-Example mapSet document
+Example maps document
 ```
 {
-	"name" : "Sbi1.4",
-	"maps" : {
-		"1" : { "type" : "chromosome", "length" : 123456789 },
-		"2" : { "type" : "chromosome", "length" : 112233445 }
-	}
+  "id"          : "GCA_000001735.1",
+  "system_name" : "arabidopsis_thaliana",
+  "taxon_id"    : 3702,
+  "name"        : "TAIR10 assembly",
+  "type"        : "genome", // extra info in the formats collection
+  "regions"     : {
+    "names"     : ["1", "2", "3", "4", "5", "Mt", "Pt"],
+    "lengths"   : [30427671, 19698289, 23459830, 18585056, 26975502, 366924, 154478]
+  }
 }
 ```
-Example featureSet document
+Example features document
 ```
 {
-	"name"          : "Sorghum root methylation",
-	"mapSet"        : "Sbi1.4",
-	"featureFormat" : "methylation",
-	"features"      : {
-		"map" : "/path to fastbit partition"
-	}
+  "id"     : "<automatically generated ID>",
+	"name"   : "genes",
+	"map"    : "GCA_000001735.1",
+	"type"   : "gene", // id of the corresponding document in the formats collection
+	"counts" : [8433, 5513, 6730, 5140, 7507, 146, 133],
+  "count"  : 33602
 }
 ```
-Example featureFormat document
+Example correspondences document
 ```
 {
-	"name"    : "methylation",
+  "featureSetA" : "foo",
+  "featureSetB" : "bar",
+	"type"        : "synteny", // extra info in the features collection?
+  "matrix"      : [0, 234, 300, 543, 788, 5544, 12313, 12324]
+}
+```
+Example formats document
+```
+// these examples are too much like FastBit's -part.txt file
+// change "columns" to "properties" so we can use revalidator.js
+// The syntactical mapping from properties to a FastBit -part.txt file should be done elsewhere
+{
+  "id"      : "gene",
+  "columns" : [
+    {
+      "name" : "region",
+      "type" : "USHORT"
+      "info" : "the index of the region in the maps document"
+    },
+		{
+			"name" : "start",
+			"type" : "UINT",
+			"info" : "the start position of the gene"
+		},
+		{
+			"name" : "end",
+			"type" : "UINT",
+			"info" : "the end position of the gene"
+		},
+		{
+			"name" : "orientation",
+			"type" : "USHORT",
+			"info" : "the orientation of the gene"
+		},
+    {
+      "name" : "gene_id",
+      "type" : "STRING",
+      "info" : "unique identifier for the gene"
+    }
+  ]
+}
+// methylation data can be large, might need to partition by context and/or region
+// and make them meta-tags. Postponing that optimization.
+{
+	"id"      : "methylation",
 	"columns" : [
+    {
+      "name" : "region",
+      "type" : "USHORT",
+      "info" : "the index of the region in the maps document"
+    },
 		{
 			"name" : "position",
-			"type" : "ULONG",
+			"type" : "UINT",
 			"info" : "the position of the (un)methylated cytosine on the map"
 		},
 		{
@@ -78,29 +126,16 @@ Example featureFormat document
 	]
 }
 ```
-Example correspondenceSet document 
+Example remappers document
 ```
 {
-	"featureSetA" : <featureSet id>,
-	"featureSetB" : <featureSet id>,
-	"type"        : <correspondence type> // is this just a label or does it require a separate table?
-	"correspondences" : [
-		{
-			"mapA"   : <map id>,
-			"mapB"   : <map id>,
-			"matrix" : [position list]
-		}
-	]
+	"sourceMap"   : <map id>,
+  "sourceStart" : <position>,
+  "sourceEnd"   : <position>,
+	"destMap"     : <map id>,
+  "destStart"   : <position>,
+  "destEnd"     : <position>,
+  "flip"        : <boolean>
 }
 ```
-Example virtualMap document
-```
-{
-	"mapA" : <map id>,
-	"mapB" : <map id>,
-	"function" : [[A1,A2,B1,B2,flip]] // sorted by A1 - keep it here or store on disk (FastBit)?
-}
-```
-
-store the function in a fastbit partition. Since features on a map are sorted (check .part.txt), doing the projection is linear in the number of
-intervals in the function and the number of features on the map.
+Use indexes that let you find the remapper document given the source and destination map ids and a position on the source map. When projecting a set of features from one map to another, pull the relevant documents sorted by position. N.B. some functions are bijections while others are not (genome -> aggregated promoter regions).
