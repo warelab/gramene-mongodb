@@ -21,13 +21,13 @@ function fetchAssembly(system_name,taxon,assembly) {
     res.on('end', function (err) {
       var assemblyObj = JSON.parse(assemblyJSON);
       var map = {
-        _id : assemblyObj.assembly_accession,
+        _id : assembly,
         taxon_id : taxon,
         system_name : system_name,
         type : "genome",
         length : 0
       };
-      if (assemblyObj.assembly_accession === assembly) {
+      // if (assemblyObj.assembly_accession === assembly) {
         map.regions = {};
         map.regions.names = assemblyObj.karyotype;
         map.regions.lengths = [];
@@ -38,23 +38,23 @@ function fetchAssembly(system_name,taxon,assembly) {
         for (var j in assemblyObj.top_level_region) {
           var sr = assemblyObj.top_level_region[j];
           if (!rlen.hasOwnProperty(sr.name)) {
-            if (rlen.hasOwnProperty("Un")) rlen.Un += sr.length;
-            else rlen.Un = sr.length;
+            if (rlen.hasOwnProperty("UNANCHORED")) rlen.UNANCHORED += sr.length;
+            else rlen.UNANCHORED = sr.length;
           }
           rlen[sr.name] = sr.length;
           map.length += sr.length;
         }
-        if (rlen.hasOwnProperty("Un")) {
-          map.regions.names.push("Un");
+        if (rlen.hasOwnProperty("UNANCHORED")) {
+          map.regions.names.push("UNANCHORED");
         }
         map.regions.names.forEach(function(name) {
           map.regions.lengths.push(rlen[name]);
         });
         console.log(JSON.stringify(map));
-      }
-      else {
-        console.log("ERROR matching assembly_name to assembly "+system_name+" -- "+assembly);
-      }
+      // }
+      // else {
+      //   console.log("ERROR matching assembly_name to assembly "+system_name+" -- "+assembly);
+      // }
     });
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
@@ -72,6 +72,7 @@ http.get(rest_api + '/info/species?content-type=application/json', function(res)
         for (var i in obj.species) {
             var species = obj.species[i];
             species.taxon_id = +species.taxon_id;
+            if (!species.accession) species.accession = species.assembly;
             if (output === 'species') {
                 console.log(JSON.stringify(species));
             }

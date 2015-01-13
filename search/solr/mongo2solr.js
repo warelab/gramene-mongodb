@@ -55,6 +55,8 @@ require('readline').createInterface(
   solr.start       = mongo.location.start;
   solr.end         = mongo.location.end;
   solr.strand      = mongo.location.strand;
+  if (mongo.hasOwnProperty("gene_idx"))      solr.gene_idx      = mongo.gene_idx;
+  if (mongo.hasOwnProperty("genome_idx"))    solr.genome_idx    = mongo.genome_idx;
   if (mongo.hasOwnProperty("eg_gene_tree"))  solr.eg_gene_tree  = mongo.eg_gene_tree;
   if (mongo.hasOwnProperty("epl_gene_tree")) solr.epl_gene_tree = mongo.epl_gene_tree;
   if (mongo.hasOwnProperty("pathways"))      solr.pathways      = mongo.pathways;
