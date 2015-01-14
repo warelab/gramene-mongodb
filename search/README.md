@@ -24,6 +24,32 @@ Final step is to build indexes
 ```
 mongo search41 < indexCommands.js
 ```
+
+## Creating a genetrees collection
+This didn't work...
+```
+db.genes.aggregate(
+  { $match: { "genetrees.0" : { $exists : true}}},
+  { $project :
+    {
+      _id : 0, genetrees : 1, taxon_id : 1, ipr : "$protein_features.interpro", go : "$xrefs.GO", po : "$xrefs.PO",
+      txt : { $concat : [ "$gene_id", " ", "$name", " ", "$description" ] }
+    }
+  },
+  { $unwind : "$genetrees" },
+  { $unwind : "$go" },
+  { $unwind : "$po" },
+  { $unwind : "$ipr" },
+  { $group :
+    {
+      _id : "$genetrees", taxa : { $addToSet : "$taxon_id" },
+      interpro : { $addToSet : "$ipr" }, go : { $addToSet : "$go" },
+      po : { $addToSet : "$po" }, content : { $addToSet : "$txt" }
+    }
+  },
+  { $out : "genetrees" }
+)
+```
 ## Populating the reactome collection
 ```
 reactome_solr_to_json.pl plant_reactome_solr_dump_082114.tab | mongoimport --db search41 --collection reactome

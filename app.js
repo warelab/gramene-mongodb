@@ -1,15 +1,35 @@
 // setup some dependencies
-var express  = require('express'),
+var cluster = require('cluster'),
+    express = require('express'),
     cors = require('cors'),
     compression = require('compression'),
-    cache    = require('web-cache'),
+    cache = require('web-cache'),
     validate = require('conform').validate,
-    MongoClient  = require('mongodb').MongoClient;
+    MongoClient = require('mongodb').MongoClient,
+    ObjectId = require('mongodb').ObjectID,
+    fastbit = require('fastbit');
 
+if (cluster.isMaster) {
+  // Count the machine's CPUs
+  var cpuCount = require('os').cpus().length;
+
+  // Create a worker for each CPU
+  for (var i = 0; i < cpuCount; i += 1) {
+    cluster.fork();
+  }
+  // Listen for dying workers
+  cluster.on('exit', function (worker) {
+    // Replace the dead worker, we're not sentimental
+    console.log('Worker ' + worker.id + ' died :(');
+    cluster.fork();
+  });
+}
+else {
 // load settings from config file
 var settings = require('./config/settings.json');
 var collections = require('./config/collections').collections;
-var MongoAPI = require('./config/api').api;
+var MongoAPI = require('./config/api').mongo;
+var FastBitAPI = require('./config/api').fastbit;
 
 // add mongodb collections to the external services
 var services = settings.externalServices;
@@ -121,7 +141,48 @@ var MongoCommand = {
     });
   }
 };
-
+// The FastBit API commands
+var FastBitCommand = {
+  columns: function(c, params, req, res) {
+    // need to find the path to the requested featureSet
+    // first lookup the map id and the featureSet name
+    c.coll.findOne({_id: new ObjectId(params['featureSet'])},function(err, featureSet) {
+      if (err) throw err;
+      // need to look up the system_name for this map
+      collections['maps'].coll.findOne({_id: featureSet.map},function(err, map) {
+        if (err) throw err;
+        params.from = c.dataDirectory+'/'+map.system_name+'/'+featureSet.map+'/'+featureSet.name;
+        res.send(fastbit.describe(params));
+      });
+    });
+  },
+  sql: function(c, params, req, res) {
+    // need to find the path to the requested featureSet
+    // first lookup the map id and the featureSet name
+    c.coll.findOne({_id: new ObjectId(params['featureSet'])},function(err, featureSet) {
+      if (err) throw err;
+      // need to look up the system_name for this map
+      collections['maps'].coll.findOne({_id: featureSet.map},function(err, map) {
+        if (err) throw err;
+        params.from = c.dataDirectory+'/'+map.system_name+'/'+featureSet.map+'/'+featureSet.name;
+        res.send(fastbit.SQL(params));
+      });
+    });
+  },
+  histogram: function(c, params, req, res) {
+    // need to find the path to the requested featureSet
+    // first lookup the map id and the featureSet name
+    c.coll.findOne({_id: new ObjectId(params['featureSet'])},function(err, featureSet) {
+      if (err) throw err;
+      // need to look up the system_name for this map
+      collections['maps'].coll.findOne({_id: featureSet.map},function(err, map) {
+        if (err) throw err;
+        params.from = c.dataDirectory+'/'+map.system_name+'/'+featureSet.map+'/'+featureSet.name;
+        res.send(fastbit.histogram(params));
+      });
+    });
+  }
+};
 
 var app = express();
 
@@ -149,7 +210,10 @@ app.get('/', function (req, res, next) { // return top level info
 app.get('/:collection', function (req, res, next) {
   // check if the collection exists
   var c = req.params.collection;
-  if (collections.hasOwnProperty(c)) res.json(MongoAPI);
+  if (collections.hasOwnProperty(c)) {
+    if (c === 'features') res.json({featureSet:MongoAPI,features:FastBitAPI});
+    else res.json(MongoAPI);
+  }
   else res.json({"error":" '"+c+"' not found"});
 });
 
@@ -170,7 +234,15 @@ app.get('/:collection/:command', function (req, res, next) {
       }
       else MongoCommand[cmd](collections[c], req.query, req, res);
     }
-    else res.json({"error":" command '"+cmd+"' is invalid","api" : MongoAPI});
+    else if (c === 'features' && FastBitAPI.hasOwnProperty(cmd)) { // its a fastbit command
+      if (FastBitAPI[cmd].hasOwnProperty("properties")) { // validate cmd params
+        var check = validate(req.query, FastBitAPI[cmd], {cast: true, castSource: true});
+        if (check['valid']) FastBitCommand[cmd](collections[c], req.query, req, res);
+        else res.json(check);
+      }
+      else FastBitCommand[cmd](collections[c], req.query, req, res);
+    }
+    else res.json({"error":" command '"+cmd+"' is invalid","api" : FastBitAPI});
   }
   else res.json({"error":" collection '"+c+"' does not exist"});
 });
@@ -178,3 +250,4 @@ app.get('/:collection/:command', function (req, res, next) {
 var server = app.listen(port, function() {
     console.log('Listening on port %d', server.address().port);
 });
+}

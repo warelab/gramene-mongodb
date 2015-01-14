@@ -30,6 +30,7 @@
     "cors": "^2.4.1",
     "web-cache": "0.1.1",
     "conform": "^0.2.5",
-    "xml-stream": "^0.4.5"
+    "xml-stream": "^0.4.5",
+    "fastbit": "^0.0.1"
   }
 }
