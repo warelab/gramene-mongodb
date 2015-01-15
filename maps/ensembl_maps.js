@@ -37,7 +37,7 @@ function fetchAssembly(system_name,taxon,assembly) {
         });
         for (var j in assemblyObj.top_level_region) {
           var sr = assemblyObj.top_level_region[j];
-          if (!rlen.hasOwnProperty(sr.name)) {
+          if (!rlen.hasOwnProperty(sr.name)) { // not an assembled pseudomolecute
             if (rlen.hasOwnProperty("UNANCHORED")) rlen.UNANCHORED += sr.length;
             else rlen.UNANCHORED = sr.length;
           }
@@ -46,6 +46,7 @@ function fetchAssembly(system_name,taxon,assembly) {
         }
         if (rlen.hasOwnProperty("UNANCHORED")) {
           map.regions.names.push("UNANCHORED");
+          map.length -= rlen["UNANCHORED"]; // map.length does not include unanchored regions
         }
         map.regions.names.forEach(function(name) {
           map.regions.lengths.push(rlen[name]);

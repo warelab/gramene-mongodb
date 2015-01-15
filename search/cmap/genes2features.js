@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
-
+var exec = require('child_process').exec;
 var outputDir = process.argv[2];
 
 // Functor necessary for variable closure
@@ -64,7 +64,7 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
       async.series(funcs, function(err,sortedGenes) {
         if (err) throw err;
         var featureSet = {};
-        var offset = 0;
+        var gene_idx = 1;
         sortedGenes.forEach(function(byRegion) {
           if (byRegion && byRegion[0]) {
             var map = byRegion[0].location.map;
@@ -77,7 +77,7 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
                 counts : [],
                 features : []
               };
-              offset=0;
+              gene_idx=1;
             }
             featureSet[map].counts.push(byRegion.length);
             featureSet[map].count += byRegion.length;
@@ -85,7 +85,6 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
               // write features output file for this map
               var feature = {
                 id: gene._id,
-                gene_idx : offset,
                 region : gene.location.region,
                 start : gene.location.start,
                 end : gene.location.end,
@@ -93,13 +92,14 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
               };
               if (mapOffsets[map].hasOwnProperty(gene.location.region)) {
                 feature.genome_idx = gene.location.start + mapOffsets[map][gene.location.region];
+                feature.gene_idx = gene_idx;
               }
-              else { // unanchored scaffold
+              else { // unanchored scaffold - order of genes is undefined
                 feature.genome_idx = 0;
+                feature.gene_idx = 0;
               }
               featureSet[map].features.push(feature);
-              offset++;
-              // if (offset == 10) process.exit(2);
+              gene_idx++;
             });
           }
         });
@@ -110,8 +110,7 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
           // system_name/map/featureSet.name
           var outdir = outputDir+'/'+system_name[map]+'/'+map;
           mkdirp.sync(outdir);
-          var fb_csv = outdir+'/'+featureSet[map].name+'.csv';
-          console.log('writing to '+fb_csv);
+          var fb_dir = outdir+'/'+featureSet[map].name;
           var csv_buffer='';
           featureSet[map].features.forEach(function(feature) {
             var csv = [
@@ -127,7 +126,16 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
             batch.find({_id:feature.id})
               .updateOne({$set:{gene_idx:feature.gene_idx,genome_idx:feature.genome_idx}});
           });
-          fs.writeFileSync(fb_csv, csv_buffer);
+          fs.writeFileSync(fb_dir+'.csv', csv_buffer);
+          // run ardea here to set up fastbit
+          var fb_cmd = 'ardea -d '+fb_dir+' -t '+fb_dir+'.csv ';
+          fb_cmd += '-m id:t,gene_idx:i,genome_idx:l,region:k,start:i,end:i,strand:i -tag map='+map;
+          fb_cmd += '; rm '+fb_dir+'.csv';
+          console.log('indexing '+fb_dir);
+          var ardea = exec(fb_cmd, function (error, stdout, stderr) {
+            if (error) throw error;
+            console.log(stdout.split('\n')[8]);
+          });
           delete featureSet[map].features;
           fs.appendFileSync('features.json',JSON.stringify(featureSet[map])+'\n');
         }
