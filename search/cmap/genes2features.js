@@ -85,6 +85,7 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
               // write features output file for this map
               var feature = {
                 id: gene._id,
+                gene_idx : gene_idx,
                 region : gene.location.region,
                 start : gene.location.start,
                 end : gene.location.end,
@@ -92,11 +93,9 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
               };
               if (mapOffsets[map].hasOwnProperty(gene.location.region)) {
                 feature.genome_idx = gene.location.start + mapOffsets[map][gene.location.region];
-                feature.gene_idx = gene_idx;
               }
               else { // unanchored scaffold - order of genes is undefined
                 feature.genome_idx = 0;
-                feature.gene_idx = 0;
               }
               featureSet[map].features.push(feature);
               gene_idx++;
