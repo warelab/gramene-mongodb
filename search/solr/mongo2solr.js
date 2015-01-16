@@ -55,6 +55,12 @@ require('readline').createInterface(
   solr.start       = mongo.location.start;
   solr.end         = mongo.location.end;
   solr.strand      = mongo.location.strand;
+
+  solr.genome_1000 = mongo.genome_1000;
+  solr.genome_100 = mongo.genome_100;
+  solr.gene_1000 = mongo.gene_1000;
+  solr.gene_100 = mongo.gene_100;
+  
   if (mongo.hasOwnProperty("gene_idx"))      solr.gene_idx      = mongo.gene_idx;
   if (mongo.hasOwnProperty("genome_idx"))    solr.genome_idx    = mongo.genome_idx;
   if (mongo.hasOwnProperty("eg_gene_tree"))  solr.eg_gene_tree  = mongo.eg_gene_tree;

@@ -137,7 +137,11 @@
    <field name="end"    type="int" indexed="true" stored="true" />
  	 <field name="strand" type="int" indexed="true" stored="true" />
    <field name="gene_idx" type="tint" indexed="true" stored="true" />
-   <field name="genome_idx" type="tlong" indexed="true" stored="true" />
+   <field name="genome_idx" type="long" indexed="true" stored="true" />
+   <field name="genome_1000" type="int" indexed="true" stored="true" />
+   <field name="genome_100" type="int" indexed="true" stored="true" />
+   <field name="gene_1000" type="int" indexed="true" stored="true" />
+   <field name="gene_100" type="int" indexed="true" stored="true" />
 <!--
    using dynamic fields 
 
