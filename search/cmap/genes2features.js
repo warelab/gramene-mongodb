@@ -136,7 +136,7 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
           bin_maps['gene_100'][map.taxon_id] = {};
           // output the features to fastbit
           // system_name/map/featureSet.name
-          var outdir = outputDir+'/'+maps.system_name+'/'+map._id;
+          var outdir = outputDir+'/'+map.system_name+'/'+map._id;
           mkdirp.sync(outdir);
           var fb_dir = outdir+'/'+featureSet[map._id].name;
           var csv_buffer='';
@@ -159,8 +159,8 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
                 bin_maps['genome_100'][map.taxon_id][curr_region] = {start:genome_100};
                 bin_maps['gene_1000'][map.taxon_id][curr_region] = {start:gene_1000};
                 bin_maps['gene_100'][map.taxon_id][curr_region] = {start:gene_100};
-                gene_1000_binend += gene_1000_binsize;
-                gene_100_binend += gene_100_binsize;
+                gene_1000_binend = gene_1000_binsize;
+                gene_100_binend = gene_100_binsize;
                 gene_i=0;
               }
             }
@@ -181,8 +181,8 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
                 bin_maps['gene_100'][map.taxon_id][curr_region] = {start:gene_100};
                 genome_1000_binend = genome_1000_binsize;
                 genome_100_binend = genome_100_binsize;
-                gene_1000_binend += gene_1000_binsize;
-                gene_100_binend += gene_100_binsize;
+                gene_1000_binend = gene_1000_binsize;
+                gene_100_binend = gene_100_binsize;
                 gene_i=0;
                 prev_region = feature.region;
               }
@@ -240,7 +240,6 @@ MongoClient.connect(mongoURL + 'search44', function(err, searchdb) {
           console.log('indexing '+fb_dir);
           var ardea = exec(fb_cmd, function (error, stdout, stderr) {
             if (error) throw error;
-            console.log(stdout.split('\n')[8]);
           });
           delete featureSet[map._id].features;
           fs.appendFileSync('features.json',JSON.stringify(featureSet[map._id])+'\n');
