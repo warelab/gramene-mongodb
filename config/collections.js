@@ -139,7 +139,7 @@ exports.collections = {
   genes : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "search42",
+    dbName         : "search44",
     collectionName : "genes",
     description    : "ensembl gene data",
     properties     : gene_schema
@@ -147,7 +147,7 @@ exports.collections = {
   reactions : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "search",
+    dbName         : "search44",
     collectionName : "reactome",
     description    : "reactome data",
     properties     : reactome_schema
@@ -155,7 +155,7 @@ exports.collections = {
   pathways : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "search",
+    dbName         : "search44",
     collectionName : "cyc",
     description    : "cyc pathway data",
     properties     : cyc_schema
@@ -163,7 +163,7 @@ exports.collections = {
   EO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "EO",
     description    : "plant environmental ontology",
     properties     : ontology_schema
@@ -171,7 +171,7 @@ exports.collections = {
   GO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "GO",
     description    : "gene ontology",
     properties     : ontology_schema
@@ -179,7 +179,7 @@ exports.collections = {
   GRO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "GRO",
     description    : "cereal plant growth stage ontology",
     properties     : ontology_schema
@@ -187,7 +187,7 @@ exports.collections = {
   taxonomy : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "NCBITaxon",
     description    : "NCBI taxonomy (pruned to cover gramene species)",
     properties     : ontology_schema
@@ -195,7 +195,7 @@ exports.collections = {
   PO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "PO",
     description    : "plant ontology",
     properties     : ontology_schema
@@ -203,7 +203,7 @@ exports.collections = {
   SO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "SO",
     description    : "sequence ontology",
     properties     : ontology_schema
@@ -211,7 +211,7 @@ exports.collections = {
   TO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "TO",
     description    : "trait ontology",
     properties     : ontology_schema
@@ -219,7 +219,7 @@ exports.collections = {
   domains : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology42",
+    dbName         : "ontology",
     collectionName : "interpro",
     description    : "intepro domains",
     properties     : ontology_schema
@@ -228,8 +228,25 @@ exports.collections = {
     host           : "brie.cshl.edu",
     port           : 27017,
     dbName         : "cmap",
-    collectionName : "map",
+    collectionName : "maps",
     description    : "a collection of maps",
+    properties     : {}
+  },
+  features : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
+    dbName         : "cmap",
+    collectionName : "features",
+    description    : "a collection of features",
+    dataDirectory  : "/scratch/olson/cmap/features/",
+    properties     : {}
+  },
+  species : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
+    dbName         : "cmap",
+    collectionName : "species",
+    description    : "a collection of species",
     properties     : {}
   }
 };
