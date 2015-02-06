@@ -6,7 +6,7 @@ var lut_file = process.argv[2];
 var genes_file = process.argv[3];
 
 var fs = require('fs');
-var bin_lut = JSON.parse(fs.readFileSync(lut_file, 'utf8'));
+var bins = JSON.parse(fs.readFileSync(lut_file, 'utf8'));
 // read genes documents
 require('readline').createInterface(
   {
@@ -16,12 +16,13 @@ require('readline').createInterface(
 ).on('line', function(line) { // one JSON object per line
    var gene = JSON.parse(line);
    var tss = gene.location.strand === 1 ? gene.location.start : gene.location.end;
-   for (var mb in bin_lut) {
-     if (bin_lut[mb][gene.taxon_id].hasOwnProperty(gene.location.region)) {
-       gene['bin_'+mb+'Mb'] = bin_lut[mb][gene.taxon_id][gene.location.region].o + Math.floor(tss/(mb*1000000));
+   for(var i=0;i<bins.sizes.length;i++) {
+     var mb = bins.sizes[i];
+     if (bins.lut[gene.taxon_id].hasOwnProperty(gene.location.region)) {
+       gene['bin_'+mb+'Mb'] = bins.lut[gene.taxon_id][gene.location.region].b[i] + Math.floor(tss/(mb*1000000));
      }
      else { // unanchored
-       gene['bin_'+mb+'Mb'] = bin_lut[mb][gene.taxon_id]['UNANCHORED'].o;
+       gene['bin_'+mb+'Mb'] = bins.lut[gene.taxon_id]['UNANCHORED'].b[i];
      }
    }
    console.log(JSON.stringify(gene));
