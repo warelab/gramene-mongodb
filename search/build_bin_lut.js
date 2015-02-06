@@ -2,7 +2,7 @@
 
 var MongoClient = require('mongodb').MongoClient;
     fs          = require('fs');
-var sizes = process.argv.slice(2);
+var sizes = process.argv.slice(2).map(function(mb) {return +mb;});
 
 var bin_lut = {},
     bin_idx = {},
