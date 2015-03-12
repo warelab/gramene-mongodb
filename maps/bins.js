@@ -1,0 +1,196 @@
+/*
+  bins - a module for bins defined on an ordered set of maps
+         such as the genomes in Gramene.
+
+  Bin numbers are global so they can uniquely identify an interval
+  on a chromosome (aka. region). This is why the regions need to be sorted.
+
+  Once the maps have been loaded, you can get a bin mapper for a set of bins.
+
+  The bins can be defined in several ways:
+      a bin size for uniform-width bins in nucleotides
+      a set of intervals {taxon_id: , region: , start: , end: }
+
+  bins_2Mb = bins.binMapper(2000000); // 2Mb bins
+  bin = bins_2Mb.pos2bin(taxon_id, region, position);
+  pos = bins_2Mb.bin2pos(bin); // should return an interval that contains position!
+*/
+
+Number.isInteger = Number.isInteger || function(value) {
+    return typeof value === "number" && 
+           isFinite(value) && 
+           Math.floor(value) === value;
+};
+
+module.exports = function(data) {
+  // Don't sort it here. It's above my pay grade. - using map_idx{} and region_idx{} to order bins
+  // data.sort(function(a,b) {
+  //   if (a.taxon_id > b.taxon_id) {
+  //     return 1;
+  //   }
+  //   if (a.taxon_id < b.taxon_id) {
+  //     return -1;
+  //   }
+  //   else {
+  //     return 0;
+  //   }
+  // });
+  var maps = [];
+  var map_idx = {};
+  for(var i=0;i<data.length;i++) {
+    var d = data[i];
+    map_idx[d.taxon_id] = i;
+    var map = {};
+    map.taxon_id = d.taxon_id;
+    map.length = d.length; // does not include UNANCHORED region
+    map.regions = d.regions.names;
+    map.lengths = d.regions.lengths;
+    map.region_idx = {}; // needed for sorting user provided bins
+    for(var j=0;j<map.regions.length;j++) {
+      map.region_idx[map.regions[j]] = j;
+    }
+    maps.push(map);
+  }
+  
+  function uniformBins(binSize) {
+    var binPos = [];
+    var posBin = {};
+    var bin_idx = 0;
+    for (var m in maps) {
+      var map = maps[m];
+      var tax = map.taxon_id;
+      posBin[tax] = {};
+      var nRegions = map.regions.length;
+      for (var i=0;i<nRegions;i++) {
+        var rlen = map.lengths[i];
+        var rname = map.regions[i];
+        posBin[tax][rname] = [rlen, binPos.length];
+        var nbins = (rname === 'UNANCHORED') ? 1 : Math.ceil(rlen/binSize);
+        for(var j=0; j < nbins; j++) {
+          var end = (j+1 === nbins) ? rlen : (j+1)*binSize;
+          binPos.push({taxon_id:tax,region:rname,start:j*binSize,end:end});
+        }
+      }
+    }
+    return {
+      // _binPos: binPos, // uncomment if you want to bipass sanity checks in bin2pos()
+      // _posBin: posBin,
+      bin2pos: function(bin) {
+        if (bin < 0 || bin >= binPos.length) {
+          throw 'bin ' + bin + ' out of range';
+        }
+        return binPos[bin];
+      },
+      pos2bin: function(tax, region, position) {
+        if (!posBin.hasOwnProperty(tax)) {
+          throw tax + ' not a known taxonomy id';
+        }
+        if (region === 'UNANCHORED' || !posBin[tax].hasOwnProperty(region)) {
+          // assume UNANCHORED
+          if (!posBin[tax].hasOwnProperty('UNANCHORED')) {
+            throw region + ' not a known seq region';
+          }
+          return posBin[tax]['UNANCHORED'][1];
+        }
+        if (position < 0 || position >= posBin[tax][region][0]) {
+          throw 'position ' + position + ' out of range';
+        }
+        return posBin[tax][region][1] + Math.floor(position/binSize);
+      },
+      nbins: binPos.length
+    };
+  }
+
+  function variableBins(bins) {
+    // sort the bins to match the order given in the maps
+    bins.sort(function(a,b) {
+      var a_idx = map_idx[a.taxon_id];
+      var b_idx = map_idx[b.taxon_id];
+      if (a_idx > b_idx) {
+        return 1;
+      }
+      if (a_idx < b_idx) {
+        return -1;
+      }
+      // same species, check index of region
+      var ar_idx = maps[a_idx].region_idx[a.region];
+      var br_idx = maps[b_idx].region_idx[b.region];
+      if (ar_idx > br_idx) {
+        return 1;
+      }
+      if (ar_idx < br_idx) {
+        return -1;
+      }
+      // same region, compare bin start positions
+      if (a.start > b.start) {
+        return 1;
+      }
+      if (a.start < b.start) {
+        return -1;
+      }
+      return 0; // this isn't supposed to happen
+    });
+    var binPos = bins;
+    var posBin = {};
+    for(var i=0;i<binPos.length;i++) {
+      var bin = binPos[i];
+      if (! posBin.hasOwnProperty(bin.taxon_id)) {
+        posBin[bin.taxon_id] = {};
+      }
+      if (! posBin[bin.taxon_id].hasOwnProperty(bin.region)) {
+        posBin[bin.taxon_id][bin.region] = {o:i,bins:[]};
+      }
+      posBin[bin.taxon_id][bin.region].bins.push(bin.start,bin.end);
+    }
+
+    return {
+      bin2pos: function(bin) {
+        if (bin < 0 || bin >= binPos.length) {
+          throw 'bin ' + bin + ' out of range';
+        }
+        return binPos[bin];
+      },
+      pos2bin: function(tax, region, position) {
+        if (!(posBin.hasOwnProperty(tax) && posBin[tax].hasOwnProperty(region))) {
+          return -1; // no bins here
+        }
+        var rbins = posBin[tax][region].bins;
+        // binary search in rbins for position
+        var a = 0;
+        var b = rbins.length-1;
+        if (position < rbins[a] || position > rbins[b]) { // possibly invalid position that doesn't fall into any bins
+          return -1;
+        }
+        while (a<b) {
+          // assume uniform bin distribution
+          var f = Math.floor((b - a)*(position - rbins[a])/(rbins[b] - rbins[a]));
+          if (f<0) return -1;
+          if (f>a && f%2==1) f--;
+          if (position < rbins[f]) {
+            b = f-1;
+          }
+          else if (position > rbins[f+1]) {
+            a = f+2;
+          }
+          else {
+            return posBin[tax][region].o + f/2;
+          }
+        }
+        return -1;
+      },
+      nbins: binPos.length
+    };
+  }
+
+  return {
+    binMapper: function(arg) {
+      if (Number.isInteger(arg)) {
+        return uniformBins(arg);
+      }
+      // assume we've been given array of valid non-overlapping intervals as objects with keys
+      // taxon_id, region, start, end
+      // arg checking might be a good idea
+      return variableBins(arg);
+    }
+  };
+}
