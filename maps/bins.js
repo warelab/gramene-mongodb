@@ -3,38 +3,25 @@
          such as the genomes in Gramene.
 
   Bin numbers are global so they can uniquely identify an interval
-  on a chromosome (aka. region). This is why the regions need to be sorted.
+  on a chromosome (aka. region). This is why the maps and regions need to be ordered.
 
-  Once the maps have been loaded, you can get a bin mapper for a set of bins.
+  Once the maps have been loaded, you can get a binMapper for a set of bins.
 
-  The bins can be defined in several ways:
+  The bins can be defined as follows:
       a bin size for uniform-width bins in nucleotides
-      a set of intervals {taxon_id: , region: , start: , end: }
+      an arbitrary set of intervals {taxon_id: , region: , start: , end: }
 
-  bins_2Mb = bins.binMapper(2000000); // 2Mb bins
-  bin = bins_2Mb.pos2bin(taxon_id, region, position);
-  pos = bins_2Mb.bin2pos(bin); // should return an interval that contains position!
+  bins = require('bins.js')(map_info);
+  mapper_2Mb = bins.binMapper(2000000);
+  bin = mapper_2Mb.pos2bin(taxon_id, region, position); // returns -1 for positions not in a bin
+  interval = mapper_2Mb.bin2pos(bin); // returns an interval that contains position
 */
 
 Number.isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" && 
-           isFinite(value) && 
-           Math.floor(value) === value;
+  return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
 };
 
 module.exports = function(data) {
-  // Don't sort it here. It's above my pay grade. - using map_idx{} and region_idx{} to order bins
-  // data.sort(function(a,b) {
-  //   if (a.taxon_id > b.taxon_id) {
-  //     return 1;
-  //   }
-  //   if (a.taxon_id < b.taxon_id) {
-  //     return -1;
-  //   }
-  //   else {
-  //     return 0;
-  //   }
-  // });
   var maps = [];
   var map_idx = {};
   for(var i=0;i<data.length;i++) {
@@ -162,7 +149,7 @@ module.exports = function(data) {
           return -1;
         }
         while (a<b) {
-          // assume uniform bin distribution
+          // assume uniform bin distribution and guess a bin
           var f = Math.floor((b - a)*(position - rbins[a])/(rbins[b] - rbins[a]));
           if (f<0) return -1;
           if (f>a && f%2==1) f--;

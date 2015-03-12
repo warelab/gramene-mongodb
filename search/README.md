@@ -15,10 +15,10 @@ git clone https://github.com/ajo2995/eg-web-common.git
 cd eg-web-common/utils
 perl ./search_dump.pl -host hostname -port 3306 -user username -pass password -dir /scratch/olson/build41/genes -format json -release 41 
 ```
-The script takes over an hour to run, so go populate the ontology database while you wait.
-Once the json files are ready, we include ancestor information of the ontology terms.
+The script takes over an hour to run, so go populate the ontology and maps databases while you wait.
+Once the json files are ready, we include ancestor information of the ontology terms and global bins of various sizes.
 ```
-gzip -cd /scratch/olson/build41/Gene_* | node add_ontology_fields.js /dev/fd/0 | mongoimport --db search41 --collection genes
+gzip -cd /scratch/olson/build41/Gene_* | node add_ontology_fields.js /dev/fd/0 | node add_bins.js ../maps/maps.json /dev/fd/0 | mongoimport --db search41 --collection genes
 ```
 Final step is to build indexes
 ```
