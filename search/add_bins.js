@@ -2,10 +2,9 @@
 // load the ordered set of maps
 // create binMappers for various binning options
 // 1. uniform width bins of 1Mb, 2Mb, 5Mb, 10Mb, etc
-// 2. arbitrary precalculated sets of bins such as gene_space_100
+// 2. fixed number of bins per genome 100, 200, 500, 1000
 // iterate over gene documents and add bin fields to each document
-// based on the 5' end of the gene? or make bin fields multi-valued so genes
-// can span multiple bins?
+// based on the TSS of the gene
 
 var genomes_file = process.argv[2];
 var genes_file = process.argv[3];
@@ -16,10 +15,14 @@ var genomes = JSON.parse(fs.readFileSync(genomes_file, 'utf8'));
 var bins = require('../maps/bins.js')(genomes);
 
 var mapper = {
-  bin_1Mb: bins.binMapper(1000000),
-  bin_2Mb: bins.binMapper(2000000),
-  bin_5Mb: bins.binMapper(5000000),
-  bin_10Mb: bins.binMapper(10000000)
+  fixed_100_bin : bins.binMapper('fixed', 100), // 100 bins per genome
+  fixed_200_bin : bins.binMapper('fixed', 200),
+  fixed_500_bin : bins.binMapper('fixed', 500),
+  fixed_1000_bin: bins.binMapper('fixed',1000), // 1000 bins per genome
+  uniform_1Mb_bin : bins.binMapper('uniform', 1000000), // all bins are 1Mb
+  uniform_2Mb_bin : bins.binMapper('uniform', 2000000),
+  uniform_5Mb_bin : bins.binMapper('uniform', 5000000),
+  uniform_10Mb_bin: bins.binMapper('uniform',10000000)  // all bins are 10Mb
 };
 
 // read genes documents

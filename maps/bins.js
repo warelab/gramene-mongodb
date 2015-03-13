@@ -12,7 +12,7 @@
       an arbitrary set of intervals {taxon_id: , region: , start: , end: }
 
   bins = require('bins.js')(map_info);
-  mapper_2Mb = bins.binMapper(2000000);
+  mapper_2Mb = bins.binMapper('uniform',2000000);
   bin = mapper_2Mb.pos2bin(taxon_id, region, position); // returns -1 for positions not in a bin
   interval = mapper_2Mb.bin2pos(bin); // returns an interval that contains position
 */

@@ -57,10 +57,11 @@ require('readline').createInterface(
   solr.end         = mongo.location.end;
   solr.strand      = mongo.location.strand;
 
-  solr.bin_1Mb = mongo.bin_1Mb;
-  solr.bin_2Mb = mongo.bin_2Mb;
-  solr.bin_5Mb = mongo.bin_5Mb;
-  solr.bin_10Mb = mongo.bin_10Mb;
+  for (var field in mongo) {
+    if (field.substr(-4) === '_bin') {
+      solr[field] = mongo[field];
+    }
+  }
   
   if (mongo.hasOwnProperty("eg_gene_tree"))  solr.eg_gene_tree  = mongo.eg_gene_tree;
   if (mongo.hasOwnProperty("epl_gene_tree")) solr.epl_gene_tree = mongo.epl_gene_tree;
