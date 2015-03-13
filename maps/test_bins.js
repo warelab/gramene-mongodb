@@ -10,11 +10,18 @@ console.log('reading maps.json took '+ ms + ' ms');
 
 t0 = process.hrtime();
 var bins = require('./bins.js')(maps);
-var diff = process.hrtime(t0);
 
-var mapper_2Mb = bins.binMapper(2000000);
-var mapper_200kb = bins.binMapper(200000);
-var mapper_20Mb = bins.binMapper(20000000);
+var mapper_2Mb = bins.binMapper('uniform',2000000);
+var mapper_200_per_genome = bins.binMapper('fixed',200);
+// lets try some homemade bins
+var mybins = [
+  {taxon_id:3702,region:"1",start:123,end:432},
+  {taxon_id:3702,region:"1",start:555,end:888},
+  {taxon_id:3702,region:"2",start:111,end:444}
+];
+var custom_mapper = bins.binMapper(mybins);
+
+var diff = process.hrtime(t0);
 var ms = diff[0]*1e3 + diff[1]/1e6;
 console.log('initialization took '+ ms + ' ms');
 
@@ -35,13 +42,4 @@ diff = process.hrtime(t0);
 ms = diff[0]*1e3 + diff[1]/1e6;
 console.log(nbins+' bins: '+iterations+' iterations took '+ ms + ' ms');
 
-
-// lets try some homemade bins
-var mybins = [
-  {taxon_id:3702,region:"1",start:123,end:432},
-  {taxon_id:3702,region:"1",start:555,end:888},
-  {taxon_id:3702,region:"2",start:111,end:444}
-];
-
-var custom_mapper = bins.binMapper(mybins);
 

@@ -17,10 +17,6 @@
   interval = mapper_2Mb.bin2pos(bin); // returns an interval that contains position
 */
 
-Number.isInteger = Number.isInteger || function(value) {
-  return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
-};
-
 module.exports = function(data) {
   var maps = [];
   var map_idx = {};
@@ -82,6 +78,57 @@ module.exports = function(data) {
         if (position < 0 || position >= posBin[tax][region][0]) {
           throw 'position ' + position + ' out of range';
         }
+        return posBin[tax][region][1] + Math.floor(position/binSize);
+      },
+      nbins: binPos.length
+    };
+  }
+
+  function fixedBins(nBins) {
+    var binPos = [];
+    var posBin = {};
+    var bin_idx = 0;
+    for (var m in maps) {
+      var map = maps[m];
+      var tax = map.taxon_id;
+      posBin[tax] = {};
+      var nRegions = map.regions.length;
+      var binSize = Math.floor(map.length/nBins);
+      for (var i=0;i<nRegions;i++) {
+        var rlen = map.lengths[i];
+        var rname = map.regions[i];
+        posBin[tax][rname] = [rlen, binPos.length];
+        var nbins = (rname === 'UNANCHORED') ? 1 : Math.ceil(rlen/binSize);
+        for(var j=0; j < nbins; j++) {
+          var end = (j+1 === nbins) ? rlen : (j+1)*binSize;
+          binPos.push({taxon_id:tax,region:rname,start:j*binSize,end:end});
+        }
+      }
+    }
+    return {
+      // _binPos: binPos, // uncomment if you want to bipass sanity checks in bin2pos()
+      // _posBin: posBin,
+      bin2pos: function(bin) {
+        if (bin < 0 || bin >= binPos.length) {
+          throw 'bin ' + bin + ' out of range';
+        }
+        return binPos[bin];
+      },
+      pos2bin: function(tax, region, position) {
+        if (!posBin.hasOwnProperty(tax)) {
+          throw tax + ' not a known taxonomy id';
+        }
+        if (region === 'UNANCHORED' || !posBin[tax].hasOwnProperty(region)) {
+          // assume UNANCHORED
+          if (!posBin[tax].hasOwnProperty('UNANCHORED')) {
+            throw region + ' not a known seq region';
+          }
+          return posBin[tax]['UNANCHORED'][1];
+        }
+        if (position < 0 || position >= posBin[tax][region][0]) {
+          throw 'position ' + position + ' out of range';
+        }
+        var binSize = Math.floor(maps[map_idx[tax]].length/nBins);
         return posBin[tax][region][1] + Math.floor(position/binSize);
       },
       nbins: binPos.length
@@ -170,14 +217,20 @@ module.exports = function(data) {
   }
 
   return {
-    binMapper: function(arg) {
-      if (Number.isInteger(arg)) {
+    binMapper: function(binType,arg) {
+      if (binType === 'uniform') {
         return uniformBins(arg);
       }
-      // assume we've been given array of valid non-overlapping intervals as objects with keys
-      // taxon_id, region, start, end
-      // arg checking might be a good idea
-      return variableBins(arg);
+      if (binType === 'fixed') {
+        return fixedBins(arg);
+      }
+      if (binType === 'variable') {
+        // assume we've been given array of valid non-overlapping intervals as objects with keys
+        // taxon_id, region, start, end
+        // arg checking might be a good idea
+        return variableBins(arg);
+      }
+      return 'error, '+binType+' is not a valid binType';
     }
   };
 }
