@@ -58,11 +58,18 @@ while (<>) {
     }
     else { # reached the end of a stanza
         if (exists $hsh{id}) {
-            # clean up the is_a entries  
+          # generate parent-child relationships from is_a and part_of relationships
             if (exists $hsh{is_a}) {
                 for (my $i=0;$i<@{$hsh{is_a}};$i++) {
                     $parent{$hsh{id}}{$hsh{is_a}[$i]}=1;
                 }
+            }
+            if (exists $hsh{relationship}) {
+              for (my $i=0;$i<@{$hsh{relationship}};$i++) {
+                if ($hsh{relationship}[$i] =~ m/part_of\s+${prefix}:0*(\d+)/) {
+                  $parent{$hsh{id}}{$1} = 1;
+                }
+              }
             }
             # use the id field as the mongo _id
             $hsh{_id} = $hsh{id};
