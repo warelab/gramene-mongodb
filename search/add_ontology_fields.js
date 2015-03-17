@@ -108,6 +108,7 @@ MongoClient.connect(mongoURL, function(err, db) {
            "use strict";
            return function (done) {
                coll.aggregate(pipeline, function(err,result) {
+                 if (err) throw err;
                    if (typeof result[0] === "object") done(null, result[0].ancestors);
                    else done(null, null);
                });
@@ -131,7 +132,13 @@ MongoClient.connect(mongoURL, function(err, db) {
                var o = collectionLUT[field];
                var coll = db.collection(o);
                for (var ec in terms) {
-                 var ints = termsToIntsReplace(terms[ec]);
+                 var ints;
+                 if (typeof terms[ec] === "object") {
+                   ints = termsToIntsReplace(Object.keys(terms[ec]));
+                 }
+                 else {
+                   ints = termsToIntsReplace(terms[ec]);
+                 }
                  queryFunctions[o+"_"+ec] = aggregateFunctor(coll,Ancestors(ints));
                  for(var i=0; i < ints.length; i++) { allInts[ints[i]]=1; };
                }
