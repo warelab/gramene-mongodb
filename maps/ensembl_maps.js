@@ -70,6 +70,12 @@ http.get(rest_api + '/info/species?content-type=application/json', function(res)
     });
     res.on('end', function (err) {
         var obj = JSON.parse(speciesJSON);
+        obj.species.sort(function(a,b) {
+          if (+a.taxon_id < +b.taxon_id) {
+            return -1;
+          }
+          return 1;
+        });
         for (var i in obj.species) {
             var species = obj.species[i];
             species.taxon_id = +species.taxon_id;
