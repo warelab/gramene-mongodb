@@ -51,7 +51,7 @@ module.exports = function(data) {
         var nbins = (rname === 'UNANCHORED') ? 1 : Math.ceil(rlen/binSize);
         for(var j=0; j < nbins; j++) {
           var end = (j+1 === nbins) ? rlen : (j+1)*binSize;
-          binPos.push({taxon_id:tax,region:rname,start:j*binSize,end:end});
+          binPos.push({taxon_id:tax,region:rname,start:j*binSize+1,end:end});
         }
       }
     }
@@ -75,10 +75,10 @@ module.exports = function(data) {
           }
           return posBin[tax]['UNANCHORED'][1];
         }
-        if (position < 0 || position >= posBin[tax][region][0]) {
+        if (position < 1 || position >= posBin[tax][region][0]) {
           throw 'position ' + position + ' out of range';
         }
-        return posBin[tax][region][1] + Math.floor(position/binSize);
+        return posBin[tax][region][1] + Math.floor((position-1)/binSize);
       },
       nbins: binPos.length
     };
@@ -101,7 +101,7 @@ module.exports = function(data) {
         var nbins = (rname === 'UNANCHORED') ? 1 : Math.ceil(rlen/binSize);
         for(var j=0; j < nbins; j++) {
           var end = (j+1 === nbins) ? rlen : (j+1)*binSize;
-          binPos.push({taxon_id:tax,region:rname,start:j*binSize,end:end});
+          binPos.push({taxon_id:tax,region:rname,start:j*binSize+1,end:end});
         }
       }
     }
@@ -125,11 +125,11 @@ module.exports = function(data) {
           }
           return posBin[tax]['UNANCHORED'][1];
         }
-        if (position < 0 || position >= posBin[tax][region][0]) {
+        if (position < 1 || position >= posBin[tax][region][0]) {
           throw 'position ' + position + ' out of range';
         }
         var binSize = Math.floor(maps[map_idx[tax]].length/nBins);
-        return posBin[tax][region][1] + Math.floor(position/binSize);
+        return posBin[tax][region][1] + Math.floor((position-1)/binSize);
       },
       nbins: binPos.length
     };
