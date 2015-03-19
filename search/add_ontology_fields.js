@@ -133,12 +133,15 @@ MongoClient.connect(mongoURL, function(err, db) {
                var coll = db.collection(o);
                for (var ec in terms) {
                  var ints;
-                 if (typeof terms[ec] === "object") {
-                   ints = termsToIntsReplace(Object.keys(terms[ec]));
-                 }
-                 else {
+                 // console.log('terms['+ec+']=',terms[ec]);
+                 // if (typeof terms[ec] === "object") {
+                 //   ints = termsToIntsReplace(Object.keys(terms[ec]));
+                 // }
+                 // else {
                    ints = termsToIntsReplace(terms[ec]);
-                 }
+                 // }
+                 // console.log(ints);
+                 // process.exit(2);
                  queryFunctions[o+"_"+ec] = aggregateFunctor(coll,Ancestors(ints));
                  for(var i=0; i < ints.length; i++) { allInts[ints[i]]=1; };
                }

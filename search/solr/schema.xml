@@ -130,27 +130,29 @@
    <field name="description" type="text_general" indexed="true" stored="true"/>
  	 <field name="biotype" type="string" indexed="true" stored="true"/>
 
-<!-- location field -->
+	 <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+	 <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+
+   <field name="pathways" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="reactions" type="string" indexed="true" stored="true" multiValued="true"/>
+
+   <!-- location fields-->
    <field name="map"    type="string" indexed="true" stored="true"/>
    <field name="region" type="string" indexed="true" stored="true"/> 
    <field name="start"  type="int" indexed="true" stored="true" />
    <field name="end"    type="int" indexed="true" stored="true" />
  	 <field name="strand" type="int" indexed="true" stored="true" />
-<!--
-   using dynamic fields 
 
-   *_xrefs is for stored, indexed, multiValued string fields
-   *_xrefi is for stored, indexed, multiValued integer fields
-   *_ancestors is like *_xrefi but not stored
+   <!-- interpro domain architecture fields -->
+   <field name="domainRoots" type="text_ws" indexed="true" stored="true" multiValued="false"/>
+   <field name="domainList" type="string" indexed="false" stored="true" multiValued="true"/>
+   <field name="domainHits" type="string" indexed="false" stored="true" multiValued="true"/>
+   <!--
+     using dynamic fields for xrefs of various kinds
 
-   protein_features we also use *_xrefs
-   protein_features.PANTHER -> PANTHER_xrefs
--->
-	 <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
-	 <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
-   <!-- these fields are dynamic fields which reference reactome and pathway cores
-   <field name="pathways" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="reactions" type="string" indexed="true" stored="true" multiValued="true"/>
+     *_xrefs is for stored, indexed, multiValued string fields
+     *_xrefi is for stored, indexed, multiValued integer fields
+     *_ancestors is like *_xrefi but not stored
    -->
 
    <!-- Main body of document extracted by SolrCell.

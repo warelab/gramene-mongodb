@@ -72,6 +72,8 @@ MongoClient.connect(mongoURL, function(err, db) {
               ipr_hits.push(interval);
             });
           }
+          obj.interpro_hits[ipr_i] = obj.interpro_hits[ipr];
+          delete obj.interpro_hits[ipr];
         }
         if (ipr_hits.length > 0) {
           ipr_hits.sort(function(a,b) {
@@ -127,17 +129,19 @@ MongoClient.connect(mongoURL, function(err, db) {
             return 1;
           });
           var roots = [];
-          var domains = [];
+          obj.domainList = [];
+          obj.domainHits = [];
           clusters.forEach(function(c) {
             roots.push(c.root);
             var distinctDomains = {};
+            obj.domainHits.push({id:c.root,s:c.start,e:c.end});
             c.iprs.forEach(function(i) {
               distinctDomains[ipr_hits[i][2]]=1;
+              // obj.domainHits.push({id:ipr_hits[i][2],s:ipr_hits[i][0],e:ipr_hits[i][1]});
             });
-            domains.push(Object.keys(distinctDomains).join(','));
+            obj.domainList.push(Object.keys(distinctDomains).map(function(d){return +d}));
           });
           obj.domainRoots = roots.join(' ');
-          obj.domains = domains;
         }
       }
       console.log(JSON.stringify(obj));
