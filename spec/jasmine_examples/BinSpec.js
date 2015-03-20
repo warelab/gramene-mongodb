@@ -135,6 +135,25 @@ describe('Bins', function () {
     var bin1end = customMapper.pos2bin(3702, "1", 432);
     var bin1end2 = customMapper.pos2bin(3702, "1", "432");
     var bin1end3 = customMapper.pos2bin("3702", "1", "432");
+
+    // then
+    expect(bin1start).toEqual(0);
+    expect(bin1start2).toEqual(0);
+    expect(bin1end).toEqual(0);
+    expect(bin1end2).toEqual(0);
+    expect(bin1end3).toEqual(0);
+  });
+
+  it('should return -1 with illegal bin postions', function() {
+    // given
+    var myBins = [
+      {taxon_id: 3702, region: "1", start: 123, end: 432},
+      {taxon_id: 3702, region: "1", start: 555, end: 888},
+      {taxon_id: 3702, region: "2", start: 111, end: 444}
+    ];
+    var customMapper = bins.binMapper('variable', myBins);
+
+    // when
     var nobin1 = customMapper.pos2bin(3702, "1", 433);
     var nobin2 = customMapper.pos2bin(3702, "1", 0);
     var nobin3 = customMapper.pos2bin(3702, "1", new Date());
@@ -143,17 +162,46 @@ describe('Bins', function () {
     var nobin6 = customMapper.pos2bin(Array.prototype.slice, "1", 123);
 
     // then
-    expect(bin1start).toEqual(0);
-    expect(bin1start2).toEqual(0);
-    expect(bin1end).toEqual(0);
-    expect(bin1end2).toEqual(0);
-    expect(bin1end3).toEqual(0);
     expect(nobin1).toEqual(-1);
     expect(nobin2).toEqual(-1);
     expect(nobin3).toEqual(-1);
     expect(nobin4).toEqual(-1);
     expect(nobin5).toEqual(-1);
     expect(nobin6).toEqual(-1);
+  });
+
+  it('should return the variable bin by index', function() {
+    // given
+    var myBins = [
+      {taxon_id: 3702, region: "1", start: 123, end: 432},
+      {taxon_id: 3702, region: "1", start: 555, end: 888},
+      {taxon_id: 3702, region: "2", start: 111, end: 444}
+    ];
+    var customMapper = bins.binMapper('variable', myBins);
+    var idx = 0;
+
+    // when
+    var bin = customMapper.bin2pos(idx);
+
+    // then
+    expect(bin).toEqual(myBins[idx]);
+  });
+
+  it('should error out when asking for unreasonable bins', function() {
+    // given
+    var myBins = [
+      {taxon_id: 3702, region: "1", start: 123, end: 432},
+      {taxon_id: 3702, region: "1", start: 555, end: 888},
+      {taxon_id: 3702, region: "2", start: 111, end: 444}
+    ];
+    var customMapper = bins.binMapper('variable', myBins);
+    var illegalIdx = 5;
+
+    // when
+    var bin = function(){customMapper.bin2pos(illegalIdx);};
+
+    // then
+    expect(bin).toThrow();
   });
 
   it('should disallow overlapping custom bins', function() {
