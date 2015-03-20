@@ -29,12 +29,8 @@
     "express": "^4.6.1",
     "express-session": "^1.7.0",
     "fastbit": "^0.0.1",
-    "is-number": "^1.1.2",
     "mongodb": "^1.4.7",
     "web-cache": "0.1.1",
     "xml-stream": "^0.4.5"
-  },
-  "devDependencies": {
-    "jasmine-node": "^1.14.5"
   }
 }
