@@ -74,26 +74,26 @@ describe('Bins', function () {
     expect(result.end).toEqual(chocolate_end_fixed200);
   });
 
-  it('bin2pos should throw with illegal parameters', function() {
+  it('bin2pos should throw with illegal parameters', function () {
     // when
-    var bin2posFixed = function(){ mapper_200.bin2pos(1e9) };
-    var bin2posUniform = function(){ mapper_2Mb.bin2pos(1e9) };
+    var bin2posFixed = function () { mapper_200.bin2pos(1e9) };
+    var bin2posUniform = function () { mapper_2Mb.bin2pos(1e9) };
 
     // then
     expect(bin2posFixed).toThrow();
     expect(bin2posUniform).toThrow();
   });
 
-  it('pos2bin should throw with illegal taxon_id', function() {
+  it('pos2bin should throw with illegal taxon_id', function () {
     // when
-    var illegalTaxonId = function() {mapper_200.pos2bin(1, -1, -1)};
+    var illegalTaxonId = function () {mapper_200.pos2bin(1, -1, -1)};
 
     // then
     expect(illegalTaxonId).toThrow();
   });
 
   it('pos2bin should assume you are asking for an UNANCHORED region if ' +
-  'the region is not recognized and the genome has an UNANCHORED region', function() {
+  'the region is not recognized and the genome has an UNANCHORED region', function () {
     // when
     var illegalRegion1 = mapper_200.pos2bin(chocolate_taxon_id, "100", -1);
 
@@ -102,21 +102,70 @@ describe('Bins', function () {
   });
 
   it('pos2bin should throw when an unrecognized region is requested from a ' +
-  'genome without UNANCHORED sequence', function() {
+  'genome without UNANCHORED sequence', function () {
     // when
-    var illegalRegion1 = function(){mapper_200.pos2bin(arabidopsis_thaliana_taxon_id, "100", -1)};
+    var illegalRegion1 = function () {mapper_200.pos2bin(arabidopsis_thaliana_taxon_id, "100", -1)};
 
     // then
     expect(illegalRegion1).toThrow();
   });
 
-  it('pos2bin should throw when an illegal position is requested', function() {
+  it('pos2bin should throw when an illegal position is requested', function () {
     // when
-    var illegalRegion1 = function(){mapper_200.pos2bin(arabidopsis_thaliana_taxon_id, "1", -1)};
-    var illegalRegion2 = function(){mapper_200.pos2bin(arabidopsis_thaliana_taxon_id, "1", 1e11)};
+    var illegalRegion1 = function () {mapper_200.pos2bin(arabidopsis_thaliana_taxon_id, "1", -1)};
+    var illegalRegion2 = function () {mapper_200.pos2bin(arabidopsis_thaliana_taxon_id, "1", 1e11)};
 
     // then
     expect(illegalRegion1).toThrow();
     expect(illegalRegion2).toThrow();
+  });
+
+  it('should support custom mapping', function () {
+    // given
+    var myBins = [
+      {taxon_id: 3702, region: "1", start: 123, end: 432},
+      {taxon_id: 3702, region: "1", start: 555, end: 888},
+      {taxon_id: 3702, region: "2", start: 111, end: 444}
+    ];
+    var customMapper = bins.binMapper('variable', myBins);
+
+    // when
+    var bin1start = customMapper.pos2bin(3702, "1", 123);
+    var bin1start2 = customMapper.pos2bin(3702, 1, 123);
+    var bin1end = customMapper.pos2bin(3702, "1", 432);
+    var bin1end2 = customMapper.pos2bin(3702, "1", "432");
+    var bin1end3 = customMapper.pos2bin("3702", "1", "432");
+    var nobin1 = customMapper.pos2bin(3702, "1", 433);
+    var nobin2 = customMapper.pos2bin(3702, "1", 0);
+    var nobin3 = customMapper.pos2bin(3702, "1", new Date());
+    var nobin4 = customMapper.pos2bin(3702, "1", Array.prototype.slice);
+    var nobin5 = customMapper.pos2bin(3702, Array.prototype.slice, 123);
+    var nobin6 = customMapper.pos2bin(Array.prototype.slice, "1", 123);
+
+    // then
+    expect(bin1start).toEqual(0);
+    expect(bin1start2).toEqual(0);
+    expect(bin1end).toEqual(0);
+    expect(bin1end2).toEqual(0);
+    expect(bin1end3).toEqual(0);
+    expect(nobin1).toEqual(-1);
+    expect(nobin2).toEqual(-1);
+    expect(nobin3).toEqual(-1);
+    expect(nobin4).toEqual(-1);
+    expect(nobin5).toEqual(-1);
+    expect(nobin6).toEqual(-1);
+  });
+
+  it('should disallow overlapping custom bins', function() {
+    // given
+    var myBins = [
+      {taxon_id: 3702, region: "1", start: 1, end: 432},
+      {taxon_id: 3702, region: "1", start: 3, end: 888},
+      {taxon_id: 3702, region: "2", start: 2, end: 444}
+    ];
+
+    var shouldFail = function() {bins.binMapper('variable', myBins);};
+
+    expect(shouldFail).toThrow();
   });
 });

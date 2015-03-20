@@ -17,6 +17,8 @@
   interval = mapper_2Mb.bin2pos(bin); // returns an interval that contains position
 */
 
+var isNumber = require('is-number');
+
 module.exports = function(data) {
   var maps = [];
   var map_idx = {};
@@ -155,14 +157,21 @@ module.exports = function(data) {
       if (ar_idx < br_idx) {
         return -1;
       }
-      // same region, compare bin start positions
+      // same region,  check for overlap and compare bin start positions
+
       if (a.start > b.start) {
+        if(a.start <= b.end) {
+          throw new Error('overlapping bins found: ' + JSON.stringify(a) + ' and ' + JSON.stringify(b));
+        }
         return 1;
       }
       if (a.start < b.start) {
+        if(a.end >= b.start) {
+          throw new Error('overlapping bins found: ' + JSON.stringify(a) + ' and ' + JSON.stringify(b));
+        }
         return -1;
       }
-      return 0; // this isn't supposed to happen
+      throw new Error('found two apparently identical bins: ' + JSON.stringify(a) + ' and ' + JSON.stringify(b));
     });
     var binPos = bins;
     var posBin = {};
@@ -192,7 +201,7 @@ module.exports = function(data) {
         // binary search in rbins for position
         var a = 0;
         var b = rbins.length-1;
-        if (position < rbins[a] || position > rbins[b]) { // possibly invalid position that doesn't fall into any bins
+        if (position < rbins[a] || position > rbins[b] || !isNumber(position)) { // possibly invalid position that doesn't fall into any bins
           return -1;
         }
         while (a<b) {
