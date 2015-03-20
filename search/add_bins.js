@@ -12,7 +12,7 @@ var genes_file = process.argv[3];
 var fs = require('fs');
 var genomes = JSON.parse(fs.readFileSync(genomes_file, 'utf8'));
 
-var bins = require('../maps/bins.js')(genomes);
+var bins = require('../../../gramene-bins-client/src/bins.js')(genomes);
 
 var mapper = {
   fixed_100_bin : bins.binMapper('fixed', 100), // 100 bins per genome

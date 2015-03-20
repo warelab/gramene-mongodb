@@ -18,8 +18,8 @@
 
 <script>
 jQuery(document).ready(function() {
-	$.ajax({url: "http://data.gramene.org/history", xhrFields: {withCredentials: true}})
-	.done(function(data) {
+	$.getJSON("http://data.gramene.org/history")
+	.then(function(data) {
 		var html = '<table class="table table-striped">'
 		+'<thead>'
 		+'<tr><th>db</th><th>collection</th><th>query</th><th>count</th><th>timeago</th></tr>'
