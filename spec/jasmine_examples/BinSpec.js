@@ -17,7 +17,7 @@ describe('Bins', function () {
   var chocolate_unanchored_bin = 207;
 
   var chocolate_genome_length = 330456197;
-  var chocolate_end_fixed200 = Math.ceil(chocolate_genome_length / 200);
+  var chocolate_end_fixed200 = Math.floor(chocolate_genome_length / 200);
 
   var arabidopsis_thaliana_taxon_id = 3702;
 
