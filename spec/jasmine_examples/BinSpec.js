@@ -17,7 +17,7 @@ describe('Bins', function () {
   var chocolate_unanchored_bin = 207;
 
   var chocolate_genome_length = 330456197;
-  var chocolate_end_fixed200 = Math.floor(chocolate_genome_length / 200);
+  var chocolate_end_fixed200 = Math.ceil(chocolate_genome_length / 200);
 
   var arabidopsis_thaliana_taxon_id = 3702;
 
@@ -30,10 +30,12 @@ describe('Bins', function () {
 
   it('pos2bin should work with uniform', function () {
     // when
-    var bin = mapper_2Mb.pos2bin(chocolate_taxon_id, chocolate_region, chocolate_start);
+    var startBin = mapper_2Mb.pos2bin(chocolate_taxon_id, chocolate_region, chocolate_start);
+    var endBin = mapper_2Mb.pos2bin(chocolate_taxon_id, chocolate_region, chocolate_end);
 
     // then
-    expect(bin).toEqual(chocolate_bin);
+    expect(startBin).toEqual(chocolate_bin);
+    expect(endBin).toEqual(chocolate_bin);
   });
 
   it('bin2pos should work with uniform', function () {
@@ -51,10 +53,12 @@ describe('Bins', function () {
 
   it('pos2bin should work with fixed', function () {
     // when
-    var bin = mapper_200.pos2bin(chocolate_taxon_id, chocolate_region, chocolate_start);
+    var startBin = mapper_200.pos2bin(chocolate_taxon_id, chocolate_region, chocolate_start);
+    var endBin = mapper_200.pos2bin(chocolate_taxon_id, chocolate_region, chocolate_end_fixed200);
 
     // then
-    expect(bin).toEqual(chocolate_bin);
+    expect(startBin).toEqual(chocolate_bin);
+    expect(endBin).toEqual(chocolate_bin);
   });
 
   it('bin2pos should work with fixed', function () {

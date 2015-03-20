@@ -125,7 +125,7 @@ module.exports = function(data) {
           }
           return posBin[tax]['UNANCHORED'][1];
         }
-        if (position < 1 || position >= posBin[tax][region][0]) {
+        if (position < 1 || position > posBin[tax][region][0]) {
           throw 'position ' + position + ' out of range';
         }
         var binSize = Math.floor(maps[map_idx[tax]].length/nBins);
