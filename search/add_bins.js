@@ -12,17 +12,18 @@ var genes_file = process.argv[3];
 var fs = require('fs');
 var genomes = JSON.parse(fs.readFileSync(genomes_file, 'utf8'));
 
-var bins = require('../../../gramene-bins-client/src/bins.js')(genomes);
+var binsGenerator = require('gramene-bins-client');
+var bins = binsGenerator.bins(genomes);
 
 var mapper = {
-  fixed_100_bin : bins.binMapper('fixed', 100), // 100 bins per genome
-  fixed_200_bin : bins.binMapper('fixed', 200),
-  fixed_500_bin : bins.binMapper('fixed', 500),
-  fixed_1000_bin: bins.binMapper('fixed',1000), // 1000 bins per genome
-  uniform_1Mb_bin : bins.binMapper('uniform', 1000000), // all bins are 1Mb
-  uniform_2Mb_bin : bins.binMapper('uniform', 2000000),
-  uniform_5Mb_bin : bins.binMapper('uniform', 5000000),
-  uniform_10Mb_bin: bins.binMapper('uniform',10000000)  // all bins are 10Mb
+  fixed_100_bin : bins.fixedBinMapper( 100), // 100 bins per genome
+  fixed_200_bin : bins.fixedBinMapper( 200),
+  fixed_500_bin : bins.fixedBinMapper( 500),
+  fixed_1000_bin: bins.fixedBinMapper(1000), // 1000 bins per genome
+  uniform_1Mb_bin : bins.uniformBinMapper( 1000000), // all bins are 1Mb
+  uniform_2Mb_bin : bins.uniformBinMapper( 2000000),
+  uniform_5Mb_bin : bins.uniformBinMapper( 5000000),
+  uniform_10Mb_bin: bins.uniformBinMapper(10000000)  // all bins are 10Mb
 };
 
 // read genes documents

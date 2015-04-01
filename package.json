@@ -21,6 +21,7 @@
   "homepage": "https://github.com/warelab/gramene-mongodb",
   "dependencies": {
     "async": "^0.9.0",
+    "bins": "git://github.com/warelab/gramene-bins-client.git#master",
     "compression": "^1.0.9",
     "conform": "^0.2.5",
     "connect-mongo": "^0.4.1",
