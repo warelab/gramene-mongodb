@@ -186,15 +186,16 @@ var FastBitCommand = {
 
 var app = express();
 
-var corsOptionsDelegate = function(req, callback){
-  var corsOptions = {credentials: true, origin: false};
-  if(settings.CORS.indexOf(req.header('Origin')) !== -1){
-    corsOptions.origin = true; // reflect (enable) the requested origin in the CORS response
-  }
-  callback(null, corsOptions); // callback expects two parameters: error and options
-};
-
-app.use(cors(corsOptionsDelegate));
+// var corsOptionsDelegate = function(req, callback){
+//   var corsOptions = {credentials: true, origin: false};
+//   if(settings.CORS.indexOf(req.header('Origin')) !== -1){
+//     corsOptions.origin = true; // reflect (enable) the requested origin in the CORS response
+//   }
+//   callback(null, corsOptions); // callback expects two parameters: error and options
+// };
+//
+// app.use(cors(corsOptionsDelegate));
+app.use(cors());
 app.use(compression());
 app.use(cache.middleware({
   clean: true
