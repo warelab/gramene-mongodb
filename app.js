@@ -102,7 +102,9 @@ var MongoCommand = {
     c.coll.count(query, function(err, count) {
       if (err) throw err;
       var options = {};
-      if (params.hasOwnProperty('rows')) options['limit'] = params['rows'];
+      if (params.hasOwnProperty('rows')) {
+        if (params['rows'] !== -1) options['limit'] = params['rows'];
+      }
       else options['limit'] = 20;
       if (params.hasOwnProperty('start')) options['skip'] = params['start'];
       if (params.hasOwnProperty('sort')) {
