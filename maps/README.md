@@ -1,5 +1,13 @@
 # (comparative) maps
 
+use the gramene ensembl rest API to obtain species and maps data
+```
+./ensembl_maps.pl http://APIhost:port species > species.json
+./ensembl_maps.pl http://APIhost:port maps > maps.json
+mongoimport --drop -d cmap -c species < species.json
+mongoimport --drop -d cmap -c maps < maps.json
+```
+
 Lets first define some terms
 
 - map: a linear representation of DNA.
