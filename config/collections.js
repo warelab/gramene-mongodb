@@ -139,7 +139,7 @@ exports.collections = {
   genes : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "search44",
+    dbName         : "search45",
     collectionName : "genes",
     description    : "ensembl gene data",
     properties     : gene_schema
