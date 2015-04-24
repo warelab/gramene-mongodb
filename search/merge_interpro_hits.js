@@ -66,13 +66,20 @@ MongoClient.connect(mongoURL, function(err, db) {
         var ipr_hits = [];
         for (var ipr in obj.interpro_hits) {
           var ipr_i = parseInt(ipr.match(/\d+/));
-          if (hroot.hasOwnProperty(ipr_i)) {
-            obj.interpro_hits[ipr].forEach(function(interval) {
+          var hits = []
+          obj.interpro_hits[ipr].forEach(function(interval) {
+            var hit = {
+              start: interval[0],
+              end: interval[1]
+            };
+            if (hroot.hasOwnProperty(ipr_i)) {
               interval.push(ipr_i,hroot[ipr_i]);
               ipr_hits.push(interval);
-            });
-          }
-          obj.interpro_hits[ipr_i] = obj.interpro_hits[ipr];
+              hit.root = hroot[ipr_i];
+            }
+            hits.push(hit);
+          });
+          obj.interpro_hits[ipr_i] = hits;
           delete obj.interpro_hits[ipr];
         }
         if (ipr_hits.length > 0) {
