@@ -1,12 +1,15 @@
 var fs = require('fs');
 var filename = process.argv[2];
+var ont_key = process.argv[3];
+var assocs = require('./facet_counts.js');
+var assoc = assocs[ont_key];
 
 var skipField = [];
 skipField['created_by']=1;
 skipField['ancestors']=1;
 skipField['relationship']=1;
 skipField['creation_date']=1;
-skipField['is_a']=1;
+// skipField['is_a']=1;
 
 // setup reader
 var n=0;
@@ -38,7 +41,9 @@ require('readline').createInterface(
       }
     }
   }
-
+  solr._terms = solr.id_s + ' | ' + solr.name_s;
+  if (solr.description_s) solr._terms += ' | ' + solr.description_s;
+  solr._genes = assoc.hasOwnProperty(solr.id) ? assoc[solr.id] : 0;
   if (n===0) console.log('[');
   else console.log(',');
   console.log(JSON.stringify(solr));

@@ -137,7 +137,8 @@
         leading wildcard queries. -->
    <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
 
-   <field name="_terms" type="textSuggest" indexed="true" stored="true" multiValued="true"/>
+   <field name="_terms" type="textSuggest" indexed="true" stored="true" multiValued="false"/>
+   <field name="_genes" type="int" indexed="true" stored="true" multiValued="false"/>
 
    <!-- Dynamic field definitions allow using convention over configuration
        for fields via the specification of patterns to match field names. 
@@ -186,8 +187,8 @@
 
   <copyField source="*_s" dest="text"/>
   <copyField source="*_ss" dest="text"/>
-  <copyField source="*_s" dest="_terms"/>
-  <copyField source="*_ss" dest="_terms"/>
+  <!-- <copyField source="*_s" dest="_terms"/>
+  <copyField source="*_ss" dest="_terms"/> -->
   
     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"

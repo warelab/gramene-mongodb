@@ -44,6 +44,9 @@ while (<>) {
     elsif (my($k,$v) = /^(\S+):\s*(.+)$/) { # parse key-value pair
         $v =~ s/^"(.+)".*/$1/; # strip off quotes and qualifiers(?)
         if ($v =~ m/^${prefix}:0*(\d+)/) {
+            if ($k eq 'id') {
+              $hsh{_orig_id_} = $v;
+            }
             $v = $1+0;
         }
         if ($MULTI{$k}) {
@@ -73,7 +76,8 @@ while (<>) {
             }
             # use the id field as the mongo _id
             $hsh{_id} = $hsh{id};
-            delete $hsh{id};
+            $hsh{id} = $hsh{_orig_id_};
+            delete $hsh{_orig_id_};
             # save a copy for later
             %{$ontology{$key}{$hsh{_id}}} = %hsh;
         }

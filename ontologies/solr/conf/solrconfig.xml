@@ -1379,7 +1379,7 @@
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>      
       <!-- <str name="dictionaryImpl">DocumentDictionaryFactory</str> -->
       <str name="field">_terms</str>
-      <!-- <str name="weightField">price</str> -->
+      <str name="weightField">_genes</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="exactMatchFirst">true</str>
       <str name="buildOnStartup">false</str>

@@ -81,11 +81,16 @@ mongo cmap
 ## Setting up Solr cores for each collection
 The solr subdirectory contains a script that will convert a stream of JSON documents exported from mongodb into a list of JSON documents that can be imported into solr. The schema.xml and solrconfig.xml files can be used to set up the core.
 #### export and convert mongodb docs for solr
+First do facet counts on the *_ancestors fields of the genes solr core. This is used to populate the _genes field in each core.
 ```
-mongoexport -d ontology -c GO | node ontology2solr.js /dev/fd/0 > GO.json
-mongoexport -d ontology -c PO | node ontology2solr.js /dev/fd/0 > PO.json
-mongoexport -d ontology -c NCBITaxon | node ontology2solr.js /dev/fd/0 > taxonomy.json
-mongoexport -d ontology -c interpro | node ontology2solr.js /dev/fd/0 > interpro.json
+curl "http://data.gramene.org/search/genes?q=*:*&rows=0&facet=true&facet.field=GO_ancestors&facet.limit=-1&json.nl=map&facet.field=PO_ancestors&facet.field=NCBITaxon_ancestors&facet.field=interpro_ancestors"  > facet_counts.js
+edit facet_counts.js so it is more like:
+module.exports = {GO_ancestors:{},PO_ancestors:{}, etc}
+
+mongoexport -d ontology -c GO | node ontology2solr.js /dev/fd/0 GO_ancestors > GO.json
+mongoexport -d ontology -c PO | node ontology2solr.js /dev/fd/0 PO_ancestors > PO.json
+mongoexport -d ontology -c NCBITaxon | node ontology2solr.js /dev/fd/0 NCBITaxon_ancestors > taxonomy.json
+mongoexport -d ontology -c interpro | node ontology2solr.js /dev/fd/0 interpro_ancestors > interpro.json
 ```
 #### import into a running solr instance
 ```
