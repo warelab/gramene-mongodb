@@ -66,7 +66,7 @@ require('readline').createInterface(
   // for Surround Query Parser
   if (mongo.hasOwnProperty("domainRoots"))   solr.domainRoots = mongo.domainRoots;
   // multivalued distinct list of domains
-  if (mongo.hasOwnProperty("domainList"))    solr.domainList  = mongo.domainList.map(function(d){return d.join('|')});
+  if (mongo.hasOwnProperty("domainList"))    solr.domainList  = mongo.domainList.map(function(d){return d[0]});
   // all of the domain hits
   if (mongo.hasOwnProperty("domainHits"))    solr.domainHits  = mongo.domainHits.map(function(d){return d.id+':'+d.s+'-'+d.e});
   

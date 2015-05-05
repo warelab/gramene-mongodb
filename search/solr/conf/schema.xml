@@ -152,7 +152,7 @@
 
    <!-- interpro domain architecture fields -->
    <field name="domainRoots" type="text_ws" indexed="true" stored="true" multiValued="false"/>
-   <field name="domainList" type="string" indexed="false" stored="true" multiValued="true"/>
+   <field name="domainList" type="int" indexed="false" stored="true" multiValued="true"/>
    <field name="domainHits" type="string" indexed="false" stored="true" multiValued="true"/>
    <!--
      using dynamic fields for xrefs of various kinds
@@ -165,10 +165,12 @@
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="ids" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="ids_exact" type="text_general" indexed="false" stored="true" multiValued="true"/>
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
-   <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
+   <!-- <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/> -->
 
    <field name="_terms" type="textSuggest" indexed="true" stored="true" multiValued="true"/>
 
@@ -217,16 +219,27 @@
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
 
+  <copyField source="id" dest="_terms"/>
+  <copyField source="name" dest="_terms"/>
+  <copyField source="description" dest="_terms"/>
+  <copyField source="*_gene_tree" dest="_terms"/>
+  <copyField source="*_xrefs" dest="_terms"/>
+
   <copyField source="id" dest="text"/>
   <copyField source="name" dest="text"/>
   <copyField source="description" dest="text"/>
   <copyField source="*_gene_tree" dest="text"/>
   <copyField source="*_xrefs" dest="text"/>
-  <copyField source="id" dest="_terms"/>
-  <copyField source="name" dest="_terms"/>
-  <copyField source="*_gene_tree" dest="_terms"/>
-  <copyField source="*_xrefs" dest="_terms"/>
-  <copyField source="description" dest="_terms"/>
+  
+  <copyField source="id" dest="ids"/>
+  <copyField source="name" dest="ids"/>
+  <copyField source="*_gene_tree" dest="ids"/>
+  <copyField source="*_xrefs" dest="ids"/>
+
+  <copyField source="id" dest="ids_exact"/>
+  <copyField source="name" dest="ids_exact"/>
+  <copyField source="*_gene_tree" dest="ids_exact"/>
+  <copyField source="*_xrefs" dest="ids_exact"/>
   
     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"
