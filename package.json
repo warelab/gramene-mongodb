@@ -34,7 +34,7 @@
     "lodash": "^3.8.0",
     "mongodb": "^1.4.7",
     "mysql": "^2.6.2",
-    "stream-transform": "0.0.7",
+    "through2": "^0.6.5",
     "tree-model": "^1.0.0",
     "web-cache": "0.1.1",
     "xml-stream": "^0.4.5"

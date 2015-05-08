@@ -1,21 +1,10 @@
 var mysql = require('mysql');
-var transform = require('stream-transform');
 var TreeModel = require('tree-model');
 var treeModel = new TreeModel();
 var FlatToNested = require('flat-to-nested');
 var _ = require('lodash');
-
-function Grouper(options) {
-  // allow use without new
-  if (!(this instanceof Upper)) {
-    return new Upper(options);
-  }
-
-  this.groupBy = options.groupBy || 'root_id';
-
-  stream.Transform.call(this, options);
-}
-
+var through2 = require('through2');
+var fs = require('fs');
 
 var comparaDb = mysql.createConnection({
   "host": "cabot",
@@ -41,11 +30,11 @@ var query = "select r.stable_id as tree_id, n.node_id, n.parent_id, n.root_id, "
 "left join gene_tree_node_attr a on a.node_id = n.node_id " +
 "left join species_tree_node sn on sn.node_id = a.species_tree_node_id " +
 
-"where r.tree_type = 'tree' " +
+"where r.tree_type = 'tree' and clusterset_id = 'default' " +
 
 "order by r.root_id";
 
-var tidyRow = transform(function(row) {
+var tidyRow = through2.obj(function(row, encoding, done) {
   // FlatToNested does not like it if parent is defined on root.
   if(row.root_id === row.node_id) {
     row.supertree_id = row.parent_id;
@@ -53,13 +42,14 @@ var tidyRow = transform(function(row) {
   }
 
   // remove null properties
-  return _.omit(row, _.isNull);
+  this.push( _.omit(row, _.isNull));
+  done();
 });
 
 var groupRowsByTree = function() {
   var growingTree;
 
-  var transformer = transform(function(row) {
+  var transform = function(row, enc, done) {
     if(growingTree && growingTree.treeId === row.tree_id) {
       growingTree.nodes.push(row);
     }
@@ -71,25 +61,28 @@ var groupRowsByTree = function() {
       };
 
       if(doneTree) {
-        //console.log('done with', doneTree.treeId, 'starting', growingTree.treeId);
-        return doneTree;
+        this.push(doneTree);
       }
     }
-  });
+    done();
+  };
 
-  transformer.on('finish', function() {
-    return growingTree;
-  });
+  var flush = function(done) {
+    //console.log('group rows by tree is done');
+    this.push(growingTree);
+    done();
+  };
 
-  return transformer;
+  return through2.obj(transform, flush);
 };
 
-var makeNestedTree = transform(function(tree) {
+var makeNestedTree = through2.obj(function(tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
-  return tree;
+  this.push(tree);
+  done();
 });
 
-var loadIntoTreeModelAndDoAQuickSanityCheck = transform(function(tree) {
+var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function(tree, enc, done) {
   tree.treeModel = treeModel.parse(tree.nested);
   tree.treeModel.all(function(node) {
     if(node.children && node.children.length) {
@@ -104,28 +97,43 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = transform(function(tree) {
     }
   });
 
-  return tree;
+  this.push(tree);
+  done();
 });
 
-var flatNodesFromTree = transform(function(tree) {
-  // overwrite the original array
-  tree.nodes = [];
+var counter = function() {
+  var treeCount = 0;
+  var rowCount = 0;
 
-  tree.treeModel.all(function(node) {
-    tree.nodes.push(node);
-  });
+  var transform = function(tree, enc, done) {
+    ++treeCount;
+    rowCount += tree.nodes.length;
+    if(treeCount % 1000 == 0) {
+      console.log(treeCount + ' trees with ' + rowCount + ' nodes so far');
+    }
+    this.push(tree);
+    done();
+  };
 
-  return tree;
+  var flush = function(done) {
+    console.log(treeCount + ' trees with ' + rowCount + ' nodes in total');
+    done();
+  };
+
+  return through2.obj(transform, flush);
+};
+
+var serialize = through2.obj(function(tree, enc, done) {
+  this.push(JSON.stringify(tree.nested) + "\n");
+  done();
 });
 
-comparaDb.query(query)
-  .stream()
+var stream = comparaDb.query(query)
+  .stream({highWaterMark: 5})
   .pipe(tidyRow)
   .pipe(groupRowsByTree())
   .pipe(makeNestedTree)
   .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-  .pipe(flatNodesFromTree)
-  .pipe(transform(function nowWhat(tree) {
-    console.log('here is a tree', tree);
-    return tree;
-  }));
+  .pipe(counter())
+  .pipe(serialize)
+  .pipe(fs.createWriteStream('./trees.json'));
