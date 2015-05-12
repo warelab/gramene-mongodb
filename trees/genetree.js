@@ -16,8 +16,8 @@ var comparaDb = mysql.createConnection({
 // this query returns one row per node in the tree; it includes both leaf and
 // branch nodes. some properties (e.g. system_name) are null for branch nodes
 // and others (e.g. node_type) are null for leaf nodes.
-var query = "select r.stable_id as tree_id, n.node_id, n.parent_id, n.root_id, " +
-  "n.distance_to_parent, s.stable_id, g.taxon_id, g.name as system_name, " +
+var query = "select case when r.tree_type = 'supertree' then concat('Supertree-', n.root_id) else r.stable_id end as tree_stable_id, n.node_id, n.parent_id, n.root_id, " +
+  "n.distance_to_parent, s.stable_id as protein_stable_id, g.taxon_id, g.name as system_name, " +
   "g.assembly, a.node_type, a.bootstrap, a.duplication_confidence_score, " +
   "sn.taxon_id as node_taxon_id, sn.node_name as node_taxon " +
 
@@ -30,14 +30,14 @@ var query = "select r.stable_id as tree_id, n.node_id, n.parent_id, n.root_id, "
 "left join gene_tree_node_attr a on a.node_id = n.node_id " +
 "left join species_tree_node sn on sn.node_id = a.species_tree_node_id " +
 
-"where r.tree_type = 'tree' and clusterset_id = 'default' " +
+"where r.tree_type in ('tree', 'supertree') and clusterset_id = 'default' " +
 
 "order by r.root_id";
 
 var tidyRow = through2.obj(function(row, encoding, done) {
   // FlatToNested does not like it if parent is defined on root.
   if(row.root_id === row.node_id) {
-    row.supertree_id = row.parent_id;
+    row.supertree_id = 'Supertree-' + row.parent_id;
     delete row.parent_id;
   }
 
@@ -50,13 +50,13 @@ var groupRowsByTree = function() {
   var growingTree;
 
   var transform = function(row, enc, done) {
-    if(growingTree && growingTree.treeId === row.tree_id) {
+    if(growingTree && growingTree.treeId === row.tree_stable_id) {
       growingTree.nodes.push(row);
     }
     else {
       var doneTree = growingTree;
       growingTree = {
-        treeId: row.tree_id,
+        treeId: row.tree_stable_id,
         nodes: [row]
       };
 
@@ -64,6 +64,12 @@ var groupRowsByTree = function() {
         this.push(doneTree);
       }
     }
+
+    if(row.node_id !== row.root_id) {
+      delete row.root_id;
+      delete row.tree_stable_id;
+    }
+
     done();
   };
 
@@ -83,6 +89,7 @@ var makeNestedTree = through2.obj(function(tree, enc, done) {
 });
 
 var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function(tree, enc, done) {
+  var isSupertree = tree.nested.tree_stable_id.indexOf('Supertree') === 0;
   tree.treeModel = treeModel.parse(tree.nested);
   tree.treeModel.all(function(node) {
     if(node.children && node.children.length) {
@@ -91,7 +98,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function(tree, enc, d
       }
     }
     else {
-      if(node.model.node_type) {
+      if(node.model.node_type && !isSupertree) {
         console.log('Found leaf node with property meant for branch node', node.model.node_type, node.model.node_id);
       }
     }
@@ -126,7 +133,9 @@ var counter = function() {
 var serialize = through2.obj(function(tree, enc, done) {
   this.push(JSON.stringify(tree.nested) + "\n");
   done();
-});
+}, function(done) { console.log('serializer is done'); done()});
+
+var fileWriter = fs.createWriteStream('./trees.json');
 
 var stream = comparaDb.query(query)
   .stream({highWaterMark: 5})
@@ -136,4 +145,9 @@ var stream = comparaDb.query(query)
   .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
   .pipe(counter())
   .pipe(serialize)
-  .pipe(fs.createWriteStream('./trees.json'));
+  .pipe(fileWriter);
+
+fileWriter.on('finish', function() {
+  console.log('we are done here');
+  stream.end();
+});
