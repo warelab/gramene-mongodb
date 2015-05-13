@@ -5,8 +5,9 @@ var FlatToNested = require('flat-to-nested');
 var _ = require('lodash');
 var through2 = require('through2');
 var fs = require('fs');
+var MongoClient = require('mongodb').MongoClient;
 
-var comparaDb = mysql.createConnection({
+var comparaMysqlDb = mysql.createConnection({
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
@@ -84,6 +85,7 @@ var groupRowsByTree = function() {
 
 var makeNestedTree = through2.obj(function(tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
+  tree.nested._id = tree.nested.tree_stable_id;
   this.push(tree);
   done();
 });
@@ -130,24 +132,41 @@ var counter = function() {
   return through2.obj(transform, flush);
 };
 
-var serialize = through2.obj(function(tree, enc, done) {
-  this.push(JSON.stringify(tree.nested) + "\n");
+var serialize = through2.obj(function(r, enc, done) {
+  this.push(JSON.stringify(r) + "\n");
   done();
 }, function(done) { console.log('serializer is done'); done()});
 
-var fileWriter = fs.createWriteStream('./trees.json');
+var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-var stream = comparaDb.query(query)
-  .stream({highWaterMark: 5})
-  .pipe(tidyRow)
-  .pipe(groupRowsByTree())
-  .pipe(makeNestedTree)
-  .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-  .pipe(counter())
-  .pipe(serialize)
-  .pipe(fileWriter);
+MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, mongoDb) {
 
-fileWriter.on('finish', function() {
-  console.log('we are done here');
-  stream.end();
+  var mongoCollection = mongoDb.collection('genetree');
+
+  var upsertTreeIntoMongo = through2.obj(function(tree, enc, done) {
+    var throughThis = this;
+    mongoCollection.update({_id: tree.nested._id}, tree.nested, {upsert: true}, function(err, count, status) {
+      throughThis.push({err: err, status: status, _id: tree.nested._id});
+      done();
+    });
+  });
+
+  var stream = comparaMysqlDb.query(query)
+    .stream({highWaterMark: 5})
+    .pipe(tidyRow)
+    .pipe(groupRowsByTree())
+    .pipe(makeNestedTree)
+    .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+    .pipe(counter())
+    .pipe(upsertTreeIntoMongo)
+    .pipe(serialize)
+    .pipe(fileWriter);
+
+  fileWriter.on('finish', function() {
+    console.log('We are done here.');
+    stream.end();
+
+    // it would be super if this were not necessary.
+    process.exit(0);
+  });
 });
