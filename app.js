@@ -7,7 +7,8 @@ var cluster = require('cluster'),
     validate = require('conform').validate,
     MongoClient = require('mongodb').MongoClient,
     ObjectId = require('mongodb').ObjectID,
-    fastbit = require('fastbit');
+    fastbit = require('fastbit'),
+    isNumber = require("isnumber");
 
 if (cluster.isMaster) {
   // Count the machine's CPUs
@@ -78,7 +79,7 @@ function buildQuery(params, cmd) {
   }
   for (var p in params) {
     if (!cmd.hasOwnProperty(p)) {
-      if (p === 'idList') qExprs.push({'_id': {'$in': params['idList'].split(',').map(function(x) {return +x;})}});
+      if (p === 'idList') qExprs.push({'_id': {'$in': params['idList'].split(',').map(function(x) {return isNumber(x) ? +x : x;})}});
       else {
         var o = {};
         o[p] = params[p];
