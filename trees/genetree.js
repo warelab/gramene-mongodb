@@ -40,7 +40,7 @@ var query = "select " +
 var tidyRow = through2.obj(function(row, encoding, done) {
   // FlatToNested does not like it if parent is defined on root.
   // (This happens with Compara because tree roots are considered
-  // to be rows
+  // to be nodes in a higher order tree)
   if(row.root_id === row.node_id) {
     // We COULD store the reference to the supertree here, but
     // what is the use case?
