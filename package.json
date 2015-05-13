@@ -30,7 +30,12 @@
     "express": "^4.6.1",
     "express-session": "^1.7.0",
     "fastbit": "^0.0.1",
+    "flat-to-nested": "^1.0.1",
+    "lodash": "^3.8.0",
     "mongodb": "^1.4.7",
+    "mysql": "^2.6.2",
+    "through2": "^0.6.5",
+    "tree-model": "^1.0.0",
     "web-cache": "0.1.1",
     "xml-stream": "^0.4.5"
   }
