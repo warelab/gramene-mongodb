@@ -17,7 +17,9 @@ var comparaMysqlDb = mysql.createConnection({
 // this query returns one row per node in the tree; it includes both leaf and
 // branch nodes. some properties (e.g. system_name) are null for branch nodes
 // and others (e.g. node_type) are null for leaf nodes.
-var query = "select case when r.tree_type = 'supertree' then concat('Supertree-', n.root_id) else r.stable_id end as tree_stable_id, n.node_id, n.parent_id, n.root_id, " +
+var query = "select " +
+  "r.stable_id as tree_stable_id, " +
+  "n.node_id, n.parent_id, n.root_id, " +
   "n.distance_to_parent, s.stable_id as protein_stable_id, g.taxon_id, g.name as system_name, " +
   "g.assembly, a.node_type, a.bootstrap, a.duplication_confidence_score, " +
   "sn.taxon_id as node_taxon_id, sn.node_name as node_taxon " +
@@ -31,14 +33,20 @@ var query = "select case when r.tree_type = 'supertree' then concat('Supertree-'
 "left join gene_tree_node_attr a on a.node_id = n.node_id " +
 "left join species_tree_node sn on sn.node_id = a.species_tree_node_id " +
 
-"where r.tree_type in ('tree', 'supertree') and clusterset_id = 'default' " +
+"where r.tree_type = 'tree' and clusterset_id = 'default' " +
 
 "order by r.root_id";
 
 var tidyRow = through2.obj(function(row, encoding, done) {
   // FlatToNested does not like it if parent is defined on root.
+  // (This happens with Compara because tree roots are considered
+  // to be rows
   if(row.root_id === row.node_id) {
-    row.supertree_id = 'Supertree-' + row.parent_id;
+    // We COULD store the reference to the supertree here, but
+    // what is the use case?
+
+    //row.supertree_node_id = row.parent_id;
+    //row.supertree = 'Supertree-' + row.parent_root_id;
     delete row.parent_id;
   }
 
@@ -139,7 +147,7 @@ var serialize = through2.obj(function(r, enc, done) {
 
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, mongoDb) {
+MongoClient.connect('mongodb://127.0.0.1:27017/search45', function(err, mongoDb) {
 
   var mongoCollection = mongoDb.collection('genetree');
 
