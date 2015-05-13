@@ -56,7 +56,12 @@ require('readline').createInterface(
   solr.start       = mongo.location.start;
   solr.end         = mongo.location.end;
   solr.strand      = mongo.location.strand;
-
+  
+  if (mongo.hasOwnProperty('canonical_translation')) {
+    solr.canonical_translation = mongo.canonical_translation.name;
+    solr.canonical_translation_length = mongo.canonical_translation['length'];
+  }
+  
   for (var field in mongo) {
     if (field.substr(-4) === '_bin') {
       solr[field] = mongo[field];
