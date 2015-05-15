@@ -25,5 +25,6 @@ MongoClient.connect(mongoURL, function(err, db) {
   db.collection('genetree').find({}, {node_taxon_id: 1}).toArray(function(err, docs) {
     if (err) throw err;
     modifyGeneDocs(_.indexBy(docs, '_id'));
+    db.close();
   });
 });
