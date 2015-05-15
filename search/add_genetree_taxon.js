@@ -16,11 +16,6 @@ function modifyGeneDocs(genetreeLUT) {
       obj.epl_gene_tree_root_taxon_id = genetreeLUT[obj.epl_gene_tree].node_taxon_id;
     }
     console.log(JSON.stringify(obj));
-  }).on('close', function () {
-    // close the database connection, but give the currently running commands
-    setTimeout(function () {
-      db.close();
-    }, 5000);
   });
 }
 
