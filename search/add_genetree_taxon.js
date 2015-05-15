@@ -13,7 +13,7 @@ function modifyGeneDocs(genetreeLUT) {
   }).on('line', function (line) { // one JSON object per line
     var obj = JSON.parse(line);
     if(obj.epl_gene_tree) {
-      obj.epl_gene_tree_root_taxon_id = genetreeLUT[obj.epl_gene_tree];
+      obj.epl_gene_tree_root_taxon_id = genetreeLUT[obj.epl_gene_tree].node_taxon_id;
     }
     console.log(JSON.stringify(obj));
   }).on('close', function () {
