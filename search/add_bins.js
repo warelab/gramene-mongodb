@@ -10,7 +10,7 @@ var genomes_file = process.argv[2];
 var genes_file = process.argv[3];
 
 var fs = require('fs');
-var genomes = JSON.parse('[' + fs.readFileSync(genomes_file, 'utf8').replace(/\n/g, ', ') + ']');
+var genomes = JSON.parse('[' + fs.readFileSync(genomes_file, 'utf8').replace(/\n\{/g, ', {') + ']');
 
 var binsGenerator = require('gramene-bins-client');
 var bins = binsGenerator.bins(genomes);
