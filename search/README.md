@@ -18,11 +18,10 @@ perl ./search_dump.pl -host hostname -port 3306 -user username -pass password -d
 The script takes over an hour to run, so go populate the ontology and maps databases while you wait.
 Once the json files are ready, we include ancestor information of the ontology terms and global bins of various sizes.
 ```
-gzip -cd /scratch/olson/build41/Gene_* | node add_ontology_fields.js /dev/fd/0 | node add_bins.js ../maps/maps.json /dev/fd/0 | mongoimport --db search41 --collection genes
-```
+ gzip -cd /scratch/olson/build45/Gene_* | node add_ontology_fields.js /dev/fd/0 | node add_bins.js ../maps/maps.json /dev/fd/0 | node add_genetree_taxon.js /dev/fd/0 | node merge_interpro_hits.js /dev/fd/0 | mongoimport --db search45 --collection genes --drop ```
 Final step is to build indexes
 ```
-mongo search41 < indexCommands.js
+mongo search45 < indexCommands.js
 ```
 
 ## Creating a genetrees collection
