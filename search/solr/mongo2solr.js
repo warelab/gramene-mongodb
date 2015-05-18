@@ -61,6 +61,9 @@ require('readline').createInterface(
     solr.canonical_translation = mongo.canonical_translation.name;
     solr.canonical_translation_length = mongo.canonical_translation['length'];
   }
+  if (mongo.hasOwnProperty('epl_gene_tree_root_taxon_id')) {
+    solr.epl_gene_tree_root_taxon_id = mongo.epl_gene_tree_root_taxon_id;
+  }
   
   for (var field in mongo) {
     if (field.substr(-4) === '_bin') {

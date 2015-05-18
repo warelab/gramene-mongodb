@@ -135,10 +135,11 @@
 
    <field name="name" type="text_general" indexed="true" stored="true"/>
    <field name="description" type="text_general" indexed="true" stored="true"/>
- 	 <field name="biotype" type="string" indexed="true" stored="true"/>
-
-	 <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
-	 <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="biotype" type="string" indexed="true" stored="true"/>
+   
+   <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="epl_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="epl_gene_tree_root_taxon_id" type="int" indexed="true" stored="true" multiValued="false"/>
 
    <field name="pathways" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="reactions" type="string" indexed="true" stored="true" multiValued="true"/>
