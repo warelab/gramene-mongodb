@@ -154,6 +154,11 @@
    <field name="domainRoots" type="text_ws" indexed="true" stored="true" multiValued="false"/>
    <field name="domainList" type="int" indexed="false" stored="true" multiValued="true"/>
    <field name="domainHits" type="string" indexed="false" stored="true" multiValued="true"/>
+
+   <!-- canonical translation name and length fields (for displaying domain arch) -->
+   <field name="canonical_translation" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="canonical_translation_length" type="int" indexed="true" stored="true" multiValued="false"/>
+   
    <!--
      using dynamic fields for xrefs of various kinds
 
