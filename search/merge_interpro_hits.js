@@ -138,16 +138,17 @@ MongoClient.connect(mongoURL, function(err, db) {
           var roots = [];
           obj.domainList = [];
           obj.domainHits = [];
+          var distinctDomains = {};
           clusters.forEach(function(c) {
             roots.push(c.root);
-            var distinctDomains = {};
             obj.domainHits.push({id:c.root,s:c.start,e:c.end});
+            distinctDomains[c.root]=1; // to make sure we have the root id
             c.iprs.forEach(function(i) {
-              distinctDomains[ipr_hits[i][2]]=1;
+              distinctDomains[ipr_hits[i][2]]=1; // add non-root domain ids
               // obj.domainHits.push({id:ipr_hits[i][2],s:ipr_hits[i][0],e:ipr_hits[i][1]});
             });
-            obj.domainList.push(Object.keys(distinctDomains).map(function(d){return +d}));
           });
+          obj.domainList = Object.keys(distinctDomains).map(function(d){return +d});
           obj.domainRoots = roots.join(' ');
         }
       }
