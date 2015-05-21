@@ -20,7 +20,8 @@ var comparaMysqlDb = mysql.createConnection({
 var query = "select " +
   "r.stable_id as tree_stable_id, " +
   "n.node_id, n.parent_id, n.root_id, " +
-  "n.distance_to_parent, s.stable_id as protein_stable_id, g.taxon_id, g.name as system_name, " +
+  "n.distance_to_parent, s.stable_id as protein_stable_id, " +
+  "gene.stable_id as gene_stable_id, g.taxon_id, g.name as system_name, " +
   "g.assembly, a.node_type, a.bootstrap, a.duplication_confidence_score, " +
   "sn.taxon_id as node_taxon_id, sn.node_name as node_taxon " +
 
@@ -28,6 +29,7 @@ var query = "select " +
   "inner join gene_tree_node n on n.root_id = r.root_id " +
 
   "left join seq_member s on s.seq_member_id = n.seq_member_id " +
+  "left join gene_member gene on s.gene_member_id = gene.gene_member_id " +
   "left join genome_db g on g.genome_db_id = s.genome_db_id " +
 
   "left join gene_tree_node_attr a on a.node_id = n.node_id " +
