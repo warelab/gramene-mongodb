@@ -82,7 +82,12 @@ function buildQuery(params, cmd) {
       if (p === 'idList') qExprs.push({'_id': {'$in': params['idList'].split(',').map(function(x) {return isNumber(x) ? +x : x;})}});
       else {
         var o = {};
-        o[p] = params[p];
+        if (Array.isArray(params[p])) {
+          o[p] = {'$in': params[p].map(function(x) {return isNumber(x) ? +x : x;})};
+        }
+        else {
+          o[p] = params[p];
+        }
         qExprs.push(o);
       }
     }
