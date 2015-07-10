@@ -61,8 +61,12 @@ require('readline').createInterface(
     solr.canonical_translation = mongo.canonical_translation.name;
     solr.canonical_translation_length = mongo.canonical_translation['length'];
   }
-  if (mongo.hasOwnProperty('epl_gene_tree_root_taxon_id')) {
-    solr.epl_gene_tree_root_taxon_id = mongo.epl_gene_tree_root_taxon_id;
+  if (mongo.hasOwnProperty('grm_gene_tree_root_taxon_id')) {
+    solr.grm_gene_tree_root_taxon_id = mongo.grm_gene_tree_root_taxon_id;
+    solr.grm_gene_tree = mongo.grm_gene_tree;
+  }
+  if (mongo.hasOwnProperty('epl_sibling_trees')) {
+    solr.epl_sibling_trees = mongo.epl_sibling_trees;
   }
   
   for (var field in mongo) {
