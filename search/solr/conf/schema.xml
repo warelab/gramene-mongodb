@@ -134,7 +134,7 @@
    <field name="species" type="text_general" stored="true" indexed="true"/> <!-- take from taxonomy core? -->
 
    <field name="name" type="text_general" indexed="true" stored="true"/>
-   <field name="description" type="text_general" indexed="true" stored="true"/>
+   <field name="description" type="text_general" indexed="true" stored="true" sortMissingLast="true"/>
    <field name="biotype" type="string" indexed="true" stored="true"/>
    
    <field name="eg_gene_tree" type="string" indexed="true" stored="true" multiValued="false"/>
