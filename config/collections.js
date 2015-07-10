@@ -2,10 +2,6 @@
 // as a guide for validating query parameters
 // and casting from string to integer when appropriate
 var ontology_schema = {
-  _id : {
-    type : 'integer',
-    description : 'integerized ontology ID, e.g., GO:0001234 -> 1234'
-  },
   is_a : {
     type : 'integer',
     description : 'array of parent identifiers'
@@ -139,11 +135,19 @@ exports.collections = {
   genes : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "search45",
+    dbName         : "search46",
     collectionName : "genes",
     description    : "ensembl gene data",
     properties     : gene_schema
   },
+  genetrees : {
+    host           : "brie.cshl.edu",
+    port           : 27017,
+    dbName         : "search46",
+    collectionName : "genetree",
+    description    : "ensembl gene trees",
+    properties     : {}
+  }, 
   reactions : {
     host           : "brie.cshl.edu",
     port           : 27017,
@@ -171,7 +175,7 @@ exports.collections = {
   GO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology46",
     collectionName : "GO",
     description    : "gene ontology",
     properties     : ontology_schema
@@ -187,7 +191,7 @@ exports.collections = {
   taxonomy : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology46",
     collectionName : "NCBITaxon",
     description    : "NCBI taxonomy (pruned to cover gramene species)",
     properties     : ontology_schema
@@ -195,7 +199,7 @@ exports.collections = {
   PO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology46",
     collectionName : "PO",
     description    : "plant ontology",
     properties     : ontology_schema
@@ -211,7 +215,7 @@ exports.collections = {
   TO : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology46",
     collectionName : "TO",
     description    : "trait ontology",
     properties     : ontology_schema
@@ -219,7 +223,7 @@ exports.collections = {
   domains : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "ontology",
+    dbName         : "ontology46",
     collectionName : "interpro",
     description    : "intepro domains",
     properties     : ontology_schema
@@ -227,7 +231,7 @@ exports.collections = {
   maps : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "cmap",
+    dbName         : "search46",
     collectionName : "maps",
     description    : "a collection of maps",
     properties     : {}
@@ -244,7 +248,7 @@ exports.collections = {
   species : {
     host           : "brie.cshl.edu",
     port           : 27017,
-    dbName         : "cmap",
+    dbName         : "search46",
     collectionName : "species",
     description    : "a collection of species",
     properties     : {}
