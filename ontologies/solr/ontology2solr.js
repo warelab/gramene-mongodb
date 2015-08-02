@@ -41,7 +41,7 @@ require('readline').createInterface(
       }
     }
   }
-  solr._terms = solr.id_s + ' | ' + solr.name_s;
+  solr._terms = solr.name_s;
   if (solr.description_s) solr._terms += ' | ' + solr.description_s;
   solr._genes = assoc.hasOwnProperty(solr.id) ? assoc[solr.id] : 0;
   if (n===0) console.log('[');
