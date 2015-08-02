@@ -11,7 +11,7 @@ var comparaMysqlDb = mysql.createConnection({
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
-  "database": "ensembl_compara_plants_45_79"
+  "database": "ensembl_compara_plants_46_80"
 });
 
 // this query returns one row per node in the tree; it includes both leaf and
@@ -201,7 +201,7 @@ var serialize = through2.obj(function (r, enc, done) {
 
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-MongoClient.connect('mongodb://127.0.0.1:27017/search45', function (err, mongoDb) {
+MongoClient.connect('mongodb://brie:27017/search46', function (err, mongoDb) {
   var mongoCollection = mongoDb.collection('genetree');
 
   var upsertTreeIntoMongo = through2.obj(function (tree, enc, done) {
