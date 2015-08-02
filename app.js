@@ -5,6 +5,7 @@ var cluster = require('cluster'),
     compression = require('compression'),
     cache = require('web-cache'),
     validate = require('conform').validate,
+    sanitize = require('mongo-sanitize'),
     MongoClient = require('mongodb').MongoClient,
     ObjectId = require('mongodb').ObjectID,
     fastbit = require('fastbit'),
@@ -66,6 +67,9 @@ for (var dbName in databases) {
 }
 
 function buildQuery(params, cmd) {
+  for (var p in params) {
+    params[p] = sanitize(params[p]);
+  }
   var qExprs = [];
   if (params.hasOwnProperty('q')) qExprs.push({'$text': {'$search': params['q']}});
   if (params.hasOwnProperty('l')) {
