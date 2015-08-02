@@ -1,4 +1,4 @@
-var mongoURL = 'mongodb://127.0.0.1:27017/search45';
+var mongoURL = 'mongodb://brie:27017/search46';
 
 var MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
