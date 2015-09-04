@@ -6,4 +6,4 @@ inner join gene_member g1 on hm.gene_member_id = g1.gene_member_id
 inner join homology_member hm2 on hm2.homology_id = h.homology_id
 inner join gene_member g2 on hm2.gene_member_id = g2.gene_member_id and g1.gene_member_id <> g2.gene_member_id
 
-where g1.stable_id = '{stableId}';
+where g1.stable_id = ?;
