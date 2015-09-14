@@ -37,6 +37,7 @@ Q.all([
       done();
     });
 
+    // Make-your-own-promise to account for connection cleanup in callback.
     function queryPromiseUsingPool(gene) {
       var deferred = Q.defer();
       comparaMysqlDb.getConnection(function(err, connection) {
@@ -51,20 +52,23 @@ Q.all([
       return deferred.promise;
     }
 
+    var time = new Date().getTime();
     var count = 0;
 
     var addTree = through2.obj(function (gene, enc, done) {
-      if (!(++count % 100)) {
+      var newTime = new Date().getTime();
+      if (++count && (newTime - time) > 5000) {
         console.log(count);
+        time = newTime;
       }
       var streamCtx = this;
       if (gene.grm_gene_tree) {
-        console.log("will request genetree " + gene.grm_gene_tree + " for " + gene._id);
+        //console.log("will request genetree " + gene.grm_gene_tree + " for " + gene._id);
         Q.all([
           Q.ninvoke(genetreeMongoCollection, 'findOne', {tree_id: gene.grm_gene_tree}),
           queryPromiseUsingPool(gene)
         ]).spread(function (rawTree, orthos) {
-          console.log("got " + rawTree._id + " for " + gene._id + " and " + _.size(orthos) + " ortho/paras");
+          //console.log("got " + rawTree._id + " for " + gene._id + " and " + _.size(orthos) + " ortho/paras");
           var tree = new TreeModel().parse(rawTree);
           streamCtx.push(gene);
           done();
