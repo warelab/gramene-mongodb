@@ -83,7 +83,7 @@ module.exports = {
       }
       c.coll.find(query, options).toArray(function(err, result) {
         if (err) throw err;
-        res.send(result);
+        res.send({response:result});
       });
     }
   }
