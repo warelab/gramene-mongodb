@@ -1,9 +1,8 @@
 select
-g1.stable_id as ':START_ID(Gene)',
-g2.stable_id as ':END_ID(Gene)',
+g1.stable_id as 'geneId',
+g2.stable_id as 'otherId',
 h.description as kind,
-h.homology_id as 'homologyId:long',
-h.is_tree_compliant as 'isTreeCompliant:boolean'
+h.is_tree_compliant as 'isTreeCompliant'
 
 from homology h
 inner join homology_member hm on hm.homology_id = h.homology_id

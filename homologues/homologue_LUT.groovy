@@ -1,12 +1,31 @@
 @Grab('com.xlson.groovycsv:groovycsv:1.0')
-@Grab(group = 'com.sparkjava', module = 'spark-core', version = '2.1')
 
-import static spark.Spark.*
 import groovy.json.*
 
-final Map<String, List<Homology>> lut = new HashMap(2**22).withDefault { new LinkedList<Homology>() }
+HomologyLut lut = HomologyLut.fromCsv('./homologue_edge.txt')
 
-Integer count = 0
+JsonSlurper jsonSlurper = new JsonSlurper();
+//BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
+BufferedReader input = new BufferedReader(new FileReader('../Gene_Aegilops_tauschii_core.for_genetree_testing.json'))
+//BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out))
+BufferedWriter output = new BufferedWriter(new FileWriter('../Gene_Aegilops_tauschii_core.for_genetree_testing.out.json'))
+
+int count = 0
+int time = System.currentTimeMillis()
+
+input.eachLine {
+  if(++count % 10000 == 0) {
+    int now = System.currentTimeMillis()
+    int dur = now - time;
+    console.log("$count in $dur ms")
+    time = now
+  }
+  Map gene = jsonSlurper.parseText it
+  gene.homologs = lut.homologs(gene._id)
+  String prettyGene = new JsonBuilder(gene).toPrettyString()
+  output.write prettyGene
+}
+
 
 enum HomologyKind {
   ortholog_one2one,
@@ -20,36 +39,45 @@ enum HomologyKind {
   other_paralog
 }
 
-class Homology {
+class Homology implements Serializable {
   String otherGene
   HomologyKind kind
   Boolean isTreeCompliant
 }
 
-for (line in new File('./homologue_edge.txt').newReader('UTF-8')) {
-  if (count++) {
-    String[] tokens = line.split('\t')
-    String geneA = tokens[0]
-    String geneB = tokens[1]
-    HomologyKind kind = HomologyKind.valueOf(tokens[2])
-    Boolean isTreeCompliant = tokens[4] == '1'
+class HomologyLut implements Serializable {
 
-    lut[geneA] << new Homology(otherGene: geneB, kind: kind, isTreeCompliant: isTreeCompliant)
-    lut[geneB] << new Homology(otherGene: geneA, kind: kind, isTreeCompliant: isTreeCompliant)
-    if (count % 1000000 == 0) {
-      println "$count ${lut.size()}"
+  final Map<String, List<Homology>> lut = new HashMap(2**22)// .withDefault { new LinkedList<Homology>() }
+  Integer count = 0
+
+  static HomologyLut fromCsv(String fileName) {
+    HomologyLut lut = new HomologyLut()
+    lut.loadFromCsv(fileName)
+    return lut
+  }
+
+  private def loadFromCsv(String fileName) {
+    for (line in new File(fileName).newReader('UTF-8')) {
+      if (count++) {
+        String[] tokens = line.split('\t')
+        String geneA = tokens[0]
+        String geneB = tokens[1]
+        HomologyKind kind = HomologyKind.valueOf(tokens[2])
+        Boolean isTreeCompliant = tokens[3] == '1'
+
+        if(lut[geneA] == null) lut[geneA] = new LinkedList<>()
+        if(lut[geneB] == null) lut[geneB] = new LinkedList<>()
+
+        lut[geneA] << new Homology(otherGene: geneB, kind: kind, isTreeCompliant: isTreeCompliant)
+        lut[geneB] << new Homology(otherGene: geneA, kind: kind, isTreeCompliant: isTreeCompliant)
+        if (count % 1000000 == 0) {
+          println "$count ${lut.size()}"
+        }
+      }
     }
   }
-}
 
-println 'Done. Will attempt to start a server.'
-
-get '/homologs', { req, res ->
-  res.type('application/json')
-
-  String geneId = req.queryMap().toMap().for[0]
-  List<Homology> homologies = lut[geneId]
-  new JsonBuilder(homologies.collect{ h ->
-    [otherGene: h.otherGene, kind: h.kind, isTreeCompliant: h.isTreeCompliant]
-  })
+  List<Homology> homologs(geneId) {
+    return lut[geneId]
+  }
 }
