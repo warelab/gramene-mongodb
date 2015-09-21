@@ -11,6 +11,6 @@ echo "Dumping data from $DB on $HOST"
 # mysql -h$HOST -u$USER -p$PASS $DB -q < gene_node.sql > gene_node.txt
 
 echo "Edges…"
-mysql -h$HOST -u$USER -p$PASS $DB -q < homologue_edge.sql > homologue_edge.txt
+mysql -h$HOST -u$USER -p$PASS $DB -q < homologue_edge.sql | gzip -c > homologue_edge.txt.gz
 
 echo "Done dumping"

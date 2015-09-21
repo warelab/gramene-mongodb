@@ -4,10 +4,12 @@
 
 import groovy.json.*
 
+import java.util.zip.GZIPInputStream
+
 //"bash dump_data.sh".execute().in.eachLine { line ->
 //  System.err.println line
 //}
-HomologyLut lut = CsvHomologyLutFactory.from('./homologue_edge.txt').create()
+HomologyLut lut = CsvHomologyLutFactory.from('./homologue_edge.txt.gz').create()
 //HomologyLut lut = MysqlHomologyLutFactory.get().create()
 
 JsonSlurper jsonSlurper = new JsonSlurper();
@@ -144,7 +146,7 @@ class CsvHomologyLutFactory implements HomologyLutFactory {
   HomologyLut create() {
     System.err.println "Loading lookup table from $fileName"
     HomologyLut lut = new HomologyLut()
-    for (line in new File(fileName).newReader('UTF-8')) {
+    for (line in new BufferedInputStream(new GZIPInputStream(new FileInputStream(fileName))).newReader('UTF-8')) {
       if (count++) {
         String[] tokens = line.split('\t')
         String geneA = tokens[0]
