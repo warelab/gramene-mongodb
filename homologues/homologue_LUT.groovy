@@ -1,16 +1,22 @@
 #!/usr/bin/env groovy
 
 @Grab('com.xlson.groovycsv:groovycsv:1.0')
+@Grab('mysql:mysql-connector-java:5.1.25')
+@GrabConfig(systemClassLoader = true)
+
 
 import groovy.json.*
 
 import java.util.zip.GZIPInputStream
 
-//"bash dump_data.sh".execute().in.eachLine { line ->
-//  System.err.println line
-//}
+Integer overallStart = System.currentTimeMillis()
+
+"bash dump_data.sh".execute().in.eachLine { line ->
+  System.err.println line
+}
 HomologyLut lut = CsvHomologyLutFactory.from('./homologue_edge.txt.gz').create()
 //HomologyLut lut = MysqlHomologyLutFactory.get().create()
+//HomologyLut lut = JDBCHomologyLutFactory.get().create()
 
 JsonSlurper jsonSlurper = new JsonSlurper();
 BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
@@ -23,17 +29,29 @@ int count = 0
 int time = System.currentTimeMillis()
 
 input.eachLine { line ->
-  if(++count % 10000 == 0) {
+  if (++count % 10000 == 0) {
     int now = System.currentTimeMillis()
     int dur = now - time;
     System.err.println "10000 modified in $dur ms; $count total"
     time = now
   }
   Map gene = jsonSlurper.parseText line
-  gene.homologs = lut.homologs gene._id
+  String geneId = gene._id
+  List<Homology> homologies = lut.homologs geneId
+  if(homologies) {
+    gene.homologs = homologies.groupBy{
+      it.kind
+    }
+    .each{ Map.Entry e ->
+      e.value = e.value.collect{ h -> h.otherGene }
+    }
+  }
   String prettyGene = new JsonBuilder(gene).toString()
   output.write prettyGene
 }
+
+
+System.err.println "It took ${System.currentTimeMillis() - overallStart}ms to run this thing."
 
 enum HomologyKind {
   ortholog_one2one,
@@ -50,7 +68,7 @@ enum HomologyKind {
 
   static {
     Map<String, HomologyKind> temp = new HashMap()
-    for(HomologyKind kind in values()) {
+    for (HomologyKind kind in values()) {
       temp[kind.toString()] = kind
     }
     enumlut = Collections.unmodifiableMap(temp)
@@ -110,14 +128,15 @@ class MysqlHomologyLutFactory implements HomologyLutFactory {
 
   @Override
   HomologyLut create() {
+    "Getting lookup table from mysql on $host"
     HomologyLut lut = new HomologyLut()
     String query = new File('homologue_edge.sql').text
     def mysqlProc = "mysql -h$host -u$user -p$pass $db -q".execute()
-    mysqlProc.out.withWriter{ w ->
+    mysqlProc.out.withWriter { w ->
       w.write query
     }
     new BufferedReader(new InputStreamReader(mysqlProc.in)).eachLine { String line ->
-      if(count++) {
+      if (count++) {
         def (String geneA, String geneB, kind, isTreeCompliant) = line.split(/\t/)
         kind = HomologyKind.fromString((String) kind)
         isTreeCompliant = isTreeCompliant == '1'
