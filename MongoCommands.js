@@ -62,6 +62,11 @@ module.exports = {
       fl: {
         type: "string",
         description: "list of fields to return"
+      },
+      wt: {
+        type: "string",
+        enum: ['tab','json'],
+        description: "use the specified response writer"
       }
     },
     run: function(c, params, req,  res) {
@@ -83,7 +88,20 @@ module.exports = {
       }
       c.coll.find(query, options).toArray(function(err, result) {
         if (err) throw err;
-        res.send({response:result});
+        if (params.hasOwnProperty('wt') && params.wt === "tab" && params.hasOwnProperty('fl')) {
+          var fl = params.fl.split(",");
+          var response = fl.join("\t") + "\n";
+          result.forEach(function(doc) {
+            var fields = fl.map(function(p) {
+              return typeof doc[p] === 'object' ? JSON.stringify(doc[p]) : doc[p];
+            });
+            response += fields.join("\t") + "\n";
+          });
+          res.send(response);
+        }
+        else { // default to the json response writer
+          res.send({response:result});
+        }
       });
     }
   }
