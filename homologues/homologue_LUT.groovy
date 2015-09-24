@@ -1,26 +1,34 @@
 #!/usr/bin/env groovy
-
 @Grab('com.xlson.groovycsv:groovycsv:1.0')
 @Grab('mysql:mysql-connector-java:5.1.25')
 @GrabConfig(systemClassLoader = true)
 
-
 import groovy.json.*
-import groovy.sql.*
+import groovy.sql.Sql
 
+import java.sql.ResultSet
 import java.util.zip.GZIPInputStream
 
 Long overallStart = System.currentTimeMillis()
 
-//HomologyLut lut = CsvHomologyLutFactory.get().create()
-//HomologyLut lut = MysqlHomologyLutFactory.get().create()
-HomologyLut lut = JDBCHomologyLutFactory.get().create()
+def cl = new CliBuilder(usage: 'homologue_LUT.groovy [-f <factoryType>] [-i <input file] [-o <output file>]')
+cl.f(longOpt:'factoryType', args: 1, 'Define factory. Must be one of "Csv", "Mysql", "JDBC". (These names aren\'t very descriptive)')
+cl.i(longOpt:'in', args: 1, 'Input file')
+cl.o(longOpt:'out', args: 1, 'Output file')
+
+def opts = cl.parse(args)
+
+String factoryType = opts.f ?: 'JDBC'
+InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
+OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
+
+Class<HomologyLutFactory> factory = Class.forName("${factoryType}HomologyLutFactory")
+
+HomologyLut lut = factory.get().create()
 
 JsonSlurper jsonSlurper = new JsonSlurper();
-//BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-//BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out))
-BufferedReader input = new BufferedReader(new FileReader('../Gene_Aegilops_tauschii_core.for_genetree_testing.json'))
-BufferedWriter output = new BufferedWriter(new FileWriter('../Gene_Aegilops_tauschii_core.for_genetree_testing.out.json'))
+BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
+BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
 
 System.err.println "Adding homologs to JSON docs"
 int count = 0
@@ -36,12 +44,12 @@ input.eachLine { line ->
   Map gene = jsonSlurper.parseText line
   String geneId = gene._id
   List<Homology> homologies = lut.homologs geneId
-  if(homologies) {
-    gene.homologs = homologies.groupBy{
+  if (homologies) {
+    gene.homologs = homologies.groupBy {
       it.kind
     }
-    .each{ Map.Entry e ->
-      e.value = e.value.collect{ h -> h.otherGene }
+    .each { Map.Entry e ->
+      e.value = e.value.collect { h -> h.otherGene }
     }
   }
   String prettyGene = new JsonBuilder(gene).toString()
@@ -152,12 +160,14 @@ class MysqlHomologyLutFactory implements HomologyLutFactory {
 class JDBCHomologyLutFactory implements HomologyLutFactory {
 
   Map dbParams = [
-      url: 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
-      user: 'gramene_web',
+      url     : 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
+      user    : 'gramene_web',
       password: 'gram3n3',
-      driver: 'com.mysql.jdbc.Driver'
+      driver  : 'com.mysql.jdbc.Driver'
   ]
   int count = 0
+  final int batch = 100000
+  int lastBatch = batch
 
   static HomologyLutFactory get() {
     return new JDBCHomologyLutFactory()
@@ -168,17 +178,32 @@ class JDBCHomologyLutFactory implements HomologyLutFactory {
     System.err.println "Getting lookup table from mysql on $dbParams.url"
     def sql = Sql.newInstance(dbParams)
     HomologyLut lut = new HomologyLut()
-    sql.eachRow(new File('homologue_edge.sql').text) { row ->
-      ++count
-      HomologyKind kind = HomologyKind.fromString((String) row.kind)
 
-      lut.addHomology(row.geneId, new Homology(otherGene: row.otherId, kind: kind, isTreeCompliant: row.isTreeCompliant))
-      lut.addHomology(row.otherId, new Homology(otherGene: row.geneId, kind: kind, isTreeCompliant: row.isTreeCompliant))
+    String query = new File('homologue_edge.sql').text
 
-      if(count % 1000000 == 0) {
-        System.err.print '.'
+    // implement batching explicitly here using LIMIT in query because mysql
+    // JDBC driver doesn't support it properly and gets ALL ROWS.
+    while (lastBatch == batch) {
+      String batchQuery = query.replace(';', " LIMIT $count,$batch;")
+
+      // use sql.query rather than sql.eachRow to reduce object creation overhead
+      sql.query(batchQuery) { ResultSet rs ->
+        lastBatch = 0
+        while(rs.next()) {
+          ++lastBatch
+          HomologyKind kind = HomologyKind.fromString(rs.getString('kind'))
+          String geneId1 = rs.getString('geneId').intern()
+          String geneId2 = rs.getString('otherId').intern()
+          Boolean isTreeCompliant = rs.getBoolean('isTreeCompliant')
+
+          lut.addHomology(geneId1, new Homology(otherGene: geneId2, kind: kind, isTreeCompliant: isTreeCompliant))
+          lut.addHomology(geneId2, new Homology(otherGene: geneId1, kind: kind, isTreeCompliant: isTreeCompliant))
+        }
       }
+
+      System.err.print '.'
     }
+
     System.err.println ' done.'
     System.err.println "LUT has ${lut.homologyCount()} records in ${lut.size()} genes"
     return lut
