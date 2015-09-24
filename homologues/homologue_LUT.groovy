@@ -199,6 +199,7 @@ class JDBCHomologyLutFactory implements HomologyLutFactory {
           lut.addHomology(geneId1, new Homology(otherGene: geneId2, kind: kind, isTreeCompliant: isTreeCompliant))
           lut.addHomology(geneId2, new Homology(otherGene: geneId1, kind: kind, isTreeCompliant: isTreeCompliant))
         }
+        count += lastBatch
       }
 
       System.err.print '.'
