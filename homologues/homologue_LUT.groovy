@@ -6,23 +6,21 @@
 
 
 import groovy.json.*
+import groovy.sql.*
 
 import java.util.zip.GZIPInputStream
 
-Integer overallStart = System.currentTimeMillis()
+Long overallStart = System.currentTimeMillis()
 
-"bash dump_data.sh".execute().in.eachLine { line ->
-  System.err.println line
-}
-HomologyLut lut = CsvHomologyLutFactory.from('./homologue_edge.txt.gz').create()
+//HomologyLut lut = CsvHomologyLutFactory.get().create()
 //HomologyLut lut = MysqlHomologyLutFactory.get().create()
-//HomologyLut lut = JDBCHomologyLutFactory.get().create()
+HomologyLut lut = JDBCHomologyLutFactory.get().create()
 
 JsonSlurper jsonSlurper = new JsonSlurper();
-BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
-BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out))
-//BufferedReader input = new BufferedReader(new FileReader('../Gene_Aegilops_tauschii_core.for_genetree_testing.json'))
-//BufferedWriter output = new BufferedWriter(new FileWriter('../Gene_Aegilops_tauschii_core.for_genetree_testing.out.json'))
+//BufferedReader input = new BufferedReader(new InputStreamReader(System.in))
+//BufferedWriter output = new BufferedWriter(new OutputStreamWriter(System.out))
+BufferedReader input = new BufferedReader(new FileReader('../Gene_Aegilops_tauschii_core.for_genetree_testing.json'))
+BufferedWriter output = new BufferedWriter(new FileWriter('../Gene_Aegilops_tauschii_core.for_genetree_testing.out.json'))
 
 System.err.println "Adding homologs to JSON docs"
 int count = 0
@@ -49,7 +47,6 @@ input.eachLine { line ->
   String prettyGene = new JsonBuilder(gene).toString()
   output.write prettyGene
 }
-
 
 System.err.println "It took ${System.currentTimeMillis() - overallStart}ms to run this thing."
 
@@ -148,6 +145,43 @@ class MysqlHomologyLutFactory implements HomologyLutFactory {
         }
       }
     }
+    return lut
+  }
+}
+
+class JDBCHomologyLutFactory implements HomologyLutFactory {
+
+  Map dbParams = [
+      url: 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
+      user: 'gramene_web',
+      password: 'gram3n3',
+      driver: 'com.mysql.jdbc.Driver'
+  ]
+  int count = 0
+
+  static HomologyLutFactory get() {
+    return new JDBCHomologyLutFactory()
+  }
+
+  @Override
+  HomologyLut create() {
+    System.err.println "Getting lookup table from mysql on $dbParams.url"
+    def sql = Sql.newInstance(dbParams)
+    HomologyLut lut = new HomologyLut()
+    sql.eachRow(new File('homologue_edge.sql').text) { row ->
+      ++count
+      HomologyKind kind = HomologyKind.fromString((String) row.kind)
+
+      lut.addHomology(row.geneId, new Homology(otherGene: row.otherId, kind: kind, isTreeCompliant: row.isTreeCompliant))
+      lut.addHomology(row.otherId, new Homology(otherGene: row.geneId, kind: kind, isTreeCompliant: row.isTreeCompliant))
+
+      if(count % 1000000 == 0) {
+        System.err.print '.'
+      }
+    }
+    System.err.println ' done.'
+    System.err.println "LUT has ${lut.homologyCount()} records in ${lut.size()} genes"
+    return lut
   }
 }
 
@@ -157,12 +191,17 @@ class CsvHomologyLutFactory implements HomologyLutFactory {
 
   int count = 0
 
-  static CsvHomologyLutFactory from(String fileName) {
-    return new CsvHomologyLutFactory(fileName: fileName)
+  static CsvHomologyLutFactory get() {
+    return new CsvHomologyLutFactory(fileName: './homologue_edge.txt.gz')
   }
 
   @Override
   HomologyLut create() {
+
+    "bash dump_data.sh".execute().in.eachLine { line ->
+      System.err.println line
+    }
+
     System.err.println "Loading lookup table from $fileName"
     HomologyLut lut = new HomologyLut()
     for (line in new BufferedInputStream(new GZIPInputStream(new FileInputStream(fileName))).newReader('UTF-8')) {
