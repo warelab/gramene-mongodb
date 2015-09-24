@@ -18,7 +18,7 @@ cl.o(longOpt:'out', args: 1, 'Output file')
 
 def opts = cl.parse(args)
 
-String factoryType = opts.f ?: 'JDBC'
+String factoryType = opts.f ?: 'Mysql'
 InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
 OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
 
@@ -148,7 +148,7 @@ class MysqlHomologyLutFactory implements HomologyLutFactory {
 
         lut.addHomology(geneA, new Homology(otherGene: geneB, kind: kind, isTreeCompliant: isTreeCompliant))
         lut.addHomology(geneB, new Homology(otherGene: geneA, kind: kind, isTreeCompliant: isTreeCompliant))
-        if (count % 10000 == 0) {
+        if (count % 1000000 == 0) {
           System.err.print '.'
         }
       }
