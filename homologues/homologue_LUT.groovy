@@ -9,14 +9,15 @@ import groovy.sql.Sql
 import java.sql.ResultSet
 import java.util.zip.GZIPInputStream
 
-import static java.sql.ResultSet.*
+import static java.sql.ResultSet.CONCUR_READ_ONLY
+import static java.sql.ResultSet.TYPE_FORWARD_ONLY
 
 Long overallStart = System.currentTimeMillis()
 
 def cl = new CliBuilder(usage: 'homologue_LUT.groovy [-f <factoryType>] [-i <input file] [-o <output file>]')
-cl.f(longOpt:'factoryType', args: 1, 'Define factory. Must be one of "Csv", "Mysql", "JDBC". (These names aren\'t very descriptive)')
-cl.i(longOpt:'in', args: 1, 'Input file')
-cl.o(longOpt:'out', args: 1, 'Output file')
+cl.f(longOpt: 'factoryType', args: 1, 'Define factory. Must be one of "Csv", "Mysql", "JDBC". (These names aren\'t very descriptive)')
+cl.i(longOpt: 'in', args: 1, 'Input file')
+cl.o(longOpt: 'out', args: 1, 'Output file')
 
 def opts = cl.parse(args)
 
@@ -55,7 +56,7 @@ input.eachLine { line ->
     }
   }
   String prettyGene = new JsonBuilder(gene).toString()
-  output.write prettyGene
+  output.writeLine prettyGene
 }
 
 System.err.println "It took ${System.currentTimeMillis() - overallStart}ms to run this thing."
@@ -162,12 +163,12 @@ class MysqlHomologyLutFactory implements HomologyLutFactory {
 class JDBCHomologyLutFactory implements HomologyLutFactory {
 
   Map dbParams = [
-      url     : 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
-      user    : 'gramene_web',
-      password: 'gram3n3',
-      driver  : 'com.mysql.jdbc.Driver',
+      url                 : 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
+      user                : 'gramene_web',
+      password            : 'gram3n3',
+      driver              : 'com.mysql.jdbc.Driver',
       resultSetConcurrency: CONCUR_READ_ONLY,
-      resultSetType: TYPE_FORWARD_ONLY,
+      resultSetType       : TYPE_FORWARD_ONLY,
   ]
 
   int count = 0
@@ -181,36 +182,28 @@ class JDBCHomologyLutFactory implements HomologyLutFactory {
   HomologyLut create() {
     System.err.println "Getting lookup table from mysql on $dbParams.url"
     def sql = Sql.newInstance(dbParams)
-    sql.withStatement{ stmt -> stmt.fetchSize = Integer.MIN_VALUE }
+    sql.withStatement { stmt -> stmt.fetchSize = Integer.MIN_VALUE }
     HomologyLut lut = new HomologyLut()
 
     String query = new File('homologue_edge.sql').text
 
-    // implement batching explicitly here using LIMIT in query because mysql
-    // JDBC driver doesn't support it properly and gets ALL ROWS.
-//    while (lastBatch == batch) {
-//      String batchQuery = query.replace(';', " LIMIT $count,$batch;")
+    // use sql.query rather than sql.eachRow to reduce object creation overhead
+    sql.query(query) { ResultSet rs ->
+      while (rs.next()) {
+        ++count
+        HomologyKind kind = HomologyKind.fromString(rs.getString('kind'))
+        String geneId1 = rs.getString('geneId').intern()
+        String geneId2 = rs.getString('otherId').intern()
+        Boolean isTreeCompliant = rs.getBoolean('isTreeCompliant')
 
-      // use sql.query rather than sql.eachRow to reduce object creation overhead
-      sql.query(query) { ResultSet rs ->
-        while(rs.next()) {
-          ++count
-          HomologyKind kind = HomologyKind.fromString(rs.getString('kind'))
-          String geneId1 = rs.getString('geneId').intern()
-          String geneId2 = rs.getString('otherId').intern()
-          Boolean isTreeCompliant = rs.getBoolean('isTreeCompliant')
+        lut.addHomology(geneId1, new Homology(otherGene: geneId2, kind: kind, isTreeCompliant: isTreeCompliant))
+        lut.addHomology(geneId2, new Homology(otherGene: geneId1, kind: kind, isTreeCompliant: isTreeCompliant))
 
-          lut.addHomology(geneId1, new Homology(otherGene: geneId2, kind: kind, isTreeCompliant: isTreeCompliant))
-          lut.addHomology(geneId2, new Homology(otherGene: geneId1, kind: kind, isTreeCompliant: isTreeCompliant))
-
-          if(count % batch == 0) {
-            System.err.print '.'
-          }
+        if (count % batch == 0) {
+          System.err.print '.'
         }
       }
-
-//
-//    }
+    }
 
     System.err.println ' done.'
     System.err.println "LUT has ${lut.homologyCount()} records in ${lut.size()} genes"
