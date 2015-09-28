@@ -5,61 +5,66 @@
 
 import groovy.json.*
 import groovy.sql.Sql
+import groovy.util.logging.Log
 
 import java.sql.ResultSet
-import java.util.zip.GZIPInputStream
 
-import static java.sql.ResultSet.CONCUR_READ_ONLY
-import static java.sql.ResultSet.TYPE_FORWARD_ONLY
+final long overallStart = System.currentTimeMillis()
 
-Long overallStart = System.currentTimeMillis()
-
-def cl = new CliBuilder(usage: 'homologue_LUT.groovy [-f <factoryType>] [-i <input file] [-o <output file>]')
-cl.f(longOpt: 'factoryType', args: 1, 'Define factory. Must be one of "Csv", "Mysql", "JDBC". (These names aren\'t very descriptive)')
-cl.i(longOpt: 'in', args: 1, 'Input file')
-cl.o(longOpt: 'out', args: 1, 'Output file')
+def cl = new CliBuilder(usage: 'homologue_LUT.groovy [-i <input file] [-o <output file>] [-v]')
+cl.i(longOpt: 'in', args: 1, 'Input file (defaults to stdin)')
+cl.o(longOpt: 'out', args: 1, 'Output file (defaults to stdout)')
+cl.d(longOpt: 'debug', args: 0, 'Send some logging info to stderr')
 
 def opts = cl.parse(args)
 
-String factoryType = opts.f ?: 'Mysql'
-InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
-OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
+final InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
+final OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
 
-Class<HomologyLutFactory> factory = Class.forName("${factoryType}HomologyLutFactory")
+HomologAdder.run(inStream, outStream)
 
-HomologyLut lut = factory.get().create()
+log "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
 
-JsonSlurper jsonSlurper = new JsonSlurper();
-BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
-BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
 
-System.err.println "Adding homologs to JSON docs"
-int count = 0
-int time = System.currentTimeMillis()
+/**
+ * Adds homolog information to each gene document in a stream
+ */
+@Log
+class HomologAdder {
+  static run(InputStream inStream, OutputStream outStream) {
+    final HomologyLut lut = JDBCHomologyLutFactory.instance.create()
 
-input.eachLine { line ->
-  if (++count % 10000 == 0) {
-    int now = System.currentTimeMillis()
-    int dur = now - time;
-    System.err.println "10000 modified in $dur ms; $count total"
-    time = now
-  }
-  Map gene = jsonSlurper.parseText line
-  String geneId = gene._id
-  List<Homology> homologies = lut.homologs geneId
-  if (homologies) {
-    gene.homologs = homologies.groupBy {
-      it.kind
+    final JsonSlurper jsonSlurper = new JsonSlurper();
+    final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
+    final BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
+
+    log.info "Adding homologs to JSON docs"
+    int count = 0
+    long time = System.currentTimeMillis()
+
+    input.eachLine { line ->
+      if (++count % 10000 == 0) {
+        int now = System.currentTimeMillis()
+        int dur = now - time;
+        log.info "10000 modified in $dur ms; $count total"
+        time = now
+      }
+      def gene = jsonSlurper.parseText line
+      String geneId = gene._id
+      List<Homology> homologies = lut.homologs geneId
+      if (homologies) {
+        gene.homologs = homologies.groupBy {
+          it.kind
+        }
+        .each { Map.Entry e ->
+          e.value = e.value.collect { h -> h.otherGene }
+        }
+      }
+      String prettyGene = new JsonBuilder(gene).toString()
+      output.writeLine prettyGene
     }
-    .each { Map.Entry e ->
-      e.value = e.value.collect { h -> h.otherGene }
-    }
   }
-  String prettyGene = new JsonBuilder(gene).toString()
-  output.writeLine prettyGene
 }
-
-System.err.println "It took ${System.currentTimeMillis() - overallStart}ms to run this thing."
 
 enum HomologyKind {
   ortholog_one2one,
@@ -72,17 +77,17 @@ enum HomologyKind {
   homoeolog_many2many,
   other_paralog
 
-  static Map<String, HomologyKind> enumlut
+  static final Map<String, HomologyKind> enumlut
 
   static {
-    Map<String, HomologyKind> temp = new HashMap()
+    Map<String, HomologyKind> mutable = new HashMap()
     for (HomologyKind kind in values()) {
-      temp[kind.toString()] = kind
+      mutable[kind.toString()] = kind
     }
-    enumlut = Collections.unmodifiableMap(temp)
+    enumlut = Collections.unmodifiableMap(mutable)
   }
 
-  // valueOf is very slow.
+  // valueOf seems to be slow.
   static fromString(String s) {
     return enumlut[s]
   }
@@ -94,9 +99,10 @@ class Homology implements Serializable {
   Boolean isTreeCompliant
 }
 
+@Singleton
 class HomologyLut implements Serializable {
 
-  private final Map<String, List<Homology>> lut = new HashMap(2**22).withDefault { new ArrayList<Homology>(50) }
+  private final Map<String, List<Homology>> lut = new HashMap(2**22).withDefault { new ArrayList<Homology>() }
   private int homologyCount = 0
 
   def addHomology(String geneId, Homology homology) {
@@ -117,81 +123,42 @@ class HomologyLut implements Serializable {
   }
 }
 
-interface HomologyLutFactory {
-  HomologyLut create()
-}
-
-class MysqlHomologyLutFactory implements HomologyLutFactory {
-
-  String host = 'cabot'
-  String db = 'ensembl_compara_plants_46_80'
-  String user = 'gramene_web'
-  String pass = 'gram3n3'
-
-  int count = 0
-
-  static MysqlHomologyLutFactory get() {
-    return new MysqlHomologyLutFactory()
-  }
-
-  @Override
-  HomologyLut create() {
-    "Getting lookup table from mysql on $host"
-    HomologyLut lut = new HomologyLut()
-    String query = new File('homologue_edge.sql').text
-    def mysqlProc = "mysql -h$host -u$user -p$pass $db -q".execute()
-    mysqlProc.out.withWriter { w ->
-      w.write query
-    }
-    new BufferedReader(new InputStreamReader(mysqlProc.in)).eachLine { String line ->
-      if (count++) {
-        def (String geneA, String geneB, kind, isTreeCompliant) = line.split(/\t/)
-        kind = HomologyKind.fromString((String) kind)
-        isTreeCompliant = isTreeCompliant == '1'
-
-        lut.addHomology(geneA, new Homology(otherGene: geneB, kind: kind, isTreeCompliant: isTreeCompliant))
-        lut.addHomology(geneB, new Homology(otherGene: geneA, kind: kind, isTreeCompliant: isTreeCompliant))
-        if (count % 1000000 == 0) {
-          System.err.print '.'
-        }
-      }
-    }
-    return lut
-  }
-}
-
-class JDBCHomologyLutFactory implements HomologyLutFactory {
+@Log
+@Singleton
+class JDBCHomologyLutFactory {
 
   Map dbParams = [
       url                 : 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
       user                : 'gramene_web',
       password            : 'gram3n3',
       driver              : 'com.mysql.jdbc.Driver',
-      resultSetConcurrency: CONCUR_READ_ONLY,
-      resultSetType       : TYPE_FORWARD_ONLY,
+
+      // Incantations to get MySQL JDBC to stream. OMG.
+      // Adapted from http://stackoverflow.com/a/2448019
+      resultSetConcurrency: ResultSet.CONCUR_READ_ONLY,
+      resultSetType       : ResultSet.TYPE_FORWARD_ONLY,
   ]
 
   int count = 0
-  final int batch = 100000
+  final int batch = 1000000
 
-  static HomologyLutFactory get() {
-    return new JDBCHomologyLutFactory()
-  }
-
-  @Override
   HomologyLut create() {
-    System.err.println "Getting lookup table from mysql on $dbParams.url"
-    def sql = Sql.newInstance(dbParams)
-    sql.withStatement { stmt -> stmt.fetchSize = Integer.MIN_VALUE }
-    HomologyLut lut = new HomologyLut()
+    log.info "Getting lookup table from mysql on $dbParams.url"
+    final long start = System.currentTimeMillis()
+    final HomologyLut lut = HomologyLut.instance
+    final def sql = Sql.newInstance(dbParams)
 
-    String query = new File('homologue_edge.sql').text
+    // Another incantation to get MySQL JDBC to stream. OMG.
+    // Adapted from http://stackoverflow.com/a/2448019
+    sql.withStatement { stmt -> stmt.fetchSize = Integer.MIN_VALUE }
 
     // use sql.query rather than sql.eachRow to reduce object creation overhead
-    sql.query(query) { ResultSet rs ->
+    sql.query(HomologueQuery.get()) { ResultSet rs ->
       while (rs.next()) {
         ++count
         HomologyKind kind = HomologyKind.fromString(rs.getString('kind'))
+
+        // intern() strings to save a lot of memory.
         String geneId1 = rs.getString('geneId').intern()
         String geneId2 = rs.getString('otherId').intern()
         Boolean isTreeCompliant = rs.getBoolean('isTreeCompliant')
@@ -200,52 +167,34 @@ class JDBCHomologyLutFactory implements HomologyLutFactory {
         lut.addHomology(geneId2, new Homology(otherGene: geneId1, kind: kind, isTreeCompliant: isTreeCompliant))
 
         if (count % batch == 0) {
-          System.err.print '.'
+          log.info "$count homologies processed"
         }
       }
     }
 
-    System.err.println ' done.'
-    System.err.println "LUT has ${lut.homologyCount()} records in ${lut.size()} genes"
+    log.info "LUT has ${lut.homologyCount()} records in ${lut.size()} genes"
+    log.info "LUT took ${System.currentTimeMillis() - start}ms to be created"
     return lut
   }
 }
 
-class CsvHomologyLutFactory implements HomologyLutFactory {
+// These classes are declared as a class simply so that I can put it at the end of the file
 
-  String fileName
+class HomologueQuery {
+  static get() {
+    return """
+select
+g1.stable_id as 'geneId',
+g2.stable_id as 'otherId',
+h.description as kind,
+h.is_tree_compliant as 'isTreeCompliant'
 
-  int count = 0
-
-  static CsvHomologyLutFactory get() {
-    return new CsvHomologyLutFactory(fileName: './homologue_edge.txt.gz')
-  }
-
-  @Override
-  HomologyLut create() {
-
-    "bash dump_data.sh".execute().in.eachLine { line ->
-      System.err.println line
-    }
-
-    System.err.println "Loading lookup table from $fileName"
-    HomologyLut lut = new HomologyLut()
-    for (line in new BufferedInputStream(new GZIPInputStream(new FileInputStream(fileName))).newReader('UTF-8')) {
-      if (count++) {
-        String[] tokens = line.split('\t')
-        String geneA = tokens[0]
-        String geneB = tokens[1]
-        HomologyKind kind = HomologyKind.valueOf(tokens[2])
-        Boolean isTreeCompliant = tokens[3] == '1'
-
-        lut.addHomology(geneA, new Homology(otherGene: geneB, kind: kind, isTreeCompliant: isTreeCompliant))
-        lut.addHomology(geneB, new Homology(otherGene: geneA, kind: kind, isTreeCompliant: isTreeCompliant))
-        if (count % 1000000 == 0) {
-          System.err.print '.'
-        }
-      }
-    }
-    System.err.println "LUT has ${lut.homologyCount()} records in ${lut.size()} genes"
-    return lut
+from homology h
+inner join homology_member hm on hm.homology_id = h.homology_id
+inner join gene_member g1 on hm.gene_member_id = g1.gene_member_id
+inner join homology_member hm2 on hm2.homology_id = h.homology_id and hm.gene_member_id > hm2.gene_member_id
+inner join gene_member g2 on hm2.gene_member_id = g2.gene_member_id
+;
+    """.trim()
   }
 }
