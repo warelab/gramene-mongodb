@@ -11,28 +11,30 @@ import java.sql.ResultSet
 
 final long overallStart = System.currentTimeMillis()
 
-def cl = new CliBuilder(usage: 'homologue_LUT.groovy [-i <input file] [-o <output file>] [-v]')
+def cl = new CliBuilder(usage: 'add_homologues.groovy [-i <input file] [-o <output file>] [-v]')
+cl.h(longOpt: 'host', args: 1, 'Mysql database host (default `cabot`)')
+cl.d(longOpt: 'database', args: 1, 'Name of compara database (default `ensembl_compara_plants_46_80`)')
+cl.u(longOpt: 'user', args: 1, 'Mysql username')
+cl.p(longOpt: 'password', args: 1, 'Mysql password')
 cl.i(longOpt: 'in', args: 1, 'Input file (defaults to stdin)')
 cl.o(longOpt: 'out', args: 1, 'Output file (defaults to stdout)')
-cl.d(longOpt: 'debug', args: 0, 'Send some logging info to stderr')
 
 def opts = cl.parse(args)
 
-final InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
-final OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
-
-HomologAdder.run(inStream, outStream)
+HomologAdder.run(opts)
 
 log "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
-
 
 /**
  * Adds homolog information to each gene document in a stream
  */
 @Log
 class HomologAdder {
-  static run(InputStream inStream, OutputStream outStream) {
-    final HomologyLut lut = JDBCHomologyLutFactory.instance.create()
+  static run(opts) {
+    final HomologyLut lut = JDBCHomologyLutFactory.instance.create(opts)
+
+    InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
+    OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
 
     final JsonSlurper jsonSlurper = new JsonSlurper();
     final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
@@ -127,26 +129,31 @@ class HomologyLut implements Serializable {
 @Singleton
 class JDBCHomologyLutFactory {
 
-  Map dbParams = [
-      url                 : 'jdbc:mysql://cabot/ensembl_compara_plants_46_80',
-      user                : 'gramene_web',
-      password            : 'gram3n3',
-      driver              : 'com.mysql.jdbc.Driver',
-
-      // Incantations to get MySQL JDBC to stream. OMG.
-      // Adapted from http://stackoverflow.com/a/2448019
-      resultSetConcurrency: ResultSet.CONCUR_READ_ONLY,
-      resultSetType       : ResultSet.TYPE_FORWARD_ONLY,
-  ]
-
   int count = 0
   final int batch = 1000000
 
-  HomologyLut create() {
+  static Sql getSql(opts) {
+    Map dbParams = [
+        url                 : "jdbc:mysql://${opts.h ?: 'cabot'}/${opts.d ?: 'ensembl_compara_plants_46_80'}",
+        user                : opts.u,
+        password            : opts.p,
+        driver              : 'com.mysql.jdbc.Driver',
+
+        // Incantations to get MySQL JDBC to stream. OMG.
+        // Adapted from http://stackoverflow.com/a/2448019
+        resultSetConcurrency: ResultSet.CONCUR_READ_ONLY,
+        resultSetType       : ResultSet.TYPE_FORWARD_ONLY,
+    ]
+
     log.info "Getting lookup table from mysql on $dbParams.url"
+
+    Sql.newInstance(dbParams)
+  }
+
+  HomologyLut create(opts) {
     final long start = System.currentTimeMillis()
     final HomologyLut lut = HomologyLut.instance
-    final def sql = Sql.newInstance(dbParams)
+    final Sql sql = getSql(opts)
 
     // Another incantation to get MySQL JDBC to stream. OMG.
     // Adapted from http://stackoverflow.com/a/2448019
