@@ -24,7 +24,8 @@ Once the json files are ready, we include ancestor information of the ontology t
  node add_genetree_taxon.js /dev/fd/0 | \
  node merge_interpro_hits.js /dev/fd/0 | \
  JAVA_OPTS="-Xmx8192m" groovy add_homologues.groovy -h cabot -d ensembl_compara_plants_46_80 -u <user> -p <passw0rd> | \
- mongoimport --db search46 --collection genes --drop ```
+ mongoimport --db search46 --collection genes --drop
+```
 
 Final step is to build indexes
 ```
