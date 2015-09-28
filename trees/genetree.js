@@ -7,8 +7,7 @@ var through2 = require('through2');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 
-var comparaMysqlDb = mysql.createPool({
-  connectionLimit: 10,
+var comparaMysqlDb = mysql.createConnection({
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
