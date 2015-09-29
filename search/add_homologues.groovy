@@ -9,8 +9,6 @@ import groovy.util.logging.Log
 
 import java.sql.ResultSet
 
-final long overallStart = System.currentTimeMillis()
-
 def cl = new CliBuilder(usage: 'add_homologues.groovy [-i <input file] [-o <output file>] [-v]')
 cl.h(longOpt: 'host', args: 1, 'Mysql database host (default `cabot`)')
 cl.d(longOpt: 'database', args: 1, 'Name of compara database (default `ensembl_compara_plants_46_80`)')
@@ -23,14 +21,13 @@ def opts = cl.parse(args)
 
 HomologAdder.run(opts)
 
-log "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
-
 /**
  * Adds homolog information to each gene document in a stream
  */
 @Log
 class HomologAdder {
   static run(opts) {
+    final long overallStart = System.currentTimeMillis()
     final HomologyLut lut = JDBCHomologyLutFactory.instance.create(opts)
 
     InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
@@ -65,6 +62,7 @@ class HomologAdder {
       String prettyGene = new JsonBuilder(gene).toString()
       output.writeLine prettyGene
     }
+    log.info "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
   }
 }
 
