@@ -62,6 +62,12 @@ class HomologAdder {
       String prettyGene = new JsonBuilder(gene).toString()
       output.writeLine prettyGene
     }
+
+    output.flush()
+    output.close()
+
+    input.close()
+
     log.info "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
   }
 }
