@@ -50,8 +50,8 @@ class HomologAdder {
           ++outCount
         }
 
-        output.flush()
-        println "done writing"
+        output.flush() // don't close; we're still reading
+        log.info "done writing"
       }
       Thread pull = Thread.start {
         long time = System.currentTimeMillis()
@@ -70,8 +70,8 @@ class HomologAdder {
             break;
           }
         }
-        println "done reading"
-        output.flush()
+        log.info "done reading"
+        output.close()
         input.close()
       }
       pull.join()
