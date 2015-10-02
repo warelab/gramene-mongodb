@@ -61,7 +61,7 @@ var exons = {
 }
 // lookup gene info and the canonical translation
 var genes = {
-  sql: 'select g.gene_id, g.stable_id, xref.display_label as name, g.description, g.biotype,'
+  sql: 'select g.gene_id, g.stable_id, x.display_label as name, g.description, g.biotype,'
     + ' sr.name as region, g.seq_region_start as start, g.seq_region_end as end, g.seq_region_strand as strand,'
     + ' g.canonical_transcript_id, tl.stable_id as translation_stable_id,'
     + ' ta164.value as IsoPoint,'
@@ -72,7 +72,7 @@ var genes = {
     + ' from gene g'
     + ' inner join seq_region sr on g.seq_region_id = sr.seq_region_id'
     + ' LEFT join translation tl on g.canonical_transcript_id = tl.transcript_id'
-    + ' left join xref on g.display_xref_id = xref.xref_id'
+    + ' left join xref x on g.display_xref_id = x.xref_id'
     + ' left join translation_attrib ta164 on tl.translation_id = ta164.translation_id and ta164.attrib_type_id = 164'
     + ' left join translation_attrib ta165 on tl.translation_id = ta165.translation_id and ta165.attrib_type_id = 165'
     + ' left join translation_attrib ta166 on tl.translation_id = ta166.translation_id and ta166.attrib_type_id = 166'
@@ -85,7 +85,7 @@ var genes = {
     genes.forEach(function(row) {
       gene[row.gene_id] = {
         id : row.stable_id,
-        name: row.display_label ? row.display_label : row.stable_id,
+        name: row.name ? row.name : row.stable_id,
         description: row.description,
         biotype: row.biotype,
         taxon_id: +meta['species.species_taxonomy_id'],
@@ -164,9 +164,9 @@ var xrefs = {
     xrefs.forEach(function(xref) {
       var gx = geneInfo[xref.gene_id].xrefs
       if (! gx.hasOwnProperty(xref.db_name)) {
-        gx[xref.db_name] = [];
+        gx[xref.db_name] = {};
       }
-      gx[xref.db_name].push(xref.dbprimary_acc);
+      gx[xref.db_name][xref.dbprimary_acc] = 1;
       if (xref.synonym) {
         geneInfo[xref.gene_id].synonyms[xref.synonym] = 1;
       }
@@ -212,6 +212,10 @@ connection.query(metadata.sql, function(err, rows, fields) {
           if (err) throw err;
           features.add2Genes(rows,geneInfo);
           for(var gene in geneInfo) {
+            Object.keys(geneInfo[gene].xrefs).forEach(function(xref_key) {
+              var uniq_list = Object.keys(geneInfo[gene].xrefs[xref_key]);
+              geneInfo[gene].xrefs[xref_key] = uniq_list;
+            });
             var syn_list = Object.keys(geneInfo[gene].synonyms);
             if (syn_list.length > 0) {
               geneInfo[gene].synonyms = syn_list;
