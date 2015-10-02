@@ -12,6 +12,7 @@ import java.sql.ResultSet
 def cl = new CliBuilder(usage: 'add_homologues.groovy [-i <input file] [-o <output file>]')
 cl.i(longOpt: 'in', args: 1, 'Input file (defaults to stdin)')
 cl.o(longOpt: 'out', args: 1, 'Output file (defaults to stdout)')
+cl.h(longOpt: 'host', args: 1, 'Host of the socket server (default is localhost)')
 cl.s(longOpt: 'socketPort', args: 1, 'Port for the socket server (default is 54321)')
 
 def opts = cl.parse(args)
@@ -28,12 +29,12 @@ class HomologAdder {
     InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
     OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
     Integer socketPort = opts.s ? Integer.parseInt(opts.s) : 5432
+    String host = opts.h ?: 'localhost'
 
-    Socket socket = new Socket("localhost", socketPort)
+    Socket socket = new Socket(host, socketPort)
 
     final JsonSlurper jsonSlurper = new JsonSlurper();
-    final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
-    final BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
+
 
     log.info "Adding homologs to JSON docs"
     int count = 0
@@ -41,22 +42,26 @@ class HomologAdder {
     socket.withStreams { socketIn, socketOut ->
       int outCount = 0, backCount = 0
       Thread push = Thread.start {
-        Writer outWriter = socketOut.newWriter()
+        final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
+        BufferedWriter output = new BufferedWriter(socketOut.newWriter())
+
         for(String line in input) {
-          outWriter.write(line + '\n')
+          output.writeLine line
           ++outCount
         }
 
-        outWriter.flush()
+        output.flush()
         println "done writing"
       }
       Thread pull = Thread.start {
         long time = System.currentTimeMillis()
-        Reader inReader = socketIn.newReader()
-        for(String line in inReader) {
+        Reader input = socketIn.newReader()
+        final BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
+        for(String line in input) {
           output.writeLine line
           ++backCount
-          if(backCount % 10000 == 0) {
+
+          if(backCount % 1000000 == 0) {
             long now = System.currentTimeMillis()
             log.info "$backCount docs; ${now - time}ms"
             time = now
@@ -66,11 +71,11 @@ class HomologAdder {
           }
         }
         println "done reading"
-        inReader.close()
+        output.flush()
+        input.close()
       }
       pull.join()
       log.info "$backCount documents processed"
-
     }
     log.info "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
   }
