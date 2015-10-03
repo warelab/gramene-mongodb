@@ -1,8 +1,12 @@
-var mongoURL = 'mongodb://brie:27017/search46';
+#!/usr/bin/env node
+var gtDB = require('../config/collections.js').genetrees;
+var mongoURL = 'mongodb://'
+  + gtDB.host + ':' + gtDB.port + '/' + gtDB.dbName;
 
 var MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
 var _ = require('lodash');
+var TreeModel = require('tree-model');
 
 var filename = process.argv[2];
 
@@ -12,12 +16,14 @@ function modifyGeneDocs(genetreeLUT) {
     terminal: false
   }).on('line', function (line) { // one JSON object per line
     var obj = JSON.parse(line);
-    if(obj.epl_gene_tree) {
-      var tree = genetreeLUT[obj.epl_gene_tree];
-      obj.grm_gene_tree = tree.tree_id;
-      obj.grm_gene_tree_root_taxon_id = tree.node_taxon_id;
-      if(tree.stableIds.length > 1) {
-        obj.epl_sibling_trees = _.filter(tree.stableIds, function(id) { return id !== obj.epl_gene_tree; });
+    var tree = genetreeLUT[obj._id];
+
+    if(tree) {
+      obj.grm_gene_tree = tree.grm;
+      obj.grm_gene_tree_root_taxon_id = tree.grm_gene_tree_root_taxon_id;
+      obj.epl_gene_tree = tree.epl;
+      if(tree.siblings.length > 1) {
+        obj.epl_sibling_trees = _.filter(tree.siblings, function(id) { return id !== obj.epl_gene_tree; });
       }
     }
     console.log(JSON.stringify(obj));
@@ -25,18 +31,50 @@ function modifyGeneDocs(genetreeLUT) {
 }
 
 // connect to the ontologies database
-MongoClient.connect(mongoURL, function(err, db) {
+MongoClient.connect(mongoURL, function (err, db) {
   if (err) throw err;
-  db.collection('genetree').find({}, {node_taxon_id: 1, stableIds: 1, tree_id: 1}).toArray(function(err, docs) {
+  db.collection(gtDB.collectionName).find().toArray(function (err, docs) {
     if (err) throw err;
-    var lut = _.reduce(docs, function(acc, doc) {
-      _.forEach(doc.stableIds, function(stableId) {
-        acc[stableId] = doc;
+    var countOfGenes = 0;
+
+    var genetreeIdLut = docs.reduce(function (acc, doc) {
+      var tree = new TreeModel().parse(doc);
+      var rootTaxonId = tree.model.node_taxon_id;
+      var grmTreeId = tree.model.tree_id;
+
+      var subtrees = tree.all(function (node) {
+        return !!node.model.subtree_stable_id;
+      });
+      var subtreeIds = subtrees.map(function(node) { return node.model.subtree_stable_id });
+
+      if(subtrees.length == 0) {
+        subtrees = [tree];
+      }
+
+      subtrees.forEach(function (subtree) {
+        var eplTreeId = subtree.model.subtree_stable_id || grmTreeId;
+        var lookupValue = {
+          epl: eplTreeId,
+          grm: grmTreeId,
+          grm_gene_tree_root_taxon_id: rootTaxonId,
+          siblings: subtreeIds
+        };
+
+        subtree.all(function (node) {
+            return !node.hasChildren();
+          })
+          .map(function (leaf) {
+            return leaf.model.gene_stable_id
+          })
+          .forEach(function (geneId) {
+            acc[geneId] = lookupValue;
+            ++countOfGenes;
+          });
       });
       return acc;
     }, {});
 
-    modifyGeneDocs(lut);
+    modifyGeneDocs(genetreeIdLut);
     db.close();
   });
 });

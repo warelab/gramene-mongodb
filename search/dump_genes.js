@@ -84,7 +84,7 @@ var genes = {
     gene = {};
     genes.forEach(function(row) {
       gene[row.gene_id] = {
-        id : row.stable_id,
+        _id : row.stable_id,
         name: row.name ? row.name : row.stable_id,
         description: row.description,
         biotype: row.biotype,
