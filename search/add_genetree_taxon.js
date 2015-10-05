@@ -1,18 +1,15 @@
 #!/usr/bin/env node
-var gtDB = require('../config/collections.js').genetrees;
+var MongoClient = require('mongodb').MongoClient,
+  _ = require('lodash'),
+  TreeModel = require('tree-model'),
+  gtDB = require('../config/collections.js').genetrees;
+
 var mongoURL = 'mongodb://'
   + gtDB.host + ':' + gtDB.port + '/' + gtDB.dbName;
 
-var MongoClient = require('mongodb').MongoClient;
-var fs = require('fs');
-var _ = require('lodash');
-var TreeModel = require('tree-model');
-
-var filename = process.argv[2];
-
 function modifyGeneDocs(genetreeLUT) {
   require('readline').createInterface({
-    input: fs.createReadStream(filename),
+    input: process.stdin,
     terminal: false
   }).on('line', function (line) { // one JSON object per line
     var obj = JSON.parse(line);

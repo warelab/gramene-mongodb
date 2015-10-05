@@ -41,8 +41,6 @@ var domains = require('../config/collections.js').domains;
 var mongoURL = 'mongodb://'
   + domains.host + ':' + domains.port + '/' + domains.dbName;
 var MongoClient = require('mongodb').MongoClient;
-var fs = require('fs');
-var genes_fn = process.argv[2];
 MongoClient.connect(mongoURL, function(err, db) {
   if (err) throw err;
   // fetch all the interpro docs and build a hierarchy root lookup table hroot[this_ipr] = root_ipr;
@@ -68,15 +66,17 @@ MongoClient.connect(mongoURL, function(err, db) {
     db.close();
     // setup reader
     require('readline').createInterface({
-        input: fs.createReadStream(genes_fn),
+        input: process.stdin,
         terminal: false
     }).on('line', function(line) { // one JSON object per line
       var obj = JSON.parse(line);
       if (obj.hasOwnProperty('canonical_translation')) {
         // group features by domain hierarchy root
         var arch = {};
+        var interproSet = {};
         var features = obj.canonical_translation.features;
         features.all.forEach(function(feature) {
+          interproSet[feature.interpro]=1;
           var ipr_i = parseInt(feature.interpro.match(/\d+/));
           feature.ipr = ipr_i;
           if (hroot.hasOwnProperty(ipr_i)) {
@@ -85,15 +85,22 @@ MongoClient.connect(mongoURL, function(err, db) {
             }
             arch[hroot[ipr_i]].domains.push(feature);
           }
-          else { // things that are not going into domainArchitecture
+          else if (info.hasOwnProperty(ipr_i)) { // things that are not going into domainArchitecture
             var type = info[ipr_i].type;
             if (!features.hasOwnProperty(type)) {
               features[type] = [];
             }
             features[type].push(feature);
           }
+          else {
+            console.error(obj._id,'ignoring deprecated feature',feature.interpro);
+          }
         });
         delete features.all;
+        var uniqueIPRs = Object.keys(interproSet);
+        if (uniqueIPRs.length > 1) {
+          obj.xrefs.interpro = uniqueIPRs;
+        }
         // merge overlapping domains into clusters
         // and assign them the ipr id of their lca instead of the root?
         var clusters = [];
@@ -182,7 +189,7 @@ MongoClient.connect(mongoURL, function(err, db) {
       console.log(JSON.stringify(obj,function(k,v) {
         if (k === "ipr") return undefined;
         else return v;
-      },'  '));
+      }));
     });
   });
 });

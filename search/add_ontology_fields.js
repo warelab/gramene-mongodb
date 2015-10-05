@@ -14,22 +14,14 @@ add ancestors fields from the ontology db. This script reads each gene document 
 a stream of JSON documents (one per line), looks up the ancestors for the
 annotated term(s), and outputs an updated JSON document for the gene.
 */
-
-var mongoURL = 'mongodb://127.0.0.1:27017/ontology';
-
-var collectionLUT = {
-    // 'xrefs:goslim_goa' : 'GO', // skipped because it is a subset of GO
-    'xrefs:GO' : 'GO',
-    'xrefs:TO' : 'TO',
-    'xrefs:PO' : 'PO',
-    'taxon_id' : 'NCBITaxon',
-    'protein_features:interpro' : 'interpro'
-};
+// assumes all collections are in the same mongo db as GO
+var GOdb = require('../config/collections.js').GO;
+var mongoURL = 'mongodb://'
+  + GOdb.host + ':' + GOdb.port + '/' + GOdb.dbName;
 
 var MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
 var async = require('async');
-var filename = process.argv[2];
 
 // given a list of terms, this is how you get all the ancestors
 function Ancestors(terms) {
@@ -42,61 +34,13 @@ function Ancestors(terms) {
     ];
 }
 
-// retrieve a subObject based on a list of keys
-function getField(o,keys) {
-    var subObj = o;
-    for(var i in keys) {
-        if (subObj.hasOwnProperty(keys[i])) {
-            subObj = subObj[keys[i]];
-        }
-        else {
-            return undefined;
-        }
-    }
-    return subObj;
-}
-
-// convert a list of ontology terms from strings
-// to a list of integers
-function termsToInts(terms) {
-    var ints = [];
-    if (typeof terms === "object") {
-        for(var i in terms) {
-            if (typeof terms[i] === "string") {
-                ints.push(parseInt(terms[i].match(/\d+/)));
-            }
-            else {
-                ints.push(terms[i]);
-            }
-        }
-    }
-    else {
-        ints.push(terms);
-    }
-    return ints;
-}
-
-// convert a list of ontology terms from strings to integers in place
-function termsToIntsReplace(terms) {
-    if (typeof terms === "object") {
-        for(var i in terms) {
-            if (typeof terms[i] === "string") {
-                // terms[i] = parseInt(terms[i].replace(/[A-Z]+:0*/, ""));
-                terms[i] = parseInt(terms[i].match(/\d+/));
-            }
-        }
-        return terms;
-    }
-    return [terms]; // special case for singletons (taxon_id)
-}
-
 // connect to the ontologies database
 MongoClient.connect(mongoURL, function(err, db) {
     if (err) throw err;
 
     // setup reader
     require('readline').createInterface({
-        input: fs.createReadStream(filename),
+      input: process.stdin,
         terminal: false
     }).on('line', function(line) { // one JSON object per line
        var obj = JSON.parse(line);
@@ -116,39 +60,19 @@ MongoClient.connect(mongoURL, function(err, db) {
        }
 
        // Populate query functions
-       for(var field in collectionLUT) {
-           var terms = getField(obj, field.split(':'));
-           if (terms) {
-             // terms might now be an object where keys are evidence codes, and values are arrays of terms
-             if (Array.isArray(terms) || typeof terms !== "object") { // nope, just an array or a non-object
-               // var ints = termsToInts(terms);
-               var ints = termsToIntsReplace(terms);
-               var o = collectionLUT[field];
-               var coll = db.collection(o);
-               queryFunctions[o] = aggregateFunctor(coll,Ancestors(ints));
-             }
-             else { // object with evidence code keys
-               var allInts = {};
-               var o = collectionLUT[field];
-               var coll = db.collection(o);
-               for (var ec in terms) {
-                 var ints;
-                 // console.log('terms['+ec+']=',terms[ec]);
-                 // if (typeof terms[ec] === "object") {
-                 //   ints = termsToIntsReplace(Object.keys(terms[ec]));
-                 // }
-                 // else {
-                   ints = termsToIntsReplace(terms[ec]);
-                 // }
-                 // console.log(ints);
-                 // process.exit(2);
-                 queryFunctions[o+"_"+ec] = aggregateFunctor(coll,Ancestors(ints));
-                 for(var i=0; i < ints.length; i++) { allInts[ints[i]]=1; };
-               }
-               var intarray = Object.keys(allInts).map(function(x){return +x});
-               queryFunctions[o] = aggregateFunctor(coll,Ancestors(intarray));
-             }
-           }
+       function to_int(list) {
+         return list.map(function(item) { return parseInt(item.match(/\d+/)) });
+       }
+
+       queryFunctions.taxon_id = aggregateFunctor(db.collection('NCBITaxon'),Ancestors([obj.taxon_id]));
+       if (!!obj.xrefs.GO) {
+         queryFunctions.GO = aggregateFunctor(db.collection('GO'),Ancestors(to_int(obj.xrefs.GO)));
+       }
+       if (!!obj.xrefs.PO) {
+         queryFunctions.PO = aggregateFunctor(db.collection('PO'),Ancestors(to_int(obj.xrefs.PO)));
+       }
+       if (!!obj.xrefs.interpro) {
+         queryFunctions.interpro = aggregateFunctor(db.collection('interpro'),Ancestors(to_int(obj.xrefs.interpro)));
        }
 
        if (queryFunctions) {
