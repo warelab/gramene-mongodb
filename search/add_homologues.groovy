@@ -9,17 +9,49 @@ import groovy.util.logging.Log
 
 import java.sql.ResultSet
 
-def cl = new CliBuilder(usage: 'add_homologues.groovy [-i <input file] [-o <output file>] [-v]')
-cl.h(longOpt: 'host', args: 1, 'Mysql database host (default `cabot`)')
-cl.d(longOpt: 'database', args: 1, 'Name of compara database (default `ensembl_compara_plants_46_80`)')
-cl.u(longOpt: 'user', args: 1, 'Mysql username')
-cl.p(longOpt: 'password', args: 1, 'Mysql password')
-cl.i(longOpt: 'in', args: 1, 'Input file (defaults to stdin)')
-cl.o(longOpt: 'out', args: 1, 'Output file (defaults to stdout)')
+def cl = new CliBuilder(usage:
+    'CLIENT MODE (requires daemon to be running): add_homologues.groovy ' +
+        '[-i <input file] ' +
+        '[-o <output file>] ' +
+        '[-s <socket port>] ' +
+        '[-h <socket host]\n\n\n' +
+    'DAEMON MODE (for client): homologue_daemon.groovy -D ' +
+        '-u <mysql uersname> ' +
+        '-p <mysql password> ' +
+        '[-h <mysql host>] ' +
+        '[-d <mysql database>] ' +
+        '[-s <socket port>] \n\n\n' +
+    'SINGLE PROCESS MODE (don\'t use daemon): add_homologues.groovy -S ' +
+        '[-i <input file] [-o <output file>] ' +
+        '-u <mysql uersname> ' +
+        '-p <mysql password> ' +
+        '[-h <mysql host>] ' +
+        '[-d <mysql database>] \n\n\n'
+)
+cl.D(longOpt: 'daemon', args: 0, 'Daemon mode flag')
+cl.S(longOpt: 'singleProcess', args: 0, 'Single-process mode flag')
+cl.h(longOpt: 'host', args: 1, 'with -S or -D, mysql database host (default `cabot`), ' +
+    'otherwise host of the socket server (default is localhost)')
+cl.d(longOpt: 'database', args: 1, 'with -S or -D, name of compara database (default `ensembl_compara_plants_46_80`)')
+cl.u(longOpt: 'user', args: 1, 'with -S or -D, Mysql username')
+cl.p(longOpt: 'password', args: 1, 'with -S or -D, Mysql password')
+cl.s(longOpt: 'socketPort', args: 1, 'with -D or client mode, Port for the socket server (default is 5432)')
+cl.i(longOpt: 'in', args: 1, 'with -S or client mode, Input file (defaults to stdin)')
+cl.o(longOpt: 'out', args: 1, 'with -S or client mode, Output file (defaults to stdout)')
 
 def opts = cl.parse(args)
 
-HomologAdder.run(opts)
+if(!args.length) {
+  cl.usage()
+  System.exit(1)
+}
+
+if(opts.D) {
+  HomologDaemon.run(opts)
+}
+else {
+  HomologAdder.run(opts)
+}
 
 /**
  * Adds homolog information to each gene document in a stream
@@ -28,14 +60,73 @@ HomologAdder.run(opts)
 class HomologAdder {
   static run(opts) {
     final long overallStart = System.currentTimeMillis()
-    final HomologyLut lut = JDBCHomologyLutFactory.instance.create(opts)
+    final InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
+    final OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
 
-    InputStream inStream = opts.i ? new FileInputStream(opts.i) : System.in
-    OutputStream outStream = opts.o ? new FileOutputStream(opts.o) : System.out
+    if(opts.S) {
+      log.info "Single process mode. Building lookup table, then adding homologs to supplied gene documents"
+      JDBCHomologyLutFactory.instance.create(opts)
+      addHomologs(inStream, outStream)
+    }
+    else {
+      log.info "Client mode. Will use lookup table in daemon process to add homologs to gene docs"
+      useDaemon(opts, inStream, outStream)
+    }
+    log.info "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
+  }
 
+  private static void useDaemon(opts, InputStream inStream, OutputStream outStream) {
+    final Integer socketPort = opts.s ? Integer.parseInt(opts.s) : 5432
+    final String host = opts.h ?: 'localhost'
+    final Socket socket = new Socket(host, socketPort)
+
+    log.info "Adding homologs to JSON docs"
+
+    socket.withStreams { socketIn, socketOut ->
+      int outCount = 0, backCount = 0
+      Thread push = Thread.start {
+        final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
+        final BufferedWriter toDaemon = new BufferedWriter(socketOut.newWriter())
+
+        for (String line in input) {
+          toDaemon.writeLine line
+          ++outCount
+        }
+
+        toDaemon.flush() // don't close; we're still reading and need the socket to stay open
+        log.info "done writing"
+      }
+      Thread pull = Thread.start {
+        long time = System.currentTimeMillis()
+        final Reader fromDaemon = socketIn.newReader()
+        final BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
+        for (String line in fromDaemon) {
+          output.writeLine line
+          ++backCount
+
+          if (backCount % 1000000 == 0) {
+            long now = System.currentTimeMillis()
+            log.info "$backCount docs; ${now - time}ms"
+            time = now
+          }
+          if (!push.alive && outCount - backCount == 0) {
+            break;
+          }
+        }
+        log.info "done reading"
+        output.close()
+        fromDaemon.close()
+      }
+      pull.join()
+      log.info "$backCount documents processed"
+    }
+  }
+
+  static addHomologs(InputStream inStream, OutputStream outStream) {
     final JsonSlurper jsonSlurper = new JsonSlurper();
     final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
     final BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
+    final HomologyLut lut = HomologyLut.instance
 
     log.info "Adding homologs to JSON docs"
     int count = 0
@@ -64,11 +155,33 @@ class HomologAdder {
     }
 
     output.flush()
-    output.close()
+    log.info "Done sending docs to that client"
+  }
+}
 
-    input.close()
+/**
+ * Builds a lookup table
+ */
+@Log
+class HomologDaemon {
+  static run(opts) {
+    final long overallStart = System.currentTimeMillis()
+    log.info "Daemon mode; will start daemon once lookup table is built."
+    JDBCHomologyLutFactory.instance.create(opts)
 
-    log.info "It took ${System.currentTimeMillis() - overallStart}ms to run the whole thing."
+    Integer socketPort = opts.s ? Integer.parseInt(opts.s) : 5432
+
+    ServerSocket server = new ServerSocket(socketPort)
+
+    log.info "It took ${System.currentTimeMillis() - overallStart}ms to start the daemon"
+
+    while(true) {
+      server.accept { socket ->
+        println "processing new connection..."
+        socket.withStreams HomologAdder.&addHomologs
+        println "processing/thread complete."
+      }
+    }
   }
 }
 
