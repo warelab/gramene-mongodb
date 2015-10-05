@@ -98,7 +98,7 @@ MongoClient.connect(mongoURL, function(err, db) {
         });
         delete features.all;
         var uniqueIPRs = Object.keys(interproSet);
-        if (uniqueIPRs.length > 1) {
+        if (uniqueIPRs.length > 0) {
           obj.xrefs.interpro = uniqueIPRs;
         }
         // merge overlapping domains into clusters
