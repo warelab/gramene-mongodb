@@ -1,9 +1,9 @@
 # Search database
-The search database contains collections for various types of biological object. 
+The search database contains collections for various types of biological object.
 ## Populating the genes collection
 The first step is to extract information on all the genes from the ensembl databases.
 This is done with a script based on
-https://github.com/EnsemblGenomes/eg-web-common/blob/master/utils/search_dump.pl 
+https://github.com/EnsemblGenomes/eg-web-common/blob/master/utils/search_dump.pl
 The EnsemblGenomes team uses this to output xml formatted files for use in the ensembl
 search tool. Since we are using mongodb, it is more convient to work with JSON files.
 The following repository was forked from EnsemblGenomes/eg-web-common and includes
@@ -13,9 +13,16 @@ changes.
 ```
 git clone https://github.com/ajo2995/eg-web-common.git
 cd eg-web-common/utils
-perl ./search_dump.pl -host hostname -port 3306 -user username -pass password -dir /scratch/olson/build41/genes -format json -release 41 
+perl ./search_dump.pl -host hostname -port 3306 -user username -pass password -dir /scratch/olson/build41/genes -format json -release 41
 ```
-The script takes over an hour to run, so go populate the ontology and maps databases while you wait.
+
+Once the perl script has started, start the homologue lookup table daemon:
+```
+cd <gramene-mongodb>/search
+groovy add_homologues.groovy -D -h cabot -d ensembl_compara_plants_46_80 -u gramene_web -p gram3n3
+```
+This takes about 15 minutes and the perl script over an hour. Go populate the ontology and maps databases while you wait.
+
 Once the json files are ready, we include ancestor information of the ontology terms and global bins of various sizes.
 ```
  gzip -cd /scratch/olson/build46/Gene_* | \
@@ -23,13 +30,23 @@ Once the json files are ready, we include ancestor information of the ontology t
  node add_bins.js ../maps/maps.json /dev/fd/0 | \
  node add_genetree_taxon.js /dev/fd/0 | \
  node merge_interpro_hits.js /dev/fd/0 | \
- JAVA_OPTS="-Xmx8192m" groovy add_homologues.groovy -h cabot -d ensembl_compara_plants_46_80 -u <user> -p <passw0rd> | \
+ groovy add_homologues.groovy -C | \
  mongoimport --db search46 --collection genes --drop
 ```
 
 Final step is to build indexes
 ```
 mongo search46 < indexCommands.js
+```
+
+Unless you think you'll be needing it again, kill the add_homologues daemon process now. Find the process:
+```
+lsof -i :5432
+```
+
+Then kill it
+```
+kill <pid returned by above command>
 ```
 
 ## Creating a genetrees collection

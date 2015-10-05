@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.sql.ResultSet
 
 def cl = new CliBuilder(usage:
-    'CLIENT MODE (requires daemon to be running): add_homologues.groovy ' +
+    'CLIENT MODE (requires daemon to be running): add_homologues.groovy -C' +
         '[-i <input file] ' +
         '[-o <output file>] ' +
         '[-s <socket port>] ' +
@@ -30,6 +30,7 @@ def cl = new CliBuilder(usage:
         '[-h <mysql host>] ' +
         '[-d <mysql database>] \n\n\n'
 )
+cl.C(longOpt: 'client', args: 0, 'Client mode flag (default mode)')
 cl.D(longOpt: 'daemon', args: 0, 'Daemon mode flag')
 cl.S(longOpt: 'singleProcess', args: 0, 'Single-process mode flag')
 cl.h(longOpt: 'host', args: 1, 'with -S or -D, mysql database host (default `cabot`), ' +
@@ -37,13 +38,14 @@ cl.h(longOpt: 'host', args: 1, 'with -S or -D, mysql database host (default `cab
 cl.d(longOpt: 'database', args: 1, 'with -S or -D, name of compara database (default `ensembl_compara_plants_46_80`)')
 cl.u(longOpt: 'user', args: 1, 'with -S or -D, Mysql username')
 cl.p(longOpt: 'password', args: 1, 'with -S or -D, Mysql password')
-cl.s(longOpt: 'socketPort', args: 1, 'with -D or client mode, Port for the socket server (default is 5432)')
-cl.i(longOpt: 'in', args: 1, 'with -S or client mode, Input file (defaults to stdin)')
-cl.o(longOpt: 'out', args: 1, 'with -S or client mode, Output file (defaults to stdout)')
+cl.s(longOpt: 'socketPort', args: 1, 'with -D or -C, Port for the socket server (default is 5432)')
+cl.i(longOpt: 'in', args: 1, 'with -S or -C, Input file (defaults to stdin)')
+cl.o(longOpt: 'out', args: 1, 'with -S or -C, Output file (defaults to stdout)')
 
 def opts = cl.parse(args)
 
-if(!args.length) {
+// ensure we specified a mode to run in
+if(!(opts.C || opts.D || opts.S)) {
   cl.usage()
   System.exit(1)
 }
@@ -70,7 +72,7 @@ class HomologAdder {
       JDBCHomologyLutFactory.instance.create(opts)
       addHomologs(inStream, outStream)
     }
-    else {
+    else { // opts.C
       log.info "Client mode. Will use lookup table in daemon process to add homologs to gene docs"
       useDaemon(opts, inStream, outStream)
     }
