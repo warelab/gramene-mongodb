@@ -7,6 +7,8 @@ import groovy.json.*
 import groovy.sql.Sql
 import groovy.util.logging.Log
 
+import java.util.concurrent.atomic.AtomicInteger
+
 import java.sql.ResultSet
 
 def cl = new CliBuilder(usage:
@@ -83,14 +85,15 @@ class HomologAdder {
     log.info "Adding homologs to JSON docs"
 
     socket.withStreams { socketIn, socketOut ->
-      int outCount = 0, backCount = 0
+      AtomicInteger outCount = new AtomicInteger()
+      AtomicInteger backCount = new AtomicInteger()
       Thread push = Thread.start {
         final BufferedReader input = new BufferedReader(new InputStreamReader(inStream))
         final BufferedWriter toDaemon = new BufferedWriter(socketOut.newWriter())
 
         for (String line in input) {
           toDaemon.writeLine line
-          ++outCount
+          outCount.incrementAndGet()
         }
 
         toDaemon.flush() // don't close; we're still reading and need the socket to stay open
@@ -102,14 +105,14 @@ class HomologAdder {
         final BufferedWriter output = new BufferedWriter(new OutputStreamWriter(outStream))
         for (String line in fromDaemon) {
           output.writeLine line
-          ++backCount
+          backCount.incrementAndGet()
 
           if (backCount % 1000000 == 0) {
             long now = System.currentTimeMillis()
             log.info "$backCount docs; ${now - time}ms"
             time = now
           }
-          if (!push.alive && outCount - backCount == 0) {
+          if (!push.alive && outCount.get() - backCount.get() == 0) {
             break;
           }
         }
@@ -152,9 +155,9 @@ class HomologAdder {
       }
       String prettyGene = new JsonBuilder(gene).toString()
       output.writeLine prettyGene
+      output.flush()
     }
 
-    output.flush()
     log.info "Done sending docs to that client"
   }
 }
