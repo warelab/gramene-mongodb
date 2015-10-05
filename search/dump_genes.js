@@ -34,9 +34,11 @@ var exons = {
    + ' inner join exon_transcript et on g.canonical_transcript_id = et.transcript_id'
    + ' inner join exon e on e.exon_id = et.exon_id'
    + ' where g.is_current=1'
+   + ' and e.seq_region_start >= g.seq_region_start' // sanity check
+   + ' and e.seq_region_end >= g.seq_region_start'   // that the gene
+   + ' and e.seq_region_id = g.seq_region_id'       // contains the exon
    + ' order by et.transcript_id, et.rank',
   process: function(exons) {
-    console.error('exons.process');
     var can_trans = {};
     exons.forEach(function(exon) {
       if (!can_trans.hasOwnProperty(exon.canonical_transcript_id)) {
@@ -80,7 +82,6 @@ var genes = {
     + ' left join translation_attrib ta168 on tl.translation_id = ta168.translation_id and ta168.attrib_type_id = 168'
     + ' where g.is_current=1;',
   process: function(genes,meta,transcripts) {
-    console.error('genes.process');
     gene = {};
     genes.forEach(function(row) {
       gene[row.gene_id] = {
@@ -88,8 +89,9 @@ var genes = {
         name: row.name ? row.name : row.stable_id,
         description: row.description,
         biotype: row.biotype,
-        taxon_id: +meta['species.species_taxonomy_id'],
+        taxon_id: +meta['species.taxonomy_id'],
         system_name: meta['species.production_name'],
+        schema_type: meta['schema_type'],
         location: {
           region: row.region,
           start: row.start,
@@ -160,7 +162,6 @@ var xrefs = {
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene"',
   add2Genes: function(xrefs,geneInfo) {
-    console.error('xrefs.add2Genes');
     xrefs.forEach(function(xref) {
       var gx = geneInfo[xref.gene_id].xrefs
       if (! gx.hasOwnProperty(xref.db_name)) {
@@ -183,7 +184,6 @@ var features = {
    + ' inner join interpro ipr on pf.hit_name = ipr.id'
    + ' WHERE g.is_current = 1',
   add2Genes: function(features, geneInfo) {
-    console.error('features.add2Genes');
     features.forEach(function(feature) {
       geneInfo[feature.gene_id].canonical_translation.features.all.push({
         name: feature.hit_name,

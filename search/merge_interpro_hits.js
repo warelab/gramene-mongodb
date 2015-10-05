@@ -93,13 +93,13 @@ MongoClient.connect(mongoURL, function(err, db) {
             features[type].push(feature);
           }
           else {
-            console.error(obj._id,'ignoring deprecated feature',feature.interpro);
+            // console.error(obj._id,'ignoring deprecated feature',feature.interpro);
           }
         });
         delete features.all;
         var uniqueIPRs = Object.keys(interproSet);
         if (uniqueIPRs.length > 0) {
-          obj.xrefs.interpro = uniqueIPRs;
+          obj.xrefs.domains = uniqueIPRs;
         }
         // merge overlapping domains into clusters
         // and assign them the ipr id of their lca instead of the root?
