@@ -6,7 +6,7 @@ var cluster = require('cluster')
   , validate = require('conform').validate
   , MongoClient = require('mongodb').MongoClient
   , MongoCommands = require('./MongoCommands')
-  , collections = require('./config/collections');
+  , collections = require('../config/collections');
   
 var port = process.argv.length > 2 ? process.argv[2] : 3000;
 
@@ -62,8 +62,6 @@ else {
   app.use(cache.middleware({
     clean: true
   }));
-
-  var port = process.argv.length > 2 ? process.argv[2] : 3000;
 
   function processRequest(cname, command, req, res) {
     if (collections.hasOwnProperty(cname)) {

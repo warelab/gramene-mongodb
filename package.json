@@ -4,6 +4,7 @@
   "description": "Gramene's MongoDB ETL code",
   "main": "index.js",
   "scripts": {
+    "start": "node rest-interface/app.js",
     "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js spec"
   },
   "repository": {
