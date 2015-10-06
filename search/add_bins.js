@@ -21,14 +21,14 @@ MongoClient.connect(mongoURL, function(err, db) {
     var bins = binsGenerator.bins(genomes);
 
     var mapper = {
-      fixed_100_bin : bins.fixedBinMapper( 100), // 100 bins per genome
-      fixed_200_bin : bins.fixedBinMapper( 200),
-      fixed_500_bin : bins.fixedBinMapper( 500),
-      fixed_1000_bin: bins.fixedBinMapper(1000), // 1000 bins per genome
-      uniform_1Mb_bin : bins.uniformBinMapper( 1000000), // all bins are 1Mb
-      uniform_2Mb_bin : bins.uniformBinMapper( 2000000),
-      uniform_5Mb_bin : bins.uniformBinMapper( 5000000),
-      uniform_10Mb_bin: bins.uniformBinMapper(10000000)  // all bins are 10Mb
+      fixed_100 : bins.fixedBinMapper( 100), // 100 bins per genome
+      fixed_200 : bins.fixedBinMapper( 200),
+      fixed_500 : bins.fixedBinMapper( 500),
+      fixed_1000: bins.fixedBinMapper(1000), // 1000 bins per genome
+      uniform_1Mb : bins.uniformBinMapper( 1000000), // all bins are 1Mb
+      uniform_2Mb : bins.uniformBinMapper( 2000000),
+      uniform_5Mb : bins.uniformBinMapper( 5000000),
+      uniform_10Mb: bins.uniformBinMapper(10000000)  // all bins are 10Mb
     };
 
     // read genes documents
@@ -39,10 +39,11 @@ MongoClient.connect(mongoURL, function(err, db) {
       }
     ).on('line', function(line) { // one JSON object per line
        var gene = JSON.parse(line);
+       gene.bins = {};
        var tss = gene.location.strand === 1 ? gene.location.start : gene.location.end;
        for(var field in mapper) {
          var bin = mapper[field].pos2bin(gene.taxon_id, gene.location.region, tss);
-         gene[field] = bin;
+         gene.bins[field] = bin;
        }
        console.log(JSON.stringify(gene));
     });
