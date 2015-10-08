@@ -26,6 +26,7 @@ function modifyGeneDocs(ancestorsLUT) {
         if (Object.keys(lut).length > 0) {
           obj.ancestors[x] = Object.keys(lut).map(function(a){return +a});
         }
+        delete obj.xrefs[x];
       }
     });
     delete obj.xrefs.taxonomy;

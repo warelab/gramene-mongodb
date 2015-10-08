@@ -55,7 +55,7 @@ var exons = {
       }
       can_trans[exon.canonical_transcript_id].length += exon.end - exon.start + 1;
       can_trans[exon.canonical_transcript_id].exons.push(
-        { start: exon.start, end: exon.end }
+        { start: exon.start, end: exon.end, id: exon.exon_id }
       );
     });
     return can_trans;
@@ -70,7 +70,8 @@ var genes = {
     + ' ta165.value as Charge,'
     + ' ta166.value as MolecularWeight,'
     + ' ta167.value as NumResidues,'
-    + ' ta168.value as AvgResWeight'
+    + ' ta168.value as AvgResWeight,'
+    + ' tl.seq_start, tl.start_exon_id, tl.seq_end, tl.end_exon_id'
     + ' from gene g'
     + ' inner join seq_region sr on g.seq_region_id = sr.seq_region_id'
     + ' LEFT join translation tl on g.canonical_transcript_id = tl.transcript_id'
@@ -84,6 +85,7 @@ var genes = {
   process: function(genes,meta,transcripts) {
     gene = {};
     genes.forEach(function(row) {
+      var c_trans = transcripts[row.canonical_transcript_id];
       gene[row.gene_id] = {
         _id : row.stable_id,
         name: row.name ? row.name : row.stable_id,
@@ -101,7 +103,7 @@ var genes = {
         },
         xrefs: {},
         synonyms: {},
-        canonical_transcript: transcripts[row.canonical_transcript_id]
+        canonical_transcript: c_trans
       };
       if (row.translation_stable_id) {
         gene[row.gene_id].canonical_translation = {
@@ -115,7 +117,22 @@ var genes = {
             all: []
           }
         };
+        // add the CDS start and end to the canonical transcript
+        c_trans.CDS = {start:0, end:0};
+        var pos=0;
+        c_trans.exons.forEach(function(exon) {
+          if (c_trans.CDS.start === 0 && exon.id === row.start_exon_id) {
+            c_trans.CDS.start = pos + row.seq_start;
+          }
+          if (c_trans.CDS.end === 0 && exon.id === row.end_exon_id) {
+            c_trans.CDS.end = pos + row.seq_end;
+          }
+          pos += exon.end - exon.start + 1;
+        });
       }
+      c_trans.exons.forEach(function(exon) {
+        delete exon.id; // don't need id any more
+      });
     });
     return gene;
   }
