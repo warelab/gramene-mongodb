@@ -130,9 +130,11 @@ var genes = {
           pos += exon.end - exon.start + 1;
         });
       }
-      c_trans.exons.forEach(function(exon) {
-        delete exon.id; // don't need id any more
-      });
+      if (c_trans.hasOwnProperty('exons')) {
+        c_trans.exons.forEach(function(exon) {
+          delete exon.id; // don't need id any more
+        });
+      }
     });
     return gene;
   }

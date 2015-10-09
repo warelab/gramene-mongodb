@@ -23,8 +23,8 @@ connection.query(sql, function(err, rows, fields) {
   if (err) throw err;
   rows.forEach(function(row) {
     var cmd = 'echo "processing '+row.SCHEMA_NAME+'"; ./dump_genes.js -h '+argv.h+' -u '+argv.u+' -p '+argv.p+' -d '+row.SCHEMA_NAME
-    // + ' | ./merge_interpro_hits.js | ./add_bins.js | ./add_xref_ancestors.js '
-    + ' > '+row.SCHEMA_NAME+'.json';
+    // + ' | ./merge_interpro_hits.js | ./add_bins.js | ./add_xref_ancestors.js | ./add_homologues.js'
+    + ' > tmp/'+row.SCHEMA_NAME+'.json';
     console.log(cmd);
   });
   // console.log('cat *_'+grm+'_'+ens+'_*.json | ./add_genetree_taxon.js'
