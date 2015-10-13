@@ -4,7 +4,7 @@ var _ = require('lodash');
 var collections = require('../config/collections.js');
 var Q = require('q');
 
-var xrefsToProcess = ['domains','GO','PO','taxonomy'];
+var xrefsToProcess = ['domains','GO','PO','taxonomy','pathways'];
 function modifyGeneDocs(ancestorsLUT) {
   require('readline').createInterface({
     input: process.stdin,
