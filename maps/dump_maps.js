@@ -21,7 +21,6 @@ var sql = 'select SCHEMA_NAME from SCHEMATA where SCHEMA_NAME like "%_core_'
 connection.query(sql, function(err, rows, fields) {
   if (err) throw err;
   rows.forEach(function(row) {
-    console.error(row.SCHEMA_NAME);
     dump_map(row.SCHEMA_NAME);
   });
   connection.end();
@@ -37,7 +36,6 @@ function dump_map(dbName) {
   });
   if (!core) throw "error";
   core.connect();
-  console.error('connected to '+dbName);
   core.query('select meta_key,meta_value from meta', function(err, rows, fields) {
     if (err) throw err;
     // do something with the metadata
@@ -48,7 +46,7 @@ function dump_map(dbName) {
     var map = {
       db: dbName,
       _id: meta.hasOwnProperty('assembly.accession') ? meta['assembly.accession'] : meta['assembly.default'],
-      taxon_id: meta['species.taxonomy_id'],
+      taxon_id: +meta['species.taxonomy_id'],
       system_name: meta['species.production_name'],
       type: 'genome',
       length: 0,
