@@ -6,12 +6,13 @@ var _ = require('lodash');
 var through2 = require('through2');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
+var argv = require('minimist')(process.argv.slice(2));
 
 var comparaMysqlDb = mysql.createConnection({
-  "host": "cabot",
-  "user": "gramene_web",
-  "password": "gram3n3",
-  "database": "ensembl_compara_plants_46_80"
+  "host": argv.h,
+  "user": argv.u,
+  "password": argv.p,
+  "database": argv.d
 });
 
 // this query returns one row per node in the tree; it includes both leaf and
@@ -201,7 +202,7 @@ var serialize = through2.obj(function (r, enc, done) {
 
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-MongoClient.connect('mongodb://brie:27017/search46', function (err, mongoDb) {
+MongoClient.connect('mongodb://brie:27017/search48', function (err, mongoDb) {
   var mongoCollection = mongoDb.collection('genetree');
 
   var upsertTreeIntoMongo = through2.obj(function (tree, enc, done) {
