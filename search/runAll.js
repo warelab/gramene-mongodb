@@ -22,7 +22,7 @@ var sql = 'select SCHEMA_NAME from SCHEMATA where SCHEMA_NAME like "%_core_'
 connection.query(sql, function(err, rows, fields) {
   if (err) throw err;
   rows.forEach(function(row) {
-    var cmd = '"./dump_genes.js -h '+argv.h+' -u '+argv.u+' -p '+argv.p+' -d '+row.SCHEMA_NAME
+    var cmd = './dump_genes.js -h '+argv.h+' -u '+argv.u+' -p '+argv.p+' -d '+row.SCHEMA_NAME
     + ' | gzip -c > tmp/'+row.SCHEMA_NAME+'.json.gz';
     console.log(cmd);
   });
