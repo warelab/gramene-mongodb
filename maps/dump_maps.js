@@ -64,6 +64,19 @@ function dump_map(dbName) {
     + 'AND cs.species_id = 1', function(err, rows, fields) {
       if (err) throw err;
       rows.forEach(function(r) {
+        r.value = +r.value;
+      });
+      rows.sort(function(a,b) {
+        if (a.value > b.value) {
+           return 1;
+         }
+         if (a.value < b.value) {
+           return -1;
+         }
+         // a must be equal to b
+         return 0;
+      });
+      rows.forEach(function(r) {
         map.regions.names.push(r.name);
         map.regions.lengths.push(r.length);
         map.length += r.length;
