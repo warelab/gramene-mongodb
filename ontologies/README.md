@@ -1,20 +1,19 @@
-# Ontology database
-The ontology database holds terms as documents. The database is intended to provide information on ontology terms and support more complex queries of annotated genes or other objects. The is_a relationships are traversed to form a list of ancestor nodes in each term document. That way, a subtree query for genes annotated with GO:0016746 | transferase activity, transferring acyl groups is `db.genes.find({"ancestors.GO":16746})`.
-## Populating the ontology database
-### special case InterPro
+# Ontology collections
+The ontology collections hold hierarchically related terms as documents. They provide information on ontology terms and support more complex queries of annotated genes. The is_a and part_of relationships are traversed to form a list of ancestors in each term document. That way you can query for genes annotated with a GO term or any more specific terms on the GO__ancestors field in the gramene-solr genes core.
+## Populating the collections
+### special case: InterPro
 Download files, parse, and import documents
 ```
 mkdir tmp
 curl -s ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt > tmp/ParentChildTreeFile.txt
-curl -s ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz | gzip -cd | node parseInterpro.js tmp/ParentChildTreeFile.txt /dev/fd/0 | mongoimport --db ontology --collection interpro
+curl -s ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz | gzip -cd | node parseInterpro.js tmp/ParentChildTreeFile.txt /dev/fd/0 | mongoimport --host brie --db search48 --collection domains
 
 mongo ontology
 > db.interpro.ensureIndex({"$**":"text"})
-> db.interpro.find({$text:{$search:"TIGR01566"}})
 ```
-### one liner
+### populate collections from .obo files
 ```
-mkdir tmp; ./populate.js tmp; mongo ontology < index.js
+./populate.js -o tmp -d search48 -h brie
 ```
 ### manual
 #### Download obo files
@@ -66,9 +65,9 @@ $ mongo ontology
 > db.GO.find({ $text: { $search: "H3-K9 methylation" }},{ name:1,namespace:1,score: { $meta: "textScore"}}).sort({score: {$meta: "textScore"}})
 ```
 ## Remove unused documents in the NCBITaxon
-There are over 1 million terms in the NCBITaxon ontology, but Gramene only hosts a few tens of species. Once the maps collection has been populated in the cmap db it is possible to extract the NCBITaxon terms that are actually used and then remove any terms from the ontology db that are not in that list.
+There are over 1 million terms in the NCBITaxon ontology, but Gramene only hosts a few tens of species. Once the maps collection has been populated it is possible to extract the NCBITaxon terms that are actually used and then remove any terms from the ontology db that are not in that list.
 ```
-mongo cmap
+mongo search48
 > db.species.aggregate({$project: { "taxon_id": 1, _id:0}},{$group:{_id:"NA", ids : {$addToSet : "$taxon_id"}}})
 { "_id" : "NA", "ids" : [ 436017, 280699, 214687, 77586, 40149, 4537, 40148, 39947, 109376, 37682, 29760, 13333, 88036, 3641, 4572, 3694, 112509, 65489, 4533, 4538, 4565, 4113, 4529, 4536, 4558, 4081, 4528, 4577, 3702, 4555, 3880, 81972, 3760, 3218, 51351, 3847, 15368, 39946, 3055 ] }
 > use ontology
@@ -78,7 +77,7 @@ mongo cmap
 > db.repairDatabase()
 ```
 
-## Setting up Solr cores for each collection
+<!-- ## Setting up Solr cores for each collection
 The solr subdirectory contains a script that will convert a stream of JSON documents exported from mongodb into a list of JSON documents that can be imported into solr. The schema.xml and solrconfig.xml files can be used to set up the core.
 #### export and convert mongodb docs for solr
 First do facet counts on the *_ancestors fields of the genes solr core. This is used to populate the _genes field in each core.
@@ -98,4 +97,4 @@ curl 'http://localhost:8983/solr/GO/update?commit=true' --data-binary @GO.json -
 curl 'http://localhost:8983/solr/PO/update?commit=true' --data-binary @PO.json -H 'Content-type:application/json'
 curl 'http://localhost:8983/solr/taxonomy/update?commit=true' --data-binary @taxonomy.json -H 'Content-type:application/json'
 curl 'http://localhost:8983/solr/interpro/update?commit=true' --data-binary @interpro.json -H 'Content-type:application/json'
-```
+``` -->

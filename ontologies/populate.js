@@ -3,20 +3,24 @@
 var http = require('http'),
     fs   = require('fs'),
     exec = require('child_process').exec;
+    
+var argv = require('minimist')(process.argv.slice(2));
+
 
 var ontologies = {
-    'EO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/plant_environment/environment_ontology.obo',
+    // 'EO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/plant_environment/environment_ontology.obo',
     'GO'        : 'http://geneontology.org/ontology/go.obo',
-    'GRO'       : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo',
+    // 'GRO'       : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo',
     // 'GR_tax'    : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/taxonomy/GR_tax-ontology.obo',
     'NCBITaxon' : 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
     'PO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/tags/live/plant_ontology.obo',
-    'SO'        : 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
-    'TO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/traits/trait.obo',
+    // 'SO'        : 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
+    // 'TO'        : 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/traits/trait.obo',
 };
 
-var outDir = process.argv[2];
-if (! outDir) outDir = '.';
+var outDir = argv.o;
+var database = argv.d;
+var host = argv.h;
 
 function parseLoad(o) {
     var cmd = './obo2json.pl '+o+' '+outDir+' < '+outDir+'/'+o+'.obo';
@@ -27,7 +31,7 @@ function parseLoad(o) {
         }
         else {
             console.log('parsed '+o+'.obo');
-            cmd = 'mongoimport --db ontology --drop --collection ' + o + ' < '+outDir+'/' + o+'.Term.json';
+            cmd = 'mongoimport --host '+host+' --db '+database+' --drop --collection ' + o + ' < '+outDir+'/' + o+'.Term.json';
             console.log(cmd);
             var load = exec(cmd, function (error, stdout, stderr) {
                 if (error !== null) {

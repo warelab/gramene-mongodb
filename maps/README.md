@@ -1,12 +1,11 @@
-# (comparative) maps
+# populating genomic maps
+```
+./dump_maps.js -h host -u user -p pass -g 48 -e 82 > maps.json
+mongoimport -h brie -d search48 -c maps < maps.json
+```
 
-use the gramene ensembl rest API to obtain species and maps data
-```
-./ensembl_maps.pl http://APIhost:port species > species.json
-./ensembl_maps.pl http://APIhost:port maps > maps.json
-mongoimport --drop -d cmap -c species < species.json
-mongoimport --drop -d cmap -c maps < maps.json
-```
+
+<!-- # (comparative) maps -- future work
 
 Lets first define some terms
 
@@ -27,7 +26,7 @@ The features in each featureSet is stored in a FastBit partition sorted by regio
 needs to match the associated maps document (not necessarily sorted lexicographically)
 
 Correspondences between features from featureSets A and B are stored as a linearized bit matrix. Only
-store the positions of the set bits. Since it is very sparse, that would be more compact and 
+store the positions of the set bits. Since it is very sparse, that would be more compact and
 easy to work with than a CmpBitVec.
 
 Example maps document
@@ -150,4 +149,4 @@ Example remappers document
   "flip"        : {boolean}>
 }
 ```
-Use indexes that let you find the remapper document given the source and destination map ids and a position on the source map. When projecting a set of features from one map to another, pull the relevant documents sorted by position. N.B. some functions are bijections while others are not (genome -> aggregated promoter regions).
+Use indexes that let you find the remapper document given the source and destination map ids and a position on the source map. When projecting a set of features from one map to another, pull the relevant documents sorted by position. N.B. some functions are bijections while others are not (genome -> aggregated promoter regions). -->
