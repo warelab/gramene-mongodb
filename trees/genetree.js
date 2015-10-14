@@ -83,6 +83,16 @@ var tidyRow = through2.obj(function (row, encoding, done) {
   done();
 });
 
+var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
+  for (var f in row) {
+    if (typeof(row[f]) === "object") {
+      row[f] = row[f].toString();
+    }
+  }
+  this.push(row);
+  done();
+});
+
 var groupRowsByTree = function () {
   var growingTree;
 
@@ -165,7 +175,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
   if(count != tree.nodes.length) {
     console.log('Expected ' + tree.nodes.length + ' nodes in treemodel, but found ' + count);
   }
-
+  delete tree.treeModel;
   this.push(tree);
   done();
 });
@@ -221,6 +231,7 @@ MongoClient.connect('mongodb://brie:27017/search48', function (err, mongoDb) {
   var stream = comparaMysqlDb.query(query)
     .stream({highWaterMark: 5})
     .pipe(tidyRow)
+    .pipe(convertBuffersToStrings)
     .pipe(groupRowsByTree())
     .pipe(makeNestedTree)
     .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
