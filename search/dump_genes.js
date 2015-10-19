@@ -3,12 +3,15 @@ var argv = require('minimist')(process.argv.slice(2));
 
 // connect to mysql database
 var mysql = require('mysql');
-var connection = mysql.createConnection({
+var connectionOptions = {
   host: argv.h,
   user: argv.u,
-  password: argv.p,
   database: argv.d
-});
+}
+if (!!argv.p) {
+  connectionOptions.password = argv.p;
+}
+var connection = mysql.createConnection(connectionOptions);
 if (!connection) throw "error";
 connection.connect();
 
@@ -26,8 +29,12 @@ var metadata = {
 // lookup exons in canonical transcripts
 var exons = {
   sql: 'select g.canonical_transcript_id, t.stable_id, e.exon_id,'
-   + ' e.seq_region_start - g.seq_region_start + 1 as start,'
-   + ' e.seq_region_end - g.seq_region_start + 1 as end,'
+   + ' case when g.seq_region_strand = 1 then e.seq_region_start - g.seq_region_start + 1'
+   + '  else g.seq_region_end - e.seq_region_end + 1'
+   + ' end as start,'
+   + ' case when g.seq_region_strand = 1 then e.seq_region_end - g.seq_region_start + 1'
+   + '  else g.seq_region_end - e.seq_region_start + 1'
+   + ' end as end,'
    + ' et.rank'
    + ' from gene g'
    + ' inner join transcript t on g.canonical_transcript_id = t.transcript_id'
@@ -141,39 +148,39 @@ var genes = {
 }
 // get xrefs
 var xrefs = {
-  sql: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+  sql1: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
    + ' JOIN xref x ON x.xref_id = g.display_xref_id'
    + ' JOIN external_db ed ON ed.external_db_id = x.external_db_id'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
-   + ' Where g.is_current=1'
-   + ' union'
-   + ' SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+   + ' Where g.is_current=1',
+
+  sql2: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
    + ' inner join transcript t on g.canonical_transcript_id = t.transcript_id'
    + ' JOIN xref x ON x.xref_id = t.display_xref_id'
    + ' JOIN external_db ed ON ed.external_db_id = x.external_db_id'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
-   + ' Where g.is_current=1'
-   + ' union'
-   + ' SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+   + ' Where g.is_current=1',
+
+  sql3: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
    + ' inner join translation tl on g.`canonical_transcript_id` = tl.`transcript_id`'
    + ' inner join object_xref ox on tl.translation_id = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
-   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Translation"'
-   + ' union'
-   + ' SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Translation"',
+
+  sql4: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
    + ' inner join object_xref ox on g.`canonical_transcript_id` = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
-   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Transcript"'
-   + ' union'
-   + ' SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Transcript"',
+
+  sql5: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
    + ' inner join object_xref ox on g.gene_id = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
@@ -224,27 +231,43 @@ connection.query(metadata.sql, function(err, rows, fields) {
     connection.query(genes.sql, function(err, rows, fields) {
       if (err) throw err;
       var geneInfo = genes.process(rows,meta,transcripts);
-      connection.query(xrefs.sql, function(err, rows, fields) {
+      connection.query(xrefs.sql1, function(err, rows, fields) {
         if (err) throw err;
         xrefs.add2Genes(rows,geneInfo);
-        connection.query(features.sql, function(err, rows, fields) {
+        connection.query(xrefs.sql2, function(err, rows, fields) {
           if (err) throw err;
-          features.add2Genes(rows,geneInfo);
-          for(var gene in geneInfo) {
-            Object.keys(geneInfo[gene].xrefs).forEach(function(xref_key) {
-              var uniq_list = Object.keys(geneInfo[gene].xrefs[xref_key]);
-              geneInfo[gene].xrefs[xref_key] = uniq_list;
+          xrefs.add2Genes(rows,geneInfo);
+          connection.query(xrefs.sql3, function(err, rows, fields) {
+            if (err) throw err;
+            xrefs.add2Genes(rows,geneInfo);
+            connection.query(xrefs.sql4, function(err, rows, fields) {
+              if (err) throw err;
+              xrefs.add2Genes(rows,geneInfo);
+              connection.query(xrefs.sql5, function(err, rows, fields) {
+                if (err) throw err;
+                xrefs.add2Genes(rows,geneInfo);
+                connection.query(features.sql, function(err, rows, fields) {
+                  if (err) throw err;
+                  features.add2Genes(rows,geneInfo);
+                  for(var gene in geneInfo) {
+                    Object.keys(geneInfo[gene].xrefs).forEach(function(xref_key) {
+                      var uniq_list = Object.keys(geneInfo[gene].xrefs[xref_key]);
+                      geneInfo[gene].xrefs[xref_key] = uniq_list;
+                    });
+                    var syn_list = Object.keys(geneInfo[gene].synonyms);
+                    if (syn_list.length > 0) {
+                      geneInfo[gene].synonyms = syn_list;
+                    }
+                    else {
+                      delete geneInfo[gene].synonyms;
+                    }
+                    console.log(JSON.stringify(geneInfo[gene]));
+                  }
+                  connection.end();
+                });
+              });
             });
-            var syn_list = Object.keys(geneInfo[gene].synonyms);
-            if (syn_list.length > 0) {
-              geneInfo[gene].synonyms = syn_list;
-            }
-            else {
-              delete geneInfo[gene].synonyms;
-            }
-            console.log(JSON.stringify(geneInfo[gene]));
-          }
-          connection.end();
+          });
         });
       });
     });

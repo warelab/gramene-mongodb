@@ -51,6 +51,8 @@ var query = "select " +
   "n.distance_to_parent, " +
   "s.stable_id as protein_stable_id, " +
   "gene.stable_id as gene_stable_id, " +
+  "gene.display_label as gene_display_label, " +
+  "gene.description as gene_description," +
   "g.taxon_id, " +
   "g.name as system_name, " +
   "g.assembly, " +
@@ -175,7 +177,97 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
   if(count != tree.nodes.length) {
     console.log('Expected ' + tree.nodes.length + ' nodes in treemodel, but found ' + count);
   }
-  delete tree.treeModel;
+  this.push(tree);
+  done();
+});
+
+var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
+  function indexTree(tree, attrs) {
+    tree.indices = _.chain(attrs)
+      .map(function (attr) {
+        var result = {_attr: attr};
+        tree.walk(function (node) {
+          if (node.model.hasOwnProperty(attr)) {
+            result[node.model[attr]] = node;
+          }
+        });
+        return result;
+      })
+      .indexBy('_attr')
+      .value();
+  }
+  function scoreRepresentative(node) {
+    var score = 0;
+    var bad = 10;
+    var meh = 5;
+    var good = -10;
+    if (node.model.hasOwnProperty('gene_description')) {
+      score += good;
+      if (node.model.gene_description.match(/unknown function/i)) {
+        score += bad;
+      }
+      if (node.model.gene_description.match(/uncharacterized/i)) {
+        score += bad;
+      }
+      if (node.model.gene_description.match(/^predicted/i)) {
+        score += bad;
+      }
+      if (node.model.gene_description.match(/^hypothetical/i)) {
+        score += bad;
+      }
+      if (node.model.gene_description.match(/^putative/i)) {
+        score += bad;
+      }
+      if (node.model.gene_description.match(/^AT[1-5]G[0-9]{5}/i)) {
+        score += meh;
+      }
+    }
+    if (node.model.hasOwnProperty('gene_display_label')) {
+      score += good;
+      if (node.model.gene_display_label === node.model.gene_stable_id) {
+        score += bad;
+      }
+    }
+    if (node.model.node_taxon_id === 3702) { // consider a model species bonus
+      score -= 0;
+    }
+    return score;
+  }
+  indexTree(tree.treeModel,['gene_stable_id']);
+  var leaves = tree.treeModel.indices.gene_stable_id;
+  for (var id in leaves) {
+    if (id !== '_attr') {
+      var node = leaves[id];
+      node.model.representative = {
+        id: id,
+        score: scoreRepresentative(node) // a lower score is better
+      };
+      while (node.hasOwnProperty('parent')) {
+        var parent = node.parent;
+        if (!parent.model.hasOwnProperty('representative')) {
+          parent.model.representative = {
+            id: id,
+            score: node.model.representative.score + node.model.distance_to_parent
+          };
+        }
+        else {
+          // parent node already has a representative.
+          // check if this one is better
+          if (node.model.representative.score + node.model.distance_to_parent < .2*parent.model.representative.score) {
+            parent.model.representative = {
+              id: id,
+              score: node.model.representative.score + node.model.distance_to_parent
+            };
+          }
+          else {
+            // keep the same representative, break out of the while loop
+            break;
+          }
+        }
+        node = parent;
+      }
+    }
+  }
   this.push(tree);
   done();
 });
@@ -235,6 +327,7 @@ MongoClient.connect('mongodb://brie:27017/search48', function (err, mongoDb) {
     .pipe(groupRowsByTree())
     .pipe(makeNestedTree)
     .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+    .pipe(selectRepresentativeGeneMembers)
     .pipe(counter())
     .pipe(upsertTreeIntoMongo)
     .pipe(serialize)
