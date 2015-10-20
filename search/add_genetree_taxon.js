@@ -48,7 +48,7 @@ function indexTree(tree, attrs) {
 // connect to the ontologies database
 MongoClient.connect(mongoURL, function (err, db) {
   if (err) throw err;
-  db.collection(gtDB.collectionName).find({_id:'__EPlSupertree262133'}).toArray(function (err, docs) {
+  db.collection(gtDB.collectionName).find().toArray(function (err, docs) {
     if (err) throw err;
     var countOfGenes = 0;
     
@@ -104,7 +104,7 @@ MongoClient.connect(mongoURL, function (err, db) {
             };
           })
           .forEach(function (gene) {
-            acc[gene.id] = lookupValue;
+            acc[gene.id] = _.cloneDeep(lookupValue);
             if (gene.rep) {
               var repNode = tree.indices.gene_stable_id[gene.rep].model;
               var representative = {
