@@ -80,18 +80,16 @@ MongoClient.connect(mongoURL, function (err, db) {
             return !node.hasChildren();
           })
           .map(function (leaf) {
-            var lvl = 0
-            if (leaf.model.representative.score < lvl) {
+            if (leaf.model.representative.score < 0) {
               return {
                 id: leaf.model.gene_stable_id,
-                rep: leaf.model.representative.id
+                rep: null // because rep = id so not needed leaf.model.representative.id
               };
             }
             var node = leaf;
             while (node.hasOwnProperty('parent')) {
               node = node.parent;
-              // lvl++;
-              if (node.model.representative.score < lvl) {
+              if (node.model.representative.score < -5) {
                 return {
                   id: leaf.model.gene_stable_id,
                   rep: node.model.representative.id
@@ -104,7 +102,6 @@ MongoClient.connect(mongoURL, function (err, db) {
             };
           })
           .forEach(function (gene) {
-            acc[gene.id] = _.cloneDeep(lookupValue);
             if (gene.rep) {
               var repNode = tree.indices.gene_stable_id[gene.rep].model;
               var representative = {
@@ -117,7 +114,11 @@ MongoClient.connect(mongoURL, function (err, db) {
               if (repNode.hasOwnProperty('gene_description')) {
                 representative.description = repNode.gene_description;
               }
+              acc[gene.id] = _.cloneDeep(lookupValue);
               acc[gene.id].representative = representative;
+            }
+            else {
+              acc[gene.id] = lookupValue;
             }
             
             ++countOfGenes;

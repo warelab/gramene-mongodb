@@ -201,25 +201,17 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
     var bad = 10;
     var meh = 5;
     var good = -10;
+    var modelSpeciesBonus = -5;
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
-      if (node.model.gene_description.match(/unknown function/i)) {
+      if (node.model.gene_description.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
         score += bad;
       }
-      if (node.model.gene_description.match(/uncharacterized/i)) {
+      else if (node.model.gene_description.match(/AT[1-5]G[0-9]{5}/i)) {
         score += bad;
       }
-      if (node.model.gene_description.match(/^predicted/i)) {
+      else if (node.model.gene_description.match(/Os[0-9]{2}g[0-9]{7}/i)) {
         score += bad;
-      }
-      if (node.model.gene_description.match(/^hypothetical/i)) {
-        score += bad;
-      }
-      if (node.model.gene_description.match(/^putative/i)) {
-        score += bad;
-      }
-      if (node.model.gene_description.match(/^AT[1-5]G[0-9]{5}/i)) {
-        score += meh;
       }
     }
     if (node.model.hasOwnProperty('gene_display_label')) {
@@ -227,9 +219,12 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
       if (node.model.gene_display_label === node.model.gene_stable_id) {
         score += bad;
       }
+      else if (node.model.gene_display_label.match(/^POPTRDRAFT/)) {
+        score += bad;
+      }
     }
     if (node.model.node_taxon_id === 3702) { // consider a model species bonus
-      score -= 0;
+      score += modelSpeciesBonus;
     }
     return score;
   }
@@ -244,19 +239,20 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
       };
       while (node.hasOwnProperty('parent')) {
         var parent = node.parent;
+        var newScore = node.model.representative.score + node.model.distance_to_parent;
         if (!parent.model.hasOwnProperty('representative')) {
           parent.model.representative = {
             id: id,
-            score: node.model.representative.score + node.model.distance_to_parent
+            score: newScore
           };
         }
         else {
           // parent node already has a representative.
           // check if this one is better
-          if (node.model.representative.score + node.model.distance_to_parent < .2*parent.model.representative.score) {
+          if (parent.model.representative.score - newScore > 3) {
             parent.model.representative = {
               id: id,
-              score: node.model.representative.score + node.model.distance_to_parent
+              score: newScore
             };
           }
           else {
@@ -304,7 +300,7 @@ var serialize = through2.obj(function (r, enc, done) {
 
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-MongoClient.connect('mongodb://brie:27017/search48', function (err, mongoDb) {
+MongoClient.connect('mongodb://localhost:27017/search48', function (err, mongoDb) {
   var mongoCollection = mongoDb.collection('genetree');
 
   var upsertTreeIntoMongo = through2.obj(function (tree, enc, done) {
