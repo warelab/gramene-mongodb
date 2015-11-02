@@ -30,6 +30,10 @@ function modifyGeneDocs(ancestorsLUT) {
       }
     });
     delete obj.xrefs.taxonomy;
+    // add ancestors of grm_gene_tree_root_taxon_id
+    if (obj.hasOwnProperty('grm_gene_tree_root_taxon_id')) {
+      obj.ancestors.gene_family = ancestorsLUT.taxonomy['NCBITaxon:'+obj.grm_gene_tree_root_taxon_id];
+    }
     console.log(JSON.stringify(obj));
   });
 }
