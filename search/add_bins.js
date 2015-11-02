@@ -40,9 +40,8 @@ MongoClient.connect(mongoURL, function(err, db) {
     ).on('line', function(line) { // one JSON object per line
        var gene = JSON.parse(line);
        gene.bins = {};
-       var tss = gene.location.strand === 1 ? gene.location.start : gene.location.end;
        for(var field in mapper) {
-         var bin = mapper[field].pos2bin(gene.taxon_id, gene.location.region, tss);
+         var bin = mapper[field].pos2bin(gene.taxon_id, gene.location.region, gene.location.start);
          gene.bins[field] = bin;
        }
        console.log(JSON.stringify(gene));
