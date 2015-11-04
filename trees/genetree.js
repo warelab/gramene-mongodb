@@ -301,7 +301,7 @@ var serialize = through2.obj(function (r, enc, done) {
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
 MongoClient.connect('mongodb://localhost:27017/search48', function (err, mongoDb) {
-  var mongoCollection = mongoDb.collection('genetree');
+  var mongoCollection = mongoDb.collection('genetrees');
 
   var upsertTreeIntoMongo = through2.obj(function (tree, enc, done) {
     var throughThis = this;
