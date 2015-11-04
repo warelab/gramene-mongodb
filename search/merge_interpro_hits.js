@@ -37,15 +37,12 @@ D F I
 In order to score the matches you need the hierarchies of each domain. Matches from solr don't need to store the path to the root because the same hierarchies are available from the query. A node service for this search will query solr and score the matches. What about pagination? Use a web cache to store results in batches to support pagination.
 If there is an intermediate service, the interpro hierarchies can be kept in memory.
 */
-var domains = require('../config/collections.js').domains;
-var mongoURL = 'mongodb://'
-  + domains.host + ':' + domains.port + '/' + domains.dbName;
-var MongoClient = require('mongodb').MongoClient;
-MongoClient.connect(mongoURL, function(err, db) {
-  if (err) throw err;
+var collections = require('gramene-mongodb-config');
+
+collections.domains.mongoCollection().then(function(coll) {
   // fetch all the interpro docs and build a hierarchy root lookup table hroot[this_ipr] = root_ipr;
-  var coll = db.collection(domains.collectionName);
   coll.find({}, {fields:{ancestors:1,type:1,id:1,name:1,description:1}}).toArray(function(err, result) {
+    collections.closeMongoDatabase();
     if (err) throw err;
     var hroot = {};
     var pathFromRoot = {};
@@ -63,7 +60,6 @@ MongoClient.connect(mongoURL, function(err, db) {
         hroot[doc._id] = doc.ancestors[0];
       }
     });
-    db.close();
     // setup reader
     require('readline').createInterface({
         input: process.stdin,

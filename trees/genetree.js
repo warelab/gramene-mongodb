@@ -5,7 +5,8 @@ var FlatToNested = require('flat-to-nested');
 var _ = require('lodash');
 var through2 = require('through2');
 var fs = require('fs');
-var MongoClient = require('mongodb').MongoClient;
+//var MongoClient = require('mongodb').MongoClient;
+var collections = require('gramene-mongodb-config');
 var argv = require('minimist')(process.argv.slice(2));
 
 var comparaMysqlDb = mysql.createConnection({
@@ -18,6 +19,10 @@ var comparaMysqlDb = mysql.createConnection({
 // this query returns one row per node in the tree; it includes both leaf and
 // branch nodes. some properties (e.g. system_name) are null for branch nodes
 // and others (e.g. node_type) are null for leaf nodes.
+
+// a good deal of this 'rootRoot' and 'case' stuff is necessary to reassemble the
+// full gene-trees from the split sibling trees that Ensembl generates to keep
+// their sizes down.
 var query = "select " +
   "n.node_id, " +
   "case " +
@@ -33,9 +38,12 @@ var query = "select " +
   "as parent_id, " +
 
   "case " +
-  " when rootRoot.tree_type is not null then concat('__EPlSupertree', lpad(rootRoot.root_id, 6, '0')) " + // if the tree is part of a supertree then use the supertree id " +
-  " when r.stable_id is null then concat('__EPlSupertree', lpad(r.root_id, 6, '0')) " + //if it's a supertree use that id " +
-  " else r.stable_id " + // otherwise the tree
+    // if the tree is part of a supertree then use the supertree id " +
+  " when rootRoot.tree_type is not null then concat('__EPlSupertree', lpad(rootRoot.root_id, 6, '0')) " +
+    //if it's a supertree use that id " +
+  " when r.stable_id is null then concat('__EPlSupertree', lpad(r.root_id, 6, '0')) " +
+    // otherwise the tree
+  " else r.stable_id " +
   "end " +
   "as tree_id, " +
 
@@ -76,8 +84,10 @@ var query = "select " +
   "left join gene_tree_node rootParentNode on rootNode.parent_id = rootParentNode.node_id " +
   "left join gene_tree_root rootRoot on rootRoot.root_id = rootParentNode.`root_id` and rootRoot.tree_type = 'supertree' " +
 
-  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default' " +
+  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default'" +
   "order by tree_id, n.node_id ";
+
+var queryStream = comparaMysqlDb.query(query).stream({highWaterMark: 5});
 
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
@@ -95,7 +105,7 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
   done();
 });
 
-var groupRowsByTree = function () {
+var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
@@ -142,7 +152,7 @@ var groupRowsByTree = function () {
   };
 
   return through2.obj(transform, flush);
-};
+})();
 
 var makeNestedTree = through2.obj(function (tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
@@ -268,7 +278,7 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
   done();
 });
 
-var counter = function () {
+var counter = (function () {
   var treeCount = 0;
   var rowCount = 0;
 
@@ -288,22 +298,10 @@ var counter = function () {
   };
 
   return through2.obj(transform, flush);
-};
+})();
 
-var serialize = through2.obj(function (r, enc, done) {
-  this.push(JSON.stringify(r) + "\n");
-  done();
-}, function (done) {
-  console.log('serializer is done');
-  done()
-});
-
-var fileWriter = fs.createWriteStream('./inserts.jsonl');
-
-MongoClient.connect('mongodb://localhost:27017/search48', function (err, mongoDb) {
-  var mongoCollection = mongoDb.collection('genetrees');
-
-  var upsertTreeIntoMongo = through2.obj(function (tree, enc, done) {
+var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
+  var transform = function (tree, enc, done) {
     var throughThis = this;
     mongoCollection.update(
       {_id: tree.nested._id},
@@ -314,24 +312,48 @@ MongoClient.connect('mongodb://localhost:27017/search48', function (err, mongoDb
         done();
       }
     );
-  });
+  };
 
-  var stream = comparaMysqlDb.query(query)
-    .stream({highWaterMark: 5})
+  var flush = function(done) {
+    collections.closeMongoDatabase();
+    console.log('upsert to mongo is done');
+    done();
+  };
+
+  return through2.obj(transform, flush);
+};
+
+var serialize = through2.obj(function (r, enc, done) {
+  this.push(JSON.stringify(r) + "\n");
+  done();
+}, function (done) {
+  console.log('serializer is done');
+  done();
+});
+
+var fileWriter = fs.createWriteStream('./inserts.jsonl');
+
+collections.genetrees.mongoCollection().then(function(mongoCollection) {
+  var upsert = upsertTreeIntoMongo(mongoCollection);
+
+  queryStream
     .pipe(tidyRow)
     .pipe(convertBuffersToStrings)
-    .pipe(groupRowsByTree())
+    .pipe(groupRowsByTree)
     .pipe(makeNestedTree)
     .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
     .pipe(selectRepresentativeGeneMembers)
-    .pipe(counter())
-    .pipe(upsertTreeIntoMongo)
+    .pipe(counter)
+    .pipe(upsert)
     .pipe(serialize)
     .pipe(fileWriter);
 
   fileWriter.on('finish', function () {
+    comparaMysqlDb.end(function(err) {
+      console.log('mysql conn closed');
+    });
+
     console.log('We are done here.');
-    stream.end();
 
     // it would be super if this were not necessary.
     process.exit(0);

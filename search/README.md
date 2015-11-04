@@ -2,12 +2,12 @@
 ###  dump genes from ensembl core and otherfeatures databases
 dump_genes.js extracts the gene models, xrefs, and interpro protein annotations on the canonical translation from a core or otherfeatures database.
 
-runAll.js interrogates the mysql server hosting ensembl databases and generates command lines for dump_genes.js.
+createDumpCommands.js interrogates the mysql server hosting ensembl databases and generates command lines for dump_genes.js.
 Dump gzipped json docs from each database.
 ```
 cd <gramene-mongodb>/search
 mkdir tmp
-./runAll.js -g 48 -e 82 -h host -u user -p pass | parallel
+./createDumpCommands.js -g 48 -e 82 -h host -u user -p pass | parallel
 ```
 
 ### populate auxiliary mongodb collections

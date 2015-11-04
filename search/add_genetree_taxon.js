@@ -1,11 +1,7 @@
 #!/usr/bin/env node
-var MongoClient = require('mongodb').MongoClient,
-  _ = require('lodash'),
+var _ = require('lodash'),
   TreeModel = require('tree-model'),
-  gtDB = require('../config/collections.js').genetrees;
-
-var mongoURL = 'mongodb://'
-  + gtDB.host + ':' + gtDB.port + '/' + gtDB.dbName;
+  collections = require('gramene-mongodb-config');
 
 function modifyGeneDocs(genetreeLUT) {
   require('readline').createInterface({
@@ -46,9 +42,9 @@ function indexTree(tree, attrs) {
 }
 
 // connect to the ontologies database
-MongoClient.connect(mongoURL, function (err, db) {
-  if (err) throw err;
-  db.collection(gtDB.collectionName).find().toArray(function (err, docs) {
+collections.genetrees.mongoCollection().then(function(coll) {
+  coll.find().toArray(function (err, docs) {
+    collections.closeMongoDatabase();
     if (err) throw err;
     var countOfGenes = 0;
     
@@ -128,6 +124,5 @@ MongoClient.connect(mongoURL, function (err, db) {
     }, {});
 
     modifyGeneDocs(genetreeIdLut);
-    db.close();
   });
 });

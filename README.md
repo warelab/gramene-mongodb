@@ -9,4 +9,4 @@ collections for genes, (more to come)
 ## maps
 comparative maps
 # services
-`node app.js 3000` will launch an express web service that can search any of the database collections as described in config/collections.json -->
+`node app.js 3000` will launch an express web service that can search any of the database collections as described in gramene-mongodb-config -->
