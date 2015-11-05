@@ -50,7 +50,7 @@ collections.genetrees.mongoCollection().then(function(coll) {
     
     var genetreeIdLut = docs.reduce(function (acc, doc) {
       var tree = new TreeModel().parse(doc);
-      indexTree(tree,['gene_stable_id']);
+      // indexTree(tree,['gene_stable_id']);
       var rootTaxonId = tree.model.node_taxon_id;
       var grmTreeId = tree.model.tree_id;
 
@@ -71,54 +71,45 @@ collections.genetrees.mongoCollection().then(function(coll) {
           grm_gene_tree_root_taxon_id: rootTaxonId,
           siblings: subtreeIds
         };
-        
-        subtree.all(function (node) {
-            return !node.hasChildren();
-          })
-          .map(function (leaf) {
-            if (leaf.model.representative.score < 0) {
-              return {
-                id: leaf.model.gene_stable_id,
-                rep: null // because rep = id so not needed leaf.model.representative.id
-              };
+
+        // push good representatives to their bad children
+        var leafIdx = {};
+        subtree.walk({strategy: 'pre'}, function (node) {
+          if (node.model.representative.score >= -5) return false; // there's no hope for this tree
+          node.children.forEach(function(child) {
+            if (child.model.representative.score >= -5) {
+              child.model.representative.score = node.model.representative.score;
+              child.model.representative.id = node.model.representative.id;
             }
-            var node = leaf;
-            while (node.hasOwnProperty('parent')) {
-              node = node.parent;
-              if (node.model.representative.score < -5) {
-                return {
-                  id: leaf.model.gene_stable_id,
-                  rep: node.model.representative.id
-                };
-              }
-            }
-            return {
-              id: leaf.model.gene_stable_id,
-              rep: null
-            };
-          })
-          .forEach(function (gene) {
-            if (gene.rep) {
-              var repNode = tree.indices.gene_stable_id[gene.rep].model;
-              var representative = {
-                id: gene.rep,
-                taxon_id: repNode.taxon_id
-              };
-              if (repNode.hasOwnProperty('gene_display_label')) {
-                representative.name = repNode.gene_display_label;
-              }
-              if (repNode.hasOwnProperty('gene_description')) {
-                representative.description = repNode.gene_description;
-              }
-              acc[gene.id] = _.cloneDeep(lookupValue);
-              acc[gene.id].representative = representative;
-            }
-            else {
-              acc[gene.id] = lookupValue;
-            }
-            
-            ++countOfGenes;
           });
+          if (!node.hasChildren()) {
+            leafIdx[node.model.gene_stable_id] = node.model;
+          }
+        });
+
+        _.forEach(leafIdx, function(leaf, id) {
+          if (leaf.representative.id === id || leaf.representative.score >= -5) {
+            // no representative
+            acc[id] = lookupValue;
+          }
+          else {
+            // has representative
+            var repNode = leafIdx[leaf.representative.id];
+            var representative = {
+              id: repNode.gene_stable_id,
+              taxon_id: repNode.taxon_id
+            };
+            if (repNode.hasOwnProperty('gene_display_label')) {
+              representative.name = repNode.gene_display_label;
+            }
+            if (repNode.hasOwnProperty('gene_description')) {
+              representative.description = repNode.gene_description;
+            }
+            acc[id] = _.cloneDeep(lookupValue);
+            acc[id].representative = representative;
+          }
+          ++countOfGenes;
+        });
       });
       return acc;
     }, {});
