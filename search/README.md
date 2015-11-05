@@ -23,22 +23,22 @@ Once all that is done:
 ```
  gzcat tmp/*.json.gz | \
  ./merge_interpro_hits.js | \
- ./add_pathways.js pathToAssociationsFile | \
- ./add_xref_ancestors.js | \
+ ./add_pathways.js <pathToAssociationsFile> | \
  ./add_bins.js | \
  ./add_genetree_taxon.js | \
- ./add_homologues.js > genes.jsonl
+ ./add_homologues.js | \
+ ./add_xref_ancestors.js > genes.jsonl
 ```
-N.B. merge_interpro_hits.js and add_pathways.js have to preceed add_xref_ancestors.js because they populate xrefs.domains and xrefs.pathways.
+N.B. run add_xref_ancestors.js last other scripts earlier in the pipe populate xrefs.
 
 Load the genes docs into mongodb
 ```
- mongoimport --db search48 --collection genes --drop
+ mongoimport --db search48 --collection genes --drop < genes.jsonl
 ```
 
 Final step is to build indexes (optional)
 ```
-mongo --host brie search48 < indexCommands.js
+mongo search48 < indexCommands.js
 ```
 Currently, this only adds one index for free text search. Solr genes and suggestions cores are the primary ways to search for genes, but the genes documents there are slimmed down. In practice, the mongo collection is queried with unique identifiers like this:
 http://data.gramene.org/genes?_id=F775_06278 
