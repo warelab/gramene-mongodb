@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-var MongoClient = require('mongodb').MongoClient;
 var _ = require('lodash');
 var collections = require('gramene-mongodb-config');
 var Q = require('q');
@@ -12,7 +11,7 @@ function modifyGeneDocs(ancestorsLUT) {
   }).on('line', function (line) { // one JSON object per line
     var obj = JSON.parse(line);
     obj.ancestors = {};
-    obj.xrefs.taxonomy = ['taxonomy:'+obj.taxon_id]; // temporary xref to make loops happy
+    obj.xrefs.taxonomy = ['NCBITaxon:'+obj.taxon_id]; // temporary xref to make loops happy
     xrefsToProcess.forEach(function(x) {
       if (obj.xrefs.hasOwnProperty(x)) {
         var lut = {};
@@ -32,7 +31,7 @@ function modifyGeneDocs(ancestorsLUT) {
     delete obj.xrefs.taxonomy;
     // add ancestors of grm_gene_tree_root_taxon_id
     if (obj.hasOwnProperty('grm_gene_tree_root_taxon_id')) {
-      obj.ancestors.gene_family = ancestorsLUT.taxonomy['taxonomy:'+obj.grm_gene_tree_root_taxon_id];
+      obj.ancestors.gene_family = ancestorsLUT.taxonomy['NCBITaxon:'+obj.grm_gene_tree_root_taxon_id];
     }
     console.log(JSON.stringify(obj));
   });
@@ -58,8 +57,8 @@ var promises = xrefsToProcess.map(function(x) {
 });
 
 Q.all(promises).then(function(luts) {
-  collections.closeMongoDatabase();
   var superLut = _.zipObject(xrefsToProcess, luts);
   modifyGeneDocs(superLut);
+  collections.closeMongoDatabase();
 });
 
