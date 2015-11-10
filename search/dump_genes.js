@@ -41,9 +41,11 @@ var exons = {
    + ' inner join exon_transcript et on g.canonical_transcript_id = et.transcript_id'
    + ' inner join exon e on e.exon_id = et.exon_id'
    + ' where g.is_current=1'
-   + ' and e.seq_region_start >= g.seq_region_start' // sanity check
-   + ' and e.seq_region_end >= g.seq_region_start'   // that the gene
-   + ' and e.seq_region_id = g.seq_region_id'       // contains the exon
+   + ' and e.seq_region_start >= g.seq_region_start'
+   + ' and e.seq_region_end >= g.seq_region_start'
+   + ' and e.seq_region_start <= g.seq_region_end'
+   + ' and e.seq_region_end <= g.seq_region_end'
+   + ' and e.seq_region_id = g.seq_region_id'
    + ' order by et.transcript_id, et.rank',
   process: function(exons) {
     var can_trans = {};
@@ -110,37 +112,39 @@ var genes = {
         },
         xrefs: {},
         synonyms: {},
-        canonical_transcript: c_trans
       };
-      if (row.translation_stable_id) {
-        gene[row.gene_id].canonical_translation = {
-          name: row.translation_stable_id,
-          length: +row.num_residues,
-          molecular_weight: +row.molecular_weight,
-          avg_res_weight: +row.avg_res_weight,
-          charge: +row.charge,
-          iso_point: +row.iso_point, 
-          features: {
-            all: []
-          }
-        };
-        // add the CDS start and end to the canonical transcript
-        c_trans.CDS = {start:0, end:0};
-        var pos=0;
-        c_trans.exons.forEach(function(exon) {
-          if (c_trans.CDS.start === 0 && exon.id === row.start_exon_id) {
-            c_trans.CDS.start = pos + row.seq_start;
-          }
-          if (c_trans.CDS.end === 0 && exon.id === row.end_exon_id) {
-            c_trans.CDS.end = pos + row.seq_end;
-          }
-          pos += exon.end - exon.start + 1;
-        });
-      }
-      if (c_trans && c_trans.hasOwnProperty('exons')) {
-        c_trans.exons.forEach(function(exon) {
-          delete exon.id; // don't need id any more
-        });
+      if (c_trans) {
+        gene[row.gene_id].canonical_transcript = c_trans;
+        if (row.translation_stable_id) {
+          gene[row.gene_id].canonical_translation = {
+            name: row.translation_stable_id,
+            length: +row.num_residues,
+            molecular_weight: +row.molecular_weight,
+            avg_res_weight: +row.avg_res_weight,
+            charge: +row.charge,
+            iso_point: +row.iso_point, 
+            features: {
+              all: []
+            }
+          };
+          // add the CDS start and end to the canonical transcript
+          c_trans.CDS = {start:0, end:0};
+          var pos=0;
+          c_trans.exons.forEach(function(exon) {
+            if (c_trans.CDS.start === 0 && exon.id === row.start_exon_id) {
+              c_trans.CDS.start = pos + row.seq_start;
+            }
+            if (c_trans.CDS.end === 0 && exon.id === row.end_exon_id) {
+              c_trans.CDS.end = pos + row.seq_end;
+            }
+            pos += exon.end - exon.start + 1;
+          });
+        }
+        if (c_trans.hasOwnProperty('exons')) {
+          c_trans.exons.forEach(function(exon) {
+            delete exon.id; // don't need id any more
+          });
+        }
       }
     });
     return gene;

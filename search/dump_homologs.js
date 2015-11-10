@@ -45,8 +45,8 @@ connection.query(sql)
   .on('result', function(row) {
     // Pausing the connnection is useful if your processing involves I/O
     connection.pause();
-    console.log(redisify('HSET',row.geneId, row.otherId, row.kind));
-    console.log(redisify('HSET',row.otherId, row.geneId, row.kind));
+    console.log(redisify('HSET',row.gene_id, row.other_id, row.kind));
+    console.log(redisify('HSET',row.other_id, row.gene_id, row.kind));
     connection.resume();
   })
   .on('end', function() {
