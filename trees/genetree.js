@@ -214,13 +214,14 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
     var modelSpeciesBonus = -5;
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
-      if (node.model.gene_description.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
+      var desc = node.model.gene_description.replace(/\s+\[Source:.*/,'');
+      if (desc.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
         score += bad;
       }
-      else if (node.model.gene_description.match(/AT[1-5]G[0-9]{5}/i)) {
+      else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
         score += bad;
       }
-      else if (node.model.gene_description.match(/Os[0-9]{2}g[0-9]{7}/i)) {
+      else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
         score += bad;
       }
     }
