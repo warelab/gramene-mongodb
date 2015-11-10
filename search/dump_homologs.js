@@ -12,10 +12,10 @@ var connection = mysql.createConnection({
 if (!connection) throw "error";
 connection.connect();
 var sql = 'select'
-  + ' g1.stable_id as geneId,'
-  + ' g2.stable_id as otherId,'
+  + ' g1.stable_id as gene_id,'
+  + ' g2.stable_id as other_id,'
   + ' h.description as kind,'
-  + ' h.is_tree_compliant as isTreeCompliant'
+  + ' h.is_tree_compliant as is_tree_compliant'
   + ' from homology h'
   + ' inner join homology_member hm on hm.homology_id = h.homology_id'
   + ' inner join gene_member g1 on hm.gene_member_id = g1.gene_member_id'

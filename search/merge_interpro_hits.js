@@ -154,7 +154,7 @@ collections.domains.mongoCollection().then(function(coll) {
         });
         // set interpro of each cluster to LCA of members
         // and set name and description based on lca
-        obj.canonical_translation.features.domainArchitecture = clusters.map(function(c) {
+        obj.canonical_translation.features.domain_architecture = clusters.map(function(c) {
           var iprList = c.members.map(function(m) {
             return m.ipr
           });
@@ -178,7 +178,7 @@ collections.domains.mongoCollection().then(function(coll) {
           return c;
         });
         // need the domain root ids put into a space delimited string for searching
-        obj.canonical_translation.domainRoots = clusters.map(function(c) {
+        obj.canonical_translation.domain_roots = clusters.map(function(c) {
           return c.root;
         }).join(' ');
       }

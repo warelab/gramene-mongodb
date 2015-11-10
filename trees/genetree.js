@@ -109,25 +109,25 @@ var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
-    if (growingTree && growingTree.treeId === row.tree_id) {
+    if (growingTree && growingTree.tree_id === row.tree_id) {
       growingTree.nodes.push(row);
 
       if( row.tree_stable_id &&
-          !_.includes(growingTree.stableIds, row.tree_stable_id)
+          !_.includes(growingTree.stable_ids, row.tree_stable_id)
       ) {
-        growingTree.stableIds.push(row.tree_stable_id);
+        growingTree.stable_ids.push(row.tree_stable_id);
       }
     }
     else {
       var doneTree = growingTree;
       growingTree = {
-        treeId: row.tree_id,
-        treeRootId: row.root_id,
-        treeType: row.tree_type,
+        tree_id: row.tree_id,
+        tree_root_id: row.root_id,
+        tree_type: row.tree_type,
         nodes: [row]
       };
 
-      growingTree.stableIds = row.tree_stable_id ? [row.tree_stable_id] : [];
+      growingTree.stable_ids = row.tree_stable_id ? [row.tree_stable_id] : [];
 
       if (doneTree) {
         this.push(doneTree);
@@ -157,7 +157,7 @@ var groupRowsByTree = (function () {
 var makeNestedTree = through2.obj(function (tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
   tree.nested._id = tree.nested.tree_id;
-  tree.nested.stableIds = tree.stableIds;
+  tree.nested.stable_ids = tree.stable_ids;
   this.push(tree);
   done();
 });
@@ -173,7 +173,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
       }
       if (node.children.length === 1) {
         console.log('Found node with exactly one child. This is probably super-sub tree junction.',
-          tree.treeType === 'supertree',
+          tree.tree_type === 'supertree',
           node.model.node_id)
       }
     }

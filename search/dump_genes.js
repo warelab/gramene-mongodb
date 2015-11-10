@@ -53,11 +53,11 @@ var exons = {
           name: exon.stable_id, // this is actuall the transcript's stable_id, sorry.
           length: 0,
           exons: [],
-          exonJunctions: []
+          exon_junctions: []
         };
       }
       else { // not the first exon
-        can_trans[exon.canonical_transcript_id].exonJunctions.push(
+        can_trans[exon.canonical_transcript_id].exon_junctions.push(
           can_trans[exon.canonical_transcript_id].length);
       }
       can_trans[exon.canonical_transcript_id].length += exon.end - exon.start + 1;
@@ -73,11 +73,11 @@ var genes = {
   sql: 'select g.gene_id, g.stable_id, x.display_label as name, g.description, g.biotype,'
     + ' sr.name as region, g.seq_region_start as start, g.seq_region_end as end, g.seq_region_strand as strand,'
     + ' g.canonical_transcript_id, tl.stable_id as translation_stable_id,'
-    + ' ta164.value as IsoPoint,'
-    + ' ta165.value as Charge,'
-    + ' ta166.value as MolecularWeight,'
-    + ' ta167.value as NumResidues,'
-    + ' ta168.value as AvgResWeight,'
+    + ' ta164.value as iso_point,'
+    + ' ta165.value as charge,'
+    + ' ta166.value as molecular_weight,'
+    + ' ta167.value as num_residues,'
+    + ' ta168.value as avg_res_weight,'
     + ' tl.seq_start, tl.start_exon_id, tl.seq_end, tl.end_exon_id'
     + ' from gene g'
     + ' inner join seq_region sr on g.seq_region_id = sr.seq_region_id'
@@ -115,11 +115,11 @@ var genes = {
       if (row.translation_stable_id) {
         gene[row.gene_id].canonical_translation = {
           name: row.translation_stable_id,
-          length: +row.NumResidues,
-          molecularWeight: +row.MolecularWeight,
-          avgResWeight: +row.AvgResWeight,
-          charge: +row.Charge,
-          isoPoint: +row.IsoPoint, 
+          length: +row.num_residues,
+          molecular_weight: +row.molecular_weight,
+          avg_res_weight: +row.avg_res_weight,
+          charge: +row.charge,
+          iso_point: +row.iso_point, 
           features: {
             all: []
           }
