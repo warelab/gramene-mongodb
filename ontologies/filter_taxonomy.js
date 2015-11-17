@@ -9,7 +9,7 @@ collections.maps.mongoCollection().then(function (coll) {
     collections.closeMongoDatabase();
     var species = {};
     genomes.forEach(function(g) {
-      species[g.taxon_id] = 1;
+      species[g.taxon_id] = g.num_genes;
     });
     // _id of desired taxonomy nodes
     var desired = {};
@@ -23,17 +23,19 @@ collections.maps.mongoCollection().then(function (coll) {
       var tax_node = JSON.parse(line);
       if (species.hasOwnProperty(tax_node._id)) {
         tax_node.ancestors.forEach(function(id) {
-          if (desired.hasOwnProperty(id)) {
-            return;
+          if (!desired.hasOwnProperty(id)) {
+            desired[id] = 0;
           }
-          desired[id] = 1;
+          desired[id] += species[tax_node._id];
         });
       }
       all[tax_node._id] = tax_node;
     })
     .on('close', function() {
       for (var id in desired) {
-        console.log(JSON.stringify(all[id]));
+        var taxNode = all[id];
+        taxNode.num_genes = desired[id];
+        console.log(JSON.stringify(taxNode));
       }
     });
   });
