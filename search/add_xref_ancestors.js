@@ -15,20 +15,29 @@ function modifyGeneDocs(ancestorsLUT) {
     xrefsToProcess.forEach(function(x) {
       if (obj.xrefs.hasOwnProperty(x)) {
         var lut = {};
+        var specificAnnotations = [];
         obj.xrefs[x].forEach(function(id) {
           if (ancestorsLUT[x].hasOwnProperty(id)) {
+            var intId = parseInt(id.match(/\d+/)[0]);
+            specificAnnotations.push(intId);
             ancestorsLUT[x][id].forEach(function(anc) {
-              lut[anc]=1;
+              if (anc !== intId) {
+                lut[anc]=1;
+              }
             });
           }
         });
+        var msa = _.filter(specificAnnotations,function(id) {
+          return !lut.hasOwnProperty(id);
+        });
+        obj.xrefs[x] = msa;
         if (Object.keys(lut).length > 0) {
           obj.ancestors[x] = Object.keys(lut).map(function(a){return +a});
         }
-        delete obj.xrefs[x];
+        // delete obj.xrefs[x];
       }
     });
-    delete obj.xrefs.taxonomy;
+    // delete obj.xrefs.taxonomy;
     // add ancestors of grm_gene_tree_root_taxon_id
     if (obj.hasOwnProperty('grm_gene_tree_root_taxon_id')) {
       obj.ancestors.gene_family = ancestorsLUT.taxonomy['NCBITaxon:'+obj.grm_gene_tree_root_taxon_id];
