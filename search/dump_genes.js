@@ -8,6 +8,8 @@ var connectionOptions = {
   user: argv.u,
   database: argv.d
 }
+var db_type = connectionOptions.database.match(/_(core|otherfeatures)_\d+_\d+_\d+/)[1];
+
 if (!!argv.p) {
   connectionOptions.password = argv.p;
 }
@@ -102,7 +104,7 @@ var genes = {
         biotype: row.biotype,
         taxon_id: +meta['species.taxonomy_id'],
         system_name: meta['species.production_name'],
-        schema_type: meta['schema_type'],
+        db_type: db_type,
         location: {
           region: row.region,
           start: row.start,
