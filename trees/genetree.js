@@ -61,6 +61,8 @@ var query = "select " +
   "gene.stable_id as gene_stable_id, " +
   "gene.display_label as gene_display_label, " +
   "gene.description as gene_description," +
+  "gam.cigar_line as cigar," +
+  "sq.sequence as sequence," +
   "g.taxon_id, " +
   "g.name as system_name, " +
   "g.assembly, " +
@@ -68,12 +70,15 @@ var query = "select " +
   "a.bootstrap, " +
   "a.duplication_confidence_score, " +
   "sn.taxon_id as node_taxon_id, " +
-  "sn.node_name as node_taxon " +
+  "sn.node_name as node_taxon, " +
+  "n.left_index as left_index " +
+  "n.right_index as right_index " +
 
   "from gene_tree_root r " +
   "inner join gene_tree_node n on n.root_id = r.root_id " +
 
   "left join seq_member s on s.seq_member_id = n.seq_member_id " +
+  "left join sequence sq on s.sequence_id = sq.sequence_id " +
   "left join gene_member gene on s.gene_member_id = gene.gene_member_id " +
   "left join genome_db g on g.genome_db_id = s.genome_db_id " +
 
@@ -83,6 +88,8 @@ var query = "select " +
   "left join gene_tree_node rootNode on rootNode.node_id = n.root_id " +
   "left join gene_tree_node rootParentNode on rootNode.parent_id = rootParentNode.node_id " +
   "left join gene_tree_root rootRoot on rootRoot.root_id = rootParentNode.`root_id` and rootRoot.tree_type = 'supertree' " +
+
+  "left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = s.seq_member_id " +
 
   "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default'" +
   "order by tree_id, n.node_id ";
@@ -208,33 +215,38 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
   }
   function scoreRepresentative(node) {
     var score = 0;
-    var bad = 10;
-    var meh = 5;
-    var good = -10;
-    var modelSpeciesBonus = -5;
+    var bad = 100;
+    var meh = -50;
+    var good = -100;
+    var modelSpeciesBonus = -25;
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
-      var desc = node.model.gene_description.replace(/\s+\[Source:.*/,'');
-      if (desc.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
+      if (node.model.gene_description.match(/projected/i)) {
         score += bad;
       }
-      else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
-        score += bad;
-      }
-      else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
-        score += bad;
+      else {
+        var desc = node.model.gene_description.replace(/\s+\[Source:.*/,'');
+        if (desc.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
+          score += bad;
+        }
+        else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
+          score += bad;
+        }
+        else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
+          score += bad;
+        }
       }
     }
     if (node.model.hasOwnProperty('gene_display_label')) {
-      score += good;
+      score += meh;
       if (node.model.gene_display_label === node.model.gene_stable_id) {
-        score += bad;
+        score -= meh;
       }
       else if (node.model.gene_display_label.match(/^POPTRDRAFT/)) {
-        score += bad;
+        score -= meh;
       }
     }
-    if (node.model.node_taxon_id === 3702) { // consider a model species bonus
+    if (node.model.taxon_id === 3702) { // consider a model species bonus
       score += modelSpeciesBonus;
     }
     return score;
@@ -260,7 +272,7 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
         else {
           // parent node already has a representative.
           // check if this one is better
-          if (parent.model.representative.score - newScore > 3) {
+          if (parent.model.representative.score - newScore > 0) {
             parent.model.representative = {
               id: id,
               score: newScore

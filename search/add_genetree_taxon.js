@@ -72,14 +72,25 @@ collections.genetrees.mongoCollection().then(function(coll) {
           siblings: subtreeIds
         };
 
-        // push good representatives to their bad children
-        var leafIdx = {};
+        var leafIdx = {}; // so we can get the leaf nodes by ID
+        var isAT = new RegExp(/^AT/);
+        if (subtree.model.representative.id.match(isAT)) {
+          subtree.model.ath_rep = subtree.model.representative;
+        }
+        // starting at the root of the subtree, assign good representatives to their bad children
         subtree.walk({strategy: 'pre'}, function (node) {
-          if (node.model.representative.score >= -5) return false; // there's no hope for this tree
+          if (node.model.representative.score >= -80) return false; // there's no hope for this tree
           node.children.forEach(function(child) {
-            if (child.model.representative.score >= -5) {
+            if (child.model.representative.score >= -80) {
               child.model.representative.score = node.model.representative.score;
               child.model.representative.id = node.model.representative.id;
+            }
+            // try to add an arabidopsis representative
+            if (child.model.representative.id.match(isAT)) {
+              child.model.ath_rep = child.model.representative;
+            }
+            else if (node.model.ath_rep) {
+              child.model.ath_rep = node.model.ath_rep;
             }
           });
           if (!node.hasChildren()) {
@@ -88,25 +99,68 @@ collections.genetrees.mongoCollection().then(function(coll) {
         });
 
         _.forEach(leafIdx, function(leaf, id) {
-          if (leaf.representative.id === id || leaf.representative.score >= -5) {
+          // non-arabidopsis genes also get a closest arabidopsis ortholog representative
+
+          if (leaf.representative.score >= -80) {
             // no representative
             acc[id] = lookupValue;
           }
           else {
-            // has representative
-            var repNode = leafIdx[leaf.representative.id];
-            var representative = {
-              id: repNode.gene_stable_id,
-              taxon_id: repNode.taxon_id
-            };
-            if (repNode.hasOwnProperty('gene_display_label')) {
-              representative.name = repNode.gene_display_label;
+            if (leaf.representative.id === id) {
+              if (leaf.taxon_id !== 3702) {
+                acc[id] = lookupValue; // doesn't need a representative
+              }
+              else {
+                // not ath, check for ath_rep
+                if (leaf.ath_rep) {
+                  var repNode = leafIdx[leaf.ath_rep.id];
+                  var representative = {
+                    id: repNode.gene_stable_id,
+                    taxon_id: repNode.taxon_id
+                  };
+                  if (repNode.hasOwnProperty('gene_display_label')) {
+                    representative.name = repNode.gene_display_label;
+                  }
+                  if (repNode.hasOwnProperty('gene_description')) {
+                    representative.description = repNode.gene_description;
+                  }
+                  acc[id] = _.cloneDeep(lookupValue);
+                  acc[id].representative = {model: representative};
+                }
+              }
             }
-            if (repNode.hasOwnProperty('gene_description')) {
-              representative.description = repNode.gene_description;
+            else {
+              // non-self representative 
+              acc[id] = _.cloneDeep(lookupValue);
+              var repNode = leafIdx[leaf.representative.id];
+              var representative = {
+                id: repNode.gene_stable_id,
+                taxon_id: repNode.taxon_id
+              };
+              if (repNode.hasOwnProperty('gene_display_label')) {
+                representative.name = repNode.gene_display_label;
+              }
+              if (repNode.hasOwnProperty('gene_description')) {
+                representative.description = repNode.gene_description;
+              }
+              acc[id].representative = {
+                closest: representative
+              };
+              if (leaf.ath_rep && leaf.ath_rep.id !== leaf.representative.id) {
+                var athNode = leafIdx[leaf.ath_rep.id];
+                var ath = {
+                  id: athNode.gene_stable_id,
+                  taxon_id: athNode.taxon_id
+                };
+                if (athNode.hasOwnProperty('gene_display_label')) {
+                  ath.name = athNode.gene_display_label;
+                }
+                if (athNode.hasOwnProperty('gene_description')) {
+                  ath.description = athNode.gene_description;
+                }
+                acc[id].representative.model = ath;
+              }
             }
-            acc[id] = _.cloneDeep(lookupValue);
-            acc[id].representative = representative;
           }
           ++countOfGenes;
         });
