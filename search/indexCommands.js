@@ -9,3 +9,5 @@ db.pathways.ensureIndex({"$**":"text"});
 db.maps.ensureIndex({"$**":"text"});
 // location based index for dumping sorted genes
 db.genes.ensureIndex({'taxon_id':1,'location.region':1,'location.start':1});
+// gene tree index for adding domain annotations to gene tree leaf nodes
+db.genes.ensureIndex({'grm_gene_tree':1});

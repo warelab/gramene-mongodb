@@ -25,7 +25,7 @@ Once all that is done:
  ./merge_interpro_hits.js | \
  ./add_pathways.js <pathToAssociationsFile> | \
  ./add_bins.js | \
- ./add_genetree_taxon.js | \
+ node --max-old-space-size=2048 ./add_genetree_taxon.js | \
  ./add_homologues.js | \
  ./add_xref_ancestors.js > genes.jsonl
 ```
@@ -36,7 +36,7 @@ Load the genes docs into mongodb
  mongoimport --db search48 --collection genes --drop < genes.jsonl
 ```
 
-Final step is to build indexes (optional)
+Final step is to build indexes
 ```
 mongo search48 < indexCommands.js
 ```
@@ -45,6 +45,13 @@ http://data.gramene.org/genes?_id=F775_06278
 or
 http://data.gramene.org/genes?idList=Traes_7BL_014267D94,ORUFI04G04670,ONIVA08G06220,BGIOSGA037893,ORGLA10G0104200,OS10G0450000,OPUNC10G10040
 
+
+One more thing...
+go back over to the trees subdirectory and add domains to the gene trees
+```
+cd ../trees
+node add_domains_to_tree.js
+```
 ### Example queries
 ```
 db.genes.find({"ancestors.GO":4321}).count()
