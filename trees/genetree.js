@@ -1,6 +1,10 @@
 var mysql = require('mysql');
 var TreeModel = require('tree-model');
-var treeModel = new TreeModel();
+function childNodeComparator(a, b) {
+  return a.left_index < b.left_index ? 1 : -1;
+}
+
+var treeModel = new TreeModel({modelComparatorFn:childNodeComparator});
 var FlatToNested = require('flat-to-nested');
 var _ = require('lodash');
 var through2 = require('through2');
@@ -71,7 +75,7 @@ var query = "select " +
   "a.duplication_confidence_score, " +
   "sn.taxon_id as node_taxon_id, " +
   "sn.node_name as node_taxon, " +
-  "n.left_index as left_index " +
+  "n.left_index as left_index, " +
   "n.right_index as right_index " +
 
   "from gene_tree_root r " +
