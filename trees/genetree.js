@@ -202,7 +202,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
   done();
 });
 
-var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
+var selectRepresentativeGeneMembers = function(haveGenome) {
   function indexTree(tree, attrs) {
     tree.indices = _.chain(attrs)
       .map(function (attr) {
@@ -217,6 +217,7 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
       .indexBy('_attr')
       .value();
   }
+  
   function scoreRepresentative(node) {
     var score = 0;
     var bad = 100;
@@ -253,47 +254,60 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
     if (node.model.taxon_id === 3702) { // consider a model species bonus
       score += modelSpeciesBonus;
     }
+    if (!haveGenome[node.model.taxon_id]) {
+      score += bad;
+    }
     return score;
   }
-  indexTree(tree.treeModel,['gene_stable_id']);
-  var leaves = tree.treeModel.indices.gene_stable_id;
-  for (var id in leaves) {
-    if (id !== '_attr') {
-      var node = leaves[id];
-      node.model.representative = {
-        id: id,
-        score: scoreRepresentative(node) // a lower score is better
-      };
-      while (node.hasOwnProperty('parent')) {
-        var parent = node.parent;
-        var newScore = node.model.representative.score + node.model.distance_to_parent;
-        if (!parent.model.hasOwnProperty('representative')) {
-          parent.model.representative = {
-            id: id,
-            score: newScore
-          };
-        }
-        else {
-          // parent node already has a representative.
-          // check if this one is better
-          if (parent.model.representative.score - newScore > 0) {
+
+  var transform = function (tree, enc, done) {
+    indexTree(tree.treeModel,['gene_stable_id']);
+    var leaves = tree.treeModel.indices.gene_stable_id;
+    for (var id in leaves) {
+      if (id !== '_attr') {
+        var node = leaves[id];
+        node.model.representative = {
+          id: id,
+          score: scoreRepresentative(node) // a lower score is better
+        };
+        while (node.hasOwnProperty('parent')) {
+          var parent = node.parent;
+          var newScore = node.model.representative.score + node.model.distance_to_parent;
+          if (!parent.model.hasOwnProperty('representative')) {
             parent.model.representative = {
               id: id,
               score: newScore
             };
           }
           else {
-            // keep the same representative, break out of the while loop
-            break;
+            // parent node already has a representative.
+            // check if this one is better
+            if (parent.model.representative.score - newScore > 0) {
+              parent.model.representative = {
+                id: id,
+                score: newScore
+              };
+            }
+            else {
+              // keep the same representative, break out of the while loop
+              break;
+            }
           }
+          node = parent;
         }
-        node = parent;
       }
     }
-  }
-  this.push(tree);
-  done();
-});
+    this.push(tree);
+    done();
+  };
+
+  var flush = function(done) {
+    console.log('selectRepresentativeGeneMembers is done');
+    done();
+  };
+
+  return through2.obj(transform, flush);
+}
 
 var counter = (function () {
   var treeCount = 0;
@@ -350,29 +364,38 @@ var serialize = through2.obj(function (r, enc, done) {
 
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-collections.genetrees.mongoCollection().then(function(mongoCollection) {
-  var upsert = upsertTreeIntoMongo(mongoCollection);
-
-  queryStream
-    .pipe(tidyRow)
-    .pipe(convertBuffersToStrings)
-    .pipe(groupRowsByTree)
-    .pipe(makeNestedTree)
-    .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-    .pipe(selectRepresentativeGeneMembers)
-    .pipe(counter)
-    .pipe(upsert)
-    .pipe(serialize)
-    .pipe(fileWriter);
-
-  fileWriter.on('finish', function () {
-    comparaMysqlDb.end(function(err) {
-      console.log('mysql conn closed');
+collections.maps.mongoCollection().then(function(mapsCollection) {
+  mapsCollection.find({type: 'genome'}, {}).toArray(function (err, genomes) {
+    if (err) throw err;
+    var haveGenome = {};
+    genomes.forEach(function(g) {
+      haveGenome[g.taxon_id] = true;
     });
+    collections.genetrees.mongoCollection().then(function(mongoCollection) {
+      var upsert = upsertTreeIntoMongo(mongoCollection);
 
-    console.log('We are done here.');
+      queryStream
+        .pipe(tidyRow)
+        .pipe(convertBuffersToStrings)
+        .pipe(groupRowsByTree)
+        .pipe(makeNestedTree)
+        .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+        .pipe(selectRepresentativeGeneMembers(haveGenome))
+        .pipe(counter)
+        .pipe(upsert)
+        .pipe(serialize)
+        .pipe(fileWriter);
 
-    // it would be super if this were not necessary.
-    process.exit(0);
+      fileWriter.on('finish', function () {
+        comparaMysqlDb.end(function(err) {
+          console.log('mysql conn closed');
+        });
+
+        console.log('We are done here.');
+
+        // it would be super if this were not necessary.
+        process.exit(0);
+      });
+    });
   });
-});
+})
