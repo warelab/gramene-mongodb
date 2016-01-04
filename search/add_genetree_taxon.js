@@ -26,31 +26,16 @@ function modifyGeneDocs(genetreeLUT) {
   });
 }
 
-function indexTree(tree, attrs) {
-  tree.indices = _.chain(attrs)
-    .map(function (attr) {
-      var result = {_attr: attr};
-      tree.walk(function (node) {
-        if (node.model.hasOwnProperty(attr)) {
-          result[node.model[attr]] = node;
-        }
-      });
-      return result;
-    })
-    .indexBy('_attr')
-    .value();
-}
-
 // connect to the ontologies database
 collections.genetrees.mongoCollection().then(function(coll) {
   coll.find().toArray(function (err, docs) {
+    console.error('loaded '+docs.length+' gene trees from mongodb');
     collections.closeMongoDatabase();
     if (err) throw err;
     var countOfGenes = 0;
     
     var genetreeIdLut = docs.reduce(function (acc, doc) {
       var tree = new TreeModel().parse(doc);
-      // indexTree(tree,['gene_stable_id']);
       var rootTaxonId = tree.model.node_taxon_id;
       var grmTreeId = tree.model.tree_id;
 
@@ -73,6 +58,12 @@ collections.genetrees.mongoCollection().then(function(coll) {
         };
 
         var leafIdx = {}; // so we can get the leaf nodes by ID
+        subtree.walk(function (node) {
+          if (!node.hasChildren()) {
+            leafIdx[node.model.gene_stable_id] = node.model;
+          }
+        });
+        
         var isAT = new RegExp(/^AT/);
         if (subtree.model.representative.id.match(isAT)) {
           subtree.model.ath_rep = subtree.model.representative;
@@ -93,9 +84,6 @@ collections.genetrees.mongoCollection().then(function(coll) {
               child.model.ath_rep = node.model.ath_rep;
             }
           });
-          if (!node.hasChildren()) {
-            leafIdx[node.model.gene_stable_id] = node.model;
-          }
         });
 
         _.forEach(leafIdx, function(leaf, id) {

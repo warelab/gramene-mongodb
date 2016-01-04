@@ -255,6 +255,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
       score += modelSpeciesBonus;
     }
     if (!haveGenome[node.model.taxon_id]) {
+      console.error("taxon not hosted",node.model.taxon_id);
       score += bad;
     }
     return score;
