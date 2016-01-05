@@ -6,10 +6,20 @@ require('readline').createInterface({
   terminal: false
 })
 .on('line', function(line) {
+/*
+0  Os Reaction Name
+1  Os Reaction DB ID
+2  Proj Reaction DB ID
+3  Proj Reaction Species
+4  Os Gene Product Locus ID
+5  Os Gene Product DB ID
+6  Proj Gene Product Locus ID
+7  Proj Gene Product DB ID
+*/
   var fields = line.split("\t");
   if (fields.length === 8) {
-    var Os_gene_id = fields[4];
-    var Proj_gene_id = fields[6];
+    var Os_gene_id = fields[4].toUpperCase();
+    var Proj_gene_id = fields[6].toUpperCase();
     var Os_reaction_id = fields[1];
     var Proj_reaction_id = fields[2];
     // rice gene to rice reaction
@@ -44,9 +54,9 @@ require('readline').createInterface({
   )
   .on('line', function(line) { // one JSON object per line
      var gene = JSON.parse(line);
-     if (geneToOsReaction.hasOwnProperty(gene._id)) {
-       gene.xrefs.pathways = Object.keys(geneToOsReaction[gene._id]); // these become pathways__ancestors in add_xref_ancestors.js
-       gene.xrefs.reactions = Object.keys(geneToProjReaction[gene._id]); // these are for linking to plant reactome
+     if (geneToOsReaction.hasOwnProperty(gene._id.toUpperCase())) {
+       gene.xrefs.pathways = Object.keys(geneToOsReaction[gene._id.toUpperCase()]); // these become pathways__ancestors in add_xref_ancestors.js
+       gene.xrefs.reactions = Object.keys(geneToProjReaction[gene._id.toUpperCase()]); // these are for linking to plant reactome
      }
      console.log(JSON.stringify(gene));
   });
