@@ -1,11 +1,16 @@
 var mysql = require('mysql');
 var TreeModel = require('tree-model');
-var treeModel = new TreeModel();
+function childNodeComparator(a, b) {
+  return a.left_index < b.left_index ? 1 : -1;
+}
+
+var treeModel = new TreeModel({modelComparatorFn:childNodeComparator});
 var FlatToNested = require('flat-to-nested');
 var _ = require('lodash');
 var through2 = require('through2');
 var fs = require('fs');
-var MongoClient = require('mongodb').MongoClient;
+//var MongoClient = require('mongodb').MongoClient;
+var collections = require('gramene-mongodb-config');
 var argv = require('minimist')(process.argv.slice(2));
 
 var comparaMysqlDb = mysql.createConnection({
@@ -18,6 +23,10 @@ var comparaMysqlDb = mysql.createConnection({
 // this query returns one row per node in the tree; it includes both leaf and
 // branch nodes. some properties (e.g. system_name) are null for branch nodes
 // and others (e.g. node_type) are null for leaf nodes.
+
+// a good deal of this 'rootRoot' and 'case' stuff is necessary to reassemble the
+// full gene-trees from the split sibling trees that Ensembl generates to keep
+// their sizes down.
 var query = "select " +
   "n.node_id, " +
   "case " +
@@ -33,9 +42,12 @@ var query = "select " +
   "as parent_id, " +
 
   "case " +
-  " when rootRoot.tree_type is not null then concat('__EPlSupertree', lpad(rootRoot.root_id, 6, '0')) " + // if the tree is part of a supertree then use the supertree id " +
-  " when r.stable_id is null then concat('__EPlSupertree', lpad(r.root_id, 6, '0')) " + //if it's a supertree use that id " +
-  " else r.stable_id " + // otherwise the tree
+    // if the tree is part of a supertree then use the supertree id " +
+  " when rootRoot.tree_type is not null then concat('__EPlSupertree', lpad(rootRoot.root_id, 6, '0')) " +
+    //if it's a supertree use that id " +
+  " when r.stable_id is null then concat('__EPlSupertree', lpad(r.root_id, 6, '0')) " +
+    // otherwise the tree
+  " else r.stable_id " +
   "end " +
   "as tree_id, " +
 
@@ -53,6 +65,8 @@ var query = "select " +
   "gene.stable_id as gene_stable_id, " +
   "gene.display_label as gene_display_label, " +
   "gene.description as gene_description," +
+  "gam.cigar_line as cigar," +
+  "sq.sequence as sequence," +
   "g.taxon_id, " +
   "g.name as system_name, " +
   "g.assembly, " +
@@ -60,12 +74,15 @@ var query = "select " +
   "a.bootstrap, " +
   "a.duplication_confidence_score, " +
   "sn.taxon_id as node_taxon_id, " +
-  "sn.node_name as node_taxon " +
+  "sn.node_name as node_taxon, " +
+  "n.left_index as left_index, " +
+  "n.right_index as right_index " +
 
   "from gene_tree_root r " +
   "inner join gene_tree_node n on n.root_id = r.root_id " +
 
   "left join seq_member s on s.seq_member_id = n.seq_member_id " +
+  "left join sequence sq on s.sequence_id = sq.sequence_id " +
   "left join gene_member gene on s.gene_member_id = gene.gene_member_id " +
   "left join genome_db g on g.genome_db_id = s.genome_db_id " +
 
@@ -76,8 +93,12 @@ var query = "select " +
   "left join gene_tree_node rootParentNode on rootNode.parent_id = rootParentNode.node_id " +
   "left join gene_tree_root rootRoot on rootRoot.root_id = rootParentNode.`root_id` and rootRoot.tree_type = 'supertree' " +
 
-  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default' " +
+  "left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = s.seq_member_id " +
+
+  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default'" +
   "order by tree_id, n.node_id ";
+
+var queryStream = comparaMysqlDb.query(query).stream({highWaterMark: 5});
 
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
@@ -95,29 +116,29 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
   done();
 });
 
-var groupRowsByTree = function () {
+var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
-    if (growingTree && growingTree.treeId === row.tree_id) {
+    if (growingTree && growingTree.tree_id === row.tree_id) {
       growingTree.nodes.push(row);
 
       if( row.tree_stable_id &&
-          !_.includes(growingTree.stableIds, row.tree_stable_id)
+          !_.includes(growingTree.stable_ids, row.tree_stable_id)
       ) {
-        growingTree.stableIds.push(row.tree_stable_id);
+        growingTree.stable_ids.push(row.tree_stable_id);
       }
     }
     else {
       var doneTree = growingTree;
       growingTree = {
-        treeId: row.tree_id,
-        treeRootId: row.root_id,
-        treeType: row.tree_type,
+        tree_id: row.tree_id,
+        tree_root_id: row.root_id,
+        tree_type: row.tree_type,
         nodes: [row]
       };
 
-      growingTree.stableIds = row.tree_stable_id ? [row.tree_stable_id] : [];
+      growingTree.stable_ids = row.tree_stable_id ? [row.tree_stable_id] : [];
 
       if (doneTree) {
         this.push(doneTree);
@@ -142,12 +163,12 @@ var groupRowsByTree = function () {
   };
 
   return through2.obj(transform, flush);
-};
+})();
 
 var makeNestedTree = through2.obj(function (tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
   tree.nested._id = tree.nested.tree_id;
-  tree.nested.stableIds = tree.stableIds;
+  tree.nested.stable_ids = tree.stable_ids;
   this.push(tree);
   done();
 });
@@ -163,7 +184,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
       }
       if (node.children.length === 1) {
         console.log('Found node with exactly one child. This is probably super-sub tree junction.',
-          tree.treeType === 'supertree',
+          tree.tree_type === 'supertree',
           node.model.node_id)
       }
     }
@@ -181,7 +202,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
   done();
 });
 
-var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
+var selectRepresentativeGeneMembers = function(haveGenome) {
   function indexTree(tree, attrs) {
     tree.indices = _.chain(attrs)
       .map(function (attr) {
@@ -196,79 +217,100 @@ var selectRepresentativeGeneMembers = through2.obj(function (tree, enc, done) {
       .indexBy('_attr')
       .value();
   }
+  
   function scoreRepresentative(node) {
     var score = 0;
-    var bad = 10;
-    var meh = 5;
-    var good = -10;
-    var modelSpeciesBonus = -5;
+    var bad = 100;
+    var meh = -50;
+    var good = -100;
+    var modelSpeciesBonus = -25;
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
-      if (node.model.gene_description.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
+      if (node.model.gene_description.match(/projected/i)) {
         score += bad;
       }
-      else if (node.model.gene_description.match(/AT[1-5]G[0-9]{5}/i)) {
-        score += bad;
-      }
-      else if (node.model.gene_description.match(/Os[0-9]{2}g[0-9]{7}/i)) {
-        score += bad;
+      else {
+        var desc = node.model.gene_description.replace(/\s+\[Source:.*/,'');
+        if (desc.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
+          score += bad;
+        }
+        else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
+          score += bad;
+        }
+        else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
+          score += bad;
+        }
       }
     }
     if (node.model.hasOwnProperty('gene_display_label')) {
-      score += good;
+      score += meh;
       if (node.model.gene_display_label === node.model.gene_stable_id) {
-        score += bad;
+        score -= meh;
       }
       else if (node.model.gene_display_label.match(/^POPTRDRAFT/)) {
-        score += bad;
+        score -= meh;
       }
     }
-    if (node.model.node_taxon_id === 3702) { // consider a model species bonus
+    if (node.model.taxon_id === 3702) { // consider a model species bonus
       score += modelSpeciesBonus;
+    }
+    if (!haveGenome[node.model.taxon_id]) {
+      console.error("taxon not hosted",node.model.taxon_id);
+      score += bad;
     }
     return score;
   }
-  indexTree(tree.treeModel,['gene_stable_id']);
-  var leaves = tree.treeModel.indices.gene_stable_id;
-  for (var id in leaves) {
-    if (id !== '_attr') {
-      var node = leaves[id];
-      node.model.representative = {
-        id: id,
-        score: scoreRepresentative(node) // a lower score is better
-      };
-      while (node.hasOwnProperty('parent')) {
-        var parent = node.parent;
-        var newScore = node.model.representative.score + node.model.distance_to_parent;
-        if (!parent.model.hasOwnProperty('representative')) {
-          parent.model.representative = {
-            id: id,
-            score: newScore
-          };
-        }
-        else {
-          // parent node already has a representative.
-          // check if this one is better
-          if (parent.model.representative.score - newScore > 3) {
+
+  var transform = function (tree, enc, done) {
+    indexTree(tree.treeModel,['gene_stable_id']);
+    var leaves = tree.treeModel.indices.gene_stable_id;
+    for (var id in leaves) {
+      if (id !== '_attr') {
+        var node = leaves[id];
+        node.model.representative = {
+          id: id,
+          score: scoreRepresentative(node) // a lower score is better
+        };
+        while (node.hasOwnProperty('parent')) {
+          var parent = node.parent;
+          var newScore = node.model.representative.score + node.model.distance_to_parent;
+          if (!parent.model.hasOwnProperty('representative')) {
             parent.model.representative = {
               id: id,
               score: newScore
             };
           }
           else {
-            // keep the same representative, break out of the while loop
-            break;
+            // parent node already has a representative.
+            // check if this one is better
+            if (parent.model.representative.score - newScore > 0) {
+              parent.model.representative = {
+                id: id,
+                score: newScore
+              };
+            }
+            else {
+              // keep the same representative, break out of the while loop
+              break;
+            }
           }
+          node = parent;
         }
-        node = parent;
       }
     }
-  }
-  this.push(tree);
-  done();
-});
+    this.push(tree);
+    done();
+  };
 
-var counter = function () {
+  var flush = function(done) {
+    console.log('selectRepresentativeGeneMembers is done');
+    done();
+  };
+
+  return through2.obj(transform, flush);
+}
+
+var counter = (function () {
   var treeCount = 0;
   var rowCount = 0;
 
@@ -288,22 +330,10 @@ var counter = function () {
   };
 
   return through2.obj(transform, flush);
-};
+})();
 
-var serialize = through2.obj(function (r, enc, done) {
-  this.push(JSON.stringify(r) + "\n");
-  done();
-}, function (done) {
-  console.log('serializer is done');
-  done()
-});
-
-var fileWriter = fs.createWriteStream('./inserts.jsonl');
-
-MongoClient.connect('mongodb://localhost:27017/search48', function (err, mongoDb) {
-  var mongoCollection = mongoDb.collection('genetree');
-
-  var upsertTreeIntoMongo = through2.obj(function (tree, enc, done) {
+var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
+  var transform = function (tree, enc, done) {
     var throughThis = this;
     mongoCollection.update(
       {_id: tree.nested._id},
@@ -314,26 +344,59 @@ MongoClient.connect('mongodb://localhost:27017/search48', function (err, mongoDb
         done();
       }
     );
-  });
+  };
 
-  var stream = comparaMysqlDb.query(query)
-    .stream({highWaterMark: 5})
-    .pipe(tidyRow)
-    .pipe(convertBuffersToStrings)
-    .pipe(groupRowsByTree())
-    .pipe(makeNestedTree)
-    .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-    .pipe(selectRepresentativeGeneMembers)
-    .pipe(counter())
-    .pipe(upsertTreeIntoMongo)
-    .pipe(serialize)
-    .pipe(fileWriter);
+  var flush = function(done) {
+    collections.closeMongoDatabase();
+    console.log('upsert to mongo is done');
+    done();
+  };
 
-  fileWriter.on('finish', function () {
-    console.log('We are done here.');
-    stream.end();
+  return through2.obj(transform, flush);
+};
 
-    // it would be super if this were not necessary.
-    process.exit(0);
-  });
+var serialize = through2.obj(function (r, enc, done) {
+  this.push(JSON.stringify(r) + "\n");
+  done();
+}, function (done) {
+  console.log('serializer is done');
+  done();
 });
+
+var fileWriter = fs.createWriteStream('./inserts.jsonl');
+
+collections.maps.mongoCollection().then(function(mapsCollection) {
+  mapsCollection.find({type: 'genome'}, {}).toArray(function (err, genomes) {
+    if (err) throw err;
+    var haveGenome = {};
+    genomes.forEach(function(g) {
+      haveGenome[g.taxon_id] = true;
+    });
+    collections.genetrees.mongoCollection().then(function(mongoCollection) {
+      var upsert = upsertTreeIntoMongo(mongoCollection);
+
+      queryStream
+        .pipe(tidyRow)
+        .pipe(convertBuffersToStrings)
+        .pipe(groupRowsByTree)
+        .pipe(makeNestedTree)
+        .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+        .pipe(selectRepresentativeGeneMembers(haveGenome))
+        .pipe(counter)
+        .pipe(upsert)
+        .pipe(serialize)
+        .pipe(fileWriter);
+
+      fileWriter.on('finish', function () {
+        comparaMysqlDb.end(function(err) {
+          console.log('mysql conn closed');
+        });
+
+        console.log('We are done here.');
+
+        // it would be super if this were not necessary.
+        process.exit(0);
+      });
+    });
+  });
+})

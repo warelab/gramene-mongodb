@@ -94,8 +94,12 @@ function dump_map(dbName) {
           map.regions.names.push('UNANCHORED');
           map.regions.lengths.push(unanchored);
         }
-        console.log(JSON.stringify(map));
-        core.end();
+        core.query('SELECT COUNT(*) as num_genes from gene where is_current=1', function(err, rows, fields) {
+          if (err) throw err;
+          map.num_genes = rows[0].num_genes;
+          console.log(JSON.stringify(map));
+          core.end();
+        });
       });
     });
   });

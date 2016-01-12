@@ -10,4 +10,4 @@
 // 2 level indexes to accelerate ancestor lookups
 db.GO.ensureIndex({_id:1,ancestors:1});
 db.PO.ensureIndex({_id:1,ancestors:1});
-db.NCBITaxon.ensureIndex({_id:1,ancestors:1});
+db.taxonomy.ensureIndex({_id:1,ancestors:1});

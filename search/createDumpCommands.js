@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-var genes = require('../config/collections.js').genes;
 var argv = require('minimist')(process.argv.slice(2));
 
 var grm = argv.g;
