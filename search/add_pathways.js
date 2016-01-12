@@ -56,7 +56,7 @@ require('readline').createInterface({
      var gene = JSON.parse(line);
      if (geneToOsReaction.hasOwnProperty(gene._id.toUpperCase())) {
        gene.xrefs.pathways = Object.keys(geneToOsReaction[gene._id.toUpperCase()]); // these become pathways__ancestors in add_xref_ancestors.js
-       gene.xrefs.reactions = Object.keys(geneToProjReaction[gene._id.toUpperCase()]); // these are for linking to plant reactome
+       gene.xrefs.reactions = Object.keys(geneToProjReaction[gene._id.toUpperCase()]).map(function(r){return +r}); // these are for linking to plant reactome
      }
      console.log(JSON.stringify(gene));
   });
