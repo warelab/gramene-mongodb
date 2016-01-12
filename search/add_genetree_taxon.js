@@ -95,7 +95,7 @@ collections.genetrees.mongoCollection().then(function(coll) {
           }
           else {
             if (leaf.representative.id === id) {
-              if (leaf.taxon_id !== 3702) {
+              if (leaf.taxon_id === 3702) {
                 acc[id] = lookupValue; // doesn't need a representative
               }
               else {
