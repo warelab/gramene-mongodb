@@ -230,7 +230,8 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
         score += bad;
       }
       else {
-        var desc = node.model.gene_description.replace(/\s+\[Source:.*/,'');
+        var desc = node.model.gene_description.replace(/\s*\[Source:.*/,'');
+        node.model.gene_description = desc;
         if (desc.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
           score += bad;
         }
@@ -239,6 +240,9 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
         }
         else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
           score += bad;
+        }
+        else if (desc === "") {
+          score += bad; // because we stripped off the only non-info there was ([Source:.*])
         }
       }
     }
@@ -255,7 +259,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
       score += modelSpeciesBonus;
     }
     if (!haveGenome[node.model.taxon_id]) {
-      console.error("taxon not hosted",node.model.taxon_id);
+      // console.error("taxon not hosted",node.model.taxon_id);
       score += bad;
     }
     return score;
@@ -335,6 +339,7 @@ var counter = (function () {
 var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
   var transform = function (tree, enc, done) {
     var throughThis = this;
+    tree.nested.compara_db = argv.d; // so we can pull out just the gene trees we want later
     mongoCollection.update(
       {_id: tree.nested._id},
       tree.nested,

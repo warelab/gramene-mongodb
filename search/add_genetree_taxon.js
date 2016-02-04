@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 var _ = require('lodash'),
   TreeModel = require('tree-model'),
-  collections = require('gramene-mongodb-config');
+  collections = require('gramene-mongodb-config'),
+  argv = require('minimist')(process.argv.slice(2));
 
 function modifyGeneDocs(genetreeLUT) {
   require('readline').createInterface({
@@ -12,14 +13,15 @@ function modifyGeneDocs(genetreeLUT) {
     var tree = genetreeLUT[obj._id];
 
     if(tree) {
-      obj.grm_gene_tree = tree.grm;
-      obj.grm_gene_tree_root_taxon_id = tree.grm_gene_tree_root_taxon_id;
-      obj.epl_gene_tree = tree.epl;
-      if(tree.siblings.length > 1) {
-        obj.epl_sibling_trees = _.filter(tree.siblings, function(id) { return id !== obj.epl_gene_tree; });
+      if (! obj.hasOwnProperty('homology')) {
+        obj.homology = {};
+      }
+      obj.homology.gene_tree = {
+        id: tree.grm,
+        root_taxon_id: tree.grm_gene_tree_root_taxon_id
       }
       if (tree.hasOwnProperty('representative')) {
-        obj.representative = tree.representative;
+        obj.homology.representative = tree.representative;
       }
     }
     console.log(JSON.stringify(obj));
@@ -28,7 +30,7 @@ function modifyGeneDocs(genetreeLUT) {
 
 // connect to the ontologies database
 collections.genetrees.mongoCollection().then(function(coll) {
-  coll.find().toArray(function (err, docs) {
+  coll.find({compara_db:argv.d}).toArray(function (err, docs) {
     console.error('loaded '+docs.length+' gene trees from mongodb');
     collections.closeMongoDatabase();
     if (err) throw err;

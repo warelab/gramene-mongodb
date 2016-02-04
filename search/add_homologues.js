@@ -9,16 +9,15 @@ client.select(1, function(err) {
     var obj = JSON.parse(line);
     client.hgetall(obj._id, function (err, homologs) {
       if (err) throw err;
-      homology = {};
+      if (!obj.hasOwnProperty('homology')) {
+        obj.homology = {};
+      }
       for (var gene in homologs) {
         var k = homologs[gene];
-        if (!homology.hasOwnProperty(k)) {
-          homology[k] = [];
+        if (!obj.homology.hasOwnProperty(k)) {
+          obj.homology[k] = [];
         }
-        homology[k].push(gene);
-      }
-      if (Object.keys(homology).length > 0) {
-        obj.homology = homology;
+        obj.homology[k].push(gene);
       }
       console.log(JSON.stringify(obj));
     });

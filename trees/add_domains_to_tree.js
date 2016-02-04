@@ -9,7 +9,7 @@ var decorateTree = function(geneCollection) {
   return through2.obj(function decorateTree(mongoTree, encoding, done) {
     var throughThis = this;
     geneCollection.find(
-      {grm_gene_tree: mongoTree._id},
+      {'homology.gene_tree': mongoTree._id},
       {'canonical_translation.features.domain_architecture':1})
     .toArray(function (err, gene_domains) {
       if (err) throw err;

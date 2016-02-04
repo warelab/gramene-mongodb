@@ -25,7 +25,7 @@ Once all that is done:
  ./merge_interpro_hits.js | \
  ./add_pathways.js <pathToAssociationsFile> | \
  ./add_bins.js | \
- node --max-old-space-size=2048 ./add_genetree_taxon.js | \
+ node --max-old-space-size=4096 ./add_genetree_taxon.js -d ensembl_compara_plants_49_83 | \
  ./add_homologues.js | \
  ./add_xref_ancestors.js > genes.jsonl
 ```
