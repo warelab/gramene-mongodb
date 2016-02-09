@@ -84,7 +84,7 @@ collections.domains.mongoCollection().then(function(coll) {
               arch[hroot[ipr_i]].domains.push(feature);
             }
             if (info.hasOwnProperty(ipr_i)) {
-              var type = info[ipr_i].type;
+              var type = info[ipr_i].type.toLowerCase();
               if (!features.hasOwnProperty(type)) {
                 features[type] = {entries:[]};
               }
@@ -152,7 +152,7 @@ collections.domains.mongoCollection().then(function(coll) {
           });
           // set interpro of each cluster to LCA of members
           // and set name and description based on lca
-          features.Domain.architecture = clusters.map(function(c) {
+          features.domain.architecture = clusters.map(function(c) {
             var iprList = c.members.map(function(m) {
               return m.ipr
             });
@@ -177,7 +177,7 @@ collections.domains.mongoCollection().then(function(coll) {
             return c;
           });
           // need the domain root ids put into a space delimited string for searching
-          features.Domain.roots = clusters.map(function(c) {
+          features.domain.roots = clusters.map(function(c) {
             return c.root;
           }).join(' ');
         }

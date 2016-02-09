@@ -93,7 +93,7 @@ var add_translations_to_transcripts = {
       transcript.translation = {
         id : row.stable_id,
         length : (transcript.cds.end - transcript.cds.start + 1)/3, // a truncated translation may have fractional length
-        features: []
+        features: {all:[]}
       };
       obj[row.translation_id] = transcript.translation;
     });
@@ -103,15 +103,18 @@ var add_translations_to_transcripts = {
 
 // get interpro protein features and add them to the corresponding translation object
 var add_features_to_translations = {
-  sql: 'SELECT tl.translation_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name'
+  sql: 'SELECT tl.translation_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name, pf.hit_description, a.db'
    + ' FROM translation tl'
    + ' inner join protein_feature pf on tl.translation_id = pf.translation_id'
    + ' inner join interpro ipr on pf.hit_name = ipr.id'
+   + ' inner join analysis a on pf.analysis_id = a.analysis_id'
    + ' WHERE 1',
   process: function(rows, translations) {
     rows.forEach(function(row) {
-      translations[row.translation_id].features.push({
+      translations[row.translation_id].features.all.push({
         name: row.hit_name,
+        description: row.hit_description,
+        db: row.db,
         interpro: row.interpro_ac,
         start: row.seq_start,
         end: row.seq_end
@@ -148,7 +151,8 @@ var get_genes = {
         },
         xrefs: {},
         synonyms: {},
-        gene_structure: {exons:{},transcripts:{}}
+        gene_structure: {exons:{},transcripts:{}},
+        annotations: {}
       };
       all_genes[row.gene_id] = gene;
       var c_trans = transcripts[row.canonical_transcript_id];
