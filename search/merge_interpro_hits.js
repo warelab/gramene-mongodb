@@ -66,121 +66,125 @@ collections.domains.mongoCollection().then(function(coll) {
         terminal: false
     }).on('line', function(line) { // one JSON object per line
       var obj = JSON.parse(line);
-      if (obj.hasOwnProperty('canonical_translation')) {
-        // group features by domain hierarchy root
-        var arch = {};
-        var interproSet = {};
-        var features = obj.canonical_translation.features;
-        features.all.forEach(function(feature) {
-          interproSet[feature.interpro]=1;
-          var ipr_i = parseInt(feature.interpro.match(/\d+/));
-          feature.ipr = ipr_i;
-          if (hroot.hasOwnProperty(ipr_i)) {
-            if (!arch.hasOwnProperty(hroot[ipr_i])) {
-              arch[hroot[ipr_i]] = {domains:[]};
+      var interproSet = {};
+      for(var transcript_id in obj.gene_structure.transcripts) {
+        var transcript = obj.gene_structure.transcripts[transcript_id];
+        if (transcript.hasOwnProperty('translation')) {
+          // group features by domain hierarchy root
+          var arch = {};
+          var features = transcript.translation.features;
+          features.all.forEach(function(feature) {
+            interproSet[feature.interpro]=1;
+            var ipr_i = parseInt(feature.interpro.match(/\d+/));
+            feature.ipr = ipr_i;
+            if (hroot.hasOwnProperty(ipr_i)) {
+              if (!arch.hasOwnProperty(hroot[ipr_i])) {
+                arch[hroot[ipr_i]] = {domains:[]};
+              }
+              arch[hroot[ipr_i]].domains.push(feature);
             }
-            arch[hroot[ipr_i]].domains.push(feature);
-          }
-          else if (info.hasOwnProperty(ipr_i)) { // things that are not going into domainArchitecture
-            var type = info[ipr_i].type;
-            if (!features.hasOwnProperty(type)) {
-              features[type] = [];
+            if (info.hasOwnProperty(ipr_i)) {
+              var type = info[ipr_i].type;
+              if (!features.hasOwnProperty(type)) {
+                features[type] = {entries:[]};
+              }
+              features[type].entries.push(feature);
             }
-            features[type].push(feature);
+            else {
+              // console.error(obj._id,'ignoring deprecated feature',feature.interpro);
+            }
+          });
+          delete features.all;
+          // merge overlapping domains into clusters
+          // and assign them the ipr id of their lca instead of the root?
+          var clusters = [];
+          for (var root in arch) {
+            arch[root].domains.sort(function(a,b) {
+              if (a.start < b.start) { return -1 }
+              if (a.start > b.start) { return 1 }
+              if (a.end < b.end) { return -1 }
+              if (a.end > b.end) { return 1 }
+              return 1;
+            });
+            var ipr = arch[root].domains.shift();
+
+            var clust = {
+              root: root,
+              start: ipr.start,
+              end: ipr.end,
+              members: [ipr]
+            };
+            var done=0;
+            arch[root].domains.forEach(function(ipr) {
+              done=1;
+              if (ipr.start < clust.end) {
+                if (ipr.end < clust.end) {
+                  clust.members.push(ipr);
+                  done=0;
+                }
+                else {
+                  var overlap = clust.end - ipr.start;
+                  if (overlap/(ipr.end - ipr.start) >= 0.2 || overlap/(clust.end-clust.start) >= 0.2) {
+                    clust.members.push(ipr);
+                    clust.end = ipr.end;
+                    done=0;
+                  }
+                }
+              }
+              if (done) {
+                clusters.push(clust);
+                clust = {
+                  root: root,
+                  start: ipr.start,
+                  end: ipr.end,
+                  members: [ipr]
+                };
+              }
+            });
+            if (!done) clusters.push(clust);
           }
-          else {
-            // console.error(obj._id,'ignoring deprecated feature',feature.interpro);
-          }
-        });
-        delete features.all;
+          // sort clusters
+          clusters.sort(function(a,b) {
+            if (a.start < b.start) {return -1}
+            if (a.start > b.start) {return 1}
+            if (a.end < b.end) {return -1}
+            return 1;
+          });
+          // set interpro of each cluster to LCA of members
+          // and set name and description based on lca
+          features.Domain.architecture = clusters.map(function(c) {
+            var iprList = c.members.map(function(m) {
+              return m.ipr
+            });
+            function lca(ids, idPath) {
+              if (ids.length === 1) return ids[0];
+              var lca = ids.shift();
+              ids.forEach(function(id) {
+                var p1 = idPath[lca];
+                var p2 = idPath[id];
+                var n = p1.length < p2.length ? p1.length : p2.length; 
+                var i=1;
+                while (i<n && p1[i] === p2[i]) {i++}
+                lca = p1[i-1];
+              });
+              return lca;
+            }
+            var lca_ipr = lca(iprList, pathFromRoot);
+            c.interpro = info[lca_ipr].interpro;
+            c.name = info[lca_ipr].name;
+            c.description = info[lca_ipr].description;
+            delete c.members;
+            return c;
+          });
+          // need the domain root ids put into a space delimited string for searching
+          features.Domain.roots = clusters.map(function(c) {
+            return c.root;
+          }).join(' ');
+        }
         var uniqueIPRs = Object.keys(interproSet);
         if (uniqueIPRs.length > 0) {
           obj.xrefs.domains = uniqueIPRs;
         }
-        // merge overlapping domains into clusters
-        // and assign them the ipr id of their lca instead of the root?
-        var clusters = [];
-        for (var root in arch) {
-          arch[root].domains.sort(function(a,b) {
-            if (a.start < b.start) { return -1 }
-            if (a.start > b.start) { return 1 }
-            if (a.end < b.end) { return -1 }
-            if (a.end > b.end) { return 1 }
-            return 1;
-          });
-          var ipr = arch[root].domains.shift();
-
-          var clust = {
-            root: root,
-            start: ipr.start,
-            end: ipr.end,
-            members: [ipr]
-          };
-          var done=0;
-          arch[root].domains.forEach(function(ipr) {
-            done=1;
-            if (ipr.start < clust.end) {
-              if (ipr.end < clust.end) {
-                clust.members.push(ipr);
-                done=0;
-              }
-              else {
-                var overlap = clust.end - ipr.start;
-                if (overlap/(ipr.end - ipr.start) >= 0.2 || overlap/(clust.end-clust.start) >= 0.2) {
-                  clust.members.push(ipr);
-                  clust.end = ipr.end;
-                  done=0;
-                }
-              }
-            }
-            if (done) {
-              clusters.push(clust);
-              clust = {
-                root: root,
-                start: ipr.start,
-                end: ipr.end,
-                members: [ipr]
-              };
-            }
-          });
-          if (!done) clusters.push(clust);
-        }
-        // sort clusters
-        clusters.sort(function(a,b) {
-          if (a.start < b.start) {return -1}
-          if (a.start > b.start) {return 1}
-          if (a.end < b.end) {return -1}
-          return 1;
-        });
-        // set interpro of each cluster to LCA of members
-        // and set name and description based on lca
-        obj.canonical_translation.features.domain_architecture = clusters.map(function(c) {
-          var iprList = c.members.map(function(m) {
-            return m.ipr
-          });
-          function lca(ids, idPath) {
-            if (ids.length === 1) return ids[0];
-            var lca = ids.shift();
-            ids.forEach(function(id) {
-              var p1 = idPath[lca];
-              var p2 = idPath[id];
-              var n = p1.length < p2.length ? p1.length : p2.length; 
-              var i=1;
-              while (i<n && p1[i] === p2[i]) {i++}
-              lca = p1[i-1];
-            });
-            return lca;
-          }
-          var lca_ipr = lca(iprList, pathFromRoot);
-          c.interpro = info[lca_ipr].interpro;
-          c.name = info[lca_ipr].name;
-          c.description = info[lca_ipr].description;
-          return c;
-        });
-        // need the domain root ids put into a space delimited string for searching
-        obj.canonical_translation.domain_roots = clusters.map(function(c) {
-          return c.root;
-        }).join(' ');
       }
       console.log(JSON.stringify(obj,function(k,v) {
         if (k === "ipr") return undefined;
