@@ -67,41 +67,43 @@ var add_exons_to_transcripts = {
   }
 }
 
-// get translations, create an object for each, and add translation to transcript obj
-var get_translations = {
+var add_translations_to_transcripts = {
   sql: 'select translation_id,transcript_id,seq_start,seq_end,start_exon_id,end_exon_id,stable_id from translation',
-  process: function(rows,exons,transcripts) {
-    var obj = {};
+  process: function(rows, exons, transcripts) {
+    var obj={};
     rows.forEach(function(row) {
       var transcript = transcripts[row.transcript_id];
       // calculate the translation start and end coords relative to the transcript
-      transcript.translation = {
-        intId : row.translation_id,
-        id : row.stable_id,
+      transcript.cds = {
         start: 0,
         end: 0
       };
       var pos=0;
       transcript.exon_ids.forEach(function(exon_id) {
         var exon = exons[exon_id];
-        if (transcript.translation.start === 0 && exon_id === row.start_exon_id) {
-          transcript.translation.start = pos + row.seq_start;
+        if (transcript.cds.start === 0 && exon_id === row.start_exon_id) {
+          transcript.cds.start = pos + row.seq_start;
         }
-        if (transcript.translation.end === 0 && exon_id === row.end_exon_id) {
-          transcript.translation.end = pos + row.seq_end;
+        if (transcript.cds.end === 0 && exon_id === row.end_exon_id) {
+          transcript.cds.end = pos + row.seq_end;
         }
-        pos += exon.end - exon.start + 1;
+        pos += exon.seq_region_end - exon.seq_region_start + 1;
       });
-      row.features=[];
-      obj[row.translation_id] = row;
+      
+      transcript.translation = {
+        id : row.stable_id,
+        length : (transcript.cds.end - transcript.cds.start + 1)/3, // a truncated translation may have fractional length
+        features: []
+      };
+      obj[row.translation_id] = transcript.translation;
     });
     return obj;
   }
 }
 
 // get interpro protein features and add them to the corresponding translation object
-var add_features = {
-  sql: 'SELECT tl.translation_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name, pf.hit_description'
+var add_features_to_translations = {
+  sql: 'SELECT tl.translation_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name'
    + ' FROM translation tl'
    + ' inner join protein_feature pf on tl.translation_id = pf.translation_id'
    + ' inner join interpro ipr on pf.hit_name = ipr.id'
@@ -110,7 +112,6 @@ var add_features = {
     rows.forEach(function(row) {
       translations[row.translation_id].features.push({
         name: row.hit_name,
-        description: row.hit_description,
         interpro: row.interpro_ac,
         start: row.seq_start,
         end: row.seq_end
@@ -214,7 +215,7 @@ var add_xrefs = {
   }
 }
 
-function add_gene_structure(exons,transcripts,translations,genes) {
+function add_gene_structure(exons,transcripts,genes) {
   for(var transcript_id in transcripts) {
     var transcript = transcripts[transcript_id];
     var gene = genes[transcript.gene_id];
@@ -225,10 +226,10 @@ function add_gene_structure(exons,transcripts,translations,genes) {
       var exon = exons[exon_id];
       if (!gene.gene_structure.exons.hasOwnProperty(exon.stable_id)) {
         gene.gene_structure.exons[exon.stable_id] = {
-          start: gene.strand === 1 ?
+          start: gene.location.strand === 1 ?
             exon.seq_region_start - gene.location.start + 1 :
             gene.location.end - exon.seq_region_end + 1,
-          end: gene.strand === 1 ?
+          end: gene.location.strand === 1 ?
             exon.seq_region_end - gene.location.start + 1 :
             gene.location.end - exon.seq_region_start + 1
         };
@@ -238,22 +239,6 @@ function add_gene_structure(exons,transcripts,translations,genes) {
     delete transcript.transcript_id;
     delete transcript.gene_id;
     delete transcript.stable_id;
-    // add translations to gene
-    if (transcript.hasOwnProperty('translation')) {
-      var translation = translations[transcript.translation.intId];
-      delete transcript.translation.intId;
-      if (!gene.gene_structure.hasOwnProperty('translations')) {
-        gene.gene_structure.translations = {};
-      }
-      gene.gene_structure.translations[translation.stable_id] = translation;
-      delete translation.translation_id;
-      delete translation.transcript_id;
-      delete translation.seq_start;
-      delete translation.seq_end;
-      delete translation.start_exon_id;
-      delete translation.end_exon_id;
-      delete translation.stable_id;
-    }
   }
 }
 
@@ -263,8 +248,8 @@ function add_gene_structure(exons,transcripts,translations,genes) {
   get_exons
   get_transcripts
   add_exons_to_transcripts
-  get_translations
-  add_features
+  add_translations_to_transcripts
+  add_features_to_translations
   get_genes
   add_xrefs
 */
@@ -286,13 +271,13 @@ connection.query(add_exons_to_transcripts.sql, function(err, rows, fields) {
   if (err) throw err;
   add_exons_to_transcripts.process(rows, exons, transcripts);
 
-connection.query(get_translations.sql, function(err, rows, fields) {
+connection.query(add_translations_to_transcripts.sql, function(err, rows, fields) {
   if (err) throw err;
-  var translations = get_translations.process(rows, exons, transcripts);
+  var translations = add_translations_to_transcripts.process(rows, exons, transcripts);
 
-connection.query(add_features.sql, function(err, rows, fields) {
+connection.query(add_features_to_translations.sql, function(err, rows, fields) {
   if (err) throw err;
-  add_features.process(rows, translations);
+  add_features_to_translations.process(rows, translations);
 
 connection.query(get_genes.sql, function(err, rows, fields) {
   if (err) throw err;
@@ -318,7 +303,7 @@ connection.query(add_xrefs.sql5, function(err, rows, fields) {
   if (err) throw err;
   add_xrefs.process(rows, genes);
 
-  add_gene_structure(exons,transcripts,translations,genes);
+  add_gene_structure(exons,transcripts,genes);
 
   for(var gene_id in genes) {
     var gene = genes[gene_id];
@@ -343,8 +328,8 @@ connection.query(add_xrefs.sql5, function(err, rows, fields) {
 }); // add_xrefs 2
 }); // add_xrefs 1
 }); // get_genes
-}); // add_features
-}); // get_translations
+}); // add_features_to_translations
+}); // add_translations_to_transcripts
 }); // add_exons_to_transcripts
 }); // get_transcripts
 }); // get_exons
