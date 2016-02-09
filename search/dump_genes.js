@@ -18,86 +18,119 @@ if (!connection) throw "error";
 connection.connect();
 
 // lookup metadata
-var metadata = {
+var get_metadata = {
   sql: 'select meta_key,meta_value from meta',
   process: function(rows) {
     var meta = {};
     rows.forEach(function(row) {
       meta[row.meta_key] = row.meta_value;
     });
-    return meta
+    return meta;
   }
 };
-// lookup exons in canonical transcripts
-var exons = {
-  sql: 'select g.canonical_transcript_id, t.stable_id, e.exon_id,'
-   + ' case when g.seq_region_strand = 1 then e.seq_region_start - g.seq_region_start + 1'
-   + '  else g.seq_region_end - e.seq_region_end + 1'
-   + ' end as start,'
-   + ' case when g.seq_region_strand = 1 then e.seq_region_end - g.seq_region_start + 1'
-   + '  else g.seq_region_end - e.seq_region_start + 1'
-   + ' end as end,'
-   + ' et.rank'
-   + ' from gene g'
-   + ' inner join transcript t on g.canonical_transcript_id = t.transcript_id'
-   + ' inner join exon_transcript et on g.canonical_transcript_id = et.transcript_id'
-   + ' inner join exon e on e.exon_id = et.exon_id'
-   + ' where g.is_current=1'
-   + ' and e.seq_region_start >= g.seq_region_start'
-   + ' and e.seq_region_end >= g.seq_region_start'
-   + ' and e.seq_region_start <= g.seq_region_end'
-   + ' and e.seq_region_end <= g.seq_region_end'
-   + ' and e.seq_region_id = g.seq_region_id'
-   + ' order by et.transcript_id, et.rank',
-  process: function(exons) {
-    var can_trans = {};
-    exons.forEach(function(exon) {
-      if (!can_trans.hasOwnProperty(exon.canonical_transcript_id)) {
-        can_trans[exon.canonical_transcript_id] = {
-          name: exon.stable_id, // this is actuall the transcript's stable_id, sorry.
-          length: 0,
-          exons: [],
-          exon_junctions: []
-        };
-      }
-      else { // not the first exon
-        can_trans[exon.canonical_transcript_id].exon_junctions.push(
-          can_trans[exon.canonical_transcript_id].length);
-      }
-      can_trans[exon.canonical_transcript_id].length += exon.end - exon.start + 1;
-      can_trans[exon.canonical_transcript_id].exons.push(
-        { start: exon.start, end: exon.end, id: exon.exon_id }
-      );
+
+var get_exons = {
+  sql: 'select * from exon',
+  process: function(rows) {
+    var obj = {};
+    rows.forEach(function(row) {
+      obj[row.exon_id] = row;
     });
-    return can_trans;
+    return obj;
   }
 }
-// lookup gene info and the canonical translation
-var genes = {
+
+var get_transcripts = {
+  sql: 'select transcript_id,gene_id,stable_id from transcript',
+  process: function(rows) {
+    var obj = {};
+    rows.forEach(function(row) {
+      row.exons = [];
+      row.exon_ids = [];
+      row.length = 0;
+      obj[row.transcript_id] = row;
+    });
+    return obj;
+  }
+}
+
+var add_exons_to_transcripts = {
+  sql: 'select * from exon_transcript',
+  process: function(rows,exons,transcripts) {
+    rows.forEach(function(row) {
+      var exon = exons[row.exon_id];
+      var transcript = transcripts[row.transcript_id];
+      transcript.exons[row.rank-1] = exon.stable_id;
+      transcript.exon_ids[row.rank-1] = row.exon_id; // needed for translation start and end
+      transcript.length += exon.seq_region_end - exon.seq_region_start + 1;
+    });
+  }
+}
+
+// get translations, create an object for each, and add translation to transcript obj
+var get_translations = {
+  sql: 'select translation_id,transcript_id,seq_start,seq_end,start_exon_id,end_exon_id,stable_id from translation',
+  process: function(rows,exons,transcripts) {
+    var obj = {};
+    rows.forEach(function(row) {
+      var transcript = transcripts[row.transcript_id];
+      // calculate the translation start and end coords relative to the transcript
+      transcript.translation = {
+        intId : row.translation_id,
+        id : row.stable_id,
+        start: 0,
+        end: 0
+      };
+      var pos=0;
+      transcript.exon_ids.forEach(function(exon_id) {
+        var exon = exons[exon_id];
+        if (transcript.translation.start === 0 && exon_id === row.start_exon_id) {
+          transcript.translation.start = pos + row.seq_start;
+        }
+        if (transcript.translation.end === 0 && exon_id === row.end_exon_id) {
+          transcript.translation.end = pos + row.seq_end;
+        }
+        pos += exon.end - exon.start + 1;
+      });
+      row.features=[];
+      obj[row.translation_id] = row;
+    });
+    return obj;
+  }
+}
+
+// get interpro protein features and add them to the corresponding translation object
+var add_features = {
+  sql: 'SELECT tl.translation_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name, pf.hit_description'
+   + ' FROM translation tl'
+   + ' inner join protein_feature pf on tl.translation_id = pf.translation_id'
+   + ' inner join interpro ipr on pf.hit_name = ipr.id'
+   + ' WHERE 1',
+  process: function(rows, translations) {
+    rows.forEach(function(row) {
+      translations[row.translation_id].features.push({
+        name: row.hit_name,
+        description: row.hit_description,
+        interpro: row.interpro_ac,
+        start: row.seq_start,
+        end: row.seq_end
+      });
+    });
+  }
+}
+
+var get_genes = {
   sql: 'select g.gene_id, g.stable_id, x.display_label as name, g.description, g.biotype,'
     + ' sr.name as region, g.seq_region_start as start, g.seq_region_end as end, g.seq_region_strand as strand,'
-    + ' g.canonical_transcript_id, tl.stable_id as translation_stable_id,'
-    + ' ta164.value as iso_point,'
-    + ' ta165.value as charge,'
-    + ' ta166.value as molecular_weight,'
-    + ' ta167.value as num_residues,'
-    + ' ta168.value as avg_res_weight,'
-    + ' tl.seq_start, tl.start_exon_id, tl.seq_end, tl.end_exon_id'
+    + ' g.canonical_transcript_id'
     + ' from gene g'
     + ' inner join seq_region sr on g.seq_region_id = sr.seq_region_id'
-    + ' LEFT join translation tl on g.canonical_transcript_id = tl.transcript_id'
     + ' left join xref x on g.display_xref_id = x.xref_id'
-    + ' left join translation_attrib ta164 on tl.translation_id = ta164.translation_id and ta164.attrib_type_id = 164'
-    + ' left join translation_attrib ta165 on tl.translation_id = ta165.translation_id and ta165.attrib_type_id = 165'
-    + ' left join translation_attrib ta166 on tl.translation_id = ta166.translation_id and ta166.attrib_type_id = 166'
-    + ' left join translation_attrib ta167 on tl.translation_id = ta167.translation_id and ta167.attrib_type_id = 167'
-    + ' left join translation_attrib ta168 on tl.translation_id = ta168.translation_id and ta168.attrib_type_id = 168'
     + ' where g.is_current=1;',
-  process: function(genes,meta,transcripts) {
-    gene = {};
-    genes.forEach(function(row) {
-      var c_trans = transcripts[row.canonical_transcript_id];
-      gene[row.gene_id] = {
+  process: function(rows,meta,transcripts) {
+    var all_genes = {};
+    rows.forEach(function(row) {
+      var gene = {
         _id : row.stable_id,
         name: row.name ? row.name : row.stable_id,
         description: row.description,
@@ -114,46 +147,20 @@ var genes = {
         },
         xrefs: {},
         synonyms: {},
+        gene_structure: {exons:{},transcripts:{}}
       };
+      all_genes[row.gene_id] = gene;
+      var c_trans = transcripts[row.canonical_transcript_id];
       if (c_trans) {
-        gene[row.gene_id].canonical_transcript = c_trans;
-        if (row.translation_stable_id) {
-          gene[row.gene_id].canonical_translation = {
-            name: row.translation_stable_id,
-            length: +row.num_residues,
-            molecular_weight: +row.molecular_weight,
-            avg_res_weight: +row.avg_res_weight,
-            charge: +row.charge,
-            iso_point: +row.iso_point, 
-            features: {
-              all: []
-            }
-          };
-          // add the CDS start and end to the canonical transcript
-          c_trans.CDS = {start:0, end:0};
-          var pos=0;
-          c_trans.exons.forEach(function(exon) {
-            if (c_trans.CDS.start === 0 && exon.id === row.start_exon_id) {
-              c_trans.CDS.start = pos + row.seq_start;
-            }
-            if (c_trans.CDS.end === 0 && exon.id === row.end_exon_id) {
-              c_trans.CDS.end = pos + row.seq_end;
-            }
-            pos += exon.end - exon.start + 1;
-          });
-        }
-        if (c_trans.hasOwnProperty('exons')) {
-          c_trans.exons.forEach(function(exon) {
-            delete exon.id; // don't need id any more
-          });
-        }
+        gene.gene_structure.canonical_transcript = c_trans.stable_id
       }
     });
-    return gene;
+    return all_genes;
   }
 }
-// get xrefs
-var xrefs = {
+
+// get xrefs and synonyms
+var add_xrefs = {
   sql1: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
    + ' JOIN xref x ON x.xref_id = g.display_xref_id'
@@ -193,7 +200,7 @@ var xrefs = {
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene"',
-  add2Genes: function(xrefs,geneInfo) {
+  process: function(xrefs,geneInfo) {
     xrefs.forEach(function(xref) {
       var gx = geneInfo[xref.gene_id].xrefs
       if (! gx.hasOwnProperty(xref.db_name)) {
@@ -206,76 +213,140 @@ var xrefs = {
     });
   }
 }
-// get interpro protein features
-var features = {
-  sql: 'SELECT g.gene_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name, pf.hit_description'
-   + ' FROM gene g'
-   + ' inner join transcript t on g.canonical_transcript_id = t.transcript_id'
-   + ' inner join translation tl on t.transcript_id = tl.transcript_id'
-   + ' inner join protein_feature pf on tl.translation_id = pf.translation_id'
-   + ' inner join interpro ipr on pf.hit_name = ipr.id'
-   + ' WHERE g.is_current = 1',
-  add2Genes: function(features, geneInfo) {
-    features.forEach(function(feature) {
-      geneInfo[feature.gene_id].canonical_translation.features.all.push({
-        name: feature.hit_name,
-        description: feature.hit_description,
-        interpro: feature.interpro_ac,
-        start: feature.seq_start,
-        end: feature.seq_end
-      });
+
+function add_gene_structure(exons,transcripts,translations,genes) {
+  for(var transcript_id in transcripts) {
+    var transcript = transcripts[transcript_id];
+    var gene = genes[transcript.gene_id];
+    // add transcript to gene 
+    gene.gene_structure.transcripts[transcript.stable_id] = transcript;
+    // add exons to gene
+    transcript.exon_ids.forEach(function(exon_id) {
+      var exon = exons[exon_id];
+      if (!gene.gene_structure.exons.hasOwnProperty(exon.stable_id)) {
+        gene.gene_structure.exons[exon.stable_id] = {
+          start: gene.strand === 1 ?
+            exon.seq_region_start - gene.location.start + 1 :
+            gene.location.end - exon.seq_region_end + 1,
+          end: gene.strand === 1 ?
+            exon.seq_region_end - gene.location.start + 1 :
+            gene.location.end - exon.seq_region_start + 1
+        };
+      }
     });
+    delete transcript.exon_ids;
+    delete transcript.transcript_id;
+    delete transcript.gene_id;
+    delete transcript.stable_id;
+    // add translations to gene
+    if (transcript.hasOwnProperty('translation')) {
+      var translation = translations[transcript.translation.intId];
+      delete transcript.translation.intId;
+      if (!gene.gene_structure.hasOwnProperty('translations')) {
+        gene.gene_structure.translations = {};
+      }
+      gene.gene_structure.translations[translation.stable_id] = translation;
+      delete translation.translation_id;
+      delete translation.transcript_id;
+      delete translation.seq_start;
+      delete translation.seq_end;
+      delete translation.start_exon_id;
+      delete translation.end_exon_id;
+      delete translation.stable_id;
+    }
   }
 }
+
 // ugly nested way to do each step in a predictable sequence
-connection.query(metadata.sql, function(err, rows, fields) {
+/*
+  get_metadata
+  get_exons
+  get_transcripts
+  add_exons_to_transcripts
+  get_translations
+  add_features
+  get_genes
+  add_xrefs
+*/
+
+
+connection.query(get_metadata.sql, function(err, rows, fields) {
   if (err) throw err;
-  var meta = metadata.process(rows);
-  connection.query(exons.sql, function(err, rows, fields) {
-    if (err) throw err;
-    var transcripts = exons.process(rows);
-    connection.query(genes.sql, function(err, rows, fields) {
-      if (err) throw err;
-      var geneInfo = genes.process(rows,meta,transcripts);
-      connection.query(xrefs.sql1, function(err, rows, fields) {
-        if (err) throw err;
-        xrefs.add2Genes(rows,geneInfo);
-        connection.query(xrefs.sql2, function(err, rows, fields) {
-          if (err) throw err;
-          xrefs.add2Genes(rows,geneInfo);
-          connection.query(xrefs.sql3, function(err, rows, fields) {
-            if (err) throw err;
-            xrefs.add2Genes(rows,geneInfo);
-            connection.query(xrefs.sql4, function(err, rows, fields) {
-              if (err) throw err;
-              xrefs.add2Genes(rows,geneInfo);
-              connection.query(xrefs.sql5, function(err, rows, fields) {
-                if (err) throw err;
-                xrefs.add2Genes(rows,geneInfo);
-                connection.query(features.sql, function(err, rows, fields) {
-                  if (err) throw err;
-                  features.add2Genes(rows,geneInfo);
-                  for(var gene in geneInfo) {
-                    Object.keys(geneInfo[gene].xrefs).forEach(function(xref_key) {
-                      var uniq_list = Object.keys(geneInfo[gene].xrefs[xref_key]);
-                      geneInfo[gene].xrefs[xref_key] = uniq_list;
-                    });
-                    var syn_list = Object.keys(geneInfo[gene].synonyms);
-                    if (syn_list.length > 0) {
-                      geneInfo[gene].synonyms = syn_list;
-                    }
-                    else {
-                      delete geneInfo[gene].synonyms;
-                    }
-                    console.log(JSON.stringify(geneInfo[gene]));
-                  }
-                  connection.end();
-                });
-              });
-            });
-          });
-        });
-      });
+  var meta = get_metadata.process(rows);
+
+connection.query(get_exons.sql, function(err, rows, fields) {
+  if (err) throw err;
+  var exons = get_exons.process(rows);
+
+connection.query(get_transcripts.sql, function(err, rows, fields) {
+  if (err) throw err;
+  var transcripts = get_transcripts.process(rows);
+
+connection.query(add_exons_to_transcripts.sql, function(err, rows, fields) {
+  if (err) throw err;
+  add_exons_to_transcripts.process(rows, exons, transcripts);
+
+connection.query(get_translations.sql, function(err, rows, fields) {
+  if (err) throw err;
+  var translations = get_translations.process(rows, exons, transcripts);
+
+connection.query(add_features.sql, function(err, rows, fields) {
+  if (err) throw err;
+  add_features.process(rows, translations);
+
+connection.query(get_genes.sql, function(err, rows, fields) {
+  if (err) throw err;
+  var genes = get_genes.process(rows, meta, transcripts);
+
+connection.query(add_xrefs.sql1, function(err, rows, fields) {
+  if (err) throw err;
+  add_xrefs.process(rows, genes);
+
+connection.query(add_xrefs.sql2, function(err, rows, fields) {
+  if (err) throw err;
+  add_xrefs.process(rows, genes);
+
+connection.query(add_xrefs.sql3, function(err, rows, fields) {
+  if (err) throw err;
+  add_xrefs.process(rows, genes);
+
+connection.query(add_xrefs.sql4, function(err, rows, fields) {
+  if (err) throw err;
+  add_xrefs.process(rows, genes);
+
+connection.query(add_xrefs.sql5, function(err, rows, fields) {
+  if (err) throw err;
+  add_xrefs.process(rows, genes);
+
+  add_gene_structure(exons,transcripts,translations,genes);
+
+  for(var gene_id in genes) {
+    var gene = genes[gene_id];
+    Object.keys(gene.xrefs).forEach(function(xref_key) {
+      var uniq_list = Object.keys(gene.xrefs[xref_key]);
+      gene.xrefs[xref_key] = uniq_list;
     });
-  });
-});
+    var syn_list = Object.keys(gene.synonyms);
+    if (syn_list.length > 0) {
+      gene.synonyms = syn_list;
+    }
+    else {
+      delete gene.synonyms;
+    }
+    console.log(JSON.stringify(gene));
+  }
+  connection.end();
+
+}); // add_xrefs 5
+}); // add_xrefs 4
+}); // add_xrefs 3
+}); // add_xrefs 2
+}); // add_xrefs 1
+}); // get_genes
+}); // add_features
+}); // get_translations
+}); // add_exons_to_transcripts
+}); // get_transcripts
+}); // get_exons
+}); // get_metadata
+
