@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 var client = require('redis').createClient();
+
 client.select(1, function(err) {
   if (err) throw err;
-  require('readline').createInterface({
+  var rl = require('readline').createInterface({
     input: process.stdin,
     terminal: false
-  }).on('line', function (line) { // one JSON object per line
+  });
+  
+  rl.on('line', function (line) { // one JSON object per line
+    rl.pause();
     var obj = JSON.parse(line);
     client.hgetall(obj._id, function (err, homologs) {
       if (err) throw err;
@@ -20,6 +24,7 @@ client.select(1, function(err) {
         obj.homology[k].push(gene);
       }
       console.log(JSON.stringify(obj));
+      rl.resume();
     });
   }).on('close', function() {
     client.quit();
