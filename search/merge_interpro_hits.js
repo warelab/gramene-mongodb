@@ -143,43 +143,45 @@ collections.domains.mongoCollection().then(function(coll) {
             });
             if (!done) clusters.push(clust);
           }
-          // sort clusters
-          clusters.sort(function(a,b) {
-            if (a.start < b.start) {return -1}
-            if (a.start > b.start) {return 1}
-            if (a.end < b.end) {return -1}
-            return 1;
-          });
-          // set interpro of each cluster to LCA of members
-          // and set name and description based on lca
-          features.domain.architecture = clusters.map(function(c) {
-            var iprList = c.members.map(function(m) {
-              return m.ipr
+          if (clusters.length !== 0) {
+            // sort clusters
+            clusters.sort(function(a,b) {
+              if (a.start < b.start) {return -1}
+              if (a.start > b.start) {return 1}
+              if (a.end < b.end) {return -1}
+              return 1;
             });
-            function lca(ids, idPath) {
-              if (ids.length === 1) return ids[0];
-              var lca = ids.shift();
-              ids.forEach(function(id) {
-                var p1 = idPath[lca];
-                var p2 = idPath[id];
-                var n = p1.length < p2.length ? p1.length : p2.length; 
-                var i=1;
-                while (i<n && p1[i] === p2[i]) {i++}
-                lca = p1[i-1];
+            // set interpro of each cluster to LCA of members
+            // and set name and description based on lca
+            features.domain.architecture = clusters.map(function(c) {
+              var iprList = c.members.map(function(m) {
+                return m.ipr
               });
-              return lca;
-            }
-            var lca_ipr = lca(iprList, pathFromRoot);
-            c.interpro = info[lca_ipr].interpro;
-            c.name = info[lca_ipr].name;
-            c.description = info[lca_ipr].description;
-            delete c.members;
-            return c;
-          });
-          // need the domain root ids put into a space delimited string for searching
-          features.domain.roots = clusters.map(function(c) {
-            return c.root;
-          }).join(' ');
+              function lca(ids, idPath) {
+                if (ids.length === 1) return ids[0];
+                var lca = ids.shift();
+                ids.forEach(function(id) {
+                  var p1 = idPath[lca];
+                  var p2 = idPath[id];
+                  var n = p1.length < p2.length ? p1.length : p2.length; 
+                  var i=1;
+                  while (i<n && p1[i] === p2[i]) {i++}
+                  lca = p1[i-1];
+                });
+                return lca;
+              }
+              var lca_ipr = lca(iprList, pathFromRoot);
+              c.interpro = info[lca_ipr].interpro;
+              c.name = info[lca_ipr].name;
+              c.description = info[lca_ipr].description;
+              delete c.members;
+              return c;
+            });
+            // need the domain root ids put into a space delimited string for searching
+            features.domain.roots = clusters.map(function(c) {
+              return c.root;
+            }).join(' ');
+          }
         }
         var uniqueIPRs = Object.keys(interproSet);
         if (uniqueIPRs.length > 0) {
