@@ -22,6 +22,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "bins": "git://github.com/warelab/gramene-bins-client.git#master",
+    "byline": "^4.2.1",
     "cluster": "^0.7.7",
     "compression": "^1.0.9",
     "conform": "^0.2.5",
