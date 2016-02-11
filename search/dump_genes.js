@@ -74,6 +74,8 @@ var add_translations_to_transcripts = {
     rows.forEach(function(row) {
       var transcript = transcripts[row.transcript_id];
       // calculate the translation start and end coords relative to the transcript
+      // and exon junctions
+      transcript.exon_junctions = [];
       transcript.cds = {
         start: 0,
         end: 0
@@ -88,8 +90,12 @@ var add_translations_to_transcripts = {
           transcript.cds.end = pos + row.seq_end;
         }
         pos += exon.seq_region_end - exon.seq_region_start + 1;
+        transcript.exon_junctions.push(pos);
       });
-      
+      transcript.exon_junctions.pop();
+      if (transcript.exon_junctions.length === 0) {
+        delete transcript.exon_junctions;
+      }
       transcript.translation = {
         id : row.stable_id,
         length : (transcript.cds.end - transcript.cds.start + 1)/3, // a truncated translation may have fractional length
