@@ -60,6 +60,7 @@ var query = "select " +
   " as subtree_stable_id, " +
 
   "case when r.tree_type = 'supertree' or rootRoot.tree_type = 'supertree' then 'supertree' else r.tree_type end as tree_type, " +
+
   "n.distance_to_parent, " +
   "s.stable_id as protein_stable_id, " +
   "gene.stable_id as gene_stable_id, " +
@@ -67,14 +68,14 @@ var query = "select " +
   "gene.description as gene_description," +
   "gam.cigar_line as cigar," +
   "sq.sequence as sequence," +
-  "g.taxon_id, " +
-  "g.name as system_name, " +
+
+  "case when sn.taxon_id is not null then sn.taxon_id else sn2.taxon_id end as taxon_id, " +
+  "case when sn.node_name is not null then sn.node_name else sn2.node_name end as taxon_name, " +
+
   "g.assembly, " +
   "a.node_type, " +
   "a.bootstrap, " +
   "a.duplication_confidence_score, " +
-  "sn.taxon_id as node_taxon_id, " +
-  "sn.node_name as node_taxon, " +
   "n.left_index as left_index, " +
   "n.right_index as right_index " +
 
@@ -88,6 +89,7 @@ var query = "select " +
 
   "left join gene_tree_node_attr a on a.node_id = n.node_id " +
   "left join species_tree_node sn on sn.node_id = a.species_tree_node_id " +
+  "left join species_tree_node sn2 on sn2.taxon_id = g.taxon_id " +
 
   "left join gene_tree_node rootNode on rootNode.node_id = n.root_id " +
   "left join gene_tree_node rootParentNode on rootNode.parent_id = rootParentNode.node_id " +
@@ -95,7 +97,7 @@ var query = "select " +
 
   "left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = s.seq_member_id " +
 
-  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default'" +
+  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default' " +
   "order by tree_id, n.node_id ";
 
 var queryStream = comparaMysqlDb.query(query).stream({highWaterMark: 5});
