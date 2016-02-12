@@ -27,79 +27,32 @@ var comparaMysqlDb = mysql.createConnection({
 // a good deal of this 'rootRoot' and 'case' stuff is necessary to reassemble the
 // full gene-trees from the split sibling trees that Ensembl generates to keep
 // their sizes down.
-var query = "select " +
-  "n.node_id, " +
-  "case " +
-  " when rootRoot.root_id is not null then rootRoot.root_id " +
-  " else r.root_id " +
-  "end " +
-  "as root_id, " +
+var query = "select r.root_id,r.stable_id as tree_stable_id,\n"
++ "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
++ "case when n.node_id = n.root_id\n"
++ "	then null\n"
++ "	else n.parent_id\n"
++ "end as parent_id,\n"
++ "sm.stable_id as protein_stable_id,\n"
++ "gene.stable_id as gene_stable_id, gene.display_label as gene_display_label, gene.description as gene_description,\n"
++ "sq.sequence,\n"
++ "gam.cigar_line as cigar,\n"
++ "stn.taxon_id, stn.node_name as taxon_name,\n"
++ "g.assembly,\n"
++ "a.node_type,a.bootstrap,a.duplication_confidence_score\n"
++ "from gene_tree_root r\n"
++ "	inner join gene_tree_node n on n.root_id = r.root_id\n"
++ "	left join seq_member sm on sm.seq_member_id = n.seq_member_id\n"
++ "	left join sequence sq on sm.sequence_id = sq.sequence_id\n"
++ "	left join gene_member gene on gene.gene_member_id = sm.gene_member_id\n"
++ "	left join gene_tree_node_attr a on a.node_id = n.node_id\n"
++ "	left join species_tree_node stn on stn.node_id = a.species_tree_node_id or (stn.taxon_id = sm.taxon_id and stn.genome_db_id = sm.genome_db_id)\n"
++ "	left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = sm.seq_member_id\n"
++ "	left join genome_db g on g.genome_db_id = sm.genome_db_id\n"
++ "where r.tree_type = 'tree' and r.clusterset_id = 'default'\n"
++ "order by r.root_id, n.left_index;";
 
-  "case " +
-  " when r.root_id = n.node_id and rootRoot.root_id is null then null " +
-  " else n.parent_id " +
-  "end " +
-  "as parent_id, " +
-
-  "case " +
-    // if the tree is part of a supertree then use the supertree id " +
-  " when rootRoot.tree_type is not null then concat('__EPlSupertree', lpad(rootRoot.root_id, 6, '0')) " +
-    //if it's a supertree use that id " +
-  " when r.stable_id is null then concat('__EPlSupertree', lpad(r.root_id, 6, '0')) " +
-    // otherwise the tree
-  " else r.stable_id " +
-  "end " +
-  "as tree_id, " +
-
-  "r.stable_id as tree_stable_id, " +
-
-  "case " +
-  " when r.root_id = n.node_id and rootRoot.tree_type = 'supertree' then r.stable_id " +
-  " else NULL " +
-  "end " +
-  " as subtree_stable_id, " +
-
-  "case when r.tree_type = 'supertree' or rootRoot.tree_type = 'supertree' then 'supertree' else r.tree_type end as tree_type, " +
-
-  "n.distance_to_parent, " +
-  "s.stable_id as protein_stable_id, " +
-  "gene.stable_id as gene_stable_id, " +
-  "gene.display_label as gene_display_label, " +
-  "gene.description as gene_description," +
-  "gam.cigar_line as cigar," +
-  "sq.sequence as sequence," +
-
-  "case when sn.taxon_id is not null then sn.taxon_id else sn2.taxon_id end as taxon_id, " +
-  "case when sn.node_name is not null then sn.node_name else sn2.node_name end as taxon_name, " +
-
-  "g.assembly, " +
-  "a.node_type, " +
-  "a.bootstrap, " +
-  "a.duplication_confidence_score, " +
-  "n.left_index as left_index, " +
-  "n.right_index as right_index " +
-
-  "from gene_tree_root r " +
-  "inner join gene_tree_node n on n.root_id = r.root_id " +
-
-  "left join seq_member s on s.seq_member_id = n.seq_member_id " +
-  "left join sequence sq on s.sequence_id = sq.sequence_id " +
-  "left join gene_member gene on s.gene_member_id = gene.gene_member_id " +
-  "left join genome_db g on g.genome_db_id = s.genome_db_id " +
-
-  "left join gene_tree_node_attr a on a.node_id = n.node_id " +
-  "left join species_tree_node sn on sn.node_id = a.species_tree_node_id " +
-  "left join species_tree_node sn2 on sn2.taxon_id = g.taxon_id " +
-
-  "left join gene_tree_node rootNode on rootNode.node_id = n.root_id " +
-  "left join gene_tree_node rootParentNode on rootNode.parent_id = rootParentNode.node_id " +
-  "left join gene_tree_root rootRoot on rootRoot.root_id = rootParentNode.`root_id` and rootRoot.tree_type = 'supertree' " +
-
-  "left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = s.seq_member_id " +
-
-  "where r.tree_type <> 'clusterset' and r.clusterset_id = 'default' " +
-  "order by tree_id, n.node_id ";
-
+console.error(query);
 var queryStream = comparaMysqlDb.query(query).stream({highWaterMark: 5});
 
 var tidyRow = through2.obj(function (row, encoding, done) {
@@ -122,25 +75,17 @@ var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
-    if (growingTree && growingTree.tree_id === row.tree_id) {
+    if (growingTree && growingTree.tree_stable_id === row.tree_stable_id) {
       growingTree.nodes.push(row);
-
-      if( row.tree_stable_id &&
-          !_.includes(growingTree.stable_ids, row.tree_stable_id)
-      ) {
-        growingTree.stable_ids.push(row.tree_stable_id);
-      }
     }
     else {
       var doneTree = growingTree;
       growingTree = {
-        tree_id: row.tree_id,
+        tree_stable_id: row.tree_stable_id,
         tree_root_id: row.root_id,
         tree_type: row.tree_type,
         nodes: [row]
       };
-
-      growingTree.stable_ids = row.tree_stable_id ? [row.tree_stable_id] : [];
 
       if (doneTree) {
         this.push(doneTree);
@@ -150,7 +95,6 @@ var groupRowsByTree = (function () {
     if (row.node_id !== row.root_id) {
       // remove tree-specific properties that we capture at the root level of growingTree
       delete row.root_id;
-      delete row.tree_id;
       delete row.tree_type;
       delete row.tree_stable_id;
     }
@@ -169,8 +113,7 @@ var groupRowsByTree = (function () {
 
 var makeNestedTree = through2.obj(function (tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
-  tree.nested._id = tree.nested.tree_id;
-  tree.nested.stable_ids = tree.stable_ids;
+  tree.nested._id = tree.nested.tree_stable_id;
   this.push(tree);
   done();
 });
@@ -186,7 +129,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
       }
       if (node.children.length === 1) {
         console.log('Found node with exactly one child. This is probably super-sub tree junction.',
-          tree.tree_type === 'supertree',
+          tree.tree_type,
           node.model.node_id)
       }
     }
@@ -289,7 +232,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
           else {
             // parent node already has a representative.
             // check if this one is better
-            if (parent.model.representative.score - newScore > 0) {
+            if (newScore < parent.model.representative.score) {
               parent.model.representative = {
                 id: id,
                 score: newScore
