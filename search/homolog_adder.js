@@ -19,7 +19,6 @@ module.exports = function(db) {
   
   return through2.obj(function (gene, enc, done) {
     var that = this;
-    console.error("homologAdder got gene ",gene._id);
   
     redisPromise.then(function(client) {
 
@@ -35,7 +34,6 @@ module.exports = function(db) {
           }
           gene.homology[k].push(geneId);
         }
-        console.error("homologAdder finished gene ",gene._id);
         that.push(gene);
         done();
       });

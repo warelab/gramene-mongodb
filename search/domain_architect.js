@@ -80,17 +80,15 @@ module.exports = function() {
   
   var domainsPromise = getDomains();
   
-  return through2.obj(function (gene, enc, done) {
+  return through2.obj(function (gene, enc, callback) {
     var that = this;
-
-    console.error("domainArchitect got gene ",gene._id);
 
     domainsPromise.then(function(domainData) {
       var hroot = domainData.hroot;
       var pathFromRoot = domainData.pathFromRoot;
       var info = domainData.info;
       var interproSet = {};
-      console.error("domainArchitect working on gene ",gene._id);
+
       for(var transcript_id in gene.gene_structure.transcripts) {
         var transcript = gene.gene_structure.transcripts[transcript_id];
         if (transcript.hasOwnProperty('translation')) {
@@ -213,14 +211,15 @@ module.exports = function() {
         gene.xrefs.domains = uniqueIPRs;
       }
 
-      // console.log(JSON.stringify(obj,function(k,v) {
-      //   if (k === "ipr") return undefined;
-      //   else return v;
-      // }));
+      // remove the ipr field from each entry
+      for (var type in features) {
+        features[type].entries.forEach(function(e) {
+          delete e.ipr;
+        });
+      }
   
-      console.error("domainArchitect done with gene ",gene._id);
       that.push(gene);
-      done();
+      callback();
     });
   });  
 }
