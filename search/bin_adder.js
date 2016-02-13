@@ -52,7 +52,6 @@ module.exports = function(sizes) {
         var bin = mapper[field].pos2bin(gene.taxon_id, gene.location.region, gene.location.start);
         gene.bins[field] = bin;
       }
-  
       that.push(gene);
       done();
     });

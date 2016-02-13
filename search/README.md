@@ -22,18 +22,7 @@ dump_homologs.js -h host -u user -p pass -d ensembl_compara_plants_48_82 | redis
 Once all that is done:
 ```
  gzcat tmp/*.json.gz | \
- ./merge_interpro_hits.js | \
- ./add_pathways.js <pathToAssociationsFile> | \
- ./add_bins.js | \
- node --max-old-space-size=4096 ./add_genetree_taxon.js -d ensembl_compara_plants_49_83 | \
- ./add_homologues.js | \
- ./add_xref_ancestors.js > genes.jsonl
-```
-N.B. run add_xref_ancestors.js last other scripts earlier in the pipe populate xrefs.
-
-Load the genes docs into mongodb
-```
- mongoimport --db search48 --collection genes --drop < genes.jsonl
+ node --max-old-space-size=8192 ./decorate.js -i /dev/fd/0 -o insertion_errors.jsonl -p <pathToAssociationsFile> -d ensembl_compara_plants_49_83
 ```
 
 Final step is to build indexes

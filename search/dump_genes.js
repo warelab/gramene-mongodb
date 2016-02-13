@@ -34,6 +34,7 @@ var get_exons = {
   process: function(rows) {
     var obj = {};
     rows.forEach(function(row) {
+      row.stable_id = row.stable_id.replace(/\./g,'__');
       obj[row.exon_id] = row;
     });
     return obj;
@@ -45,6 +46,7 @@ var get_transcripts = {
   process: function(rows) {
     var obj = {};
     rows.forEach(function(row) {
+      row.stable_id = row.stable_id.replace(/\./g,'__');
       row.exons = [];
       row.exon_ids = [];
       row.length = 0;
@@ -213,6 +215,7 @@ var add_xrefs = {
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene"',
   process: function(xrefs,geneInfo) {
     xrefs.forEach(function(xref) {
+      xref.db_name = xref.db_name.replace(/\./g,'__');
       var gx = geneInfo[xref.gene_id].xrefs
       if (! gx.hasOwnProperty(xref.db_name)) {
         gx[xref.db_name] = {};

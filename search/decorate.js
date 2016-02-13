@@ -4,6 +4,8 @@ var fs = require('fs'),
 byline = require('byline'),
 through2 = require('through2');
 
+var collections = require('gramene-mongodb-config');
+
 var argv = require('minimist')(process.argv.slice(2));
 
 var reader = byline(fs.createReadStream(argv.i));
@@ -19,23 +21,52 @@ var parser = through2.obj(function (line, enc, done) {
   done();
 });
 
-
-var serializer = through2.obj(function (gene, enc, done) {
-  this.push(JSON.stringify(gene) + "\n");
+var serializer = through2.obj(function (obj, enc, done) {
+  if (obj.err) {
+    this.push(JSON.stringify(obj) + "\n");
+  }
   done();
 });
 
-reader
-.pipe(parser)
-.pipe(genetreeAdder)
-.pipe(binAdder)
-.pipe(pathwayAdder)
-.pipe(homologAdder)
-.pipe(domainArchitect)
-.pipe(ancestorAdder)
-.pipe(serializer)
-.pipe(writer);
+var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
+  var transform = function (gene, enc, done) {
+    var throughThis = this;
+    mongoCollection.update(
+      {_id: gene._id},
+      gene,
+      {upsert: true},
+      function (err, count, status) {
+        throughThis.push({err: err, status: status, _id: gene._id});
+        done();
+      }
+    );
+  };
 
-writer.on('finish', () => {
-  process.exit(0);
+  var flush = function(done) {
+    collections.closeMongoDatabase();
+    console.log('upsert to mongo is done');
+    done();
+  };
+
+  return through2.obj(transform, flush);
+};
+
+collections.genes.mongoCollection().then(function(genesCollection) {
+  var upsert = upsertGeneIntoMongo(genesCollection);
+
+  reader
+  .pipe(parser)
+  .pipe(genetreeAdder)
+  .pipe(binAdder)
+  .pipe(pathwayAdder)
+  .pipe(homologAdder)
+  .pipe(domainArchitect)
+  .pipe(ancestorAdder)
+  .pipe(upsert)
+  .pipe(serializer)
+  .pipe(writer);
+
+  writer.on('finish', () => {
+    process.exit(0);
+  });
 });
