@@ -2,6 +2,7 @@ var TreeModel = require('tree-model');
 var treeModel = new TreeModel();
 var _ = require('lodash');
 var through2 = require('through2');
+var argv = require('minimist')(process.argv.slice(2));
 
 var collections = require('gramene-mongodb-config');
 
@@ -9,22 +10,25 @@ var decorateTree = function(geneCollection) {
   return through2.obj(function decorateTree(mongoTree, encoding, done) {
     var throughThis = this;
     geneCollection.find(
-      {'homology.gene_tree': mongoTree._id},
-      {'canonical_translation.features.domain_architecture':1})
-    .toArray(function (err, gene_domains) {
+      {'homology.gene_tree.id': mongoTree._id},
+      {'gene_structure':1})
+    .toArray(function (err, geneDocs) {
       if (err) throw err;
       var domain_lut = {};
-      gene_domains.forEach(function(gd) {
-        if (gd.hasOwnProperty('canonical_translation')) {
-          domain_lut[gd._id] = gd.canonical_translation.features.domain_architecture.map(function(domain) {
-            return {
-              interpro: domain.interpro,
-              start: domain.start,
-              end: domain.end,
-              name: domain.name,
-              id: +domain.root
-            }
-          });
+      geneDocs.forEach(function(gene) {
+        if (gene.gene_structure.hasOwnProperty('canonical_transcript')) {
+          var translation = gene.gene_structure.transcripts[gene.gene_structure.canonical_transcript].translation;
+          if (translation.features.domain && translation.features.domain.architecture) {
+            domain_lut[gene._id] = translation.features.domain.architecture.map(function(domain) {
+              return {
+                interpro: domain.interpro,
+                start: domain.start,
+                end: domain.end,
+                name: domain.name,
+                id: +domain.root
+              }
+            });
+          }
         }
       });
   
@@ -70,7 +74,7 @@ collections.genetrees.mongoCollection().then(function(treeCollection) {
   collections.genes.mongoCollection().then(function(geneCollection) {
     var upsert = upsertTreeIntoMongo(treeCollection);
 
-    var treeStream = treeCollection.find().stream();
+    var treeStream = treeCollection.find({compara_db:argv.d}).stream();
 
     treeStream
       .pipe(decorateTree(geneCollection))
