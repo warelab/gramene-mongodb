@@ -21,6 +21,7 @@
   "homepage": "https://github.com/warelab/gramene-mongodb",
   "dependencies": {
     "async": "^0.9.0",
+    "binary-search-bounds": "^2.0.3",
     "bins": "git://github.com/warelab/gramene-bins-client.git#master",
     "byline": "^4.2.1",
     "cluster": "^0.7.7",
