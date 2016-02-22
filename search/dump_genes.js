@@ -70,7 +70,8 @@ var add_exons_to_transcripts = {
 }
 
 var add_translations_to_transcripts = {
-  sql: 'select translation_id,transcript_id,seq_start,seq_end,start_exon_id,end_exon_id,stable_id from translation',
+  sql: 'select t.translation_id,t.transcript_id,t.seq_start,t.seq_end,t.start_exon_id,t.end_exon_id,t.stable_id, CAST(ta.value AS UNSIGNED) as num_residues'
+  + ' from translation t left join translation_attrib ta on ta.translation_id = t.translation_id and ta.attrib_type_id = 167',
   process: function(rows, exons, transcripts) {
     var obj={};
     rows.forEach(function(row) {
@@ -100,7 +101,7 @@ var add_translations_to_transcripts = {
       }
       transcript.translation = {
         id : row.stable_id,
-        length : (transcript.cds.end - transcript.cds.start + 1)/3, // a truncated translation may have fractional length
+        length : row.num_residues,
         features: {all:[]}
       };
       obj[row.translation_id] = transcript.translation;
@@ -134,13 +135,17 @@ var add_features_to_translations = {
 var get_genes = {
   sql: 'select g.gene_id, g.stable_id, x.display_label as name, g.description, g.biotype,'
     + ' sr.name as region, g.seq_region_start as start, g.seq_region_end as end, g.seq_region_strand as strand,'
-    + ' g.canonical_transcript_id'
+    + ' g.canonical_transcript_id,'
+    + ' case when sra.value is not NULL then CAST(sra.value AS UNSIGNED) else 999999 end as karyotype'
     + ' from gene g'
     + ' inner join seq_region sr on g.seq_region_id = sr.seq_region_id'
+    + ' left join seq_region_attrib sra on sra.seq_region_id = sr.seq_region_id and sra.attrib_type_id=367' // karyotype_rank
     + ' left join xref x on g.display_xref_id = x.xref_id'
-    + ' where g.is_current=1;',
+    + ' where g.is_current=1'
+    + ' order by karyotype asc, sr.length desc, g.seq_region_start asc',
   process: function(rows,meta,transcripts) {
     var all_genes = {};
+    var gene_idx=0;
     rows.forEach(function(row) {
       var gene = {
         _id : row.stable_id,
@@ -150,12 +155,13 @@ var get_genes = {
         taxon_id: +meta['species.taxonomy_id'],
         system_name: meta['species.production_name'],
         db_type: db_type,
+        gene_idx: gene_idx++,
         location: {
           region: row.region,
           start: row.start,
           end: row.end,
           strand: row.strand,
-          map: meta['assembly.accession']
+          map: meta['assembly.accession'],
         },
         xrefs: {},
         synonyms: {},
@@ -318,7 +324,9 @@ connection.query(add_xrefs.sql5, function(err, rows, fields) {
 
   add_gene_structure(exons,transcripts,genes);
 
-  for(var gene_id in genes) {
+  var sorted_by_gene_idx = Object.keys(genes).sort(function(a,b) { return genes[a].gene_idx - genes[b].gene_idx });
+
+  sorted_by_gene_idx.forEach(function(gene_id) {
     var gene = genes[gene_id];
     Object.keys(gene.xrefs).forEach(function(xref_key) {
       var uniq_list = Object.keys(gene.xrefs[xref_key]);
@@ -332,7 +340,7 @@ connection.query(add_xrefs.sql5, function(err, rows, fields) {
       delete gene.synonyms;
     }
     console.log(JSON.stringify(gene));
-  }
+  });
   connection.end();
 
 }); // add_xrefs 5
