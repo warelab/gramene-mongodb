@@ -278,81 +278,81 @@ connection.query(get_metadata.sql, function(err, rows, fields) {
   if (err) throw err;
   var meta = get_metadata.process(rows);
 
-connection.query(get_exons.sql, function(err, rows, fields) {
-  if (err) throw err;
-  var exons = get_exons.process(rows);
+  connection.query(get_exons.sql, function(err, rows, fields) {
+    if (err) throw err;
+    var exons = get_exons.process(rows);
 
-connection.query(get_transcripts.sql, function(err, rows, fields) {
-  if (err) throw err;
-  var transcripts = get_transcripts.process(rows);
+    connection.query(get_transcripts.sql, function(err, rows, fields) {
+      if (err) throw err;
+      var transcripts = get_transcripts.process(rows);
 
-connection.query(add_exons_to_transcripts.sql, function(err, rows, fields) {
-  if (err) throw err;
-  add_exons_to_transcripts.process(rows, exons, transcripts);
+      connection.query(add_exons_to_transcripts.sql, function(err, rows, fields) {
+        if (err) throw err;
+        add_exons_to_transcripts.process(rows, exons, transcripts);
 
-connection.query(add_translations_to_transcripts.sql, function(err, rows, fields) {
-  if (err) throw err;
-  var translations = add_translations_to_transcripts.process(rows, exons, transcripts);
+        connection.query(add_translations_to_transcripts.sql, function(err, rows, fields) {
+          if (err) throw err;
+          var translations = add_translations_to_transcripts.process(rows, exons, transcripts);
 
-connection.query(add_features_to_translations.sql, function(err, rows, fields) {
-  if (err) throw err;
-  add_features_to_translations.process(rows, translations);
+          connection.query(add_features_to_translations.sql, function(err, rows, fields) {
+            if (err) throw err;
+            add_features_to_translations.process(rows, translations);
 
-connection.query(get_genes.sql, function(err, rows, fields) {
-  if (err) throw err;
-  var genes = get_genes.process(rows, meta, transcripts);
+            connection.query(get_genes.sql, function(err, rows, fields) {
+              if (err) throw err;
+              var genes = get_genes.process(rows, meta, transcripts);
 
-connection.query(add_xrefs.sql1, function(err, rows, fields) {
-  if (err) throw err;
-  add_xrefs.process(rows, genes);
+              connection.query(add_xrefs.sql1, function(err, rows, fields) {
+                if (err) throw err;
+                add_xrefs.process(rows, genes);
 
-connection.query(add_xrefs.sql2, function(err, rows, fields) {
-  if (err) throw err;
-  add_xrefs.process(rows, genes);
+                connection.query(add_xrefs.sql2, function(err, rows, fields) {
+                  if (err) throw err;
+                  add_xrefs.process(rows, genes);
 
-connection.query(add_xrefs.sql3, function(err, rows, fields) {
-  if (err) throw err;
-  add_xrefs.process(rows, genes);
+                  connection.query(add_xrefs.sql3, function(err, rows, fields) {
+                    if (err) throw err;
+                    add_xrefs.process(rows, genes);
 
-connection.query(add_xrefs.sql4, function(err, rows, fields) {
-  if (err) throw err;
-  add_xrefs.process(rows, genes);
+                    connection.query(add_xrefs.sql4, function(err, rows, fields) {
+                      if (err) throw err;
+                      add_xrefs.process(rows, genes);
 
-connection.query(add_xrefs.sql5, function(err, rows, fields) {
-  if (err) throw err;
-  add_xrefs.process(rows, genes);
+                      connection.query(add_xrefs.sql5, function(err, rows, fields) {
+                        if (err) throw err;
+                        add_xrefs.process(rows, genes);
 
-  add_gene_structure(exons,transcripts,genes);
+                        add_gene_structure(exons,transcripts,genes);
 
-  var sorted_by_gene_idx = Object.keys(genes).sort(function(a,b) { return genes[a].gene_idx - genes[b].gene_idx });
+                        var sorted_by_gene_idx = Object.keys(genes).sort(function(a,b) { return genes[a].gene_idx - genes[b].gene_idx });
 
-  sorted_by_gene_idx.forEach(function(gene_id) {
-    var gene = genes[gene_id];
-    Object.keys(gene.xrefs).forEach(function(xref_key) {
-      var uniq_list = Object.keys(gene.xrefs[xref_key]);
-      gene.xrefs[xref_key] = uniq_list;
-    });
-    var syn_list = Object.keys(gene.synonyms);
-    if (syn_list.length > 0) {
-      gene.synonyms = syn_list;
-    }
-    else {
-      delete gene.synonyms;
-    }
-    console.log(JSON.stringify(gene));
-  });
-  connection.end();
+                        sorted_by_gene_idx.forEach(function(gene_id) {
+                          var gene = genes[gene_id];
+                          Object.keys(gene.xrefs).forEach(function(xref_key) {
+                            var uniq_list = Object.keys(gene.xrefs[xref_key]);
+                            gene.xrefs[xref_key] = uniq_list;
+                          });
+                          var syn_list = Object.keys(gene.synonyms);
+                          if (syn_list.length > 0) {
+                            gene.synonyms = syn_list;
+                          }
+                          else {
+                            delete gene.synonyms;
+                          }
+                          console.log(JSON.stringify(gene));
+                        });
+                        connection.end();
 
-}); // add_xrefs 5
-}); // add_xrefs 4
-}); // add_xrefs 3
-}); // add_xrefs 2
-}); // add_xrefs 1
-}); // get_genes
-}); // add_features_to_translations
-}); // add_translations_to_transcripts
-}); // add_exons_to_transcripts
-}); // get_transcripts
-}); // get_exons
+                      }); // add_xrefs 5
+                    }); // add_xrefs 4
+                  }); // add_xrefs 3
+                }); // add_xrefs 2
+              }); // add_xrefs 1
+            }); // get_genes
+          }); // add_features_to_translations
+        }); // add_translations_to_transcripts
+      }); // add_exons_to_transcripts
+    }); // get_transcripts
+  }); // get_exons
 }); // get_metadata
 
