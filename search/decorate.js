@@ -28,6 +28,20 @@ var serializer = through2.obj(function (obj, enc, done) {
   done();
 });
 
+var speciesRank = {
+  3702 : 1, // arabidopsis
+  39947: 2, // rice
+  4577 : 3, // maize
+  4558 : 4  // sorghum
+};
+
+var speciesRanker = through2.obj(function (obj, enc, done) {
+  obj.species_idx = speciesRank[obj.taxon_id] || obj.taxon_id;
+  this.push(obj);
+  done();
+});
+
+
 var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
   var transform = function (gene, enc, done) {
     var throughThis = this;
@@ -62,6 +76,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   .pipe(homologAdder)
   .pipe(domainArchitect)
   .pipe(ancestorAdder)
+  .pipe(speciesRanker)
   .pipe(upsert)
   .pipe(serializer)
   .pipe(writer);
