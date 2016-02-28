@@ -43,11 +43,15 @@ while (<>) {
     }
     elsif (my($k,$v) = /^(\S+):\s*(.+)$/) { # parse key-value pair
         $v =~ s/^"(.+)".*/$1/; # strip off quotes and qualifiers(?)
+        my $v_str = $v;
         if ($v =~ m/^${prefix}:0*(\d+)/) {
             if ($k eq 'id') {
               $hsh{_orig_id_} = $v;
             }
             $v = $1+0;
+            if ($k eq 'alt_id') {
+              $v = $v_str;
+            }
         }
         if ($MULTI{$k}) {
             push @{$hsh{$k}}, $v;

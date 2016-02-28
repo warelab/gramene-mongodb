@@ -8,41 +8,41 @@ var collections = require('gramene-mongodb-config');
 
 
 var ontologies = [
-  {
-    collectionName: 'GO',
-    obo: 'http://www.berkeleybop.org/ontologies/go.obo',
-    prefix: 'GO'
-  },
-  {
-    collectionName: 'PO',
-    obo: 'http://www.berkeleybop.org/ontologies/po.obo',
-    prefix: 'PO'
-  },
+  // {
+  //   collectionName: 'GO',
+  //   obo: 'http://www.berkeleybop.org/ontologies/go.obo',
+  //   prefix: 'GO'
+  // },
+  // {
+  //   collectionName: 'PO',
+  //   obo: 'http://www.berkeleybop.org/ontologies/po.obo',
+  //   prefix: 'PO'
+  // },
   {
     collectionName: 'taxonomy',
     obo: 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
     prefix: 'NCBITaxon'
   },
-  {
-    collectionName: 'SO',
-    obo: 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
-    prefix: 'SO'
-  },
-  {
-    collectionName: 'TO',
-    obo: 'http://www.berkeleybop.org/ontologies/to.obo',
-    prefix: 'TO'
-  },
+  // {
+  //   collectionName: 'SO',
+  //   obo: 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
+  //   prefix: 'SO'
+  // },
+  // {
+  //   collectionName: 'TO',
+  //   obo: 'http://www.berkeleybop.org/ontologies/to.obo',
+  //   prefix: 'TO'
+  // },
   // {
   //   collectionName: 'GRO',
   //   obo: 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo',
   //   prefix: 'GRO'
   // },
-  {
-    collectionName: 'EO',
-    obo: 'http://www.berkeleybop.org/ontologies/eo.obo',
-    prefix: 'EO'
-  }
+  // {
+  //   collectionName: 'EO',
+  //   obo: 'http://www.berkeleybop.org/ontologies/eo.obo',
+  //   prefix: 'EO'
+  // }
 ];
 
 var outDir = process.argv[2];

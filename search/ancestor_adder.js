@@ -74,6 +74,11 @@ var promises = xrefsToProcess.map(function(x) {
       if (err) deferred.reject(err);
       docs.forEach(function(doc) {
         lut[doc.id] = doc;
+        if (doc.alt_id) {
+          doc.alt_id.forEach(function(id) {
+            lut[id] = doc;
+          });
+        }
       });
       deferred.resolve(lut);
     });

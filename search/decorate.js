@@ -41,6 +41,26 @@ var speciesRanker = through2.obj(function (obj, enc, done) {
   done();
 });
 
+var cleanup = through2.obj(function (gene, enc, done) {
+  function removeEmpties(obj) {
+    for (var k in obj) {
+      if (obj[k] && typeof(obj[k]) === 'object') {
+        if (Object.keys(obj[k]).length === 0) {
+          delete obj[k];
+        }
+        else if (!Array.isArray(obj[k])) {
+          removeEmpties(obj[k]);
+        }
+      }
+      else if (obj[k] === '') {
+        delete obj[k];
+      }
+    }
+  }
+  removeEmpties(gene);
+  this.push(gene);
+  done();
+});
 
 var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
   var transform = function (gene, enc, done) {
@@ -77,6 +97,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   .pipe(domainArchitect)
   .pipe(ancestorAdder)
   .pipe(speciesRanker)
+  .pipe(cleanup)
   .pipe(upsert)
   .pipe(serializer)
   .pipe(writer);
