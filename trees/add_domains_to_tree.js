@@ -17,7 +17,8 @@ var decorateTree = function(geneCollection) {
       var domain_lut = {};
       geneDocs.forEach(function(gene) {
         if (gene.gene_structure.hasOwnProperty('canonical_transcript')) {
-          var translation = gene.gene_structure.transcripts[gene.gene_structure.canonical_transcript].translation;
+          var tIdx = _.keyBy(gene.gene_structure.transcripts,'id');
+          var translation = tIdx[gene.gene_structure.canonical_transcript].translation;
           if (translation.features.domain && translation.features.domain.architecture) {
             domain_lut[gene._id] = translation.features.domain.architecture.map(function(domain) {
               return {

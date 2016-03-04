@@ -14,13 +14,14 @@ var fields = {
 };
 
 function modifyGene(ancestorsLUT,obj) {
-  obj.xrefs.taxonomy = ['NCBITaxon:'+obj.taxon_id]; // temporary xref to make loops happy
+  obj.xrefs.push({db:'taxonomy', ids: ['NCBITaxon:'+obj.taxon_id]}); // temporary xref to make loops happy
+  var xrefsKeys = _.keyBy(obj.xrefs,'db');
   xrefsToProcess.forEach(function(x) {
-    if (obj.xrefs.hasOwnProperty(x)) {
+    if (xrefsKeys.hasOwnProperty(x)) {
       var lut = {};
       var specificAnnotations = [];
       var usefulInfo = {};
-      obj.xrefs[x].forEach(function(id) {
+      xrefsKeys[x].ids.forEach(function(id) {
         if (ancestorsLUT[x].hasOwnProperty(id)) {
           var intId = parseInt(id.match(/\d+/)[0]);
           specificAnnotations.push(intId);
@@ -52,14 +53,10 @@ function modifyGene(ancestorsLUT,obj) {
       if (Object.keys(lut).length > 0) {
         obj.annotations[x].ancestors = Object.keys(lut).map(function(a){return +a});
       }
-      delete obj.xrefs[x];
+      delete xrefsKeys[x];
     }
   });
-  // delete obj.xrefs.taxonomy;
-  // add ancestors of gene_tree root_taxon_id
-  // if (obj.homology && obj.homology.gene_tree)) {
-  //   obj.ancestors.gene_family = ancestorsLUT.taxonomy['NCBITaxon:'+obj.homology.gene_tree.root_taxon_id];
-  // }
+  obj.xrefs = _.values(xrefsKeys);
   return obj;
 }
 

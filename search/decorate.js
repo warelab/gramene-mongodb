@@ -87,7 +87,6 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
 
 collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
-
   reader
   .pipe(parser)
   .pipe(genetreeAdder)

@@ -72,8 +72,8 @@ module.exports = function(filename) {
     lutPromise.then(function(lut) {
       var ID = gene._id.toUpperCase();
       if (lut.geneToOsReaction.hasOwnProperty(ID)) {
-        gene.xrefs.pathways = Object.keys(lut.geneToOsReaction[ID]);
-        gene.xrefs.reactions = Object.keys(lut.geneToProjReaction[ID]).map(function(r){return +r});
+        gene.xrefs.push({db: 'pathways', ids: Object.keys(lut.geneToOsReaction[ID])});
+        gene.xrefs.push({db: 'reactions', ids: Object.keys(lut.geneToProjReaction[ID]).map(function(r){return +r})});
       }
       that.push(gene);
       done();
