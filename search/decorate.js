@@ -28,6 +28,25 @@ var serializer = through2.obj(function (obj, enc, done) {
   done();
 });
 
+var orderTranscripts = through2.obj(function (gene, enc, done) {
+  var transcripts = gene.gene_structure.transcripts;
+  if (transcripts.length > 1) {
+    var ct = gene.gene_structure.canonical_transcript;
+    if (transcripts[0].id !== ct) {
+      var t0 = transcripts[0];
+      for(var i=1; i<transcripts.length;i++) {
+        if (transcripts[i].id === ct) {
+          transcripts[0] = transcripts[i];
+          transcripts[i] = t0;
+          break;
+        }
+      }
+    }
+  }
+  this.push(gene);
+  done();
+});
+
 var speciesRank = {
   3702 : 1, // arabidopsis
   39947: 2, // rice
@@ -89,6 +108,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
   reader
   .pipe(parser)
+  .pipe(orderTranscripts)
   .pipe(genetreeAdder)
   .pipe(binAdder)
   .pipe(pathwayAdder)
