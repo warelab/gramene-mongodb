@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var argv = require('minimist')(process.argv.slice(2));
-
+var _ = require('lodash');
 // connect to mysql database
 var mysql = require('mysql');
 var connectionOptions = {
@@ -34,7 +34,6 @@ var get_exons = {
   process: function(rows) {
     var obj = {};
     rows.forEach(function(row) {
-      row.stable_id = row.stable_id.replace(/\./g,'__');
       obj[row.exon_id] = row;
     });
     return obj;
@@ -46,7 +45,6 @@ var get_transcripts = {
   process: function(rows) {
     var obj = {};
     rows.forEach(function(row) {
-      row.stable_id = row.stable_id.replace(/\./g,'__');
       row.exons = [];
       row.exon_ids = [];
       row.length = 0;
@@ -163,9 +161,9 @@ var get_genes = {
           strand: row.strand,
           map: meta['assembly.accession'],
         },
-        xrefs: {},
-        synonyms: {},
-        gene_structure: {exons:{},transcripts:{}},
+        xrefs: [],
+        synonyms: [],
+        gene_structure: {exons:[],transcripts:[]},
         annotations: {}
       };
       all_genes[row.gene_id] = gene;
@@ -221,14 +219,9 @@ var add_xrefs = {
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene"',
   process: function(xrefs,geneInfo) {
     xrefs.forEach(function(xref) {
-      xref.db_name = xref.db_name.replace(/\./g,'__');
-      var gx = geneInfo[xref.gene_id].xrefs
-      if (! gx.hasOwnProperty(xref.db_name)) {
-        gx[xref.db_name] = {};
-      }
-      gx[xref.db_name][xref.dbprimary_acc] = 1;
+      geneInfo[xref.gene_id].xrefs.push({db: xref.db_name, id: xref.dbprimary_acc});
       if (xref.synonym) {
-        geneInfo[xref.gene_id].synonyms[xref.synonym] = 1;
+        geneInfo[xref.gene_id].synonyms.push(xref.synonym);
       }
     });
   }
@@ -239,25 +232,25 @@ function add_gene_structure(exons,transcripts,genes) {
     var transcript = transcripts[transcript_id];
     var gene = genes[transcript.gene_id];
     // add transcript to gene 
-    gene.gene_structure.transcripts[transcript.stable_id] = transcript;
+    gene.gene_structure.transcripts.push(transcript);
     // add exons to gene
     transcript.exon_ids.forEach(function(exon_id) {
       var exon = exons[exon_id];
-      if (!gene.gene_structure.exons.hasOwnProperty(exon.stable_id)) {
-        gene.gene_structure.exons[exon.stable_id] = {
-          start: gene.location.strand === 1 ?
-            exon.seq_region_start - gene.location.start + 1 :
-            gene.location.end - exon.seq_region_end + 1,
-          end: gene.location.strand === 1 ?
-            exon.seq_region_end - gene.location.start + 1 :
-            gene.location.end - exon.seq_region_start + 1
-        };
-      }
+      gene.gene_structure.exons.push({
+        id: exon.stable_id,
+        start: gene.location.strand === 1 ?
+          exon.seq_region_start - gene.location.start + 1 :
+          gene.location.end - exon.seq_region_end + 1,
+        end: gene.location.strand === 1 ?
+          exon.seq_region_end - gene.location.start + 1 :
+          gene.location.end - exon.seq_region_start + 1
+      });
     });
+    transcript.id = transcript.stable_id;
+    delete transcript.stable_id;
     delete transcript.exon_ids;
     delete transcript.transcript_id;
     delete transcript.gene_id;
-    delete transcript.stable_id;
   }
 }
 
@@ -324,23 +317,25 @@ connection.query(get_metadata.sql, function(err, rows, fields) {
 
                         add_gene_structure(exons,transcripts,genes);
 
-                        var sorted_by_gene_idx = Object.keys(genes).sort(function(a,b) { return genes[a].gene_idx - genes[b].gene_idx });
-
-                        sorted_by_gene_idx.forEach(function(gene_id) {
+                        for(var gene_id in genes) {
                           var gene = genes[gene_id];
-                          Object.keys(gene.xrefs).forEach(function(xref_key) {
-                            var uniq_list = Object.keys(gene.xrefs[xref_key]);
-                            gene.xrefs[xref_key] = uniq_list;
-                          });
-                          var syn_list = Object.keys(gene.synonyms);
-                          if (syn_list.length > 0) {
-                            gene.synonyms = syn_list;
+                          // uniqify xrefs (group by db_name)
+                          if (gene.xrefs.length > 0) {
+                            gene.xrefs = _.map(_.groupBy(gene.xrefs, 'db'),function(xrefs,db) {
+                              return {db:db, ids: _.uniqBy(xrefs,'id').map(function(xref) {return xref.id;})}
+                            });
+                          }
+                          // uniqify synonyms
+                          if (gene.synonyms.length > 0) {
+                            gene.synonyms = _.uniq(gene.synonyms)
                           }
                           else {
                             delete gene.synonyms;
                           }
+                          // uniqify exons
+                          gene.gene_structure.exons = _.uniqBy(gene.gene_structure.exons,'id');
                           console.log(JSON.stringify(gene));
-                        });
+                        }
                         connection.end();
 
                       }); // add_xrefs 5

@@ -133,6 +133,7 @@ function getLut(main_db) {
           return acc;
         }, {});
       }
+      console.error('genetreeIdLut ready');
       deferred.resolve(genetreeIdLut);
     });
   });

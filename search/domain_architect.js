@@ -82,15 +82,12 @@ module.exports = function() {
   
   return through2.obj(function (gene, enc, callback) {
     var that = this;
-
     domainsPromise.then(function(domainData) {
       var hroot = domainData.hroot;
       var pathFromRoot = domainData.pathFromRoot;
       var info = domainData.info;
       var interproSet = {};
-
-      for(var transcript_id in gene.gene_structure.transcripts) {
-        var transcript = gene.gene_structure.transcripts[transcript_id];
+      gene.gene_structure.transcripts.forEach(function(transcript) {
         if (transcript.hasOwnProperty('translation')) {
           // group features by domain hierarchy root
           var arch = {};
@@ -204,20 +201,19 @@ module.exports = function() {
               return c.root;
             }).join(' ');
           }
+          // remove the ipr field from each entry
+          for (var type in features) {
+            features[type].entries.forEach(function(e) {
+              delete e.ipr;
+            });
+          }
         }
-      }
+      });
       var uniqueIPRs = Object.keys(interproSet);
       if (uniqueIPRs.length > 0) {
-        gene.xrefs.domains = uniqueIPRs;
+        gene.xrefs.push({db: 'domains', ids: uniqueIPRs});
       }
 
-      // remove the ipr field from each entry
-      for (var type in features) {
-        features[type].entries.forEach(function(e) {
-          delete e.ipr;
-        });
-      }
-  
       that.push(gene);
       callback();
     });
