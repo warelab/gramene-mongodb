@@ -33,7 +33,7 @@
     "express": "^4.6.1",
     "express-session": "^1.7.0",
     "flat-to-nested": "^1.0.1",
-    "gramene-bins-client": "^2.2.2",
+    "gramene-bins-client": "^2.2.4",
     "gramene-mongodb-config": "^1.48.4",
     "isnumber": "^1.0.0",
     "lodash": "^4.6.1",
