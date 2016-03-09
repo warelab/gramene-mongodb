@@ -24,19 +24,21 @@ module.exports = function(db) {
 
       client.hgetall(gene._id, function (err, homologs) {
         if (err) throw err;
-        if (gene.homology) {
-          gene.homology.homologous_genes = {};
-        }
-        else {
-          gene.homology = {homologous_genes:{}};
-        }
-        for (var geneId in homologs) {
-          var k = homologs[geneId];
-          
-          if (!gene.homology.homologous_genes.hasOwnProperty(k)) {
-            gene.homology.homologous_genes[k] = [];
+        if (homologs) {
+          if (gene.homology) {
+            gene.homology.homologous_genes = {};
           }
-          gene.homology.homologous_genes[k].push(geneId);
+          else {
+            gene.homology = {homologous_genes:{}};
+          }
+          for (var geneId in homologs) {
+            var k = homologs[geneId];
+          
+            if (!gene.homology.homologous_genes.hasOwnProperty(k)) {
+              gene.homology.homologous_genes[k] = [];
+            }
+            gene.homology.homologous_genes[k].push(geneId);
+          }
         }
         that.push(gene);
         done();
