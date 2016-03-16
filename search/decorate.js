@@ -2,6 +2,7 @@
 
 var fs = require('fs'),
 byline = require('byline'),
+_ = require('lodash'),
 through2 = require('through2');
 
 var collections = require('gramene-mongodb-config');
@@ -28,6 +29,47 @@ var serializer = through2.obj(function (obj, enc, done) {
   done();
 });
 
+var rename_id = through2.obj(function (gene, enc, done) {
+  gene.synonyms = [gene._id];
+  gene._id += '_projected';
+  this.push(gene);
+  done();
+});
+
+var assignCanonicalTranscript = through2.obj(function (gene, enc,done ) {
+  if (!gene.gene_structure.canonical_transcript) {
+    var transcripts = gene.gene_structure.transcripts;
+    if (transcripts.length === 1) {
+      gene.gene_structure.canonical_transcript = transcripts[0].id;
+    }
+    else {
+      var longest_translation = 0;
+      var longest_transcript = 0;
+      var ct;
+      transcripts.forEach(function(transcript) {
+        if (transcript.translation) {
+          if (transcript.translation.length > longest_translation) {
+            longest_translation = transcript.translation.length;
+            longest_transcript = transcript.length;
+            ct = transcript.id;
+          }
+          else if (transcript.translation.length === longest_translation && transcript.length > longest_transcript) {
+            longest_transcript = transcript.length;
+            ct = transcript.id;
+          }
+        }
+        else if (transcript.length > longest_transcript) {
+          longest_transcript = transcript.length;
+          ct = transcript.id;
+        }
+      });
+      gene.gene_structure.canonical_transcript = ct;
+    }
+  }
+  this.push(gene);
+  done();
+});
+
 var orderTranscripts = through2.obj(function (gene, enc, done) {
   var transcripts = gene.gene_structure.transcripts;
   if (transcripts.length > 1) {
@@ -49,13 +91,28 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 
 var speciesRank = {
   3702 : 1, // arabidopsis
+  arabidopsis_thaliana : 1,
   39947: 2, // rice
+  oryza_sativa : 2,
   4577 : 3, // maize
-  4558 : 4  // sorghum
+  zea_mays4m : 3,
+  zea_mays : 4,
+  4558 : 4, // sorghum
+  sorghum_bicolor : 5
 };
 
 var speciesRanker = through2.obj(function (obj, enc, done) {
-  obj.species_idx = speciesRank[obj.taxon_id] || obj.taxon_id;
+  obj.species_idx = speciesRank[obj.system_name] || obj.taxon_id;
+  this.push(obj);
+  done();
+});
+
+var fixTranslationLength = through2.obj(function (obj, enc, done) {
+  obj.gene_structure.transcripts.forEach(function(tr) {
+    if (tr.translation && _.isNull(tr.translation.length)) {
+      tr.translation.length = Math.floor(tr.cds.end - tr.cds.start + 1);
+    }
+  });
   this.push(obj);
   done();
 });
@@ -97,17 +154,32 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
 
   var flush = function(done) {
     collections.closeMongoDatabase();
-    console.log('upsert to mongo is done');
+    console.error('upsert to mongo is done');
     done();
   };
 
   return through2.obj(transform, flush);
 };
+// var sayHi = function sayHi(mesg) {
+//
+//   var transform = function (gene, enc, done) {
+//     console.error(mesg,gene._id);
+//     this.push(gene);
+//     done();
+//   };
+//   var flush = function(done) {
+//     done();
+//   };
+//   return through2.obj(transform, flush);
+// };
 
 collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
   reader
   .pipe(parser)
+  .pipe(rename_id) // only used this for projected zmv3 gene models so they wouldn't clash with the zmv3 models with the same _id
+  .pipe(fixTranslationLength)
+  .pipe(assignCanonicalTranscript)
   .pipe(orderTranscripts)
   .pipe(genetreeAdder)
   .pipe(binAdder)

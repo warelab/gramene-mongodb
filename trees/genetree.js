@@ -57,7 +57,7 @@ var queryStream = comparaMysqlDb.query(query).stream({highWaterMark: 5});
 
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
-  this.push(_.omit(row, _.isNull));
+  this.push(_.omitBy(row, _.isNull));
   done();
 });
 
@@ -75,7 +75,8 @@ var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
-    if (growingTree && growingTree.tree_stable_id === row.tree_stable_id) {
+    row.tree_stable_id = row.tree_stable_id || row.root_id;
+    if (growingTree && growingTree.tree_root_id === row.root_id) {
       growingTree.nodes.push(row);
     }
     else {
@@ -159,7 +160,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
         });
         return result;
       })
-      .indexBy('_attr')
+      .keyBy('_attr')
       .value();
   }
   
@@ -181,9 +182,15 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
           score += bad;
         }
         else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
+          if (desc.toUpperCase().match(node.model.stable_id)) {
+            score -= bad;
+          }
           score += bad;
         }
         else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
+          if (desc.toUpperCase().match(node.model.stable_id)) {
+            score -= bad;
+          }
           score += bad;
         }
         else if (desc === "") {
@@ -202,6 +209,9 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
     }
     if (node.model.taxon_id === 3702) { // consider a model species bonus
       score += modelSpeciesBonus;
+      if (desc.match(/^Putative/)) {
+        score -= bad;
+      }
     }
     if (!haveGenome[node.model.taxon_id]) {
       // console.error("taxon not hosted",node.model.taxon_id);
