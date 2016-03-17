@@ -29,9 +29,24 @@ var serializer = through2.obj(function (obj, enc, done) {
   done();
 });
 
+var taxFix = through2.obj(function(gene,enc,done) {
+  if (gene.taxon_id === 4577) {
+    if (gene.system_name === "zea_mays") {
+      gene.taxon_id = 45770003;
+    }
+    else if (gene.system_name === "zea_mays4m") {
+      gene.taxon_id = 45770004;
+    }
+  }
+  this.push(gene);
+  done();
+});
+
 var rename_id = through2.obj(function (gene, enc, done) {
-  gene.synonyms = [gene._id];
-  gene._id += '_projected';
+  if (gene.system_name === "zea_mays4m" && gene.db_type === "otherfeatures") {
+    gene.synonyms = [gene._id];
+    gene._id += '_projected';
+  }
   this.push(gene);
   done();
 });
@@ -91,14 +106,10 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 
 var speciesRank = {
   3702 : 1, // arabidopsis
-  arabidopsis_thaliana : 1,
-  39947: 2, // rice
-  oryza_sativa : 2,
-  4577 : 3, // maize
-  zea_mays4m : 3,
-  zea_mays : 4,
-  4558 : 4, // sorghum
-  sorghum_bicolor : 5
+  45770004 : 2, // maize v4
+  45770003 : 3, // maize v3
+  39947: 4, // rice
+  4558 : 5 // sorghum
 };
 
 var speciesRanker = through2.obj(function (obj, enc, done) {
@@ -178,6 +189,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   reader
   .pipe(parser)
   .pipe(rename_id) // only used this for projected zmv3 gene models so they wouldn't clash with the zmv3 models with the same _id
+  .pipe(taxFix)
   .pipe(fixTranslationLength)
   .pipe(assignCanonicalTranscript)
   .pipe(orderTranscripts)

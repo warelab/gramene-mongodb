@@ -17,10 +17,6 @@ function getMapper(sizes) {
       if (err) throw deferred.reject(new Error(err));
       // collections.closeMongoDatabase();
       var binsGenerator = require('gramene-bins-client');
-      // replace taxon_id with system_name in each of the genomes
-      genomes.forEach(function(map) {
-        map.taxon_id = map.system_name;
-      });
       var bins = binsGenerator.bins(genomes);
       var mappers = {};
       sizes.fixed.forEach(function(size) {
@@ -53,7 +49,7 @@ module.exports = function(sizes) {
     mapperPromise.then(function(mapper) {
       gene.bins = {};
       for (var field in mapper) {
-        var bin = mapper[field].pos2bin(gene.system_name, gene.location.region, gene.location.start);
+        var bin = mapper[field].pos2bin(gene.taxon_id, gene.location.region, gene.location.start);
         gene.bins[field] = bin;
       }
       that.push(gene);
