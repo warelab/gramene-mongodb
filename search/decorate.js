@@ -113,7 +113,7 @@ var speciesRank = {
 };
 
 var speciesRanker = through2.obj(function (obj, enc, done) {
-  obj.species_idx = speciesRank[obj.system_name] || obj.taxon_id;
+  obj.species_idx = speciesRank[obj.taxon_id] || obj.taxon_id;
   this.push(obj);
   done();
 });
@@ -205,7 +205,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   .pipe(serializer)
   .pipe(writer);
 
-  writer.on('finish', () => {
+  writer.on('finish', function() {
     process.exit(0);
   });
 });
