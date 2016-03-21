@@ -34,10 +34,13 @@ var query = "select r.root_id,\n"
 + "	else n.parent_id\n"
 + "end as parent_id,\n"
 + "n.node_name as taxon_name,n.taxon_id,\n"
-+ "gd.name as system_name\n"
++ "gd.name as system_name,\n"
++ "ntn.name as synonym\n"
 + "from species_tree_root r\n"
 + "	inner join species_tree_node n on n.root_id = r.root_id\n"
 + "	left join genome_db gd on gd.genome_db_id = n.genome_db_id\n"
++ " inner join ncbi_taxa_name ntn on ntn.taxon_id = n.taxon_id\n"
++ "where ntn.name_class != \"merged_taxon_id\"\n"
 + "order by r.root_id, n.left_index\n";
 
 console.error(query);
@@ -59,6 +62,35 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
   this.push(row);
   done();
 });
+
+var groupSynonyms = (function() {
+  var growingNode;
+  
+  var transform = function (row, enc, done) {
+    if (growingNode && growingNode.node_id === row.node_id) {
+      growingNode.synonyms.push(row.synonym);
+    }
+    else {
+      var doneNode = growingNode;
+      growingNode = row;
+      growingNode.synonyms = [growingNode.synonym];
+      delete growingNode.synonym;
+
+      if (doneNode) {
+        doneNode.synonyms = _.uniq(doneNode.synonyms);
+        this.push(doneNode);
+      }
+    }
+    done();
+  };
+  
+  var flush = function(done) {
+    this.push(growingNode);
+    done();
+  };
+  
+  return through2.obj(transform, flush);
+})();
 
 var groupRowsByTree = (function () {
   var growingTree;
@@ -100,7 +132,7 @@ var groupRowsByTree = (function () {
 
 var makeNestedTree = through2.obj(function (tree, enc, done) {
   tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
-  tree.nested._id = tree.nested.tree_root_id;
+  tree.nested._id = tree.tree_root_id;
   this.push(tree);
   done();
 });
@@ -232,6 +264,7 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
       queryStream
         .pipe(tidyRow)
         .pipe(convertBuffersToStrings)
+        .pipe(groupSynonyms)
         .pipe(groupRowsByTree)
         .pipe(makeNestedTree)
         .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
