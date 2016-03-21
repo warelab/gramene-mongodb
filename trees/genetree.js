@@ -71,19 +71,24 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
   done();
 });
 
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
-    row.tree_stable_id = row.tree_stable_id || row.root_id;
-    if (growingTree && growingTree.tree_root_id === row.root_id) {
+    row.tree_stable_id = "Zm4GT" + pad(row.root_id,14);
+    if (growingTree && growingTree.tree_stable_id === row.tree_stable_id) {
       growingTree.nodes.push(row);
     }
     else {
       var doneTree = growingTree;
       growingTree = {
         tree_stable_id: row.tree_stable_id,
-        tree_root_id: row.root_id,
         tree_type: row.tree_type,
         nodes: [row]
       };
