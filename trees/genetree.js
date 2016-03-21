@@ -75,8 +75,7 @@ var groupRowsByTree = (function () {
   var growingTree;
 
   var transform = function (row, enc, done) {
-    row.tree_stable_id = row.tree_stable_id || row.root_id;
-    if (growingTree && growingTree.tree_root_id === row.root_id) {
+    if (growingTree && growingTree.tree_stable_id === row.tree_stable_id) {
       growingTree.nodes.push(row);
     }
     else {
@@ -182,13 +181,13 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
           score += bad;
         }
         else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
-          if (desc.toUpperCase().match(node.model.stable_id)) {
+          if (desc.toUpperCase().match(node.model.stable_id.toUpperCase())) {
             score -= bad;
           }
           score += bad;
         }
         else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
-          if (desc.toUpperCase().match(node.model.stable_id)) {
+          if (desc.toUpperCase().match(node.model.stable_id.toUpperCase())) {
             score -= bad;
           }
           score += bad;

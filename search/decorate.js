@@ -29,28 +29,6 @@ var serializer = through2.obj(function (obj, enc, done) {
   done();
 });
 
-var taxFix = through2.obj(function(gene,enc,done) {
-  if (gene.taxon_id === 4577) {
-    if (gene.system_name === "zea_mays") {
-      gene.taxon_id = 45770003;
-    }
-    else if (gene.system_name === "zea_mays4m") {
-      gene.taxon_id = 45770004;
-    }
-  }
-  this.push(gene);
-  done();
-});
-
-var rename_id = through2.obj(function (gene, enc, done) {
-  if (gene.system_name === "zea_mays4m" && gene.db_type === "otherfeatures") {
-    gene.synonyms = [gene._id];
-    gene._id += '_projected';
-  }
-  this.push(gene);
-  done();
-});
-
 var assignCanonicalTranscript = through2.obj(function (gene, enc,done ) {
   if (!gene.gene_structure.canonical_transcript) {
     var transcripts = gene.gene_structure.transcripts;
@@ -106,9 +84,8 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 
 var speciesRank = {
   3702 : 1, // arabidopsis
-  45770004 : 2, // maize v4
-  45770003 : 3, // maize v3
-  39947: 4, // rice
+  39947: 2, // rice
+  4577 : 3, // maize
   4558 : 5 // sorghum
 };
 
@@ -171,25 +148,11 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
 
   return through2.obj(transform, flush);
 };
-// var sayHi = function sayHi(mesg) {
-//
-//   var transform = function (gene, enc, done) {
-//     console.error(mesg,gene._id);
-//     this.push(gene);
-//     done();
-//   };
-//   var flush = function(done) {
-//     done();
-//   };
-//   return through2.obj(transform, flush);
-// };
 
 collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
   reader
   .pipe(parser)
-  .pipe(rename_id) // only used this for projected zmv3 gene models so they wouldn't clash with the zmv3 models with the same _id
-  .pipe(taxFix)
   .pipe(fixTranslationLength)
   .pipe(assignCanonicalTranscript)
   .pipe(orderTranscripts)
