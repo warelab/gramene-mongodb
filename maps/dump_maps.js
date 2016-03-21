@@ -16,16 +16,20 @@ var connection = mysql.createConnection({
 if (!connection) throw "error";
 connection.connect();
 
-var sql = 'select SCHEMA_NAME from SCHEMATA where SCHEMA_NAME like "%_core_'
-  + grm + '_' + ens + '_%"';
-connection.query(sql, function(err, rows, fields) {
-  if (err) throw err;
-  rows.forEach(function(row) {
-    dump_map(row.SCHEMA_NAME);
+if (argv.d) {
+  dump_map(argv.d);
+}
+else {
+  var sql = 'select SCHEMA_NAME from SCHEMATA where SCHEMA_NAME like "%_core_'
+    + grm + '_' + ens + '_%"';
+  connection.query(sql, function(err, rows, fields) {
+    if (err) throw err;
+    rows.forEach(function(row) {
+      dump_map(row.SCHEMA_NAME);
+    });
+    connection.end();
   });
-  connection.end();
-});
-
+}
 
 function dump_map(dbName) {
   var core = mysql.createConnection({

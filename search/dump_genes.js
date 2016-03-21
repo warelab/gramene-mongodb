@@ -159,7 +159,7 @@ var get_genes = {
           start: row.start,
           end: row.end,
           strand: row.strand,
-          map: meta['assembly.accession'],
+          map: meta['assembly.accession'] || meta['assembly.name'],
         },
         xrefs: [],
         synonyms: [],
