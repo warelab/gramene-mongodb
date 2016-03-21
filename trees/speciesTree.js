@@ -33,13 +33,14 @@ var query = "select r.root_id,\n"
 + "	then null\n"
 + "	else n.parent_id\n"
 + "end as parent_id,\n"
-+ "n.node_name as taxon_name,n.taxon_id,\n"
++ "n.node_name as taxon_name,n.taxon_id,ntno.rank,\n"
 + "gd.name as system_name,\n"
 + "ntn.name as synonym\n"
 + "from species_tree_root r\n"
 + "	inner join species_tree_node n on n.root_id = r.root_id\n"
 + "	left join genome_db gd on gd.genome_db_id = n.genome_db_id\n"
 + " inner join ncbi_taxa_name ntn on ntn.taxon_id = n.taxon_id\n"
++ " inner join ncbi_taxa_node ntno on ntno.taxon_id = n.taxon_id\n"
 + "where ntn.name_class != \"merged_taxon_id\"\n"
 + "order by r.root_id, n.left_index\n";
 
@@ -217,6 +218,15 @@ var addMapsInfo = function addMapsInfo(mapsLUT) {
   return through2.obj(transform, flush);
 };
 
+var pruneEmptyBranches = through2.obj(function(tree, enc, done) {
+  tree.treeModel.all(function(n) {return n.model.num_genes === 0}).forEach(function(node) {
+    console.error('dropping node',node.model.taxon_name);
+    node.drop();
+  });
+  this.push(tree);
+  done();
+});
+
 var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
   var transform = function (tree, enc, done) {
     var throughThis = this;
@@ -269,6 +279,7 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
         .pipe(makeNestedTree)
         .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
         .pipe(addMapsInfo(mapLUT))
+        .pipe(pruneEmptyBranches)
         .pipe(counter)
         .pipe(upsert)
         .pipe(serialize)
