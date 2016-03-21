@@ -252,7 +252,9 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
 };
 
 var serialize = through2.obj(function (r, enc, done) {
-  this.push(JSON.stringify(r) + "\n");
+  if (r.err) {
+    this.push(JSON.stringify(r) + "\n");
+  }
   done();
 }, function (done) {
   console.log('serializer is done');
