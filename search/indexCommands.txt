@@ -40,3 +40,6 @@ db.genetree.ensureIndex({'compara_db':1});
 
 // location based index for dumping sorted bed files
 db.genes.ensureIndex({'taxon_id':1,'db_type':1,'gene_idx':1});
+
+// subset index for taxonomy collection
+db.taxonomy.ensureIndex({'subset':1});
