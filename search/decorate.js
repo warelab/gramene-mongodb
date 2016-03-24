@@ -12,6 +12,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var reader = byline(fs.createReadStream(argv.i));
 var writer = fs.createWriteStream(argv.o);
 var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
+var thalemine = require('./thalemine')();
 var pathwayAdder = require('./pathway_adder')(argv.p);
 var genetreeAdder = require('./genetree_adder')(argv.d);
 var homologAdder = require('./homolog_adder')(1);
@@ -153,6 +154,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
   reader
   .pipe(parser)
+  .pipe(thalemine)
   .pipe(fixTranslationLength)
   .pipe(assignCanonicalTranscript)
   .pipe(orderTranscripts)

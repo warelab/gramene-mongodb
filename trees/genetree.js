@@ -181,13 +181,13 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
           score += bad;
         }
         else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
-          if (desc.toUpperCase().match(node.model.stable_id.toUpperCase())) {
+          if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
             score -= bad;
           }
           score += bad;
         }
         else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
-          if (desc.toUpperCase().match(node.model.stable_id.toUpperCase())) {
+          if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
             score -= bad;
           }
           score += bad;
