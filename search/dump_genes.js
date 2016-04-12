@@ -193,33 +193,43 @@ var add_xrefs = {
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
    + ' Where g.is_current=1',
 
-  sql3: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+  sql3: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym, onyx.linkage_type'
    + ' FROM gene g'
    + ' inner join translation tl on g.`canonical_transcript_id` = tl.`transcript_id`'
    + ' inner join object_xref ox on tl.translation_id = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
+   + ' LEFT JOIN ontology_xref onyx ON onyx.`object_xref_id` = ox.`object_xref_id`'
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Translation"',
 
-  sql4: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+  sql4: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym, onyx.linkage_type'
    + ' FROM gene g'
    + ' inner join object_xref ox on g.`canonical_transcript_id` = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
+   + ' LEFT JOIN ontology_xref onyx ON onyx.`object_xref_id` = ox.`object_xref_id`'
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Transcript"',
 
-  sql5: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
+  sql5: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym, onyx.linkage_type'
    + ' FROM gene g'
    + ' inner join object_xref ox on g.gene_id = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
+   + ' LEFT JOIN ontology_xref onyx ON onyx.`object_xref_id` = ox.`object_xref_id`'
    + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene"',
   process: function(xrefs,geneInfo) {
     xrefs.forEach(function(xref) {
-      geneInfo[xref.gene_id].xrefs.push({db: xref.db_name, id: xref.dbprimary_acc});
+      var xr = {
+        db: xref.db_name,
+        id: xref.dbprimary_acc
+      };
+      if (xref.linkage_type) {
+        xr.evidence_code = xref.linkage_type;
+      }
+      geneInfo[xref.gene_id].xrefs.push(xr);
       if (xref.synonym) {
         geneInfo[xref.gene_id].synonyms.push(xref.synonym);
       }
@@ -322,6 +332,15 @@ connection.query(get_metadata.sql, function(err, rows, fields) {
                           // uniqify xrefs (group by db_name)
                           if (gene.xrefs.length > 0) {
                             gene.xrefs = _.map(_.groupBy(gene.xrefs, 'db'),function(xrefs,db) {
+                              if (db == 'GO' || db == 'PO') {
+                                return {
+                                  db : db,
+                                  ids: _.uniqBy(xrefs,'id').map(function(xref) {
+                                    var ec = xref.evidence_code || '';
+                                    return [xref.id, ec];
+                                  })
+                                }
+                              }
                               return {db:db, ids: _.uniqBy(xrefs,'id').map(function(xref) {return xref.id;})}
                             });
                           }

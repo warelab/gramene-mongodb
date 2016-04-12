@@ -22,6 +22,11 @@ function modifyGene(ancestorsLUT,obj) {
       var specificAnnotations = [];
       var usefulInfo = {};
       xrefsKeys[x].ids.forEach(function(id) {
+        var ec;
+        if (Array.isArray(id)) {
+          ec = id[1];
+          id = id[0];
+        }
         if (ancestorsLUT[x].hasOwnProperty(id)) {
           var intId = parseInt(id.match(/\d+/)[0]);
           specificAnnotations.push(intId);
@@ -33,6 +38,9 @@ function modifyGene(ancestorsLUT,obj) {
             return obj;
           }
           usefulInfo[intId] = subdoc(ancestorsLUT[x][id],fields[x]);
+          if (!!ec) {
+            usefulInfo[intId].evidence_code = ec;
+          }
           ancestorsLUT[x][id].ancestors.forEach(function(anc) {
             if (anc !== intId) {
               lut[anc]=1;
