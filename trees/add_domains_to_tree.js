@@ -19,14 +19,15 @@ var decorateTree = function(geneCollection) {
         if (gene.gene_structure.hasOwnProperty('canonical_transcript')) {
           var tIdx = _.keyBy(gene.gene_structure.transcripts,'id');
           var translation = tIdx[gene.gene_structure.canonical_transcript].translation;
-          if (translation.features.domain && translation.features.domain.architecture) {
+          if (translation && translation.features.domain && translation.features.domain.architecture) {
             domain_lut[gene._id] = translation.features.domain.architecture.map(function(domain) {
               return {
-                interpro: domain.interpro,
+                id: domain.interpro,
+                root: +domain.root,
                 start: domain.start,
                 end: domain.end,
                 name: domain.name,
-                id: +domain.root
+                description: domain.description
               }
             });
           }
