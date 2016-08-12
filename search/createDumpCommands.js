@@ -1,29 +1,14 @@
 #!/usr/bin/env node
+var collections = require('gramene-mongodb-config');
+
 var argv = require('minimist')(process.argv.slice(2));
-
-var grm = argv.g;
-var ens = argv.e;
-
-// connect to mysql database
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: argv.h,
-  user: argv.u,
-  password: argv.p,
-  database: 'information_schema'
-});
-
-if (!connection) throw "error";
-connection.connect();
-
-var sql = 'select SCHEMA_NAME from SCHEMATA where SCHEMA_NAME like "%_core_'
-  + grm + '_' + ens + '_%" or SCHEMA_NAME like "%_otherfeatures_' + grm + '_' + ens + '%"';
-connection.query(sql, function(err, rows, fields) {
-  if (err) throw err;
-  rows.forEach(function(row) {
-    var cmd = './dump_genes.js -h '+argv.h+' -u '+argv.u+' -p '+argv.p+' -d '+row.SCHEMA_NAME
-    + ' | gzip -c > tmp/'+row.SCHEMA_NAME+'.json.gz';
-    console.log(cmd);
+collections.maps.mongoCollection().then(function(mapsCollection) {
+  mapsCollection.find({type:'genome'}).toArray(function (err, genomes) {
+    if (err) throw(err);
+    collections.closeMongoDatabase();
+    genomes.forEach(function(genome) {
+      var cmd = `./dump_genes.js -h ${argv.h} -u ${argv.u} -p ${argv.p} -d ${genome.db} -m ${genome._id} | gzip -c > tmp/${genome.system_name}.json.gz`;
+      console.log(cmd);
+    });
   });
-  connection.end();
 });
