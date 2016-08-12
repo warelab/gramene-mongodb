@@ -22,8 +22,9 @@ connection.connect();
 
 // lookup metadata
 var get_metadata = {
-  sql: 'select m2.species_id,m2.meta_key,m2.meta_value from meta m1, meta m2 where m1.meta_key = "assembly.accession" and m1.meta_value = "'+map_id+'" and m1.species_id = m2.species_id',
+  sql: 'select m2.species_id,m2.meta_key,m2.meta_value from meta m1, meta m2 where (m1.meta_key = "assembly.accession" and m1.meta_value = "'+map_id+'" or m1.meta_key = "assembly.default" and m1.meta_value = "'+map_id+'") and m1.species_id = m2.species_id',
   process: function(rows) {
+    if (!rows) throw(new error('no results for query '+this.sql));
     var meta = {
       species_id : rows[0].species_id
     };

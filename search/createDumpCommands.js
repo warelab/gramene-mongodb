@@ -7,7 +7,8 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
     if (err) throw(err);
     collections.closeMongoDatabase();
     genomes.forEach(function(genome) {
-      var cmd = `./dump_genes.js -h ${argv.h} -u ${argv.u} -p ${argv.p} -d ${genome.db} -m ${genome._id} | gzip -c > tmp/${genome.system_name}.json.gz`;
+      console.log(`echo "${genome.system_name}"`);
+      var cmd = `node --max-old-space-size=4096 ./dump_genes.js -h ${argv.h} -u ${argv.u} -p ${argv.p} -d ${genome.db} -m ${genome._id} | gzip -c > tmp/${genome.system_name}.json.gz`;
       console.log(cmd);
     });
   });
