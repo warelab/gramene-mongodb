@@ -27,7 +27,12 @@ function getMapping() {
       fields.push(''); // because the description might be missing
     }
     if (fields.length === 6) {
-      lut[fields[2]] = {id:fields[0], name:fields[4], description:fields[5]};
+      if (lut.hasOwnProperty(fields[2])) {
+        lut[fields[2]].synonyms.push(fields[0]);
+      }
+      else {
+        lut[fields[2]] = {id:fields[0], synonyms:[fields[0]], name:fields[4], description:fields[5]};
+      }
     }
   })
   .on('close', function() {
@@ -51,7 +56,7 @@ module.exports = function() {
     lutPromise.then(function(lut) {
       if (lut[gene._id]) {
         var v3 = lut[gene._id];
-        gene.synonyms = [v3.id];
+        gene.synonyms = v3.synonyms;
         if (v3.name != v3.id) {
           gene.name = v3.name;
         }
