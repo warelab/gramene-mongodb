@@ -1,60 +1,38 @@
 ## Genes collection
-###  dump genes from ensembl core and otherfeatures databases
+### populate auxiliary mongodb collections
+Go populate the genetree, pathways, ontologies, and maps collections.
+
+###  dump genes from ensembl databases
 dump_genes.js extracts the gene models, xrefs, and interpro protein annotations on the canonical translation from a core or otherfeatures database.
 
-createDumpCommands.js interrogates the mysql server hosting ensembl databases and generates command lines for dump_genes.js.
-Dump gzipped json docs from each database.
+createDumpCommands.js interrogates the maps collection on the mongodb server and generates command lines for dump_genes.js.
 ```
 cd <gramene-mongodb>/search
 mkdir tmp
-./createDumpCommands.js -g 48 -e 82 -h host -u user -p pass | parallel
+./createDumpCommands.js -h host -u user -p pass | parallel
 ```
 
-### populate auxiliary mongodb collections
-Go populate the genetree, pathways, ontologies, and maps collections.
 ### load homologue lookup table
 ```
 nohup redis-server &
-dump_homologs.js -h host -u user -p pass -d ensembl_compara_plants_48_82 | redis-cli --pipe
+dump_homologs.js -h host -u user -p pass -d ensembl_compara_plants_51_85 | redis-cli --pipe
 ```
 
 ### finish the gene documents
 Once all that is done:
 ```
  gzcat tmp/*.json.gz | \
- ./merge_interpro_hits.js | \
- ./add_pathways.js <pathToAssociationsFile> | \
- ./add_bins.js | \
- node --max-old-space-size=2048 ./add_genetree_taxon.js | \
- ./add_homologues.js | \
- ./add_xref_ancestors.js > genes.jsonl
-```
-N.B. run add_xref_ancestors.js last other scripts earlier in the pipe populate xrefs.
-
-Load the genes docs into mongodb
-```
- mongoimport --db search48 --collection genes --drop < genes.jsonl
+ node --max-old-space-size=8192 ./decorate.js -i /dev/fd/0 -o insertion_errors.jsonl -p <pathToAssociationsFile> -d ensembl_compara_plants_51_85
 ```
 
 Final step is to build indexes
 ```
-mongo search48 < indexCommands.js
+mongo search51 < indexCommands.txt
 ```
-Currently, this only adds one index for free text search. Solr genes and suggestions cores are the primary ways to search for genes, but the genes documents there are slimmed down. In practice, the mongo collection is queried with unique identifiers like this:
-http://data.gramene.org/genes?_id=F775_06278 
-or
-http://data.gramene.org/genes?idList=Traes_7BL_014267D94,ORUFI04G04670,ONIVA08G06220,BGIOSGA037893,ORGLA10G0104200,OS10G0450000,OPUNC10G10040
-
 
 One more thing...
 go back over to the trees subdirectory and add domains to the gene trees
 ```
 cd ../trees
-node add_domains_to_tree.js
-```
-### Example queries
-```
-db.genes.find({"ancestors.GO":4321}).count()
-db.genes.find({$text : {$search : "kinase"}}).count()
-db.genes.aggregate({$match: {$text: {$search: "kinase"}}},{$group : {_id: "$species", count: {$sum:1}}},{$sort: {"count":-1}})
+node add_domains_to_tree.js ensembl_compara_plants_51_85
 ```
