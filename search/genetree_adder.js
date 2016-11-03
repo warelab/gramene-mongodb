@@ -78,21 +78,19 @@ function getLut(main_db) {
                 }
                 else {
                   // not ath, check for ath_rep
-                  if (leaf.ath_rep) {
-                    var repNode = leafIdx[leaf.ath_rep.id];
-                    var representative = {
-                      id: repNode.gene_stable_id,
-                      taxon_id: repNode.taxon_id
-                    };
-                    if (repNode.hasOwnProperty('gene_display_label')) {
-                      representative.name = repNode.gene_display_label;
-                    }
-                    if (repNode.hasOwnProperty('gene_description')) {
-                      representative.description = repNode.gene_description;
-                    }
-                    acc[id] = _.cloneDeep(lookupValue);
-                    acc[id].representative = {model: representative};
+                  var repNode = leaf.ath_rep ? leafIdx[leaf.ath_rep.id] : leafIdx[id];
+                  var representative = {
+                    id: repNode.gene_stable_id,
+                    taxon_id: repNode.taxon_id
+                  };
+                  if (repNode.hasOwnProperty('gene_display_label')) {
+                    representative.name = repNode.gene_display_label;
                   }
+                  if (repNode.hasOwnProperty('gene_description')) {
+                    representative.description = repNode.gene_description;
+                  }
+                  acc[id] = _.cloneDeep(lookupValue);
+                  acc[id].representative = {model: representative};
                 }
               }
               else {

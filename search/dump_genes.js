@@ -8,7 +8,10 @@ var connectionOptions = {
   user: argv.u,
   database: argv.d
 }
+
 var db_type = connectionOptions.database.match(/_(core|otherfeatures)_\d+_\d+_\d+/)[1];
+var map_id = argv.m;
+if (!map_id) throw 'no map_id specified';
 
 if (!!argv.p) {
   connectionOptions.password = argv.p;
@@ -19,9 +22,12 @@ connection.connect();
 
 // lookup metadata
 var get_metadata = {
-  sql: 'select meta_key,meta_value from meta',
+  sql: 'select m2.species_id,m2.meta_key,m2.meta_value from meta m1, meta m2 where (m1.meta_key = "assembly.accession" and m1.meta_value = "'+map_id+'" or m1.meta_key = "assembly.default" and m1.meta_value = "'+map_id+'") and m1.species_id = m2.species_id',
   process: function(rows) {
-    var meta = {};
+    if (!rows) throw(new error('no results for query '+this.sql));
+    var meta = {
+      species_id : rows[0].species_id
+    };
     rows.forEach(function(row) {
       meta[row.meta_key] = row.meta_value;
     });
@@ -30,7 +36,10 @@ var get_metadata = {
 };
 
 var get_exons = {
-  sql: 'select * from exon',
+  sql: 'select e.* from exon e, seq_region sr, coord_system cs '
+  + 'where e.seq_region_id = sr.seq_region_id '
+  + 'and sr.coord_system_id = cs.coord_system_id '
+  + 'and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
   process: function(rows) {
     var obj = {};
     rows.forEach(function(row) {
@@ -41,7 +50,10 @@ var get_exons = {
 }
 
 var get_transcripts = {
-  sql: 'select transcript_id,gene_id,stable_id from transcript',
+  sql: 'select t.transcript_id,t.gene_id,t.stable_id from transcript t, seq_region sr, coord_system cs '
+  + 'where t.seq_region_id = sr.seq_region_id '
+  + 'and sr.coord_system_id = cs.coord_system_id '
+  + 'and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
   process: function(rows) {
     var obj = {};
     rows.forEach(function(row) {
@@ -58,11 +70,13 @@ var add_exons_to_transcripts = {
   sql: 'select * from exon_transcript',
   process: function(rows,exons,transcripts) {
     rows.forEach(function(row) {
-      var exon = exons[row.exon_id];
-      var transcript = transcripts[row.transcript_id];
-      transcript.exons[row.rank-1] = exon.stable_id;
-      transcript.exon_ids[row.rank-1] = row.exon_id; // needed for translation start and end
-      transcript.length += exon.seq_region_end - exon.seq_region_start + 1;
+      if (exons.hasOwnProperty(row.exon_id)) {
+        var exon = exons[row.exon_id];
+        var transcript = transcripts[row.transcript_id];
+        transcript.exons[row.rank-1] = exon.stable_id;
+        transcript.exon_ids[row.rank-1] = row.exon_id; // needed for translation start and end
+        transcript.length += exon.seq_region_end - exon.seq_region_start + 1;
+      }
     });
   }
 }
@@ -73,36 +87,38 @@ var add_translations_to_transcripts = {
   process: function(rows, exons, transcripts) {
     var obj={};
     rows.forEach(function(row) {
-      var transcript = transcripts[row.transcript_id];
-      // calculate the translation start and end coords relative to the transcript
-      // and exon junctions
-      transcript.exon_junctions = [];
-      transcript.cds = {
-        start: 0,
-        end: 0
-      };
-      var pos=0;
-      transcript.exon_ids.forEach(function(exon_id) {
-        var exon = exons[exon_id];
-        if (transcript.cds.start === 0 && exon_id === row.start_exon_id) {
-          transcript.cds.start = pos + row.seq_start;
+      if (transcripts.hasOwnProperty(row.transcript_id)) {
+        var transcript = transcripts[row.transcript_id];
+        // calculate the translation start and end coords relative to the transcript
+        // and exon junctions
+        transcript.exon_junctions = [];
+        transcript.cds = {
+          start: 0,
+          end: 0
+        };
+        var pos=0;
+        transcript.exon_ids.forEach(function(exon_id) {
+          var exon = exons[exon_id];
+          if (transcript.cds.start === 0 && exon_id === row.start_exon_id) {
+            transcript.cds.start = pos + row.seq_start;
+          }
+          if (transcript.cds.end === 0 && exon_id === row.end_exon_id) {
+            transcript.cds.end = pos + row.seq_end;
+          }
+          pos += exon.seq_region_end - exon.seq_region_start + 1;
+          transcript.exon_junctions.push(pos);
+        });
+        transcript.exon_junctions.pop();
+        if (transcript.exon_junctions.length === 0) {
+          delete transcript.exon_junctions;
         }
-        if (transcript.cds.end === 0 && exon_id === row.end_exon_id) {
-          transcript.cds.end = pos + row.seq_end;
-        }
-        pos += exon.seq_region_end - exon.seq_region_start + 1;
-        transcript.exon_junctions.push(pos);
-      });
-      transcript.exon_junctions.pop();
-      if (transcript.exon_junctions.length === 0) {
-        delete transcript.exon_junctions;
+        transcript.translation = {
+          id : row.stable_id,
+          length : row.num_residues,
+          features: {all:[]}
+        };
+        obj[row.translation_id] = transcript.translation;
       }
-      transcript.translation = {
-        id : row.stable_id,
-        length : row.num_residues,
-        features: {all:[]}
-      };
-      obj[row.translation_id] = transcript.translation;
     });
     return obj;
   }
@@ -118,14 +134,16 @@ var add_features_to_translations = {
    + ' WHERE 1',
   process: function(rows, translations) {
     rows.forEach(function(row) {
-      translations[row.translation_id].features.all.push({
-        name: row.hit_name,
-        description: row.hit_description,
-        db: row.db,
-        interpro: row.interpro_ac,
-        start: row.seq_start,
-        end: row.seq_end
-      });
+      if (translations.hasOwnProperty(row.translation_id)) {
+        translations[row.translation_id].features.all.push({
+          name: row.hit_name,
+          description: row.hit_description,
+          db: row.db,
+          interpro: row.interpro_ac,
+          start: row.seq_start,
+          end: row.seq_end
+        });
+      }
     });
   }
 }
@@ -137,9 +155,12 @@ var get_genes = {
     + ' case when sra.value is not NULL then CAST(sra.value AS UNSIGNED) else 999999 end as karyotype'
     + ' from gene g'
     + ' inner join seq_region sr on g.seq_region_id = sr.seq_region_id'
+    + ' inner join coord_system cs on cs.coord_system_id = sr.coord_system_id'
     + ' left join seq_region_attrib sra on sra.seq_region_id = sr.seq_region_id and sra.attrib_type_id=367' // karyotype_rank
     + ' left join xref x on g.display_xref_id = x.xref_id'
     + ' where g.is_current=1'
+    + ' and sr.coord_system_id = cs.coord_system_id'
+    + ' and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___'
     + ' order by karyotype asc, sr.length desc, g.seq_region_start asc',
   process: function(rows,meta,transcripts) {
     var all_genes = {};
@@ -180,46 +201,56 @@ var get_genes = {
 var add_xrefs = {
   sql1: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
+   + ' JOIN seq_region sr ON g.seq_region_id = sr.seq_region_id'
+   + ' JOIN coord_system cs ON cs.coord_system_id = sr.coord_system_id'
    + ' JOIN xref x ON x.xref_id = g.display_xref_id'
    + ' JOIN external_db ed ON ed.external_db_id = x.external_db_id'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
-   + ' Where g.is_current=1',
+   + ' Where g.is_current=1 and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
 
   sql2: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym'
    + ' FROM gene g'
+   + ' JOIN seq_region sr ON g.seq_region_id = sr.seq_region_id'
+   + ' JOIN coord_system cs ON cs.coord_system_id = sr.coord_system_id'
    + ' inner join transcript t on g.canonical_transcript_id = t.transcript_id'
    + ' JOIN xref x ON x.xref_id = t.display_xref_id'
    + ' JOIN external_db ed ON ed.external_db_id = x.external_db_id'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
-   + ' Where g.is_current=1',
+   + ' Where g.is_current=1 and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
 
   sql3: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym, onyx.linkage_type'
    + ' FROM gene g'
+   + ' JOIN seq_region sr ON g.seq_region_id = sr.seq_region_id'
+   + ' JOIN coord_system cs ON cs.coord_system_id = sr.coord_system_id'
    + ' inner join translation tl on g.`canonical_transcript_id` = tl.`transcript_id`'
    + ' inner join object_xref ox on tl.translation_id = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
    + ' LEFT JOIN ontology_xref onyx ON onyx.`object_xref_id` = ox.`object_xref_id`'
-   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Translation"',
+   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Translation" and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
 
   sql4: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym, onyx.linkage_type'
    + ' FROM gene g'
+   + ' JOIN seq_region sr ON g.seq_region_id = sr.seq_region_id'
+   + ' JOIN coord_system cs ON cs.coord_system_id = sr.coord_system_id'
    + ' inner join object_xref ox on g.`canonical_transcript_id` = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
    + ' LEFT JOIN ontology_xref onyx ON onyx.`object_xref_id` = ox.`object_xref_id`'
-   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Transcript"',
+   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Transcript" and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
 
   sql5: 'SELECT g.gene_id, x.dbprimary_acc, ed.db_name, es.synonym, onyx.linkage_type'
    + ' FROM gene g'
+   + ' JOIN seq_region sr ON g.seq_region_id = sr.seq_region_id'
+   + ' JOIN coord_system cs ON cs.coord_system_id = sr.coord_system_id'
    + ' inner join object_xref ox on g.gene_id = ox.`ensembl_id`'
    + ' inner join xref x on ox.`xref_id` = x.xref_id'
    + ' inner join external_db ed on x.`external_db_id` = ed.`external_db_id`'
    + ' LEFT JOIN external_synonym es ON es.xref_id = x.xref_id'
    + ' LEFT JOIN ontology_xref onyx ON onyx.`object_xref_id` = ox.`object_xref_id`'
-   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene"',
+   + ' WHERE g.`is_current`=1 and ox.`ensembl_object_type` = "Gene" and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
   process: function(xrefs,geneInfo) {
     xrefs.forEach(function(xref) {
       var xr = {
@@ -276,16 +307,19 @@ function add_gene_structure(exons,transcripts,genes) {
   add_xrefs
 */
 
+function set_species(meta, query) {
+  return query.replace('___REPLACE_ME_WITH_SPECIES_ID___', meta.species_id);
+}
 
 connection.query(get_metadata.sql, function(err, rows, fields) {
   if (err) throw err;
   var meta = get_metadata.process(rows);
 
-  connection.query(get_exons.sql, function(err, rows, fields) {
+  connection.query(set_species(meta, get_exons.sql), function(err, rows, fields) {
     if (err) throw err;
     var exons = get_exons.process(rows);
 
-    connection.query(get_transcripts.sql, function(err, rows, fields) {
+    connection.query(set_species(meta, get_transcripts.sql), function(err, rows, fields) {
       if (err) throw err;
       var transcripts = get_transcripts.process(rows);
 
@@ -301,27 +335,27 @@ connection.query(get_metadata.sql, function(err, rows, fields) {
             if (err) throw err;
             add_features_to_translations.process(rows, translations);
 
-            connection.query(get_genes.sql, function(err, rows, fields) {
+            connection.query(set_species(meta, get_genes.sql), function(err, rows, fields) {
               if (err) throw err;
               var genes = get_genes.process(rows, meta, transcripts);
 
-              connection.query(add_xrefs.sql1, function(err, rows, fields) {
+              connection.query(set_species(meta, add_xrefs.sql1), function(err, rows, fields) {
                 if (err) throw err;
                 add_xrefs.process(rows, genes);
 
-                connection.query(add_xrefs.sql2, function(err, rows, fields) {
+                connection.query(set_species(meta, add_xrefs.sql2), function(err, rows, fields) {
                   if (err) throw err;
                   add_xrefs.process(rows, genes);
 
-                  connection.query(add_xrefs.sql3, function(err, rows, fields) {
+                  connection.query(set_species(meta, add_xrefs.sql3), function(err, rows, fields) {
                     if (err) throw err;
                     add_xrefs.process(rows, genes);
 
-                    connection.query(add_xrefs.sql4, function(err, rows, fields) {
+                    connection.query(set_species(meta, add_xrefs.sql4), function(err, rows, fields) {
                       if (err) throw err;
                       add_xrefs.process(rows, genes);
 
-                      connection.query(add_xrefs.sql5, function(err, rows, fields) {
+                      connection.query(set_species(meta, add_xrefs.sql5), function(err, rows, fields) {
                         if (err) throw err;
                         add_xrefs.process(rows, genes);
 
