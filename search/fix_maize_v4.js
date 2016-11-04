@@ -57,13 +57,13 @@ module.exports = function() {
         if (!gene.hasOwnProperty('synonyms')) {
           gene.synonyms = [];
         }
-        lut[gene._id].v3.forEach({id} => {
+        lut[gene._id].v3.forEach(id => {
           if (id != '-') {
             gene.synonyms.push(id);
           }
         });
         var v3names = [];
-        lut[gene._id].names.forEach({v3name} => {
+        lut[gene._id].names.forEach(v3name => {
           if (v3name != '-') {
             gene.synonyms.push(v3name);
             v3names.push(v3name);
@@ -74,7 +74,7 @@ module.exports = function() {
         }
         gene.synonyms = _.uniq(gene.synonyms);
         var v3descriptions = [];
-        lut[gene._id].descriptions.forEach({v3description} => {
+        lut[gene._id].descriptions.forEach(v3description => {
           if (v3description != '-' && !v3description.match(/Uncharacterized protein/)) {
             v3descriptions.push(v3description);
           }
