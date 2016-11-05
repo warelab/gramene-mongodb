@@ -29,7 +29,7 @@ function buildLookupTable(filename) {
 10	Proj Gene Product DB ID
   */
     var fields = line.split("\t");
-    if (fields.length === 8) {
+    if (fields.length === 11) {
       var Os_gene_id = fields[7].toUpperCase();
       var Proj_gene_id = fields[9].toUpperCase();
       var Os_reaction_id = fields[3];
