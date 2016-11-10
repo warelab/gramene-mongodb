@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var _ = require('lodash');
-var Q = require('Q');
+var Q = require('q');
 var collections = require('gramene-mongodb-config');
 var request = require('sync-request');
 
