@@ -16,21 +16,24 @@ function buildLookupTable(filename) {
   })
   .on('line', function(line) {
   /*
-  0  Os Reaction Name
-  1  Os Reaction DB ID
-  2  Proj Reaction DB ID
-  3  Proj Reaction Species
-  4  Os Gene Product Locus ID
-  5  Os Gene Product DB ID
-  6  Proj Gene Product Locus ID
-  7  Proj Gene Product DB ID
+0	Os Pathway Name
+1	Os Pathway DB ID
+2	Os Reaction Name
+3	Os Reaction DB ID
+4	Proj Reaction DB ID
+5	Proj Reaction Species
+6	Proj Reaction Species ID
+7	Os Gene Product Locus ID
+8	Os Gene Product DB ID
+9	Proj Gene Product Locus ID
+10	Proj Gene Product DB ID
   */
     var fields = line.split("\t");
-    if (fields.length === 8) {
-      var Os_gene_id = fields[4].toUpperCase();
-      var Proj_gene_id = fields[6].toUpperCase();
-      var Os_reaction_id = fields[1];
-      var Proj_reaction_id = fields[2];
+    if (fields.length === 11) {
+      var Os_gene_id = fields[7].toUpperCase();
+      var Proj_gene_id = fields[9].toUpperCase();
+      var Os_reaction_id = fields[3];
+      var Proj_reaction_id = fields[4];
       // rice gene to rice reaction
       if (!lut.geneToOsReaction.hasOwnProperty(Os_gene_id)) {
         lut.geneToOsReaction[Os_gene_id] = {};

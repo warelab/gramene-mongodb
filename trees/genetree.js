@@ -171,30 +171,30 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
     var modelSpeciesBonus = -25;
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
-      if (node.model.gene_description.match(/projected/i)) {
+      var desc = node.model.gene_description.replace(/\s*\[Source:.*/,'');
+      var idRE = new RegExp(node.model.gene_stable_id+'\S*', 'i');
+      desc = desc.replace(idRE,'');
+      node.model.gene_description = desc;
+      if (desc.match(/(projected|unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
         score += bad;
       }
-      else {
-        var desc = node.model.gene_description.replace(/\s*\[Source:.*/,'');
-        node.model.gene_description = desc;
-        if (desc.match(/(unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
-          score += bad;
-        }
-        else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
-          if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
-            score -= bad;
-          }
-          score += bad;
-        }
-        else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
-          if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
-            score -= bad;
-          }
-          score += bad;
-        }
-        else if (desc === "") {
-          score += bad; // because we stripped off the only non-info there was ([Source:.*])
-        }
+      elsif (desc.match(/^(expressed)?\s*protein$/i) {
+        score += bad;
+      }
+      // else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
+      //   if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
+      //     score -= bad;
+      //   }
+      //   score += bad;
+      // }
+      // else if (desc.match(/Os[0-9]{2}g[0-9]{7}/i)) {
+      //   if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
+      //     score -= bad;
+      //   }
+      //   score += bad;
+      // }
+      else if (desc === "") {
+        score += bad; // because we stripped off the only non-info there was
       }
     }
     if (node.model.hasOwnProperty('gene_display_label')) {
