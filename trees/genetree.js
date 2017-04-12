@@ -164,6 +164,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
   }
   
   function scoreRepresentative(node) {
+    var desc;
     var score = 0;
     var bad = 100;
     var meh = -50;
@@ -171,14 +172,14 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
     var modelSpeciesBonus = -25;
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
-      var desc = node.model.gene_description.replace(/\s*\[Source:.*/,'');
+      desc = node.model.gene_description.replace(/\s*\[Source:.*/,'');
       var idRE = new RegExp(node.model.gene_stable_id+'\S*', 'i');
       desc = desc.replace(idRE,'');
       node.model.gene_description = desc;
       if (desc.match(/(projected|unknown|uncharacterized|predicted|hypothetical|putative|projected|cDNA)/i)) {
         score += bad;
       }
-      elsif (desc.match(/^(expressed)?\s*protein$/i) {
+      else if (desc.match(/^(expressed)?\s*protein$/i)) {
         score += bad;
       }
       // else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
@@ -208,7 +209,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
     }
     if (node.model.taxon_id === 3702) { // consider a model species bonus
       score += modelSpeciesBonus;
-      if (desc.match(/^Putative/)) {
+      if (desc && desc.match(/^Putative/)) {
         score -= bad;
       }
     }
