@@ -33,6 +33,7 @@
     "express": "^4.6.1",
     "express-session": "^1.7.0",
     "flat-to-nested": "^1.0.1",
+    "ftps": "^1.1.0",
     "gramene-bins-client": "^2.2.4",
     "gramene-mongodb-config": "git://github.com/warelab/gramene-mongodb-config.git#release53",
     "isnumber": "^1.0.0",

@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 var _ = require('lodash');
 var Q = require('q');
+var FTPS = require('ftps');
 var collections = require('gramene-mongodb-config');
+var ftps = new FTPS({
+  host: 'ftp.ebi.ac.uk'
+});
 
 function parseAssays() {
   var deferred = Q.defer();
@@ -17,12 +21,22 @@ function parseAssays() {
       assays[_id] = {
         'experiment' : fields[0],
         'group'      : fields[1],
-        'characteristics' : {},
-        'factors' : {}
+        'characteristic' : [],
+        'factor' : []
       }
     }
     var c = fields[3].replace(/\s/g,'_');
-    assays[_id][fields[2]+'s'][c] = fields[4];
+    
+    var info = { type: fields[3], label: fields[4] };
+    if (fields.length === 6) {
+      var matches = fields[5].match(/.*\/([A-Za-z]+)_(\d+)/);
+      if (matches) {
+        info.ontology = matches[1];
+        info.id = matches[1] + ':' + matches[2];
+        info.int_id = +matches[2];
+      }
+    }
+    assays[_id][fields[2]].push(info);
     if (c === 'organism') {
       assays[_id].taxon_id = +fields[5].replace(/.*NCBITaxon_/,'');
     }
@@ -39,13 +53,14 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
     var taxonomy = {};
     docs.forEach(function(doc) {
       taxonomy[doc._id] = doc.name;
-    })
-    var lut={};
+    });
+    var lut = {};
     parseAssays().then(function(experiments) {
       _.forEach(experiments, function(experiment, id) {
         if (taxonomy.hasOwnProperty(experiment[0].taxon_id)) {
-          var url = `ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/atlas/experiments/${id}/${id}.tsv`;
-          console.log('ftp '+url);
+          var url = `/pub/databases/microarray/data/atlas/experiments/${id}/${id}.tsv`;
+          var stream = ftps.get(url).execAsStream();
+          stream.pipe(process.stdout);
           experiment.forEach(function(e) {
             e._id = e.experiment + "." + e.group;
           });
