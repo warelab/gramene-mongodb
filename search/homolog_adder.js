@@ -8,6 +8,7 @@ function getRedis(db) {
   var client = require('redis').createClient();
   client.select(db, function(err) {
     if (err) throw err;
+    console.error('homolog_adder redis connection established');
     deferred.resolve(client);
   });
   return deferred.promise;

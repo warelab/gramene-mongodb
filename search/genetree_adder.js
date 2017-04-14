@@ -8,6 +8,7 @@ var _ = require('lodash'),
 function getLut(main_db) {
   var deferred = Q.defer();
   collections.genetrees.mongoCollection().then(function(coll) {
+    console.error('genetree_adder find() started');
     coll.find().toArray(function (err, docs) {
       console.error('loaded '+docs.length+' gene trees from mongodb');
       // collections.closeMongoDatabase();

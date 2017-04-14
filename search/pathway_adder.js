@@ -57,6 +57,7 @@ function buildLookupTable(filename) {
     }
   })
   .on('close', function() {
+    console.error('pathway_adder lookup table');
     deferred.resolve(lut);
   });
   return deferred.promise;

@@ -85,6 +85,7 @@ var promises = xrefsToProcess.map(function(x) {
           });
         }
       });
+      console.error('ancestor_adder ' + x + ' lookup table');
       deferred.resolve(lut);
     });
   });
@@ -96,6 +97,7 @@ var promises = xrefsToProcess.map(function(x) {
 module.exports = function() {
   
   var lutPromise = Q.all(promises).then(function(luts) {
+    console.error('ancestor_adder lookup tables done')
     return _.zipObject(xrefsToProcess, luts);
   });
   
