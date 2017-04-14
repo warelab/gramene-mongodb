@@ -31,17 +31,19 @@ tsvFiles.forEach(function(tsv) {
         }
       }
       if (!lut.hasOwnProperty(fields[0])) {
-        lut[fields[0]] = {expression: {}};
+        lut[fields[0]] = { _id: fields[0] };
       }
-      lut[fields[0]].expression[exp_id] = samples;
+      lut[fields[0]][exp_id] = samples;
     }
   })
   .on('close', function() {
     remaining--;
     console.error('closing',tsv, remaining);
     if (remaining === 0) {
-      var json = JSON.stringify(lut,null,'  ');
-      console.log(json);
+      var genes = Object.keys(lut);
+      for(var i=0;i<genes.length;i++) {        
+        console.log(JSON.stringify(lut[genes[i]]));
+      }
     }
   });
 });
