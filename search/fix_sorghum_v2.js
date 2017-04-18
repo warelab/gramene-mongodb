@@ -67,11 +67,11 @@ module.exports = function() {
         gene.synonyms = _.uniq(gene.synonyms);
         var v2descriptions = [];
         lut[gene._id].def.forEach(v2description => {
-          if (v2description != '-' && gene.description != 'hypothetical protein') {
+          if (v2description != '-') {
             v2descriptions.push(v2description);
           }
         });
-        if (!gene.description && v2descriptions.length == 1) {
+        if (v2descriptions.length > 0) {
           gene.description = v2descriptions[0];
         }
       }
