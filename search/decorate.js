@@ -25,9 +25,14 @@ var parser = through2.obj(function (line, enc, done) {
   done();
 });
 
+var numberDecorated=0;
 var serializer = through2.obj(function (obj, enc, done) {
   if (obj.err) {
     this.push(JSON.stringify(obj) + "\n");
+  }
+  numberDecorated++;
+  if (numberDecorated % 1000 === 0) {
+    console.error('decorated '+numberDecorated+' genes');
   }
   done();
 });
@@ -87,9 +92,9 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 
 var speciesRank = {
   3702 : 1, // arabidopsis
-  39947: 2, // rice
+  39947: 5, // rice
   4577 : 3, // maize
-  4558 : 5 // sorghum
+  4558 : 2 // sorghum
 };
 
 var speciesRanker = through2.obj(function (obj, enc, done) {

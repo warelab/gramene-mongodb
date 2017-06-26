@@ -25,6 +25,7 @@ function getMapper(sizes) {
       sizes.uniform.forEach(function(mb) {
         mappers['uniform_'+mb+'Mb'] = bins.uniformBinMapper(mb*1000000);
       });
+      console.error(`bin_adder: mappers are ready for ${genomes.length} genomes`);
       deferred.resolve(mappers);
     });
   });
