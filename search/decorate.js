@@ -14,6 +14,7 @@ var writer = fs.createWriteStream(argv.o);
 var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
 var fixMaizeV4 = require('./fix_maize_v4')();
 var fixSorghumV2 = require('./fix_sorghum_v2')();
+var fixBarley = require('./fix_barley_ids')();
 var thalemine = require('./thalemine')();
 var pathwayAdder = require('./pathway_adder')(argv.p);
 var genetreeAdder = require('./genetree_adder')(argv.d);
@@ -163,6 +164,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   .pipe(parser)
   .pipe(fixMaizeV4)
   .pipe(fixSorghumV2)
+  .pipe(fixBarley)
   .pipe(thalemine)
   .pipe(fixTranslationLength)
   .pipe(assignCanonicalTranscript)
