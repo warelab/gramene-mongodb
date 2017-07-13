@@ -2,6 +2,8 @@
 var _ = require('lodash');
 var Q = require('q');
 var FTPS = require('ftps');
+var fs = require('fs');
+var xml2js = require('xml2js').parseString;
 var collections = require('gramene-mongodb-config');
 var ftps = new FTPS({
   host: 'ftp.ebi.ac.uk'
@@ -9,9 +11,10 @@ var ftps = new FTPS({
 
 function parseAssays() {
   var deferred = Q.defer();
+  console.log('parseAssays()',process.argv);
   var assays = {};
   require('readline').createInterface({
-    input: process.stdin,
+    input: require('fs').createReadStream(process.argv[3]),
     terminal: false
   })
   .on('line', function(line) {
@@ -56,20 +59,46 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
     });
     var lut = {};
     parseAssays().then(function(experiments) {
+      var experiment_metadata = {};
       _.forEach(experiments, function(experiment, id) {
         if (taxonomy.hasOwnProperty(experiment[0].taxon_id)) {
+          if (!experiment_metadata.hasOwnProperty(id)) {
+            experiment_metadata[id] = {
+              taxon_id : experiment[0].taxon_id
+            };
+          }
           var url = `/pub/databases/microarray/data/atlas/experiments/${id}/${id}.tsv`;
           var stream = ftps.get(url).execAsStream();
           stream.pipe(process.stdout);
           experiment.forEach(function(e) {
             e._id = e.experiment + "." + e.group;
           });
-          collections.expression.mongoCollection().then(function(atlasCollection) {
+          collections.assays.mongoCollection().then(function(atlasCollection) {
             atlasCollection.insert(experiment, function(err, records) {
               collections.closeMongoDatabase();
             });
           });
         }
+      });
+      // get the ebeye_baseline_experiments_export.xml
+      // and add description to metadata
+      fs.readFile(process.argv[2], function(err, xml) {
+        if (err) throw err;
+        xml2js(xml, function (err, result) {
+          if (err) throw err;
+          result.database.entries[0].entry.forEach(function(entry) {
+            if (experiment_metadata[entry.$.id]) {
+              var e = experiment_metadata[entry.$.id];
+              e.description = entry.description[0];
+              e._id = entry.$.id;
+              collections.experiments.mongoCollection().then(function(expCollection) {
+                expCollection.insert(e, function(err, records) {
+                  collections.closeMongoDatabase();
+                });
+              });
+            }
+          });
+        });
       });
     });
   });
