@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var TreeModel = require('tree-model');
+var compara = require('../ensembl_db_info.json').compara;
 function childNodeComparator(a, b) {
   return a.left_index < b.left_index ? 1 : -1;
 }
@@ -8,52 +9,11 @@ var treeModel = new TreeModel({modelComparatorFn:childNodeComparator});
 var FlatToNested = require('flat-to-nested');
 var _ = require('lodash');
 var through2 = require('through2');
+var spigot = require('stream-spigot');
 var fs = require('fs');
 //var MongoClient = require('mongodb').MongoClient;
 var collections = require('gramene-mongodb-config');
-var argv = require('minimist')(process.argv.slice(2));
-
-var comparaMysqlDb = mysql.createConnection({
-  "host": argv.h,
-  "user": argv.u,
-  "password": argv.p,
-  "database": argv.d
-});
-
-// this query returns one row per node in the tree; it includes both leaf and
-// branch nodes. some properties (e.g. system_name) are null for branch nodes
-// and others (e.g. node_type) are null for leaf nodes.
-
-// a good deal of this 'rootRoot' and 'case' stuff is necessary to reassemble the
-// full gene-trees from the split sibling trees that Ensembl generates to keep
-// their sizes down.
-var query = "select r.root_id,r.stable_id as tree_stable_id,\n"
-+ "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
-+ "case when n.node_id = n.root_id\n"
-+ "	then null\n"
-+ "	else n.parent_id\n"
-+ "end as parent_id,\n"
-+ "sm.stable_id as protein_stable_id,\n"
-+ "gene.stable_id as gene_stable_id, gene.display_label as gene_display_label, gene.description as gene_description,\n"
-+ "sq.sequence,\n"
-+ "gam.cigar_line as cigar,\n"
-+ "stn.taxon_id, stn.node_name as taxon_name,\n"
-+ "g.assembly,\n"
-+ "a.node_type,a.bootstrap,a.duplication_confidence_score\n"
-+ "from gene_tree_root r\n"
-+ "	inner join gene_tree_node n on n.root_id = r.root_id\n"
-+ "	left join seq_member sm on sm.seq_member_id = n.seq_member_id\n"
-+ "	left join sequence sq on sm.sequence_id = sq.sequence_id\n"
-+ "	left join gene_member gene on gene.gene_member_id = sm.gene_member_id\n"
-+ "	left join gene_tree_node_attr a on a.node_id = n.node_id\n"
-+ "	left join species_tree_node stn on stn.node_id = a.species_tree_node_id or (stn.taxon_id = sm.taxon_id and stn.genome_db_id = sm.genome_db_id)\n"
-+ "	left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = sm.seq_member_id\n"
-+ "	left join genome_db g on g.genome_db_id = sm.genome_db_id\n"
-+ "where r.tree_type = 'tree' and r.clusterset_id = 'default'\n"
-+ "order by r.root_id, n.left_index;";
-
-console.error(query);
-var queryStream = comparaMysqlDb.query(query).stream({highWaterMark: 5});
+var comparaMysqlDb = mysql.createConnection(compara);
 
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
@@ -67,6 +27,7 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
       row[f] = row[f].toString();
     }
   }
+  row.taxon_name = taxonLUT[row.taxon_id] || 'unknown';
   this.push(row);
   done();
 });
@@ -103,7 +64,6 @@ var groupRowsByTree = (function () {
   };
 
   var flush = function (done) {
-    //console.log('group rows by tree is done');
     this.push(growingTree);
     done();
   };
@@ -262,7 +222,6 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
   };
 
   var flush = function(done) {
-    console.log('selectRepresentativeGeneMembers is done');
     done();
   };
 
@@ -294,7 +253,7 @@ var counter = (function () {
 var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
   var transform = function (tree, enc, done) {
     var throughThis = this;
-    tree.nested.compara_db = argv.d; // so we can pull out just the gene trees we want later
+    tree.nested.compara_db = compara.database; // so we can pull out just the gene trees we want later
     mongoCollection.update(
       {_id: tree.nested._id},
       tree.nested,
@@ -308,7 +267,6 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
 
   var flush = function(done) {
     collections.closeMongoDatabase();
-    console.log('upsert to mongo is done');
     done();
   };
 
@@ -319,43 +277,95 @@ var serialize = through2.obj(function (r, enc, done) {
   this.push(JSON.stringify(r) + "\n");
   done();
 }, function (done) {
-  console.log('serializer is done');
   done();
 });
 
 var fileWriter = fs.createWriteStream('./inserts.jsonl');
 
-collections.maps.mongoCollection().then(function(mapsCollection) {
-  mapsCollection.find({type: 'genome'}, {}).toArray(function (err, genomes) {
+var handleBatch = through2.obj(function (query, enc, done) {
+  var that = this;
+  console.error(query);
+  var queryStream = comparaMysqlDb.query(query, function (err, rows, fields) {
+    rows.forEach(function(r) {
+      that.push(r);
+    });
+    done();
+  });
+});
+
+var taxonLUT = {};
+collections.taxonomy.mongoCollection().then(function(taxCollection) {
+  taxCollection.find({subset: 'compara'}, {}).toArray(function (err, taxon) {
     if (err) throw err;
-    var haveGenome = {};
-    genomes.forEach(function(g) {
-      haveGenome[g.taxon_id] = true;
+    taxon.forEach(function(t) {
+      taxonLUT[t._id] = t.name;
     });
     collections.genetrees.mongoCollection().then(function(mongoCollection) {
       var upsert = upsertTreeIntoMongo(mongoCollection);
 
-      queryStream
-        .pipe(tidyRow)
-        .pipe(convertBuffersToStrings)
-        .pipe(groupRowsByTree)
-        .pipe(makeNestedTree)
-        .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-        .pipe(selectRepresentativeGeneMembers(haveGenome))
-        .pipe(counter)
-        .pipe(upsert)
-        .pipe(serialize)
-        .pipe(fileWriter);
-
-      fileWriter.on('finish', function () {
-        comparaMysqlDb.end(function(err) {
-          console.log('mysql conn closed');
+      var queryForTreeIds = "select root_id from gene_tree_root where"
+      + " tree_type='tree' and clusterset_id = 'default' and stable_id IS NOT NULL;";
+      comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
+        if (err) throw err;
+        var ids = rows.map(function (r) {
+          return r.root_id;
         });
-
-        console.log('We are done here.');
-
-        // it would be super if this were not necessary.
-        process.exit(0);
+        console.error(`processing ${ids.length} trees`);
+        var batches = [];
+        var batchSize = 100;
+        for(var i=0;i<ids.length;i+=batchSize) {
+          var sliced = ids.slice(i,i+batchSize);
+          var whereClause = `r.root_id IN (${sliced.join(',')})`;
+          // this query returns one row per node in the tree; it includes both leaf and
+          // branch nodes. some properties (e.g. system_name) are null for branch nodes
+          // and others (e.g. node_type) are null for leaf nodes.
+          var query = "select r.root_id,r.stable_id as tree_stable_id,\n"
+          + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
+          + "case when n.node_id = n.root_id\n"
+          + "	then null\n"
+          + "	else n.parent_id\n"
+          + "end as parent_id,\n"
+          + "sm.stable_id as protein_stable_id,\n"
+          + "gene.stable_id as gene_stable_id, gene.display_label as gene_display_label, gene.description as gene_description,\n"
+          + "sq.sequence,\n"
+          + "gam.cigar_line as cigar,\n"
+          + "case when stn.taxon_id IS NULL\n"
+          + " then sm.taxon_id\n"
+          + " else stn.taxon_id\n"
+          + "end as taxon_id,\n"
+          + "g.name as system_name,\n"
+          + "a.node_type,a.bootstrap,a.duplication_confidence_score\n"
+          + "from gene_tree_root r\n"
+          + "	inner join gene_tree_node n on n.root_id = r.root_id\n"
+          + "	left join seq_member sm on sm.seq_member_id = n.seq_member_id\n"
+          + "	left join sequence sq on sm.sequence_id = sq.sequence_id\n"
+          + "	left join gene_member gene on gene.gene_member_id = sm.gene_member_id\n"
+          + "	left join gene_tree_node_attr a on a.node_id = n.node_id\n"
+          + "	left join species_tree_node stn on stn.node_id = a.species_tree_node_id\n"
+          + "	left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = sm.seq_member_id\n"
+          + "	left join genome_db g on g.genome_db_id = sm.genome_db_id\n"
+          + `where ${whereClause}\n`
+          + "order by r.root_id, n.left_index;";
+          batches.push(query);
+        }
+        spigot({objectMode: true, highWaterMark: 1}, batches)
+          .pipe(handleBatch)
+          .pipe(tidyRow)
+          .pipe(convertBuffersToStrings)
+          .pipe(groupRowsByTree)
+          .pipe(makeNestedTree)
+          .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+          .pipe(selectRepresentativeGeneMembers(function() {return true}))
+          .pipe(counter)
+          .pipe(upsert)
+          .pipe(serialize)
+          .pipe(fileWriter);
+        
+        fileWriter.on('finish', function () {
+          comparaMysqlDb.end(function(err) {
+            console.error("finished");
+          });
+        });
       });
     });
   });

@@ -4,18 +4,20 @@ var _ = require('lodash');
 var parseXML = require('xml2js').parseString;
 
 var reactomeURL = process.argv[2];
-
-var pathwayHierarchyURL = reactomeURL + '/pathwayHierarchy/oryza+sativa';
+var organism = process.argv[3] || 'oryza+sativa';
+var pathwayHierarchyURL = `${reactomeURL}/pathwayHierarchy/${organism}`;
 var queryByIdURL = reactomeURL + '/queryById/DatabaseObject/';
 
 var crawl = false; // there's a script that provides mappings from genes to pathways
 
 var cache = {};
-
+console.error("get hierarchy",pathwayHierarchyURL);
 var body = request('GET', pathwayHierarchyURL).getBody();
 parseXML(body, function(err, result) {
+  console.error('got hierarchy');
   var docs = {};
   addChildren(docs,[],result.Pathways.Pathway,'Pathway');
+  console.error('got all the children');
   for (var dbId in docs) {
     var doc = docs[dbId];
     doc.id = dbId;
@@ -33,6 +35,7 @@ parseXML(body, function(err, result) {
 
 function getFromPR(id) {  
   if (!cache.hasOwnProperty(id)) {
+    console.error('get this dbid',id);
     cache[id] = JSON.parse(request('GET',queryByIdURL+id).getBody());
   }
   return cache[id];

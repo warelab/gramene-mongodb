@@ -10,24 +10,31 @@ var fields = {
   GO: ['id','name','namespace','def','subset'],
   PO: ['id','name','namespace','def','subset'],
   taxonomy: ['_id','name'],
+  familyRoot: ['_id','name'],
   pathways: ['id','name']
 };
 
 function modifyGene(ancestorsLUT,obj) {
   obj.xrefs.push({db:'taxonomy', ids: ['NCBITaxon:'+obj.taxon_id]}); // temporary xref to make loops happy
+  if (_.has(obj, 'homology.gene_tree.root_taxon_id')) {
+    obj.xrefs.push({db:'familyRoot', ids: ['NCBITaxon:'+obj.homology.gene_tree.root_taxon_id]});
+  }
   var xrefsKeys = _.keyBy(obj.xrefs,'db');
+  xrefsToProcess.push('familyRoot');
   xrefsToProcess.forEach(function(x) {
     if (xrefsKeys.hasOwnProperty(x)) {
       var lut = {};
       var specificAnnotations = [];
       var usefulInfo = {};
+      var revert = false;
+      var LUT = (x === 'familyRoot') ? ancestorsLUT.taxonomy : ancestorsLUT[x];
       xrefsKeys[x].ids.forEach(function(id) {
         var ec;
         if (Array.isArray(id)) {
           ec = id[1];
           id = id[0];
         }
-        if (ancestorsLUT[x].hasOwnProperty(id)) {
+        if (LUT.hasOwnProperty(id)) {
           var intId = parseInt(id.match(/\d+/)[0]);
           specificAnnotations.push(intId);
           function subdoc(doc,fieldList) {
@@ -37,11 +44,11 @@ function modifyGene(ancestorsLUT,obj) {
             });
             return obj;
           }
-          usefulInfo[intId] = subdoc(ancestorsLUT[x][id],fields[x]);
+          usefulInfo[intId] = subdoc(LUT[id],fields[x]);
           if (!!ec) {
             usefulInfo[intId].evidence_code = ec;
           }
-          ancestorsLUT[x][id].ancestors.forEach(function(anc) {
+          LUT[id].ancestors.forEach(function(anc) {
             if (anc !== intId) {
               lut[anc]=1;
             }
@@ -64,6 +71,7 @@ function modifyGene(ancestorsLUT,obj) {
       delete xrefsKeys[x];
     }
   });
+  xrefsToProcess.pop();
   obj.xrefs = _.values(xrefsKeys);
   return obj;
 }
@@ -71,7 +79,6 @@ function modifyGene(ancestorsLUT,obj) {
 // create a lookup table from the documents in each aux core
 var promises = xrefsToProcess.map(function(x) {
   var deferred = Q.defer();
-
   var coll = collections[x];
   coll.mongoCollection().then(function(mc) {
     var lut = {};
@@ -85,11 +92,10 @@ var promises = xrefsToProcess.map(function(x) {
           });
         }
       });
-      console.error('ancestor_adder ' + x + ' lookup table');
+      console.error(`ancestor_adder ${x} lookup table with ${docs.length}`);
       deferred.resolve(lut);
     });
   });
-
   return deferred.promise;
 });
 

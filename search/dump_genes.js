@@ -9,10 +9,10 @@ var connectionOptions = {
   database: argv.d
 }
 
-var db_type = connectionOptions.database.match(/_(core|otherfeatures)_\d+_\d+_\d+/)[1];
+var db_type = connectionOptions.database.match(/_(core|otherfeatures)_\d+_\d+/)[1];
 var map_id = argv.m;
 if (!map_id) throw 'no map_id specified';
-
+var taxon_id = argv.t;
 if (!!argv.p) {
   connectionOptions.password = argv.p;
 }
@@ -22,7 +22,11 @@ connection.connect();
 
 // lookup metadata
 var get_metadata = {
-  sql: 'select m2.species_id,m2.meta_key,m2.meta_value from meta m1, meta m2 where (m1.meta_key = "assembly.accession" and m1.meta_value = "'+map_id+'" or m1.meta_key = "assembly.default" and m1.meta_value = "'+map_id+'") and m1.species_id = m2.species_id',
+  sql: 'select m2.species_id,m2.meta_key,m2.meta_value from meta m1, meta m2'
+  + ' where (m1.meta_key = "assembly.accession" and m1.meta_value = "'+map_id+'"'
+  + ' or m1.meta_key = "assembly.default" and m1.meta_value = "'+map_id+'"'
+  + ' or m1.meta_key = "assembly.name" and m1.meta_value = "'+map_id+'"'
+  +') and m1.species_id = m2.species_id',
   process: function(rows) {
     if (!rows) throw(new error('no results for query '+this.sql));
     var meta = {
@@ -171,7 +175,7 @@ var get_genes = {
         name: row.name ? row.name : row.stable_id,
         description: row.description,
         biotype: row.biotype,
-        taxon_id: +meta['species.taxonomy_id'],
+        taxon_id: taxon_id,//+meta['species.taxonomy_id'],
         system_name: meta['species.production_name'],
         db_type: db_type,
         gene_idx: gene_idx++,

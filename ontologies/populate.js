@@ -63,12 +63,10 @@ ontologies.forEach(function(ontology) {
       var filter = 'cat '+docs;
       if (ontology.collectionName === 'taxonomy') {
         filter = './filter_taxonomy.js'
-        + ' -h ' + argv.h
-        + ' -u ' + argv.u
-        + ' -p ' + argv.p
-        + ' --compara ' + argv.compara
-        + ' --pan ' + argv.pan
         + ' --taxonomy ' + docs;
+        if (argv.pan) {
+          filter += ' --pan ' + argv.pan;
+        }
       }
       var mongoimport = 'mongoimport'
       + ' --host ' + mongoConfig.host

@@ -15,9 +15,13 @@ var decorateTree = function(geneCollection) {
     .toArray(function (err, geneDocs) {
       if (err) throw err;
       var domain_lut = {};
+      var taxon_lut = {};
       var exonJunctions_lut = {};
+      var nTranscripts_lut = {};
       geneDocs.forEach(function(gene) {
+        taxon_lut[gene._id] = gene.taxon_id;
         if (gene.gene_structure.hasOwnProperty('canonical_transcript')) {
+          nTranscripts_lut[gene._id] = gene.gene_structure.transcripts.length;
           var tIdx = _.keyBy(gene.gene_structure.transcripts,'id');
           var ct = tIdx[gene.gene_structure.canonical_transcript];
           if (ct.translation && ct.translation.features.domain && ct.translation.features.domain.architecture) {
@@ -47,8 +51,14 @@ var decorateTree = function(geneCollection) {
       tree.walk(function (node) {
         if (!node.children.length) {
           var id = node.model.gene_stable_id;
+          if (taxon_lut.hasOwnProperty(id)) {
+            node.model.taxon_id = taxon_lut[id];
+          }
           if (domain_lut.hasOwnProperty(id)) {
             node.model.domains = domain_lut[id];
+          }
+          if (nTranscripts_lut.hasOwnProperty(id)) {
+            node.model.nTranscripts = nTranscripts_lut[id];
           }
           if (exonJunctions_lut.hasOwnProperty(id) && exonJunctions_lut[id].length > 0) {
             node.model.exon_junctions = exonJunctions_lut[id];

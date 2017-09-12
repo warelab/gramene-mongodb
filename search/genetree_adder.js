@@ -24,7 +24,8 @@ function getLut(main_db) {
           geneTrees.aux.push(doc);
         }
       });
-
+      console.error(`genetree_adder ${geneTrees.main.length} main trees`);
+      console.error(`genetree_adder ${geneTrees.aux.length} aux trees`);
       var genetreeIdLut = {main:{},aux:{}};
       for (var treeType in geneTrees) {
         genetreeIdLut[treeType] = geneTrees[treeType].reduce(function (acc, doc) {
@@ -148,22 +149,18 @@ module.exports = function(db) {
     var that = this;
   
     lutPromise.then(function(genetreeLUT) {
-      var tree = genetreeLUT.main[gene._id];
-      if(tree) {
+      if (genetreeLUT.main.hasOwnProperty(gene._id)) {
         if (! gene.hasOwnProperty('homology')) {
           gene.homology = {};
         }
-        gene.homology.gene_tree = tree;
+        gene.homology.gene_tree = genetreeLUT.main[gene._id];
       }
-    
-      var auxTree = genetreeLUT.aux[gene._id];
-      if (auxTree) {
+      if (genetreeLUT.aux.hasOwnProperty(gene._id)) {
         if (! gene.hasOwnProperty('homology')) {
           gene.homology = {};
         }
-        gene.homology.pan_tree = auxTree;
+        gene.homology.pan_tree = genetreeLUT.aux[gene._id];
       }
-
       that.push(gene);
       done();
     });

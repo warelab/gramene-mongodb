@@ -11,7 +11,6 @@ var ftps = new FTPS({
 
 function parseAssays() {
   var deferred = Q.defer();
-  console.log('parseAssays()',process.argv);
   var assays = {};
   require('readline').createInterface({
     input: require('fs').createReadStream(process.argv[3]),
@@ -68,8 +67,9 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
             };
           }
           var url = `/pub/databases/microarray/data/atlas/experiments/${id}/${id}.tsv`;
-          var stream = ftps.get(url).execAsStream();
-          stream.pipe(process.stdout);
+          // var stream = ftps.get(url).execAsStream();
+          // stream.pipe(process.stdout);
+          console.log(`ftp ftp://ftp.ebi.ac.uk${url}`);
           experiment.forEach(function(e) {
             e._id = e.experiment + "." + e.group;
           });

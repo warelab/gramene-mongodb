@@ -12,7 +12,7 @@ tsvFiles.forEach(function(tsv) {
   .on('line', function(line) {
     var fields = line.split("\t");
     if (fieldNames.length===0) {
-      if (fields[0] === "Gene ID") {
+      if (fields[0] === "GeneID") {
         // found the header line
         fields.forEach(function(f) {
           fieldNames.push(f);

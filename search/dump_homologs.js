@@ -1,15 +1,11 @@
 #!/usr/bin/env node
 var argv = require('minimist')(process.argv.slice(2));
 var bounds = require('binary-search-bounds');
+var compara = require('../ensembl_db_info.json').compara
 
 // connect to mysql database
 var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: argv.h,
-  user: argv.u,
-  password: argv.p,
-  database: argv.d
-});
+var connection = mysql.createConnection(compara);
 if (!connection) throw "error";
 connection.connect();
 var sql0 = 'select dr.*, d.genome_db_id from dnafrag_region dr, dnafrag d'
@@ -34,8 +30,10 @@ var sql1 = 'select'
   + ' inner join gene_member g1 on hm.gene_member_id = g1.gene_member_id'
   + ' inner join homology_member hm2 on hm2.homology_id = h.homology_id and hm.gene_member_id > hm2.gene_member_id'
   + ' inner join gene_member g2 on hm2.gene_member_id = g2.gene_member_id'
-  + ' where g1.taxon_id NOT IN (6239,7227,9606,51511,559292)'
-  + ' and g2.taxon_id NOT IN (6239,7227,9606,51511,559292);';
+  + ' inner join gene_tree_root gtr on h.gene_tree_root_id = gtr.root_id'
+  + ' where gtr.tree_type = "tree" and gtr.clusterset_id = "default" and gtr.stable_id IS NOT NULL';
+  // + ' where g1.taxon_id NOT IN (6239,7227,9606,51511,559292)'
+  // + ' and g2.taxon_id NOT IN (6239,7227,9606,51511,559292);';
 
 function redisify() {
   var red = [];
@@ -50,6 +48,7 @@ function redisify() {
 var previous;
 var i=0;
 var synteny = {};
+console.error('firing synteny query',sql0);
 connection.query(sql0)
 .on('error', function(err) {
   throw err;
@@ -78,6 +77,7 @@ connection.query(sql0)
   i++;
 })
 .on('end', function() {
+  console.error('firing main query',sql1);
   // sort the intervals burried in synteny so we can do a binary search
   function compareIntervals(a,b) { return a.start - b.start };
   for (var db1 in synteny) {
@@ -101,7 +101,7 @@ connection.query(sql0)
   })
   .on('result', function(row) {
     // Pausing the connnection is useful if your processing involves I/O
-    connection.pause();
+    // connection.pause();
     if (row.gene_genome_db_id < row.other_genome_db_id) {
       if (
         synteny[row.gene_genome_db_id] &&
@@ -142,10 +142,11 @@ connection.query(sql0)
     }
     console.log(redisify('HSET',row.gene_id, row.other_id, row.kind));
     console.log(redisify('HSET',row.other_id, row.gene_id, row.kind));
-    connection.resume();
+    // connection.resume();
   })
   .on('end', function() {
     // all rows have been received
+    console.error('all results received');
     connection.end();
   });
 });
