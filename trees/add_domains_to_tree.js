@@ -11,7 +11,7 @@ var decorateTree = function(geneCollection) {
     var throughThis = this;
     geneCollection.find(
       {'homology.gene_tree.id': mongoTree._id},
-      {'gene_structure':1})
+      {'gene_structure':1,'taxon_id':1})
     .toArray(function (err, geneDocs) {
       if (err) throw err;
       var domain_lut = {};
@@ -72,6 +72,7 @@ var decorateTree = function(geneCollection) {
 }
 
 var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
+  var nTrees = 0;
   var transform = function (tree, enc, done) {
     var throughThis = this;
     mongoCollection.update(
@@ -80,6 +81,10 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
       {upsert: true},
       function (err, count, status) {
         //throughThis.push({err: err, status: status, _id: tree._id});
+        nTrees++;
+        if (nTrees % 1000 === 0) {
+          console.error(`updated ${nTrees} trees`);
+        }
         done();
       }
     );

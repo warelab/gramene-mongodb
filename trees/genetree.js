@@ -297,8 +297,12 @@ var taxonLUT = {};
 collections.taxonomy.mongoCollection().then(function(taxCollection) {
   taxCollection.find({subset: 'compara'}, {}).toArray(function (err, taxon) {
     if (err) throw err;
+    var haveGenome = {};
     taxon.forEach(function(t) {
       taxonLUT[t._id] = t.name;
+      if (_.includes(t.subset,'gramene')) {
+        haveGenome[t._id] = true;
+      }
     });
     collections.genetrees.mongoCollection().then(function(mongoCollection) {
       var upsert = upsertTreeIntoMongo(mongoCollection);
@@ -355,7 +359,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
           .pipe(groupRowsByTree)
           .pipe(makeNestedTree)
           .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-          .pipe(selectRepresentativeGeneMembers(function() {return true}))
+          .pipe(selectRepresentativeGeneMembers(haveGenome))
           .pipe(counter)
           .pipe(upsert)
           .pipe(serialize)
