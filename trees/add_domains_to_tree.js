@@ -11,13 +11,17 @@ var decorateTree = function(geneCollection) {
     var throughThis = this;
     geneCollection.find(
       {'homology.gene_tree.id': mongoTree._id},
-      {'gene_structure':1})
+      {'gene_structure':1,'taxon_id':1})
     .toArray(function (err, geneDocs) {
       if (err) throw err;
       var domain_lut = {};
+      var taxon_lut = {};
       var exonJunctions_lut = {};
+      var nTranscripts_lut = {};
       geneDocs.forEach(function(gene) {
+        taxon_lut[gene._id] = gene.taxon_id;
         if (gene.gene_structure.hasOwnProperty('canonical_transcript')) {
+          nTranscripts_lut[gene._id] = gene.gene_structure.transcripts.length;
           var tIdx = _.keyBy(gene.gene_structure.transcripts,'id');
           var ct = tIdx[gene.gene_structure.canonical_transcript];
           if (ct.translation && ct.translation.features.domain && ct.translation.features.domain.architecture) {
@@ -47,8 +51,14 @@ var decorateTree = function(geneCollection) {
       tree.walk(function (node) {
         if (!node.children.length) {
           var id = node.model.gene_stable_id;
+          if (taxon_lut.hasOwnProperty(id)) {
+            node.model.taxon_id = taxon_lut[id];
+          }
           if (domain_lut.hasOwnProperty(id)) {
             node.model.domains = domain_lut[id];
+          }
+          if (nTranscripts_lut.hasOwnProperty(id)) {
+            node.model.nTranscripts = nTranscripts_lut[id];
           }
           if (exonJunctions_lut.hasOwnProperty(id) && exonJunctions_lut[id].length > 0) {
             node.model.exon_junctions = exonJunctions_lut[id];
@@ -62,6 +72,7 @@ var decorateTree = function(geneCollection) {
 }
 
 var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
+  var nTrees = 0;
   var transform = function (tree, enc, done) {
     var throughThis = this;
     mongoCollection.update(
@@ -70,6 +81,10 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
       {upsert: true},
       function (err, count, status) {
         //throughThis.push({err: err, status: status, _id: tree._id});
+        nTrees++;
+        if (nTrees % 1000 === 0) {
+          console.error(`updated ${nTrees} trees`);
+        }
         done();
       }
     );

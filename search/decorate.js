@@ -8,12 +8,17 @@ through2 = require('through2');
 var collections = require('gramene-mongodb-config');
 
 var argv = require('minimist')(process.argv.slice(2));
+var isGramene = true;
 
 var reader = byline(fs.createReadStream(argv.i));
 var writer = fs.createWriteStream(argv.o);
 var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
-var fixMaizeV4 = require('./fix_maize_v4')();
-var thalemine = require('./thalemine')();
+if (isGramene) {
+  var fixMaizeV4 = require('./fix_maize_v4')();
+  var fixSorghumV2 = require('./fix_sorghum_v2')();
+  var fixBarley = require('./fix_barley_ids')();
+  var thalemine = require('./thalemine')();
+}
 var pathwayAdder = require('./pathway_adder')(argv.p);
 var genetreeAdder = require('./genetree_adder')(argv.d);
 var homologAdder = require('./homolog_adder')(1);
@@ -24,9 +29,14 @@ var parser = through2.obj(function (line, enc, done) {
   done();
 });
 
+var numberDecorated=0;
 var serializer = through2.obj(function (obj, enc, done) {
   if (obj.err) {
     this.push(JSON.stringify(obj) + "\n");
+  }
+  numberDecorated++;
+  if (numberDecorated % 1000 === 0) {
+    console.error('decorated '+numberDecorated+' genes');
   }
   done();
 });
@@ -86,9 +96,9 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 
 var speciesRank = {
   3702 : 1, // arabidopsis
-  39947: 2, // rice
+  39947: 5, // rice
   4577 : 3, // maize
-  4558 : 5 // sorghum
+  4558 : 2 // sorghum
 };
 
 var speciesRanker = through2.obj(function (obj, enc, done) {
@@ -153,24 +163,29 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
 
 collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
-  reader
-  .pipe(parser)
-  .pipe(fixMaizeV4)
-  .pipe(thalemine)
-  .pipe(fixTranslationLength)
-  .pipe(assignCanonicalTranscript)
-  .pipe(orderTranscripts)
-  .pipe(genetreeAdder)
-  .pipe(binAdder)
-  .pipe(pathwayAdder)
-  .pipe(homologAdder)
-  .pipe(domainArchitect)
-  .pipe(ancestorAdder)
-  .pipe(speciesRanker)
-  .pipe(cleanup)
-  .pipe(upsert)
-  .pipe(serializer)
-  .pipe(writer);
+  var stream = reader.pipe(parser);
+  if (isGramene) {
+    stream = stream.pipe(fixMaizeV4)
+      .pipe(fixSorghumV2)
+      .pipe(fixBarley)
+      .pipe(thalemine)
+  }
+  stream = stream.pipe(fixTranslationLength)
+    .pipe(assignCanonicalTranscript)
+    .pipe(orderTranscripts)
+    .pipe(genetreeAdder)
+    .pipe(binAdder)
+    .pipe(pathwayAdder)
+    .pipe(homologAdder)
+    .pipe(domainArchitect)
+    .pipe(ancestorAdder)
+  if (isGramene) {
+    stream = stream.pipe(speciesRanker);
+  }
+  stream = stream.pipe(cleanup)
+    .pipe(upsert)
+    .pipe(serializer)
+    .pipe(writer);
 
   writer.on('finish', function() {
     process.exit(0);

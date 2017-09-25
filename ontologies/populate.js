@@ -9,17 +9,17 @@ var http = require('http')
 var ontologies = [
   {
     collectionName: 'GO',
-    obo: 'http://www.berkeleybop.org/ontologies/go.obo',
+    obo: 'http://purl.obolibrary.org/obo/go.obo',
     prefix: 'GO'
   },
   {
     collectionName: 'PO',
-    obo: 'http://www.berkeleybop.org/ontologies/po.obo',
+    obo: 'http://purl.obolibrary.org/obo/po.obo',
     prefix: 'PO'
   },
   {
     collectionName: 'taxonomy',
-    obo: 'http://www.berkeleybop.org/ontologies/ncbitaxon.obo',
+    obo: 'http://purl.obolibrary.org/obo/ncbitaxon.obo',
     prefix: 'NCBITaxon'
   },
   // {
@@ -49,7 +49,7 @@ var mongoConfig =  collections.getMongoConfig();
 collections.closeMongoDatabase();
 ontologies.forEach(function(ontology) {
   var oboFile = outDir+'/'+ontology.collectionName+'.obo'
-  var curl = 'curl '+ontology.obo+' -o '+oboFile;
+  var curl = 'curl -L '+ontology.obo+' -o '+oboFile;
   console.error(curl);
   exec(curl, function(err, stdout, stderr) {
     if (err) throw err;
@@ -63,12 +63,10 @@ ontologies.forEach(function(ontology) {
       var filter = 'cat '+docs;
       if (ontology.collectionName === 'taxonomy') {
         filter = './filter_taxonomy.js'
-        + ' -h ' + argv.h
-        + ' -u ' + argv.u
-        + ' -p ' + argv.p
-        + ' --compara ' + argv.compara
-        + ' --pan ' + argv.pan
         + ' --taxonomy ' + docs;
+        if (argv.pan) {
+          filter += ' --pan ' + argv.pan;
+        }
       }
       var mongoimport = 'mongoimport'
       + ' --host ' + mongoConfig.host

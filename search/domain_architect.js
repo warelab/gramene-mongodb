@@ -66,6 +66,7 @@ function getDomains() {
           hroot[doc._id] = doc.ancestors[0];
         }
       });
+      console.error('domain_architect lookup table');
       deferred.resolve({
         hroot: hroot,
         pathFromRoot: pathFromRoot,
