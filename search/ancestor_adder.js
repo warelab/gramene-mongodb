@@ -4,14 +4,13 @@ var collections = require('gramene-mongodb-config');
 var Q = require('q');
 var through2 = require('through2');
 
-var xrefsToProcess = ['domains','GO','PO','taxonomy','pathways'];
+var xrefsToProcess = ['domains','GO','PO','taxonomy'];
 var fields = {
   domains: ['id','name','description'],
   GO: ['id','name','namespace','def','subset'],
   PO: ['id','name','namespace','def','subset'],
   taxonomy: ['_id','name'],
-  familyRoot: ['_id','name'],
-  pathways: ['id','name']
+  familyRoot: ['_id','name']
 };
 
 function modifyGene(ancestorsLUT,obj) {
