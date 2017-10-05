@@ -36,7 +36,7 @@ if (speciesResponse.statusCode == 200) {
     }
     var topLevelEvents = JSON.parse(hierarchyResponse.getBody());
     topLevelEvents.forEach(function(tle) {
-      function parseEvent(event, taxon, ancestors) {
+      function parseEvent(event, taxon, pathFromRoot) {
         [r,speciesCode,id] = event.stId.split('-');
         if(!taxonLUT.hasOwnProperty(speciesCode)) {
           taxonLUT[speciesCode] = taxon;
@@ -45,19 +45,20 @@ if (speciesResponse.statusCode == 200) {
           docs[id] = {
             _id: +id,
             name: event.name,
-            type: event.type
+            type: event.type            
           };
         }
-        ancestors.push(+id);
         var ancestorField = 'ancestors_' + taxon;
-        if (docs[id].hasOwnProperty(ancestorField)) {
-          // need to merge the ancestors from another path
-          ancestors = _.uniq(_.concat(docs[id][ancestorField],ancestors));
+        var lineageField = 'lineage_' + taxon;
+        pathFromRoot.push(+id);
+        if (! docs[id].hasOwnProperty(lineageField)) {
+          docs[id][lineageField] = [];
         }
-        docs[id][ancestorField] = ancestors;
+        docs[id][lineageField].push(_.clone(pathFromRoot));
+        docs[id][ancestorField] = _.uniq(_.flatten(docs[id][lineageField]));
         if (event.children) {
           event.children.forEach(function(child) {
-            parseEvent(child, taxon, _.clone(ancestors));
+            parseEvent(child, taxon, _.clone(pathFromRoot));
           });
         }
       }
