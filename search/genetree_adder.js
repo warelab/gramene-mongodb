@@ -65,8 +65,30 @@ function getLut(main_db) {
               }
             });
           });
+          
+          // find duplication nodes with > 50% confidence
+          var duplications = tree.all(function(node) {
+            return node.model.duplication_confidence_score > 0.5;
+          });
+
+          // associate duplication nodes with leaf genes
+          duplications.forEach(function(subtree) {
+            subtree.walk(function(node) {
+              if (!node.hasChildren()) {
+                if (!node.model.hasOwnProperty('duplications')) {
+                  node.model.duplications = {};
+                }
+                node.model.duplications[subtree.model.taxon_id] = 1;
+              }
+            });
+          });
+          
 
           _.forEach(leafIdx, function(leaf, id) {
+            // convert duplications into an array
+            if (leaf.duplications) {
+              lookupValue.duplications = Object.keys(leaf.duplications).map(function(tid) {return +tid});
+            }
             // non-arabidopsis genes also get a closest arabidopsis ortholog representative
 
             if (leaf.representative.score >= -80) {
