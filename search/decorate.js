@@ -19,7 +19,8 @@ if (isGramene) {
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
 }
-var pathwayAdder = require('./pathway_adder')(argv.p);
+var pathwayLUT = require(argv.p);
+var pathwayAdder = require('./doc_merger')(pathwayLUT);
 var genetreeAdder = require('./genetree_adder')(argv.d);
 var homologAdder = require('./homolog_adder')(1);
 var domainArchitect = require('./domain_architect')();
