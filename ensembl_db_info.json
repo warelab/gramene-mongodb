@@ -1,0 +1,101 @@
+{
+ "compara": {
+  "host": "cabot",
+  "user": "gramene_web",
+  "password": "gram3n3",
+  "database": "ensembl_compara_53_87_panmaize"
+ },
+ "cores": [
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "arabidopsis_thaliana_core_52_86_11"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "brachypodium_distachyon_core_52_86_12"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "selaginella_moellendorffii_core_56_91_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "chlamydomonas_reinhardtii_core_52_86_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "glycine_max_core_52_86_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativa_core_56_91_7"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "physcomitrella_patens_core_52_86_11"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "setaria_italica_core_52_86_21"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vitis_vinifera_core_53_87_3"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_mays_core_53_87_7"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_maysph207_core_53_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_maysw22_core_53_87_12"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_bicolor_core_56_91_30"
+  }
+ ]
+}
