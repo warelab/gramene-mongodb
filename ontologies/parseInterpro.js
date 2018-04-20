@@ -5,9 +5,13 @@
 
 var parentChildFile = process.argv[2];
 var xmlFile = process.argv[3];
+var collections = require('gramene-mongodb-config');
 
 var fs        = require('fs')
   , XmlStream = require('xml-stream');
+
+var mongoDomainsPromise = collections.domains.mongoCollection();
+
 
 // read the parentChildFile into memory
 var ancestors = {}; // key is child, value is list of ancestors
@@ -59,6 +63,16 @@ require('readline').createInterface({
         obj[xref.$.db].push(xref.$.dbkey);
       })
     }
-    console.log(JSON.stringify(obj));
+    // console.log(JSON.stringify(obj));
+    mongoDomainsPromise.then(function(domainsCollection) {
+      domainsCollection.insertOne(obj, function(err, response) {
+        if (err) {
+          throw err;
+        }
+      });
+    });
   });
+  xml.on('end', function() {
+    collections.closeMongoDatabase()
+  })
 });
