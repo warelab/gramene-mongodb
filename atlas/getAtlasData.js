@@ -59,6 +59,7 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
     var lut = {};
     parseAssays().then(function(experiments) {
       var experiment_metadata = {};
+      var mongoAssays = [];
       _.forEach(experiments, function(experiment, id) {
         if (taxonomy.hasOwnProperty(experiment[0].taxon_id)) {
           if (!experiment_metadata.hasOwnProperty(id)) {
@@ -67,17 +68,11 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
             };
           }
           var url = `/pub/databases/microarray/data/atlas/experiments/${id}/${id}.tsv`;
-          // var stream = ftps.get(url).execAsStream();
-          // stream.pipe(process.stdout);
-          console.log(`ftp ftp://ftp.ebi.ac.uk${url}`);
+          console.log(`curl -O ftp.ebi.ac.uk${url}`);
           experiment.forEach(function(e) {
             e._id = e.experiment + "." + e.group;
           });
-          collections.assays.mongoCollection().then(function(atlasCollection) {
-            atlasCollection.insert(experiment, function(err, records) {
-              collections.closeMongoDatabase();
-            });
-          });
+          Array.prototype.push.apply(mongoAssays,experiment);
         }
       });
       // get the ebeye_baseline_experiments_export.xml
@@ -86,18 +81,27 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
         if (err) throw err;
         xml2js(xml, function (err, result) {
           if (err) throw err;
+          var mongoExperiments = [];
           result.database.entries[0].entry.forEach(function(entry) {
             if (experiment_metadata[entry.$.id]) {
               var e = experiment_metadata[entry.$.id];
               e.description = entry.description[0];
               e._id = entry.$.id;
-              collections.experiments.mongoCollection().then(function(expCollection) {
-                expCollection.insert(e, function(err, records) {
-                  collections.closeMongoDatabase();
-                });
-              });
+              mongoExperiments.push(e);
             }
           });
+          // insert the assays and experiments to mongodb
+          collections.assays.mongoCollection().then(function(assayCol) {
+            assayCol.insertMany(mongoAssays, function(err, result) {
+              if (err) throw err;
+              collections.experiments.mongoCollection().then(function(expCol) {
+                expCol.insertMany(mongoExperiments, function(err, result) {
+                  if (err) throw err;
+                  collections.closeMongoDatabase();
+                })
+              })
+            })
+          })
         });
       });
     });
