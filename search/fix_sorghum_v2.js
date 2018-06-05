@@ -6,7 +6,7 @@ var _ = require('lodash');
 function getMapping() {
   var deferred = Q.defer();
   var lut = {};
-  var filename = 'sorghum_v2_lut.txt';
+  var filename = 'sorghum_v3_lut.txt';
   console.error('fix_sorghum_v2 getMapping');
   require('readline').createInterface({
     input: require('fs').createReadStream(filename),
