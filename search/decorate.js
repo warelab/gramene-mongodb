@@ -7,7 +7,6 @@ through2 = require('through2');
 
 var collections = require('gramene-mongodb-config');
 var comparaDatabase = require('../ensembl_db_info.json').compara.database;
-
 var argv = require('minimist')(process.argv.slice(2));
 var isGramene = true;
 
