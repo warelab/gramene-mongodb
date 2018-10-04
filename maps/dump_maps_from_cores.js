@@ -70,6 +70,9 @@ function get_maps(dbInfo) {
           lengths: []
         }
       }
+      if (map._id === "") {
+        console.log("failed to find id for assembly", map);
+      }
       if (!taxon_tally.hasOwnProperty(map.taxon_id)) {
         taxon_tally[map.taxon_id] = 0;
         taxon_offset[map.taxon_id]=0;
