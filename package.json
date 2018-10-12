@@ -34,7 +34,7 @@
     "flat-to-nested": "^1.0.1",
     "ftps": "^1.1.0",
     "gramene-bins-client": "^2.2.11",
-    "gramene-mongodb-config": "git://github.com/warelab/gramene-mongodb-config.git#release58",
+    "gramene-mongodb-config": "git://github.com/warelab/gramene-mongodb-config.git#release59",
     "isnumber": "^1.0.0",
     "lodash": "^4.6.1",
     "minimist": "^1.2.0",

@@ -143,6 +143,16 @@ readline.createInterface({
     */
     [r,speciesCode,id] = fields[1].split('-');
     if (docs.hasOwnProperty(id)) {
+      if (!genes.hasOwnProperty(fields[0])) {
+        genes[fields[0]] = {
+          annotations: {
+            pathways: {
+              ancestors: [],
+              entries: []
+            }
+          }
+        };
+      }
       var reactionAncestors = docs[id]['ancestors_' + taxonLUT[speciesCode]];
       if (!!genes[fields[0]].annotations.pathways.ancestors) {
         reactionAncestors = _.uniq(_.concat(genes[fields[0]].annotations.pathways.ancestors, reactionAncestors));
