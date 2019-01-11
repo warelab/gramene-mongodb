@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var argv = require('minimist')(process.argv.slice(2));
 var bounds = require('binary-search-bounds');
+var collections = require('gramene-mongodb-config');
 var compara = require('../ensembl_db_info.json').compara
 
 // connect to mysql database
@@ -96,7 +97,7 @@ connection.query(sql0)
   })
   .on('fields', function(fields) {
     // the field packets for the rows to follow
-    console.log(redisify('SELECT','1'));
+    console.log(redisify('SELECT',collections.getVersion()));
     console.log(redisify('FLUSHDB'));
   })
   .on('result', function(row) {

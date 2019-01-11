@@ -2,6 +2,7 @@
 // connect to mysql database
 var mysql = require('mysql');
 var cores = require('../ensembl_db_info.json').cores;
+var collections = require('gramene-mongodb-config');
 var Q = require('q');
 var _ = require('lodash');
 
@@ -11,17 +12,28 @@ var promises = cores.map(function(core) {
   return get_maps(core);
 });
 
+var mongoMapsPromise = collections.maps.mongoCollection();
+
 var mapsPromise = Q.all(promises).then(function(maps) {
   return _.flatten(maps);
 });
 mapsPromise.then(function(maps) {
-  maps.forEach(function(map) {
-    if (taxon_tally[map.taxon_id] > 1) {
-      var newTaxId = map.taxon_id * 1000 + taxon_offset[map.taxon_id];
-      taxon_offset[map.taxon_id]++;
-      map.taxon_id = newTaxId;
-    }
-    console.log(JSON.stringify(map));
+  mongoMapsPromise.then(function(mapsCollection) {
+    var insertThese = maps.map(function(map) {
+      if (taxon_tally[map.taxon_id] > 1) {
+        var newTaxId = map.taxon_id * 1000 + taxon_offset[map.taxon_id];
+        taxon_offset[map.taxon_id]++;
+        map.taxon_id = newTaxId;
+      }
+      return map;
+    });
+    mapsCollection.insertMany(insertThese, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      console.error("finished loading maps");
+      collections.closeMongoDatabase();
+    });
   });
 });
 
@@ -57,6 +69,9 @@ function get_maps(dbInfo) {
           names: [],
           lengths: []
         }
+      }
+      if (map._id === "") {
+        console.log("failed to find id for assembly", map);
       }
       if (!taxon_tally.hasOwnProperty(map.taxon_id)) {
         taxon_tally[map.taxon_id] = 0;

@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 var tsvFiles = process.argv.slice(2);
 var lut = {};
+var collections = require('gramene-mongodb-config');
 var remaining = tsvFiles.length;
+
+var mongoExpressionPromise = collections.expression.mongoCollection();
+
 tsvFiles.forEach(function(tsv) {
   var exp_id = tsv.replace('.tsv','');
   var fieldNames = [];
@@ -41,9 +45,17 @@ tsvFiles.forEach(function(tsv) {
     console.error('closing',tsv, remaining);
     if (remaining === 0) {
       var genes = Object.keys(lut);
-      for(var i=0;i<genes.length;i++) {        
-        console.log(JSON.stringify(lut[genes[i]]));
+      var myobj = [];
+      for (var i=0;i<genes.length;i++) {
+        myobj.push(lut[genes[i]]);
       }
+      mongoExpressionPromise.then(function(expressionCollection) {
+        expressionCollection.insertMany(myobj, function(err, response) {
+          if (err) throw err;
+          console.error("finished loading expression");
+          collections.closeMongoDatabase();
+        });
+      });
     }
   });
 });

@@ -2,8 +2,7 @@ var TreeModel = require('tree-model');
 var treeModel = new TreeModel();
 var _ = require('lodash');
 var through2 = require('through2');
-var argv = require('minimist')(process.argv.slice(2));
-
+var comparaDatabase = require('../ensembl_db_info.json').compara.database;
 var collections = require('gramene-mongodb-config');
 
 var decorateTree = function(geneCollection) { 
@@ -103,7 +102,7 @@ collections.genetrees.mongoCollection().then(function(treeCollection) {
   collections.genes.mongoCollection().then(function(geneCollection) {
     var upsert = upsertTreeIntoMongo(treeCollection);
 
-    var treeStream = treeCollection.find({compara_db:argv.d}).stream();
+    var treeStream = treeCollection.find({compara_db:comparaDatabase}).stream();
 
     treeStream
       .pipe(decorateTree(geneCollection))

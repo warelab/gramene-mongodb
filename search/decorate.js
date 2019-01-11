@@ -6,7 +6,7 @@ _ = require('lodash'),
 through2 = require('through2');
 
 var collections = require('gramene-mongodb-config');
-
+var comparaDatabase = require('../ensembl_db_info.json').compara.database;
 var argv = require('minimist')(process.argv.slice(2));
 var isGramene = true;
 
@@ -21,8 +21,8 @@ if (isGramene) {
 }
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
-var genetreeAdder = require('./genetree_adder')(argv.d);
-var homologAdder = require('./homolog_adder')(1);
+var genetreeAdder = require('./genetree_adder')(comparaDatabase);
+var homologAdder = require('./homolog_adder')(collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var parser = through2.obj(function (line, enc, done) {

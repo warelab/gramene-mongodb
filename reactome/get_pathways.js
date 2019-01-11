@@ -21,10 +21,14 @@ var collections = require('gramene-mongodb-config');
 
 var genesToReactionsFile = argv.gtr || 'Ensembl2PlantReactomeReactions.txt';
 var geneProductMappingFile = argv.gtp || 'gene_ids_by_pathway_and_species.tab';
-var api = argv.api || 'http://plantreactome.gramene.org/ContentService';
+var api = argv.api || 'http://plantreactomedev.oicr.on.ca/ContentService';
 
 var docs = {};
 var taxonLUT = {}; // key is speciesCode, value is taxon id
+var speciesPrefixes = require('./merge_into_taxonomy.json');
+_.forEach(speciesPrefixes, function(value,key) {
+  taxonLUT[value.reactomePrefix] = +key;
+});
 var speciesResponse = request('GET', api + '/data/species/main');
 if (speciesResponse.statusCode == 200) {
   var species = JSON.parse(speciesResponse.getBody());
@@ -39,7 +43,12 @@ if (speciesResponse.statusCode == 200) {
       function parseEvent(event, taxon, pathFromRoot) {
         [r,speciesCode,id] = event.stId.split('-');
         if(!taxonLUT.hasOwnProperty(speciesCode)) {
+          console.error(`speciesCode ${speciesCode} not in taxonLUT`);
           taxonLUT[speciesCode] = taxon;
+        }
+        else if (taxon !== taxonLUT[speciesCode]) {
+          console.error(`ensembl-reactome taxon mismatch resolved for ${speciesCode} ${taxonLUT[speciesCode]}-${taxon}`);
+          taxon = taxonLUT[speciesCode];
         }
         if (!docs.hasOwnProperty(id)) {
           docs[id] = {
@@ -62,7 +71,7 @@ if (speciesResponse.statusCode == 200) {
           });
         }
       }
-      parseEvent(tle,s.taxId,[]);
+      parseEvent(tle,+s.taxId,[]);
     });
   });
 }
@@ -143,6 +152,16 @@ readline.createInterface({
     */
     [r,speciesCode,id] = fields[1].split('-');
     if (docs.hasOwnProperty(id)) {
+      if (!genes.hasOwnProperty(fields[0])) {
+        genes[fields[0]] = {
+          annotations: {
+            pathways: {
+              ancestors: [],
+              entries: []
+            }
+          }
+        };
+      }
       var reactionAncestors = docs[id]['ancestors_' + taxonLUT[speciesCode]];
       if (!!genes[fields[0]].annotations.pathways.ancestors) {
         reactionAncestors = _.uniq(_.concat(genes[fields[0]].annotations.pathways.ancestors, reactionAncestors));
