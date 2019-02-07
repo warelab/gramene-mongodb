@@ -42,7 +42,7 @@ module.exports = function() {
       if (lut[gene._id]) {
         if (lut[gene._id].curatorSummary != '""') gene.summary = lut[gene._id].curatorSummary;
         if (lut[gene._id].briefDescription) gene.description = lut[gene._id].briefDescription;
-        gene.name = lut[gene._id].symbol;
+        if (gene.name === gene._id) gene.name = lut[gene._id].symbol;
       }
       that.push(gene);
       done();
