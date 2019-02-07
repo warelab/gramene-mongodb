@@ -20,6 +20,9 @@ module.exports = function(lut) {
     if (lut.hasOwnProperty(gene._id)) {
       _.mergeWith(gene,lut[gene._id], concatArrays);
     }
+    else if (lut.hasOwnProperty(gene._id.toUpperCase())) {
+      _.mergeWith(gene,lut[gene._id.toUpperCase()], concatArrays);
+    }
     this.push(gene);
     done();
   });
