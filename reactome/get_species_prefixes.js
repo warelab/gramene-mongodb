@@ -39,7 +39,7 @@ if (res.statusCode == 200) {
           };
         }
         else {
-          console.error("no reactome prefix found for map ", $doc);
+          console.error("no reactome prefix found for map ", doc);
         }
       });
       console.log(JSON.stringify(taxonomy));
