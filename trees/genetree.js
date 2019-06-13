@@ -1,5 +1,7 @@
 var mysql = require('mysql');
 var TreeModel = require('tree-model');
+var GrameneTreesClient = require('gramene-trees-client');
+
 var compara = require('../ensembl_db_info.json').compara;
 function childNodeComparator(a, b) {
   return a.left_index < b.left_index ? 1 : -1;
@@ -106,6 +108,31 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
   this.push(tree);
   done();
 });
+
+var pruneTree = function(GenomesOfInterest) {
+  var transform = function (tree, enc, done) {
+    // prune out unwanted branches that don't lead to GenomesOfInterest
+    tree.treeModel = GrameneTreesClient.extensions.pruneTree(tree.treeModel, function(node) {
+      return (GenomesOfInterest.hasOwnProperty(node.model.taxon_id))
+    });
+    // rebuild the nested structure because it goes into mongodb
+    if (tree.treeModel) {
+      tree.nodes = tree.treeModel.all().map(function(n) {
+        return n.model
+      });
+      tree.nested = new FlatToNested({id: 'node_id', parent: 'parent_id', children: 'children'}).convert(tree.nodes);
+      tree.nested._id = tree.nested.tree_stable_id;
+      this.push(tree);
+    }
+    done();
+  };
+
+  var flush = function(done) {
+    done();
+  };
+
+  return through2.obj(transform, flush);
+}
 
 var selectRepresentativeGeneMembers = function(haveGenome) {
   function indexTree(tree, attrs) {
@@ -359,6 +386,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
           .pipe(groupRowsByTree)
           .pipe(makeNestedTree)
           .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+          .pipe(pruneTree(haveGenome))
           .pipe(selectRepresentativeGeneMembers(haveGenome))
           .pipe(counter)
           .pipe(upsert)

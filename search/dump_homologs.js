@@ -33,8 +33,8 @@ var sql1 = 'select'
   + ' inner join gene_member g2 on hm2.gene_member_id = g2.gene_member_id'
   + ' inner join gene_tree_root gtr on h.gene_tree_root_id = gtr.root_id'
   + ' where gtr.tree_type = "tree" and gtr.clusterset_id = "default" and gtr.stable_id IS NOT NULL';
-  // + ' where g1.taxon_id NOT IN (6239,7227,9606,51511,559292)'
-  // + ' and g2.taxon_id NOT IN (6239,7227,9606,51511,559292);';
+  + ' where g1.taxon_id IN (3702,15368,3055,3847,39947,3218,88036,4555,4558,29760,4577)'
+  + ' and g2.taxon_i IN (3702,15368,3055,3847,39947,3218,88036,4555,4558,29760,4577);';
 
 function redisify() {
   var red = [];
