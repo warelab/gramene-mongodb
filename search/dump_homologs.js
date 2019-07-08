@@ -32,9 +32,9 @@ var sql1 = 'select'
   + ' inner join homology_member hm2 on hm2.homology_id = h.homology_id and hm.gene_member_id > hm2.gene_member_id'
   + ' inner join gene_member g2 on hm2.gene_member_id = g2.gene_member_id'
   + ' inner join gene_tree_root gtr on h.gene_tree_root_id = gtr.root_id'
-  + ' where gtr.tree_type = "tree" and gtr.clusterset_id = "default" and gtr.stable_id IS NOT NULL';
-  + ' where g1.taxon_id IN (3702,15368,3055,3847,39947,3218,88036,4555,4558,29760,4577)'
-  + ' and g2.taxon_i IN (3702,15368,3055,3847,39947,3218,88036,4555,4558,29760,4577);';
+  + ' where gtr.tree_type = "tree" and gtr.clusterset_id = "default" and gtr.stable_id IS NOT NULL'
+  + ' and g1.taxon_id IN (3702,15368,3055,3847,39947,3218,88036,4555,4558,29760,4577)'
+  + ' and g2.taxon_id IN (3702,15368,3055,3847,39947,3218,88036,4555,4558,29760,4577);';
 
 function redisify() {
   var red = [];

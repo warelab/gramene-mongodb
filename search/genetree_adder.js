@@ -38,22 +38,25 @@ function getLut(main_db) {
           };
 
           var leafIdx = {}; // so we can get the leaf nodes by ID
+          var skip=true;
           tree.walk(function (node) {
             if (!node.hasChildren() && node.model.gene_stable_id) {
               leafIdx[node.model.gene_stable_id] = node.model;
+              skip=false;
             }
           });
-          if (!!leafIdx.keys) {
+          if (!tree.hasChildren() && tree.model.gene_stable_id) {
+            leafIdx[tree.model.gene_stable_id] = tree.model;
+            skip=false;
+          }
+          if (!skip) {
             var isAT = new RegExp(/^AT/);
-            if (!tree.model || !tree.model.representative) {
-              console.log('something went wrong',tree,doc,'leafidx',leafIdx);
-            }
-            if (tree.model.representative.id.match(isAT)) {
+            if (tree.model.representative && tree.model.representative.id.match(isAT)) {
               tree.model.ath_rep = tree.model.representative;
             }
             // starting at the root of the tree, assign good representatives to their bad children
             tree.walk({strategy: 'pre'}, function (node) {
-              if (node.model.representative.score >= -80) return false; // there's no hope for this subtree
+              if (!node.model.representative || node.model.representative.score >= -80) return false; // there's no hope for this subtree
               node.children.forEach(function(child) {
                 if (child.model.representative.score >= -80) {
                   child.model.representative.score = node.model.representative.score;
@@ -180,6 +183,7 @@ module.exports = function(db) {
           gene.homology = {};
         }
         gene.homology.gene_tree = genetreeLUT.main[gene._id];
+        console.log("found tree for",gene._id,genetreeLUT.main[gene._id]);
       }
       if (genetreeLUT.aux.hasOwnProperty(gene._id)) {
         if (! gene.hasOwnProperty('homology')) {
