@@ -308,7 +308,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
       var upsert = upsertTreeIntoMongo(mongoCollection);
 
       var queryForTreeIds = "select root_id from gene_tree_root where"
-      + " tree_type='tree' and clusterset_id = 'default' and stable_id IS NOT NULL;";
+      + " tree_type='tree' and clusterset_id = 'default';"; //" and stable_id IS NOT NULL;";
       comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
         if (err) throw err;
         var ids = rows.map(function (r) {
@@ -323,7 +323,11 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
           // this query returns one row per node in the tree; it includes both leaf and
           // branch nodes. some properties (e.g. system_name) are null for branch nodes
           // and others (e.g. node_type) are null for leaf nodes.
-          var query = "select r.root_id,r.stable_id as tree_stable_id,\n"
+          var query = "select r.root_id,\n"
+          + "case when r.stable_id IS NULL\n"
+          + " then CONCAT(\"MAIZE3GT_\",r.root_id)\n"
+          + " else r.stable_id\n"
+          + "end as tree_stable_id,\n"
           + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
           + "case when n.node_id = n.root_id\n"
           + "	then null\n"

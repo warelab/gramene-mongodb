@@ -42,6 +42,9 @@ require('readline').createInterface({
     var obj = {};
     obj._id = parseInt(item.$.id.match(/\d+/));
     obj.ancestors = (ancestors[obj._id]) ? ancestors[obj._id] : [obj._id];
+    if (obj.ancestors.length > 1) {
+      obj.is_a = [obj.ancestors[obj.ancestors.length - 1]];
+    }
     obj.id = item.$.id;
     obj.name = item.$.short_name;
     obj.type = item.$.type;
