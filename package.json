@@ -39,7 +39,7 @@
     "lodash": "^4.6.1",
     "minimist": "^1.2.0",
     "mongo-sanitize": "^1.0.0",
-    "mongodb": "^2.2.29",
+    "mongodb": "^3.6.1",
     "mysql": "^2.6.2",
     "q": "^1.4.1",
     "redis": "^2.3.0",
