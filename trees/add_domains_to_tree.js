@@ -23,6 +23,9 @@ var decorateTree = function(geneCollection) {
           nTranscripts_lut[gene._id] = gene.gene_structure.transcripts.length;
           var tIdx = _.keyBy(gene.gene_structure.transcripts,'id');
           var ct = tIdx[gene.gene_structure.canonical_transcript];
+          if (!ct) {
+            console.log(gene.gene_structure);
+          }
           if (ct.translation && ct.translation.features.domain && ct.translation.features.domain.architecture) {
             domain_lut[gene._id] = ct.translation.features.domain.architecture.map(function(domain) {
               return {
