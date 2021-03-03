@@ -45,6 +45,9 @@ function getLut(main_db) {
           });
         
           var isAT = new RegExp(/^AT/);
+          if (!tree.model.representative) {
+            console.log('no rep in tree',JSON.stringify(tree.model,null,2));
+          }
           if (tree.model.representative.id.match(isAT)) {
             tree.model.ath_rep = tree.model.representative;
           }
@@ -90,7 +93,9 @@ function getLut(main_db) {
               lookupValue.duplications = Object.keys(leaf.duplications).map(function(tid) {return +tid});
             }
             // non-arabidopsis genes also get a closest arabidopsis ortholog representative
-
+            if (!leaf.representative) {
+              console.log('leaf lacks representative', leaf);
+            }
             if (leaf.representative.score >= -80) {
               // no representative
               acc[id] = lookupValue;
