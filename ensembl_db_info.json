@@ -1,0 +1,87 @@
+{
+ "compara": {
+  "host": "cabot",
+  "user": "gramene_web",
+  "password": "gram3n3",
+  "database": "ensembl_compara_1_87_sorghumsicna"
+ },
+ "cores": [
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "arabidopsis_thaliana_core_2_87_11"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "chlamydomonas_reinhardtii_core_2_87_3"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativa_core_2_87_7"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "selaginella_moellendorffii_core_2_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_bicolor_core_2_87_30"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx2783pac_core_1_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx436pac_core_1_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx430nano_core_1_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_rio_core_1_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vitis_vinifera_core_2_87_3"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_maysb73v4_core_2_87_7"
+  }
+ ]
+}

@@ -133,9 +133,9 @@ var add_features_to_translations = {
   sql: 'SELECT tl.translation_id, ipr.interpro_ac, pf.seq_start, pf.seq_end, pf.hit_name, pf.hit_description, a.db'
    + ' FROM translation tl'
    + ' inner join protein_feature pf on tl.translation_id = pf.translation_id'
-   + ' inner join interpro ipr on pf.hit_name = ipr.id'
+   + ' inner join interpro ipr on pf.hit_name = concat(ipr.id,"_CSHL")'
    + ' inner join analysis a on pf.analysis_id = a.analysis_id'
-   + ' WHERE 1',
+   + ' WHERE a.logic_name = "cshl_pfam"',
   process: function(rows, translations) {
     rows.forEach(function(row) {
       if (translations.hasOwnProperty(row.translation_id)) {
@@ -151,7 +151,6 @@ var add_features_to_translations = {
     });
   }
 }
-
 var get_genes = {
   sql: 'select g.gene_id, g.stable_id, x.display_label as name, g.description, g.biotype,'
     + ' sr.name as region, g.seq_region_start as start, g.seq_region_end as end, g.seq_region_strand as strand,'
