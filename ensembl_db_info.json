@@ -14,18 +14,11 @@
    "database": "arabidopsis_thaliana_core_2_87_11"
   },
   {
-   "host": "bhsqldw1",
+   "host": "localhost",
    "port": 3306,
-   "user": "plensembl",
-   "password": "gram3n3",
+   "user": "olson",
+   "password": "BnMbs8T6zm",
    "database": "drosophila_melanogaster_core_2_87_6"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "brachypodium_distachyon_core_2_87_4"
   },
   {
    "host": "cabot",
@@ -39,13 +32,6 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "glycine_max_core_2_87_3"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
    "database": "oryza_sativa_core_2_87_7"
   },
   {
@@ -53,21 +39,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "physcomitrella_patens_core_2_87_2"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
    "database": "selaginella_moellendorffii_core_2_87_1"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "setaria_italica_core_2_87_2"
   },
   {
    "host": "cabot",
@@ -270,13 +242,6 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "zea_maysph207_core_53_87_1"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
    "database": "zea_maystx303_core_3_87_1"
   },
   {
@@ -285,13 +250,6 @@
    "user": "gramene_web",
    "password": "gram3n3",
    "database": "zea_maystzi8_core_3_87_1"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "zea_maysw22_core_53_87_12"
   }
  ]
 }

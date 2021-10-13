@@ -148,6 +148,9 @@ var add_features_to_translations = {
           end: row.seq_end
         });
       }
+      else {
+        console.error("protein feature for unknown translation:",row);
+      }
     });
   }
 }
