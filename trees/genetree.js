@@ -259,19 +259,14 @@ var counter = (function () {
   return through2.obj(transform, flush);
 })();
 
-var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
+var insertTreeIntoMongo = function insertTreeIntoMongo(mongoCollection) {
   var transform = function (tree, enc, done) {
     var throughThis = this;
     tree.nested.compara_db = compara.database; // so we can pull out just the gene trees we want later
-    mongoCollection.update(
-      {_id: tree.nested._id},
-      tree.nested,
-      {upsert: true},
-      function (err, count, status) {
-        throughThis.push({err: err, status: status, _id: tree.nested._id});
-        done();
-      }
-    );
+    mongoCollection.insertOne(tree.nested,function (err, count, status) {
+			throughThis.push({err: err, status: status, _id: tree.nested._id});
+      done();
+    });
   };
 
   var flush = function(done) {
@@ -314,7 +309,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
       }
     });
     collections.genetrees.mongoCollection().then(function(mongoCollection) {
-      var upsert = upsertTreeIntoMongo(mongoCollection);
+      var upsert = insertTreeIntoMongo(mongoCollection);
 
       var queryForTreeIds = "select root_id from gene_tree_root where"
       + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
@@ -334,7 +329,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
           // and others (e.g. node_type) are null for leaf nodes.
           var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
           + "case when r.stable_id IS NULL\n"
-          + " then CONCAT(\"MAIZE1GT_\",r.root_id)\n"
+          + " then CONCAT(\"ORYZA3GT_\",r.root_id)\n"
           + " else r.stable_id\n"
           + "end as tree_stable_id,\n"
           + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
