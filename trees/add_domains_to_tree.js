@@ -74,10 +74,9 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
   var nTrees = 0;
   var transform = function (tree, enc, done) {
     var throughThis = this;
-    mongoCollection.update(
+    mongoCollection.updateOne(
       {_id: tree._id},
-      tree,
-      {upsert: true},
+      { $set: tree},
       function (err, count, status) {
         //throughThis.push({err: err, status: status, _id: tree._id});
         nTrees++;
