@@ -143,7 +143,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
       var taxNode = all[id];
       if (!taxNode && all[fosterParent]) {
 				let fp = fosterParent;
-				if (taxNode === 45770000) {
+				if (+id === 45770000) {
 					fp = 4575
 				}
         console.error("no taxNode for desired id",id,". adding as a foster child to id",fp);
@@ -155,7 +155,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
         fosterChild.is_a = [fp];
         fosterChild.name = g.display_name;
         fosterChild.property_value = "has_rank NCBITaxon:species";
-				fosterChild.synonym = taxNode === 45770000 ? ['maize']:[argv.synonym];
+				fosterChild.synonym = +id === 45770000 ? ['maize']:[argv.synonym];
         fosterChild.ancestors.forEach(function(a) {
           nGenes[a] += nGenes[id];
         });
