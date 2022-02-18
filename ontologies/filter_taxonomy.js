@@ -2,6 +2,7 @@
 var collections = require('gramene-mongodb-config');
 var mysql = require('mysql');
 var argv = require('minimist')(process.argv.slice(2));
+var fosterParent = argv.f;
 var _ = require('lodash');
 var compara = require('../ensembl_db_info.json').compara;
 var comparaMysqlDb = mysql.createConnection(compara);
@@ -138,6 +139,30 @@ function filterTaxonomy(subsets,genomes,customChildren) {
     all[tax_node._id] = tax_node;
   })
   .on('close', function() {
+    for (var id in desired) {
+      var taxNode = all[id];
+      if (!taxNode && all[fosterParent]) {
+				let fp = fosterParent;
+				if (+id === 45770000) {
+					fp = 4575
+				}
+        console.error("no taxNode for desired id",id,". adding as a foster child to id",fp);
+        var g = genome_idx[id];
+        var fosterChild = _.cloneDeep(all[fp]);
+        fosterChild._id = +id;
+        fosterChild.id = `NCBITaxon:${id}`;
+        fosterChild.system_name = g.system_name;
+        fosterChild.is_a = [fp];
+        fosterChild.name = g.display_name;
+        fosterChild.property_value = "has_rank NCBITaxon:species";
+				fosterChild.synonym = +id === 45770000 ? ['maize']:[argv.synonym];
+        fosterChild.ancestors.forEach(function(a) {
+          nGenes[a] += nGenes[id];
+        });
+        fosterChild.ancestors.push(id);
+        all[id] = fosterChild;
+      }
+    }
     for (var id in desired) {
       var taxNode = all[id];
       taxNode.num_genes = nGenes[id] || 0;

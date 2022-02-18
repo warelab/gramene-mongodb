@@ -14,7 +14,7 @@ var reader = byline(fs.createReadStream(argv.i));
 var writer = fs.createWriteStream(argv.o);
 var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
 if (isGramene) {
-  var fixMaizeV4 = require('./fix_maize_v4')();
+  var fixMaizeV4 = require('./fix_maize_v5')();
   var fixSorghumV2 = require('./fix_sorghum_v2')();
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
@@ -142,10 +142,8 @@ var cleanup = through2.obj(function (gene, enc, done) {
 var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
   var transform = function (gene, enc, done) {
     var throughThis = this;
-    mongoCollection.update(
-      {_id: gene._id},
+    mongoCollection.insertOne(
       gene,
-      {upsert: true},
       function (err, count, status) {
         throughThis.push({err: err, status: status, _id: gene._id});
         done();
@@ -154,8 +152,9 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
   };
 
   var flush = function(done) {
-    collections.closeMongoDatabase();
     console.error('upsert to mongo is done');
+    collections.closeMongoDatabase();
+    console.error('closeMongoDatabase completed');
     done();
   };
 

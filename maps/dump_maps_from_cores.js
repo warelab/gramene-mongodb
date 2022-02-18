@@ -2,10 +2,12 @@
 // connect to mysql database
 var mysql = require('mysql');
 var cores = require('../ensembl_db_info.json').cores;
+var compara = require('../ensembl_db_info.json').compara;
 var collections = require('gramene-mongodb-config');
 var Q = require('q');
 var _ = require('lodash');
 
+var left_index = {};
 var taxon_tally = {};
 var taxon_offset = {};
 var promises = cores.map(function(core) {
@@ -18,6 +20,14 @@ var mapsPromise = Q.all(promises).then(function(maps) {
   return _.flatten(maps);
 });
 mapsPromise.then(function(maps) {
+  var comparaConn = mysql.createConnection(compara);
+  if (!comparaConn) throw "error connecting to compara";
+  comparaConn.connect();
+  comparaConn.query('select taxon_id,left_index from species_tree_node where genome_db_id IS NOT NULL', function (err, rows, fields) {
+    if (err) throw err;
+    rows.forEach(function(r) {
+      left_index[r.taxon_id] = r.left_index;
+    });
   mongoMapsPromise.then(function(mapsCollection) {
     var insertThese = maps.map(function(map) {
       if (taxon_tally[map.taxon_id] > 1) {
@@ -25,6 +35,7 @@ mapsPromise.then(function(maps) {
         taxon_offset[map.taxon_id]++;
         map.taxon_id = newTaxId;
       }
+      map.left_index = left_index[map.taxon_id];
       return map;
     });
     mapsCollection.insertMany(insertThese, function(err, result) {
@@ -34,6 +45,7 @@ mapsPromise.then(function(maps) {
       console.error("finished loading maps");
       collections.closeMongoDatabase();
     });
+  });
   });
 });
 
