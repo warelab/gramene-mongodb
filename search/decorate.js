@@ -22,7 +22,7 @@ if (isGramene) {
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
 var genetreeAdder = require('./genetree_adder')(comparaDatabase);
-var homologAdder = require('./homolog_adder')(8);//collections.getVersion());
+var homologAdder = require('./homolog_adder')(collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var parser = through2.obj(function (line, enc, done) {
@@ -152,8 +152,9 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
   };
 
   var flush = function(done) {
-    collections.closeMongoDatabase();
     console.error('upsert to mongo is done');
+    collections.closeMongoDatabase();
+    console.error('closeMongoDatabase completed');
     done();
   };
 
