@@ -5,7 +5,7 @@ use autodie;
 use JSON;
 use Readonly;
 
-Readonly my %MULTI = map { $_ , 1 } qw(
+my %MULTI = map { $_ , 1 } qw(
     alt_id
     consider
     disjoint_from
@@ -21,6 +21,7 @@ Readonly my %MULTI = map { $_ , 1 } qw(
     synonym
     xref
 );
+
 
 my $prefix = shift @ARGV;
 my $outDir = shift @ARGV;

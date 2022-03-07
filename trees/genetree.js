@@ -329,7 +329,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
           // and others (e.g. node_type) are null for leaf nodes.
           var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
           + "case when r.stable_id IS NULL\n"
-          + " then CONCAT(\"ORYZA3GT_\",r.root_id)\n"
+          + " then CONCAT(\"ORYZA4GT_\",r.root_id)\n"
           + " else r.stable_id\n"
           + "end as tree_stable_id,\n"
           + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"

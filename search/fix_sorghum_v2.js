@@ -6,7 +6,7 @@ var _ = require('lodash');
 function getMapping() {
   var deferred = Q.defer();
   var lut = {};
-  var filename = 'sorghum_v3_lut.txt';
+  var filename = 'sorghum_v3_lut2.txt';
   console.error('fix_sorghum_v2 getMapping');
   require('readline').createInterface({
     input: require('fs').createReadStream(filename),
@@ -16,8 +16,8 @@ function getMapping() {
     var fields = line.split("\t");
     /*
       fields are
-  0  v2 id (ensembl)
-  1  v2 id
+  0  ensembl id
+  1  phytozome id
   2  v1 id
   3  defline if not '-'
     */
