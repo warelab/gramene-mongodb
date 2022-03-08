@@ -3,7 +3,7 @@
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
-  "database": "ensembl_compara_4_87_rice0222"
+  "database": "ensembl_compara_4_87_rice1021"
  },
  "cores": [
   {
@@ -243,27 +243,6 @@
    "user": "gramene_web",
    "password": "gram3n3",
    "database": "leersia_perrieri_core_3_87_14"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "oryza_sativamh63_core_4_87_1"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "oryza_sativazs97_core_4_87_1"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "oryza_sativakitaake_core_4_87_1"
   }
  ]
 }
