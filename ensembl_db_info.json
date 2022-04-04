@@ -3,7 +3,7 @@
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
-  "database": "ensembl_compara_4_87_rice0921"
+  "database": "ensembl_compara_4_87_rice1021"
  },
  "cores": [
   {
@@ -49,10 +49,10 @@
    "database": "chlamydomonas_reinhardtii_core_2_87_3"
   },
   {
-   "host": "localhost",
+   "host": "cabot",
    "port": 3306,
-   "user": "olson",
-   "password": "BnMbs8T6zm",
+   "user": "gramene_web",
+   "password": "gram3n3",
    "database": "drosophila_melanogaster_core_2_87_6"
   },
   {
