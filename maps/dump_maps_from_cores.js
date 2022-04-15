@@ -126,6 +126,9 @@ function get_maps(dbInfo) {
           if (err) throw err;
           var unanchored = rows[0].sum - map.length;
           if (!!unanchored) {
+            if (map.length > 0 && unanchored > map.length) {
+              unanchored = 1000000;
+            }
             map.regions.names.push('UNANCHORED');
             map.regions.lengths.push(unanchored);
           }

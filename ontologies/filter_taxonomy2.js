@@ -147,6 +147,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
           var matches = id.toString().match(regex);
           if (matches && matches.length === 2) {
             var sib = +matches[1];
+            console.error('sib ',sib);
             if (all[sib]) {
               fosterParent = all[sib].is_a[0];
             }
@@ -169,6 +170,10 @@ function filterTaxonomy(subsets,genomes,customChildren) {
           }
           fosterChild.ancestors.forEach(function(a) {
             nGenes[a] += nGenes[id];
+            if (!desired.hasOwnProperty(a)) {
+              console.error(`adding ${a} to desired hash`);
+              desired[a] = desired[id];
+            }
           });
           fosterChild.ancestors.push(id);
           all[id] = fosterChild;
