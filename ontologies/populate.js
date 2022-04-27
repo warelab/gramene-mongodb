@@ -62,7 +62,7 @@ ontologies.forEach(function(ontology) {
       console.error('parsed',docs);
       var filter = 'cat '+docs;
       if (ontology.collectionName === 'taxonomy') {
-        filter = './filter_taxonomy2.js'
+        filter = 'node --max-old-space-size=8192 ./filter_taxonomy2.js'
         + ' --taxonomy ' + docs;
         if (argv.pan) {
           filter += ' --pan ' + argv.pan;
