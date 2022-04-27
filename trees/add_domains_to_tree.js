@@ -39,9 +39,9 @@ var decorateTree = function(geneCollection, iprInfo) {
             if (ct.translation && ct.translation.features) {
               var features = {};
               var fTypes = Object.keys(ct.translation.features);
-              if (ct.translation.features.family && fTypes.length > 1) {
+              if (ct.translation.features.family){ //} && fTypes.length > 1) {
                 delete ct.translation.features.family;
-                console.log('deleted family features. these remain',ct.translation.features);
+                // console.log('deleted family features. these remain',ct.translation.features);
               }
               Object.keys(ct.translation.features).forEach(function(featureType) {
                 ct.translation.features[featureType].entries.forEach(function(feature) {
@@ -99,6 +99,9 @@ var decorateTree = function(geneCollection, iprInfo) {
       var tree = treeModel.parse(mongoTree);
       tree.walk(function (node) {
         if (!node.children.length) {
+          if (node.model.domains) {
+            delete node.model.domains;
+          }
           var id = node.model.gene_stable_id;
           if (taxon_lut.hasOwnProperty(id)) {
             node.model.taxon_id = taxon_lut[id];
@@ -159,7 +162,7 @@ collections.genetrees.mongoCollection().then(function(treeCollection) {
         var upsert = upsertTreeIntoMongo(treeCollection);
 
         var treeStream = treeCollection.find({compara_db:comparaDatabase}).stream();
-
+   
         treeStream
           .pipe(decorateTree(geneCollection,iprInfo))
           .pipe(upsert);
