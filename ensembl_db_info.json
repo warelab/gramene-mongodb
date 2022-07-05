@@ -3,7 +3,7 @@
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
-  "database": "ensembl_compara_1_87_yeast0322"
+  "database": "ensembl_compara_4_87_sorghum0422"
  },
  "cores": [
   {
@@ -25,119 +25,168 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "homo_sapiens_core_2_87_38"
+   "database": "oryza_sativa_core_2_87_7"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "danio_rerio_core_1_87_11"
+   "database": "populus_trichocarpa_core_40_87_4"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "ustilago_maydis_core_1_87_2"
+   "database": "selaginella_moellendorffii_core_2_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "puccinia_graminis_core_1_87_1"
+   "database": "sorghum_bicolor_core_4_87_30"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "neurospora_crassa_core_1_87_2"
+   "database": "vitis_vinifera_core_2_87_3"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "aspergillus_nidulans_core_1_87_1"
+   "database": "zea_maysb73_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "saccharomyces_cerevisiae_core_1_87_4"
+   "database": "zea_maysb73v4_core_2_87_7"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "schizosaccharomyces_pombe_core_1_87_2"
+   "database": "sorghum_353_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "tetrahymena_thermophila_core_1_87_1"
+   "database": "sorghum_austrcf317961_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "plasmodium_falciparum_core_1_87_1"
+   "database": "sorghum_is12661_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "guillardia_theta_core_1_87_1"
+   "database": "sorghum_is19953_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "kluyveromyces_lactis_core_1_87_1"
+   "database": "sorghum_is36143_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "yarrowia_lipolyticae122_core_1_87_2"
+   "database": "sorghum_is8525_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "yarrowia_lipolytica223015_core_1_87_2"
+   "database": "sorghum_is929_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "yarrowia_lipolyticaclib89_core_1_87_1"
+   "database": "sorghum_ji2731_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "yarrowia_lipolyticadsm3286_core_1_87_1"
+   "database": "sorghum_pi525695_core_3_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "yarrowia_lipolyticaclib122_core_1_87_1"
+   "database": "sorghum_pi532566_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_pi536008_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_r93194522_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_rio_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_s3691_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx2783pac_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx430nano_core_3_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx436pac_core_3_87_1"
   }
  ]
 }
