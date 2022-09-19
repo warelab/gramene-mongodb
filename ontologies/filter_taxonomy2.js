@@ -20,6 +20,39 @@ var subsets = {
   pan_compara: {}
 };
 
+var pans = [
+  {
+    tax_re: /^45580[0-9]*$/,
+    parent: 4557
+  },
+  {
+    tax_re: /^45770[0-9]*$/,
+    parent: 4575
+  },
+  {
+    tax_re: /^39947[0-9]*$/,
+    parent: 4573
+  },
+  {
+    tax_re: /^29760[0-9]*$/,
+    parent: 3603
+  },
+  {
+    tax_re: /^1000(561071|651496|655996|656001)$/,
+    parent: 4557
+  }
+];
+function findParent(id) {
+  let fp=0;
+  pans.forEach(p => {
+    var matches = id.toString().match(p.tax_re);
+    if (matches) {
+      fp = p.parent;
+    }
+  })
+  return fp;
+}
+
 collections.maps.mongoCollection().then(function (coll) {
   coll.find({type: 'genome'}, {}).toArray(function (err, genomes) {
     if (err) throw err;
@@ -143,7 +176,11 @@ function filterTaxonomy(subsets,genomes,customChildren) {
     for (var id in desired) {
       var taxNode = all[id];
       if (!taxNode) {
-	if (!argv.f) {
+        var fp = findParent(id);
+        if (fp > 0) {
+          fosterParent = fp;
+        }
+        else if (!argv.f) {
           var matches = id.toString().match(regex);
           if (matches && matches.length === 2) {
             var sib = +matches[1];
@@ -152,10 +189,10 @@ function filterTaxonomy(subsets,genomes,customChildren) {
               fosterParent = all[sib].is_a[0];
             }
           } else {
-		console.error("no matches for ",id)
-	  }
-	}
-	if (all[fosterParent]) {
+		        console.error("no matches for ",id)
+          }
+	      }
+	      if (all[fosterParent]) {
           console.error("no taxNode for desired id",id,". adding as a foster child to id",fosterParent);
           var g = genome_idx[id];
           var fosterChild = _.cloneDeep(all[fosterParent]);
@@ -165,7 +202,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
           fosterChild.is_a = [fosterParent];
           fosterChild.name = g.display_name;
           fosterChild.property_value = "has_rank NCBITaxon:species";
-	  if (argv.synonym) {
+	        if (argv.synonym) {
             fosterChild.synonym = [argv.synonym];
           }
           fosterChild.ancestors.forEach(function(a) {
@@ -177,7 +214,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
           });
           fosterChild.ancestors.push(id);
           all[id] = fosterChild;
-	}
+	      }
         else {
           console.error(`fosterParent ${fosterParent} is not a valid tax id for desired id ${id}`);
         }
