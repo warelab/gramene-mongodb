@@ -97,7 +97,7 @@ connection.query(sql0)
   })
   .on('fields', function(fields) {
     // the field packets for the rows to follow
-    console.log(redisify('SELECT','2'));//collections.getVersion()));
+    console.log(redisify('SELECT','8'));//collections.getVersion()));
     console.log(redisify('FLUSHDB'));
   })
   .on('result', function(row) {
