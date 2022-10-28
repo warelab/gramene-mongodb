@@ -18,6 +18,7 @@ if (isGramene) {
   var fixSorghumV2 = require('./fix_sorghum_v2')();
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
+  var rapdb = require('./rapdb')();
 }
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
@@ -169,6 +170,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(fixSorghumV2)
       .pipe(fixBarley)
       .pipe(thalemine)
+      .pipe(rapdb)
   }
   stream = stream.pipe(fixTranslationLength)
     .pipe(assignCanonicalTranscript)
