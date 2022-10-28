@@ -279,26 +279,28 @@ function add_gene_structure(exons,transcripts,genes) {
   for(var transcript_id in transcripts) {
     var transcript = transcripts[transcript_id];
     var gene = genes[transcript.gene_id];
-    // add transcript to gene 
-    gene.gene_structure.transcripts.push(transcript);
-    // add exons to gene
-    transcript.exon_ids.forEach(function(exon_id) {
-      var exon = exons[exon_id];
-      gene.gene_structure.exons.push({
-        id: exon.stable_id,
-        start: gene.location.strand === 1 ?
-          exon.seq_region_start - gene.location.start + 1 :
-          gene.location.end - exon.seq_region_end + 1,
-        end: gene.location.strand === 1 ?
-          exon.seq_region_end - gene.location.start + 1 :
-          gene.location.end - exon.seq_region_start + 1
+    if (gene) { // because a gene might not be current
+      // add transcript to gene 
+      gene.gene_structure.transcripts.push(transcript);
+      // add exons to gene
+      transcript.exon_ids.forEach(function(exon_id) {
+        var exon = exons[exon_id];
+        gene.gene_structure.exons.push({
+          id: exon.stable_id,
+          start: gene.location.strand === 1 ?
+            exon.seq_region_start - gene.location.start + 1 :
+            gene.location.end - exon.seq_region_end + 1,
+          end: gene.location.strand === 1 ?
+            exon.seq_region_end - gene.location.start + 1 :
+            gene.location.end - exon.seq_region_start + 1
+        });
       });
-    });
-    transcript.id = transcript.stable_id;
-    delete transcript.stable_id;
-    delete transcript.exon_ids;
-    delete transcript.transcript_id;
-    delete transcript.gene_id;
+      transcript.id = transcript.stable_id;
+      delete transcript.stable_id;
+      delete transcript.exon_ids;
+      delete transcript.transcript_id;
+      delete transcript.gene_id;
+    }
   }
 }
 
