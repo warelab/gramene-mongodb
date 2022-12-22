@@ -19,11 +19,12 @@ if (isGramene) {
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
   var rapdb = require('./rapdb')();
+  var generifs = require('./generifs')(3);
 }
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
 var genetreeAdder = require('./genetree_adder')(comparaDatabase);
-var homologAdder = require('./homolog_adder')(collections.getVersion());
+var homologAdder = require('./homolog_adder')('10');//collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var parser = through2.obj(function (line, enc, done) {
@@ -171,6 +172,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(fixBarley)
       .pipe(thalemine)
       .pipe(rapdb)
+      .pipe(generifs)
   }
   stream = stream.pipe(fixTranslationLength)
     .pipe(assignCanonicalTranscript)

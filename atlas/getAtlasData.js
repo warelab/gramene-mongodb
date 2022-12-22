@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 var _ = require('lodash');
 var Q = require('q');
-var FTPS = require('ftps');
+//var FTPS = require('ftps');
 var fs = require('fs');
 var xml2js = require('xml2js').parseString;
 var collections = require('gramene-mongodb-config');
-var ftps = new FTPS({
-  host: 'ftp.ebi.ac.uk'
-});
+//var ftps = new FTPS({
+//  host: 'ftp.ebi.ac.uk'
+//});
 
 function parseAssays() {
   var deferred = Q.defer();

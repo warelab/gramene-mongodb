@@ -17,10 +17,22 @@ function getRapDB() {
       if (!lut.hasOwnProperty(g.locus)) {
         lut[g.locus] = {
           name:'',
-          synonyms:[]
+          synonyms:[],
+          refs:[]
         };
         ontologies.forEach(o => lut[g.locus][o] = {});
       }
+      _.forEach(g.references, function(ref, pmid) {
+        if (_.isObject(ref) && _.isNumber(+pmid)) {
+          lut[g.locus].refs.push({
+            id: pmid,
+            title: ref.title
+          })
+        }
+        else {
+          console.error('skipping reference',ref,pmid);
+        }
+      });
       if (g.gene_symbols) {
         let symbols = g.gene_symbols.split(', ');
         lut[g.locus].name = symbols.shift();
@@ -58,6 +70,16 @@ module.exports = function() {
         if (lut[gene._id].synonyms) {
           gene.synonyms = lut[gene._id].synonyms
         }
+        if (lut[gene._id].refs) {
+          lut[gene._id].refs.forEach(ref => {
+            gene.xrefs.push({
+              db: 'PUBMED',
+              source: 'rap-db',
+              text: ref.title,
+              ids: [ref.id]
+            })
+          })
+        }
         ontologies.forEach(o => {
           const terms = Object.keys(lut[gene._id][o]);
           if (terms && terms.length > 0) {
@@ -65,7 +87,7 @@ module.exports = function() {
               db: o.toUpperCase(),
               ids: terms.map(t => [t,"IDK"])
             })
-            console.error('rapdb',gene.xrefs);
+            // console.error('rapdb',gene.xrefs);
           }
         })
       }

@@ -72,7 +72,7 @@ function modifyGene(ancestorsLUT,obj) {
     }
   });
   xrefsToProcess.pop();
-  obj.xrefs = _.values(xrefsKeys);
+  // obj.xrefs = _.values(xrefsKeys);
   return obj;
 }
 
