@@ -35,7 +35,7 @@ var parser = through2.obj(function (line, enc, done) {
 
 var numberDecorated=0;
 var serializer = through2.obj(function (obj, enc, done) {
-  if (obj.err) {
+  if (obj.err || true) {
     this.push(JSON.stringify(obj) + "\n");
   }
   numberDecorated++;

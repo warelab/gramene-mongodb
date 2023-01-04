@@ -20,6 +20,7 @@ if (isGramene) {
   var thalemine = require('./thalemine')();
   var rapdb = require('./rapdb')();
   var generifs = require('./generifs')(3);
+  var qtls = require('./qtl_adder')();
 }
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
@@ -173,6 +174,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(thalemine)
       .pipe(rapdb)
       .pipe(generifs)
+      .pipe(qtls)
   }
   stream = stream.pipe(fixTranslationLength)
     .pipe(assignCanonicalTranscript)
