@@ -25,7 +25,7 @@ if (isGramene) {
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
 var genetreeAdder = require('./genetree_adder')(comparaDatabase);
-var homologAdder = require('./homolog_adder')('10');//collections.getVersion());
+var homologAdder = require('./homolog_adder')('9');//collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var parser = through2.obj(function (line, enc, done) {
