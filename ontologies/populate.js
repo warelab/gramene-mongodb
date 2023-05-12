@@ -27,11 +27,11 @@ var ontologies = [
   //   obo: 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
   //   prefix: 'SO'
   // },
-  // {
-  //   collectionName: 'TO',
-  //   obo: 'http://www.berkeleybop.org/ontologies/to.obo',
-  //   prefix: 'TO'
-  // },
+  {
+    collectionName: 'TO',
+    obo: 'http://purl.obolibrary.org/obo/to.obo',
+    prefix: 'TO'
+  },
   // {
   //   collectionName: 'GRO',
   //   obo: 'http://palea.cgrb.oregonstate.edu/viewsvn/Poc/trunk/ontology/collaborators_ontology/gramene/temporal_gramene.obo',

@@ -60,7 +60,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "zea_maysb73v4_core_2_87_7"
+   "database": "drosophila_melanogaster_core_2_87_6"
   },
   {
    "host": "cabot",
