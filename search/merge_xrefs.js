@@ -18,7 +18,7 @@ collections.genes.mongoCollection().then(function (coll) {
         var res = [];
         var by_db = _.keyBy(obj.xrefs, 'db');
         src.xrefs.forEach(function(xr) {
-          if (by_db[xr.db]) {
+          if (xr.db !== "PUBMED" && by_db[xr.db]) {
             res.push({
               db: xr.db,
               ids: _.union(by_db[xr.db],xr.ids)
