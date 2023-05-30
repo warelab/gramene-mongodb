@@ -151,6 +151,9 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
       else if (desc.match(/^(expressed)?\s*protein$/i)) {
         score += bad;
       }
+      else if (desc.match(/^\S+$/)) { // descriptions should have spaces
+        score += bad;
+      }
       // else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
       //   if (desc.toUpperCase().match(node.model.gene_stable_id.toUpperCase())) {
       //     score -= bad;
