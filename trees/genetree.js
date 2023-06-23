@@ -151,7 +151,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
       else if (desc.match(/^(expressed)?\s*protein$/i)) {
         score += bad;
       }
-      else if (desc.match(/^\S+$/)) { // descriptions should have spaces
+      else if (desc.match(/^Zm0/)) {
         score += bad;
       }
       // else if (desc.match(/AT[1-5]G[0-9]{5}/i)) {
