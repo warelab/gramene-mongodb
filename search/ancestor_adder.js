@@ -4,11 +4,13 @@ var collections = require('gramene-mongodb-config');
 var Q = require('q');
 var through2 = require('through2');
 
-var xrefsToProcess = ['domains','GO','PO','taxonomy'];
+var xrefsToProcess = ['domains','GO','PO','TO','taxonomy'];
 var fields = {
   domains: ['id','name','description'],
   GO: ['id','name','namespace','def','subset'],
   PO: ['id','name','namespace','def','subset'],
+  TO: ['id','name','namespace','def','subset'],
+  QTL_TO: ['id','name','namespace','def','subset'],
   taxonomy: ['_id','name'],
   familyRoot: ['_id','name']
 };
@@ -19,14 +21,21 @@ function modifyGene(ancestorsLUT,obj) {
     obj.xrefs.push({db:'familyRoot', ids: ['NCBITaxon:'+obj.homology.gene_tree.root_taxon_id]});
   }
   var xrefsKeys = _.keyBy(obj.xrefs,'db');
-  xrefsToProcess.push('familyRoot');
+  xrefsToProcess.push('familyRoot','QTL_TO');
   xrefsToProcess.forEach(function(x) {
     if (xrefsKeys.hasOwnProperty(x)) {
       var lut = {};
       var specificAnnotations = [];
       var usefulInfo = {};
       var revert = false;
-      var LUT = (x === 'familyRoot') ? ancestorsLUT.taxonomy : ancestorsLUT[x];
+      var LUT = ancestorsLUT[x];
+      if (x === 'familyRoot') {
+        LUT = ancestorsLUT.taxonomy
+      }
+      if (x === 'QTL_TO') {
+        LUT = ancestorsLUT.TO
+      }
+      
       xrefsKeys[x].ids.forEach(function(id) {
         var ec;
         if (Array.isArray(id)) {
@@ -71,7 +80,8 @@ function modifyGene(ancestorsLUT,obj) {
     }
   });
   xrefsToProcess.pop();
-  obj.xrefs = _.values(xrefsKeys);
+  xrefsToProcess.pop();
+  // obj.xrefs = _.values(xrefsKeys);
   return obj;
 }
 

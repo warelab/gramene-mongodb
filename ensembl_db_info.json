@@ -3,7 +3,7 @@
   "host": "cabot",
   "user": "gramene_web",
   "password": "gram3n3",
-  "database": "ensembl_compara_4_87_rice1021"
+  "database": "ensembl_compara_6_87_sorghum00423v2"
  },
  "cores": [
   {
@@ -11,35 +11,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "sorghum_bicolor_core_2_87_30"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "oryza_sativa_core_2_87_7"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
    "database": "arabidopsis_thaliana_core_2_87_11"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "vitis_vinifera_core_2_87_3"
-  },
-  {
-   "host": "cabot",
-   "port": 3306,
-   "user": "gramene_web",
-   "password": "gram3n3",
-   "database": "selaginella_moellendorffii_core_2_87_1"
   },
   {
    "host": "cabot",
@@ -53,14 +25,28 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "drosophila_melanogaster_core_2_87_6"
+   "database": "oryza_sativa_core_7_87_7"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "zea_maysb73v4_core_2_87_7"
+   "database": "populus_trichocarpa_core_40_87_4"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "selaginella_moellendorffii_core_2_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vitis_vinifera_core_2_87_3"
   },
   {
    "host": "cabot",
@@ -74,175 +60,226 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_barthii_core_3_87_4"
+   "database": "drosophila_melanogaster_core_2_87_6"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_brachyantha_core_3_87_4"
+   "database": "sorghum_353_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_carolina_core_4_87_1"
+   "database": "sorghum_austrcf317961_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_glaberrima_core_3_87_4"
+   "database": "sorghum_bicolor_core_6_87_30"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_glumaepatula_core_3_87_4"
+   "database": "sorghum_bicolorv5_core_6_87_5"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_indica_core_4_87_3"
+   "database": "sorghum_chineseamber_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_indicair8_core_3_87_1"
+   "database": "sorghum_grassl_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_meridionalis_core_3_87_4"
+   "database": "sorghum_is12661_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_nivara_core_3_87_4"
+   "database": "sorghum_is19953_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_punctata_core_3_87_4"
+   "database": "sorghum_is36143_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_rufipogon_core_3_87_11"
+   "database": "sorghum_is8525_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_aus_core_3_87_2"
+   "database": "sorghum_is929_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa117425_core_4_87_1"
+   "database": "sorghum_ji2731_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa125619_core_4_87_1"
+   "database": "sorghum_leoti_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa125827_core_4_87_1"
+   "database": "sorghum_pi229841_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127518_core_4_87_1"
+   "database": "sorghum_pi297155_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127564_core_4_87_1"
+   "database": "sorghum_pi329311_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127652_core_4_87_1"
+   "database": "sorghum_pi506069_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127742_core_4_87_1"
+   "database": "sorghum_pi510757_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa128077_core_4_87_1"
+   "database": "sorghum_pi525695_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa132278_core_4_87_1"
+   "database": "sorghum_pi532566_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa132424_core_4_87_1"
+   "database": "sorghum_pi536008_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativaazucena_core_4_87_1"
+   "database": "sorghum_pi655972_core_6_87_2"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativair64_core_4_87_1"
+   "database": "sorghum_r93194522_core_6_87_1"
   },
   {
    "host": "cabot",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "leersia_perrieri_core_3_87_14"
+   "database": "sorghum_rio_core_6_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_riouncc_core_6_87_2"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_s3691_core_6_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx2783pac_core_6_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx430nano_core_6_87_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_tx436pac_core_6_87_1"
+  }
+ ],
+ "variations": [
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativa_variation_7_87_7"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_bicolor_variation_6_87_30"
   }
  ]
 }

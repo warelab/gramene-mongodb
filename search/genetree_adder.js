@@ -53,9 +53,9 @@ function getLut(main_db) {
           }
           // starting at the root of the tree, assign good representatives to their bad children
           tree.walk({strategy: 'pre'}, function (node) {
-            if (node.model.representative.score >= -80) return false; // there's no hope for this subtree
+            if (node.model.representative.score >= -60) return false; // there's no hope for this subtree
             node.children.forEach(function(child) {
-              if (child.model.representative.score >= -80) {
+              if (child.model.representative.score >= -60) {
                 child.model.representative.score = node.model.representative.score;
                 child.model.representative.id = node.model.representative.id;
               }
@@ -96,7 +96,7 @@ function getLut(main_db) {
             if (!leaf.representative) {
               console.log('leaf lacks representative', leaf);
             }
-            if (leaf.representative.score >= -80) {
+            if (leaf.representative.score >= -60) {
               // no representative
               acc[id] = lookupValue;
             }
