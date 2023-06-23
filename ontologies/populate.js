@@ -62,8 +62,11 @@ ontologies.forEach(function(ontology) {
       console.error('parsed',docs);
       var filter = 'cat '+docs;
       if (ontology.collectionName === 'taxonomy') {
-        filter = './filter_taxonomy.js'
-        + ' --taxonomy ' + docs;
+        filter = argv.foster ? `./filter_taxonomy2.js -f ${argv.foster}` : './filter_taxonomy.js';
+        if (argv.synonym) {
+          filter += ` --synonym ${argv.synonym}`
+        }
+        filter += ' --taxonomy ' + docs;
         if (argv.pan) {
           filter += ' --pan ' + argv.pan;
         }
