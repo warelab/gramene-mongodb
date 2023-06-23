@@ -21,7 +21,7 @@ var collections = require('gramene-mongodb-config');
 
 var genesToReactionsFile = argv.gtr || 'Ensembl2PlantReactomeReactions.txt';
 var geneProductMappingFile = argv.gtp || 'gene_ids_by_pathway_and_species.tab';
-var api = argv.api || 'http://plantreactomedev.oicr.on.ca/ContentService';
+var api = argv.api || 'https://plantreactome.oicr.on.ca/ContentService';
 
 var docs = {};
 var taxonLUT = {}; // key is speciesCode, value is taxon id
@@ -41,34 +41,39 @@ if (speciesResponse.statusCode == 200) {
     var topLevelEvents = JSON.parse(hierarchyResponse.getBody());
     topLevelEvents.forEach(function(tle) {
       function parseEvent(event, taxon, pathFromRoot) {
-        [r,speciesCode,id] = event.stId.split('-');
-        if(!taxonLUT.hasOwnProperty(speciesCode)) {
-          console.error(`speciesCode ${speciesCode} not in taxonLUT`);
-          taxonLUT[speciesCode] = taxon;
+        if (! event.stId) {
+          console.error('no stId', event);
         }
-        else if (taxon !== taxonLUT[speciesCode]) {
-          console.error(`ensembl-reactome taxon mismatch resolved for ${speciesCode} ${taxonLUT[speciesCode]}-${taxon}`);
-          taxon = taxonLUT[speciesCode];
-        }
-        if (!docs.hasOwnProperty(id)) {
-          docs[id] = {
-            _id: +id,
-            name: event.name,
-            type: event.type            
-          };
-        }
-        var ancestorField = 'ancestors_' + taxon;
-        var lineageField = 'lineage_' + taxon;
-        pathFromRoot.push(+id);
-        if (! docs[id].hasOwnProperty(lineageField)) {
-          docs[id][lineageField] = [];
-        }
-        docs[id][lineageField].push(_.clone(pathFromRoot));
-        docs[id][ancestorField] = _.uniq(_.flatten(docs[id][lineageField]));
-        if (event.children) {
-          event.children.forEach(function(child) {
-            parseEvent(child, taxon, _.clone(pathFromRoot));
-          });
+        else {
+          [r,speciesCode,id] = event.stId.split('-');
+          if(!taxonLUT.hasOwnProperty(speciesCode)) {
+            console.error(`speciesCode ${speciesCode} not in taxonLUT`);
+            taxonLUT[speciesCode] = taxon;
+          }
+          else if (taxon !== taxonLUT[speciesCode]) {
+            console.error(`ensembl-reactome taxon mismatch resolved for ${speciesCode} ${taxonLUT[speciesCode]}-${taxon}`);
+            taxon = taxonLUT[speciesCode];
+          }
+          if (!docs.hasOwnProperty(id)) {
+            docs[id] = {
+              _id: +id,
+              name: event.name,
+              type: event.type            
+            };
+          }
+          var ancestorField = 'ancestors_' + taxon;
+          var lineageField = 'lineage_' + taxon;
+          pathFromRoot.push(+id);
+          if (! docs[id].hasOwnProperty(lineageField)) {
+            docs[id][lineageField] = [];
+          }
+          docs[id][lineageField].push(_.clone(pathFromRoot));
+          docs[id][ancestorField] = _.uniq(_.flatten(docs[id][lineageField]));
+          if (event.children) {
+            event.children.forEach(function(child) {
+              parseEvent(child, taxon, _.clone(pathFromRoot));
+            });
+          }
         }
       }
       parseEvent(tle,+s.taxId,[]);
