@@ -130,7 +130,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
             map_node.system_name = g.system_name;
             map_node.is_a = [tax_node._id];
             map_node.name = g.display_name;
-            map_node.ancestors.push(childId);
+            map_node.ancestors.push(+childId); // convert to number
             all[childId] = map_node;
           });
         }
