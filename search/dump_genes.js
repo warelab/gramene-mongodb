@@ -55,7 +55,7 @@ var get_exons = {
 
 var get_transcripts = {
   sql: 'select t.transcript_id,t.gene_id,t.stable_id from transcript t, seq_region sr, coord_system cs '
-  + 'where t.seq_region_id = sr.seq_region_id '
+  + 'where t.is_current=1 and t.seq_region_id = sr.seq_region_id '
   + 'and sr.coord_system_id = cs.coord_system_id '
   + 'and cs.species_id = ___REPLACE_ME_WITH_SPECIES_ID___',
   process: function(rows) {
@@ -77,9 +77,11 @@ var add_exons_to_transcripts = {
       if (exons.hasOwnProperty(row.exon_id)) {
         var exon = exons[row.exon_id];
         var transcript = transcripts[row.transcript_id];
-        transcript.exons[row.rank-1] = exon.stable_id;
-        transcript.exon_ids[row.rank-1] = row.exon_id; // needed for translation start and end
-        transcript.length += exon.seq_region_end - exon.seq_region_start + 1;
+        if (transcript) {
+          transcript.exons[row.rank-1] = exon.stable_id;
+          transcript.exon_ids[row.rank-1] = row.exon_id; // needed for translation start and end
+          transcript.length += exon.seq_region_end - exon.seq_region_start + 1;
+        }
       }
     });
   }
