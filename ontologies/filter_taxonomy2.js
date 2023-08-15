@@ -130,7 +130,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
             map_node.system_name = g.system_name;
             map_node.is_a = [tax_node._id];
             map_node.name = g.display_name;
-            map_node.ancestors.push(childId);
+            map_node.ancestors.push(+childId); // convert to number
             all[childId] = map_node;
           });
         }
@@ -155,6 +155,18 @@ function filterTaxonomy(subsets,genomes,customChildren) {
 	  }
 	}
 	if (all[fosterParent]) {
+    if (id === '45770000' && fosterParent !== 4575) {
+      console.error("special case for maize v4");
+      var g = genome_idx[id];
+      var fosterChild = _.cloneDeep(all[4575]);
+      fosterChild._id = +id;
+      fosterChild.id = `NCBITaxon:${id}`;
+      fosterChild.system_name = g.system_name;
+      fosterChild.is_a = [4575];
+      fosterChild.name = g.display_name;
+      fosterChild.property_value = "has_rank NCBITaxon:species";      
+    }
+    else {
           console.error("no taxNode for desired id",id,". adding as a foster child to id",fosterParent);
           var g = genome_idx[id];
           var fosterChild = _.cloneDeep(all[fosterParent]);
@@ -164,6 +176,7 @@ function filterTaxonomy(subsets,genomes,customChildren) {
           fosterChild.is_a = [fosterParent];
           fosterChild.name = g.display_name;
           fosterChild.property_value = "has_rank NCBITaxon:species";
+    }
 	  if (argv.synonym) {
             fosterChild.synonym = [argv.synonym];
           }

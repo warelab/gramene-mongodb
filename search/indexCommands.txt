@@ -1,11 +1,11 @@
 // full text indexes for string search
-db.genetree.ensureIndex({"$**":"text"});
-db.GO.ensureIndex({"$**":"text"});
-db.PO.ensureIndex({"$**":"text"});
-db.taxonomy.ensureIndex({"$**":"text"});
-db.domains.ensureIndex({"$**":"text"});
-db.pathways.ensureIndex({"$**":"text"});
-db.maps.ensureIndex({"$**":"text"});
+// db.genetree.createIndex({"$**":"text"});
+// db.GO.createIndex({"$**":"text"});
+// db.PO.createIndex({"$**":"text"});
+// db.taxonomy.createIndex({"$**":"text"});
+// db.domains.createIndex({"$**":"text"});
+// db.pathways.createIndex({"$**":"text"});
+// db.maps.createIndex({"$**":"text"});
 
 // slimmed down text index for genes collection
 db.genes.createIndex(
@@ -30,16 +30,16 @@ db.genes.createIndex(
 );
 
 // location based index for dumping sorted genes for solr
-db.genes.ensureIndex({'species_idx':1,'db_type':1,'gene_idx':1});
+db.genes.createIndex({'species_idx':1,'db_type':1,'gene_idx':1});
 
 // gene tree index for adding domain annotations to gene tree leaf nodes
-db.genes.ensureIndex({'homology.gene_tree.id':1});
+db.genes.createIndex({'homology.gene_tree.id':1});
 
 // gene tree index so we can extract trees based on the compara_db name
-db.genetree.ensureIndex({'compara_db':1});
+db.genetree.createIndex({'compara_db':1});
 
 // location based index for dumping sorted bed files
-db.genes.ensureIndex({'taxon_id':1,'db_type':1,'gene_idx':1});
+db.genes.createIndex({'taxon_id':1,'db_type':1,'gene_idx':1});
 
 // subset index for taxonomy collection
-db.taxonomy.ensureIndex({'subset':1});
+db.taxonomy.createIndex({'subset':1});

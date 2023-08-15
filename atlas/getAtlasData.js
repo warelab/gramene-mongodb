@@ -1,19 +1,14 @@
 #!/usr/bin/env node
 var _ = require('lodash');
 var Q = require('q');
-var FTPS = require('ftps');
 var fs = require('fs');
-var xml2js = require('xml2js').parseString;
 var collections = require('gramene-mongodb-config');
-var ftps = new FTPS({
-  host: 'ftp.ebi.ac.uk'
-});
 
 function parseAssays() {
   var deferred = Q.defer();
   var assays = {};
   require('readline').createInterface({
-    input: require('fs').createReadStream(process.argv[3]),
+    input: require('fs').createReadStream(process.argv[2]),
     terminal: false
   })
   .on('line', function(line) {
@@ -50,6 +45,8 @@ function parseAssays() {
   return deferred.promise;
 }
 
+const gxa_url = 'https://ftp.ebi.ac.uk/pub/databases/microarray/data/atlas/experiments';
+
 collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
   taxonomyCollection.find({subset:'gramene'},{_id:1,name:1}).toArray(function (err, docs) {
     var taxonomy = {};
@@ -67,42 +64,41 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
               taxon_id : experiment[0].taxon_id
             };
           }
-          var url = `/pub/databases/microarray/data/atlas/experiments/${id}/${id}.tsv`;
-          console.log(`curl -O ftp.ebi.ac.uk${url}`);
+          console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
           experiment.forEach(function(e) {
             e._id = e.experiment + "." + e.group;
           });
           Array.prototype.push.apply(mongoAssays,experiment);
         }
       });
-      // get the ebeye_baseline_experiments_export.xml
-      // and add description to metadata
-      fs.readFile(process.argv[2], function(err, xml) {
-        if (err) throw err;
-        xml2js(xml, function (err, result) {
-          if (err) throw err;
-          var mongoExperiments = [];
-          result.database.entries[0].entry.forEach(function(entry) {
-            if (experiment_metadata[entry.$.id]) {
-              var e = experiment_metadata[entry.$.id];
-              e.description = entry.description[0];
-              e._id = entry.$.id;
-              mongoExperiments.push(e);
-            }
-          });
-          // insert the assays and experiments to mongodb
-          collections.assays.mongoCollection().then(function(assayCol) {
-            assayCol.insertMany(mongoAssays, function(err, result) {
-              if (err) throw err;
-              collections.experiments.mongoCollection().then(function(expCol) {
-                expCol.insertMany(mongoExperiments, function(err, result) {
-                  if (err) throw err;
-                  collections.closeMongoDatabase();
-                })
+      // get the experiments metadata from https://www.ebi.ac.uk/gxa/json/experiments
+      var mongoExperiments = [];
+      var url = 'https://www.ebi.ac.uk/gxa/json/experiments'
+      console.error('gxa get('+url+')');
+      fetch(url)
+      .then(res => res.json())
+      .then(obj => {
+        obj.experiments.forEach(e => {
+          if (experiment_metadata[e.experimentAccession]) {
+            var em = experiment_metadata[e.experimentAccession];
+            em.description = e.experimentDescription;
+            em._id = e.experimentAccession;
+            mongoExperiments.push(em);
+          }
+        });
+        console.error('parsed experiments?', mongoExperiments.length)
+        // insert the assays and experiments to mongodb
+        collections.assays.mongoCollection().then(function(assayCol) {
+          assayCol.insertMany(mongoAssays, function(err, result) {
+            if (err) throw err;
+            collections.experiments.mongoCollection().then(function(expCol) {
+              expCol.insertMany(mongoExperiments, function(err, result) {
+                if (err) throw err;
+                collections.closeMongoDatabase();
               })
             })
           })
-        });
+        })
       });
     });
   });

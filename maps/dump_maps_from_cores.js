@@ -28,6 +28,7 @@ mapsPromise.then(function(maps) {
     rows.forEach(function(r) {
       left_index[r.taxon_id] = r.left_index;
     });
+    comparaConn.end();
   mongoMapsPromise.then(function(mapsCollection) {
     var insertThese = maps.map(function(map) {
       if (taxon_tally[map.taxon_id] > 1) {

@@ -7,7 +7,7 @@ var remaining = tsvFiles.length;
 var mongoExpressionPromise = collections.expression.mongoCollection();
 
 tsvFiles.forEach(function(tsv) {
-  var exp_id = tsv.replace('.tsv','');
+  var exp_id = tsv.replace('-tpms.tsv','');
   var fieldNames = [];
   require('readline').createInterface({
     input: require('fs').createReadStream(tsv),
