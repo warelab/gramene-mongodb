@@ -1,285 +1,1041 @@
 {
  "compara": {
-  "host": "cabot",
+  "host": "colden",
   "user": "gramene_web",
   "password": "gram3n3",
-  "database": "ensembl_compara_7_87_rice0523"
+  "database": "ensembl_compara_plants_66_108"
  },
  "cores": [
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "arabidopsis_thaliana_core_2_87_11"
+   "database": "actinidia_chinensis_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "chlamydomonas_reinhardtii_core_2_87_3"
+   "database": "aegilops_tauschii_core_66_108_3"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "drosophila_melanogaster_core_2_87_6"
+   "database": "amborella_trichopoda_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "leersia_perrieri_core_3_87_14"
+   "database": "ananas_comosus_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_aus_core_7_87_2"
+   "database": "arabidopsis_halleri_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_barthii_core_7_87_4"
+   "database": "arabidopsis_lyrata_core_66_108_10"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_brachyantha_core_7_87_4"
+   "database": "arabidopsis_thaliana_core_66_108_11"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_carolina_core_7_87_1"
+   "database": "arabis_alpina_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_glaberrima_core_7_87_4"
+   "database": "asparagus_officinalis_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_glumaepatula_core_7_87_4"
+   "database": "beta_vulgaris_core_66_108_2"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_indica_core_7_87_3"
+   "database": "brachypodium_distachyon_core_66_108_4"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_indicair8_core_7_87_1"
+   "database": "brassica_juncea_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_meridionalis_core_7_87_4"
+   "database": "brassica_napus_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_nivara_core_7_87_4"
+   "database": "brassica_oleracea_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_punctata_core_7_87_4"
+   "database": "brassica_rapa_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_rufipogon_core_7_87_11"
+   "database": "brassica_rapa_ro18_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa117425_core_7_87_1"
+   "database": "camelina_sativa_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa125619_core_7_87_1"
+   "database": "cannabis_sativa_female_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa125827_core_7_87_1"
+   "database": "capsicum_annuum_core_66_108_2"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127518_core_7_87_1"
+   "database": "chara_braunii_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127564_core_7_87_1"
+   "database": "chenopodium_quinoa_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127652_core_7_87_1"
+   "database": "chlamydomonas_reinhardtii_core_66_108_3"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa127742_core_7_87_1"
+   "database": "chondrus_crispus_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa128077_core_7_87_1"
+   "database": "citrullus_lanatus_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa132278_core_7_87_1"
+   "database": "citrus_clementina_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa132424_core_7_87_1"
+   "database": "coffea_canephora_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativaazucena_core_7_87_1"
+   "database": "corchorus_capsularis_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa_core_7_87_7"
+   "database": "corylus_avellana_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativair64_core_7_87_1"
+   "database": "corymbia_citriodora_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativakitaake_core_7_87_1"
+   "database": "cucumis_melo_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativamh63_core_7_87_1"
+   "database": "cucumis_sativus_core_66_108_2"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativazs97_core_7_87_1"
+   "database": "cyanidioschyzon_merolae_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "selaginella_moellendorffii_core_2_87_1"
+   "database": "cynara_cardunculus_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "sorghum_bicolor_core_2_87_30"
+   "database": "daucus_carota_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "vitis_vinifera_core_2_87_3"
+   "database": "digitaria_exilis_core_66_108_1"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "zea_maysb73_core_3_87_1"
+   "database": "dioscorea_rotundata_core_66_108_3"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "zea_maysb73v4_core_2_87_7"
+   "database": "echinochloa_crusgalli_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "eragrostis_curvula_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "eragrostis_tef_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "eucalyptus_grandis_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "eutrema_salsugineum_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "ficus_carica_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "galdieria_sulphuraria_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "glycine_max_core_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "gossypium_raimondii_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "helianthus_annuus_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "hordeum_vulgare_core_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "hordeum_vulgare_goldenpromise_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "hordeum_vulgare_tritex_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "ipomoea_triloba_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "juglans_regia_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "kalanchoe_fedtschenkoi_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "lactuca_sativa_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "leersia_perrieri_core_66_108_14"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "lolium_perenne_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "lupinus_angustifolius_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "malus_domestica_golden_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "manihot_esculenta_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "marchantia_polymorpha_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "medicago_truncatula_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "musa_acuminata_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "nicotiana_attenuata_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "nymphaea_colorata_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "olea_europaea_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "olea_europaea_sylvestris_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_barthii_core_66_108_3"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_brachyantha_core_66_108_14"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_glaberrima_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_glumipatula_core_66_108_15"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_indica_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_longistaminata_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_meridionalis_core_66_108_13"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_nivara_core_66_108_10"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_punctata_core_66_108_12"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_rufipogon_core_66_108_11"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativa_core_66_108_7"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "ostreococcus_lucimarinus_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "panicum_hallii_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "panicum_hallii_fil2_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "papaver_somniferum_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "phaseolus_vulgaris_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "physcomitrium_patens_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "pistacia_vera_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "pisum_sativum_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "populus_trichocarpa_core_66_108_3"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "prunus_avium_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "prunus_dulcis_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "prunus_persica_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "quercus_lobata_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "quercus_suber_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "rosa_chinensis_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "saccharum_spontaneum_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "secale_cereale_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "selaginella_moellendorffii_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sesamum_indicum_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "setaria_italica_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "setaria_viridis_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "solanum_lycopersicum_core_66_108_3"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "solanum_tuberosum_core_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "solanum_tuberosum_rh8903916_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_bicolor_core_66_108_30"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "theobroma_cacao_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "theobroma_cacao_criollo_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "trifolium_pratense_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_arinalrfor_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_cadenza_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_claire_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_core_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_jagger_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_julius_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_lancer_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_landmark_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_mace_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_mattis_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_norin61_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_paragon_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_robigus_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_stanley_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_weebil_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_dicoccoides_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_spelta_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_turgidum_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_urartu_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vigna_angularis_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vigna_radiata_core_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vigna_unguiculata_core_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vitis_vinifera_core_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_mays_core_66_108_8"
   }
  ],
  "variations": [
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "oryza_sativa_variation_7_87_7"
+   "database": "arabidopsis_thaliana_variation_66_108_11"
   },
   {
-   "host": "cabot",
+   "host": "colden",
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "sorghum_bicolor_variation_6_87_30"
+   "database": "brachypodium_distachyon_variation_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "cucumis_sativus_variation_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "helianthus_annuus_variation_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "hordeum_vulgare_variation_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "lactuca_sativa_variation_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "malus_domestica_golden_variation_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_glaberrima_variation_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_glumipatula_variation_66_108_15"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_indica_variation_66_108_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativa_variation_66_108_7"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "phaseolus_vulgaris_variation_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "solanum_lycopersicum_variation_66_108_3"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_bicolor_variation_66_108_30"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "theobroma_cacao_variation_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_variation_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_turgidum_variation_66_108_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "vitis_vinifera_variation_66_108_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_mays_variation_66_108_8"
   }
  ]
 }
