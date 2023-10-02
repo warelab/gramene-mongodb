@@ -45,7 +45,7 @@ var sql1 = 'select'
   + ' inner join homology_member hm2 on hm2.homology_id = h.homology_id and hm.gene_member_id > hm2.gene_member_id'
   + ' inner join gene_member g2 on hm2.gene_member_id = g2.gene_member_id'
   + ' inner join gene_tree_root gtr on h.gene_tree_root_id = gtr.root_id'
-  + ' where gtr.tree_type = "tree" and gtr.clusterset_id = "default"';//' and gtr.stable_id IS NOT NULL';
+  + ' where gtr.tree_type = "tree" and gtr.clusterset_id = "default" and gtr.stable_id IS NOT NULL';
   // + ' where g1.taxon_id NOT IN (6239,7227,9606,51511,559292)'
   // + ' and g2.taxon_id NOT IN (6239,7227,9606,51511,559292);';
 

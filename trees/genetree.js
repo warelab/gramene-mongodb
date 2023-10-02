@@ -315,7 +315,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
       var upsert = insertTreeIntoMongo(mongoCollection);
 
       var queryForTreeIds = "select root_id from gene_tree_root where"
-      + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
+      + " tree_type='tree' and clusterset_id = 'default' and stable_id IS NOT NULL;";
       comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
         if (err) throw err;
         var ids = rows.map(function (r) {
