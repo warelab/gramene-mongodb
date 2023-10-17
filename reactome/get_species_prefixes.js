@@ -28,8 +28,9 @@ if (res.statusCode == 200) {
       collections.closeMongoDatabase();
       docs.forEach(function(doc) {
         var prefix;
-        if (lut[doc.taxon_id]) {
-          prefix = lut[doc.taxon_id];
+        let tid = Math.floor(doc.taxon_id / 1000);
+        if (lut[tid]) {
+          prefix = lut[tid];
         } else if(lut[doc.display_name]) {
           prefix = lut[doc.display_name];
         }
