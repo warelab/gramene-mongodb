@@ -25,7 +25,7 @@ module.exports = function(db) {
 
       client.get(gene._id, function (err, jsonstr) {
         if (err) throw err;
-        if (jsonstr) {
+        if (gene.taxon_id !== 4565007 && jsonstr) {
           generifs = JSON.parse(jsonstr);
           // console.error(gene._id, generifs);
           generifs.forEach(gr => {

@@ -8,26 +8,26 @@
 // db.maps.createIndex({"$**":"text"});
 
 // slimmed down text index for genes collection
-db.genes.createIndex(
-	{
-		"_id": "text",
-		"name": "text",
-		"description": "text",
-		"synonyms": "text",
-		"homology.gene_tree.representative.model.name": "text",
-		"homology.gene_tree.representative.model.description": "text",
-		"homology.gene_tree.representative.closest.name": "text",
-		"homology.gene_tree.representative.closest.description": "text"
-	},
-	{
-		weights: {
-			name: 10,
-			description: 5,
-			synonyms: 5
-		},
-		name: "geneTextIndex"
-	}
-);
+// db.genes.createIndex(
+// 	{
+// 		"_id": "text",
+// 		"name": "text",
+// 		"description": "text",
+// 		"synonyms": "text",
+// 		"homology.gene_tree.representative.model.name": "text",
+// 		"homology.gene_tree.representative.model.description": "text",
+// 		"homology.gene_tree.representative.closest.name": "text",
+// 		"homology.gene_tree.representative.closest.description": "text"
+// 	},
+// 	{
+// 		weights: {
+// 			name: 10,
+// 			description: 5,
+// 			synonyms: 5
+// 		},
+// 		name: "geneTextIndex"
+// 	}
+// );
 
 // location based index for dumping sorted genes for solr
 db.genes.createIndex({'species_idx':1,'db_type':1,'gene_idx':1});
@@ -36,7 +36,7 @@ db.genes.createIndex({'species_idx':1,'db_type':1,'gene_idx':1});
 db.genes.createIndex({'homology.gene_tree.id':1});
 
 // gene tree index so we can extract trees based on the compara_db name
-db.genetree.createIndex({'compara_db':1});
+// db.genetree.createIndex({'compara_db':1});
 
 // location based index for dumping sorted bed files
 db.genes.createIndex({'taxon_id':1,'db_type':1,'gene_idx':1});

@@ -26,6 +26,7 @@
     "flat-to-nested": "^1.1.1",
     "gramene-bins-client": "^2.3.0",
     "gramene-mongodb-config": "git+ssh://git@github.com:warelab/gramene-mongodb-config.git#main68",
+    "gramene-trees-client": "^2.6.1",
     "line-reader": "^0.4.0",
     "minimist": "^1.2.5",
     "mongodb": "^4.1.3",

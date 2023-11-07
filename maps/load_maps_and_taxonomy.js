@@ -54,6 +54,7 @@ mapsPromise.then(function(maps) {
         });
         taxa = nodes.map(n => n._id);
         const nodeIdx = _.keyBy(nodes, '_id');
+        nodeIdx[1].is_a = [];
         const namesSQL = `SELECT * FROM ncbi_taxa_name where taxon_id IN (${taxa.join(',')})`;
         comparaConn.query(namesSQL, function (err, names, fields) {
           if (err) throw err;
@@ -84,6 +85,10 @@ mapsPromise.then(function(maps) {
                 childNode.id = `NCBITaxon:${map.taxon_id}`,
                 childNode.rank = "genome";
                 childNode.left_index = map.left_index;
+                // clean up
+                delete childNode.ancestors;
+                childNode.num_genes = 0;
+                childNode.subset = ["gramene"];
                 nodes.push(childNode);
                 function populate_ancestors(node,nGenes,compara) {
                   if (!node.ancestors) {
