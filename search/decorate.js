@@ -99,10 +99,10 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 });
 
 var speciesRank = {
-  3702 : 1, // arabidopsis
-  39947: 2, // rice
-  4577 : 3, // maize
-  4558 : 4 // sorghum
+  3702001 : 1, // arabidopsis
+  39947001: 2, // rice
+  4577001 : 3, // maize
+  4558001 : 4 // sorghum
 };
 
 var speciesRanker = through2.obj(function (obj, enc, done) {

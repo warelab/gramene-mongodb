@@ -41,7 +41,7 @@ var decorateTree = function(geneCollection, iprInfo) {
               var fTypes = Object.keys(ct.translation.features);
               if (ct.translation.features.family && fTypes.length > 1) {
                 delete ct.translation.features.family;
-                console.log('deleted family features. these remain',ct.translation.features);
+                // console.error('deleted family features. these remain',ct.translation.features);
               }
               Object.keys(ct.translation.features).forEach(function(featureType) {
                 ct.translation.features[featureType].entries.forEach(function(feature) {
@@ -140,7 +140,7 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
 
   var flush = function(done) {
     collections.closeMongoDatabase();
-    console.log('upsert to mongo is done');
+    console.error('upsert to mongo is done');
     done();
   };
 

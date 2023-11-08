@@ -17,11 +17,11 @@ var ontologies = [
     obo: 'http://purl.obolibrary.org/obo/po.obo',
     prefix: 'PO'
   },
-  {
-    collectionName: 'taxonomy',
-    obo: 'http://purl.obolibrary.org/obo/ncbitaxon.obo',
-    prefix: 'NCBITaxon'
-  },
+  // {
+  //   collectionName: 'taxonomy',
+  //   obo: 'http://purl.obolibrary.org/obo/ncbitaxon.obo',
+  //   prefix: 'NCBITaxon'
+  // },
   // {
   //   collectionName: 'SO',
   //   obo: 'http://sourceforge.net/p/song/svn/HEAD/tree/trunk/so-xp-simple.obo?format=raw',
@@ -61,16 +61,16 @@ ontologies.forEach(function(ontology) {
       var docs = outDir + '/' + ontology.prefix + '.Term.json';
       console.error('parsed',docs);
       var filter = 'cat '+docs;
-      if (ontology.collectionName === 'taxonomy') {
-        filter = argv.foster ? `./filter_taxonomy2.js -f ${argv.foster}` : './filter_taxonomy.js';
-        if (argv.synonym) {
-          filter += ` --synonym ${argv.synonym}`
-        }
-        filter += ' --taxonomy ' + docs;
-        if (argv.pan) {
-          filter += ' --pan ' + argv.pan;
-        }
-      }
+      // if (ontology.collectionName === 'taxonomy') {
+      //   filter = argv.foster ? `./filter_taxonomy2.js -f ${argv.foster}` : './filter_taxonomy.js';
+      //   if (argv.synonym) {
+      //     filter += ` --synonym ${argv.synonym}`
+      //   }
+      //   filter += ' --taxonomy ' + docs;
+      //   if (argv.pan) {
+      //     filter += ' --pan ' + argv.pan;
+      //   }
+      // }
       var mongoimport = 'mongoimport'
       + ' --host ' + mongoConfig.host
       + ' --db ' + mongoConfig.db

@@ -36,7 +36,7 @@ function getMapping() {
   });
   return deferred.promise;
 }
-
+const looks_like_sorghum_v3 = /^SORBI_3(.*)/;
 module.exports = function() {
   
   var lutPromise = getMapping();
@@ -74,6 +74,12 @@ module.exports = function() {
         if (v2descriptions.length > 0) {
           gene.description = v2descriptions[0];
         }
+      }
+      else if (match = looks_like_sorghum_v3.exec(gene._id)) {
+        if (!gene.hasOwnProperty('synonyms')) {
+          gene.synonyms = [];
+        }
+        gene.synonyms.push(`Sobic.${match[1]}`);
       }
       that.push(gene);
       done();

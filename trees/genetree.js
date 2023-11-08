@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var TreeModel = require('tree-model');
 var compara = require('../ensembl_db_info.json').compara;
+var isCurated = require('../curated/curated.json');
 function childNodeComparator(a, b) {
   return a.left_index < b.left_index ? 1 : -1;
 }
@@ -138,7 +139,11 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
     var bad = 100;
     var meh = -50;
     var good = -100;
+    var curated = -500;
     var modelSpeciesBonus = -25;
+    if (isCurated[node.model.gene_stable_id]) {
+      score += curated;
+    }
     if (node.model.hasOwnProperty('gene_description')) {
       score += good;
       desc = node.model.gene_description.replace(/\s*\[Source:.*/,'');
@@ -306,6 +311,9 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
     if (err) throw err;
     var haveGenome = {};
     taxon.forEach(function(t) {
+      if (t.rank === "genome") {
+        t._id = Math.floor(t._id / 1000);
+      }
       taxonLUT[t._id] = t.name;
       if (_.includes(t.subset,'gramene')) {
         haveGenome[t._id] = true;
@@ -315,7 +323,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
       var upsert = insertTreeIntoMongo(mongoCollection);
 
       var queryForTreeIds = "select root_id from gene_tree_root where"
-      + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
+      + " tree_type='tree' and clusterset_id = 'default' and stable_id IS NOT NULL;";
       comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
         if (err) throw err;
         var ids = rows.map(function (r) {
