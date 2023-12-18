@@ -118,6 +118,9 @@ var add_translations_to_transcripts = {
         if (transcript.exon_junctions.length === 0) {
           delete transcript.exon_junctions;
         }
+        if (!row.num_residues) { // not all cores have this attribute
+          row.num_residues = (transcript.cds.end - transcript.cds.start + 1)/3;
+        }
         transcript.translation = {
           id : row.stable_id,
           length : row.num_residues,

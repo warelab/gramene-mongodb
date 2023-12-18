@@ -323,7 +323,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
       var upsert = insertTreeIntoMongo(mongoCollection);
 
       var queryForTreeIds = "select root_id from gene_tree_root where"
-      + " tree_type='tree' and clusterset_id = 'default' and stable_id IS NOT NULL;";
+      + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
       comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
         if (err) throw err;
         var ids = rows.map(function (r) {
@@ -340,7 +340,7 @@ collections.taxonomy.mongoCollection().then(function(taxCollection) {
           // and others (e.g. node_type) are null for leaf nodes.
           var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
           + "case when r.stable_id IS NULL\n"
-          + " then CONCAT(\"ORYZA7GT_\",r.root_id)\n"
+          + " then CONCAT(\"VITIS4GT_\",r.root_id)\n"
           + " else r.stable_id\n"
           + "end as tree_stable_id,\n"
           + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
