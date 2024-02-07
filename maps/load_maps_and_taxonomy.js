@@ -85,6 +85,8 @@ mapsPromise.then(function(maps) {
                 childNode.id = `NCBITaxon:${map.taxon_id}`,
                 childNode.rank = "genome";
                 childNode.left_index = map.left_index;
+                childNode.name = map.display_name;
+                childNode.synonym = [];
                 // clean up
                 delete childNode.ancestors;
                 childNode.num_genes = 0;
@@ -124,7 +126,8 @@ mapsPromise.then(function(maps) {
                     if (err) {
                       throw err;
                     }
-                    taxCollection.insertMany(nodes, function(err, result) {
+                    let filtered = nodes.filter(n => n.ancestors);
+                    taxCollection.insertMany(filtered, function(err, result) {
                       if (err) {
                         throw err;
                       }
