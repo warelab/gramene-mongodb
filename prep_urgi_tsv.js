@@ -37,7 +37,7 @@ collections.maps.mongoCollection().then(function(mapsColl) {
             "Gene",
             "EBI",
             "Ensembl Plants",
-            `https://ensembl.gramene.org/${mongo.system_name}/Gene/Summary?g=${mongo._id}`,
+            `https://plants.ensembl.org/${mongo.system_name}/Gene/Summary?g=${mongo._id}`,
             speciesLUT[mongo.system_name]
           ];
           // the last column is a semi-colon (;) delimited list of descriptors
