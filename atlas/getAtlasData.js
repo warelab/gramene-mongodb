@@ -3,7 +3,7 @@ var _ = require('lodash');
 var Q = require('q');
 var fs = require('fs');
 var collections = require('gramene-mongodb-config');
-
+var seen = {};
 function parseAssays() {
   var deferred = Q.defer();
   var assays = {};
@@ -13,6 +13,11 @@ function parseAssays() {
   })
   .on('line', function(line) {
     var fields = line.split("\t");
+    var contrast = fields[1].match(/(g\d+)_(g\d+)/);
+    if (contrast) {
+      fields[1] = fields[2] === "reference" ? contrast[1] : contrast[2];
+      fields.splice(2,1);
+    }
     var _id = fields[0] + '_' + fields[1];
     if (!assays.hasOwnProperty(_id)) {
       assays[_id] = {
@@ -22,20 +27,23 @@ function parseAssays() {
         'factor' : []
       }
     }
-    var c = fields[3].replace(/\s/g,'_');
-    
-    var info = { type: fields[3], label: fields[4] };
-    if (fields.length === 6) {
-      var matches = fields[5].match(/.*\/([A-Za-z]+)_(\d+)/);
-      if (matches) {
-        info.ontology = matches[1];
-        info.id = matches[1] + ':' + matches[2];
-        info.int_id = +matches[2];
+    const prop_key = [_id,fields[2],fields[3],fields[4]].join("\t");
+    if (! seen.hasOwnProperty(prop_key)) {
+      seen[prop_key] = true;
+      var info = { type: fields[3], label: fields[4] };
+      if (fields.length === 6) {
+        var matches = fields[5].match(/.*\/([A-Za-z]+)_(\d+)/);
+        if (matches) {
+          info.ontology = matches[1];
+          info.id = matches[1] + ':' + matches[2];
+          info.int_id = +matches[2];
+        }
       }
-    }
-    assays[_id][fields[2]].push(info);
-    if (c === 'organism') {
-      assays[_id].taxon_id = +fields[5].replace(/.*NCBITaxon_/,'');
+    
+      assays[_id][fields[2]].push(info);
+      if (fields[3] === 'organism') {
+        assays[_id].taxon_id = +fields[5].replace(/.*NCBITaxon_/,'');
+      }
     }
   })
   .on('close', function() {
@@ -64,7 +72,7 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
               taxon_id : experiment[0].taxon_id
             };
           }
-          console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
+          // console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
           experiment.forEach(function(e) {
             e._id = e.experiment + "." + e.group;
           });
@@ -80,10 +88,19 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
       .then(obj => {
         obj.experiments.forEach(e => {
           if (experiment_metadata[e.experimentAccession]) {
-            var em = experiment_metadata[e.experimentAccession];
+            var id = e.experimentAccession;
+            var em = experiment_metadata[id];
             em.description = e.experimentDescription;
-            em._id = e.experimentAccession;
-            mongoExperiments.push(em);
+            em._id = id;
+            em.type = e.experimentType;
+            if (e.rawExperimentType === "RNASEQ_MRNA_BASELINE") {
+              console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
+              mongoExperiments.push(em);
+            }
+            if (e.rawExperimentType === "RNASEQ_MRNA_DIFFERENTIAL") {
+              console.log(`curl -O ${gxa_url}/${id}/${id}-analytics.tsv`)
+              mongoExperiments.push(em);
+            }
           }
         });
         console.error('parsed experiments?', mongoExperiments.length)
