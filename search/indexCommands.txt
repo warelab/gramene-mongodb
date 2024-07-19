@@ -29,6 +29,9 @@
 // 	}
 // );
 
+// location based index for bed files
+db.genes.createIndex({'location.map':1,'location.region':1,'location.start':1})
+
 // location based index for dumping sorted genes for solr
 db.genes.createIndex({'species_idx':1,'db_type':1,'gene_idx':1});
 
