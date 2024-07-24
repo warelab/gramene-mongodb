@@ -43,6 +43,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_aus_core_8_108_2"
   },
   {
@@ -50,6 +51,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_barthii_core_8_108_4"
   },
   {
@@ -57,6 +59,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_brachyantha_core_8_108_4"
   },
   {
@@ -71,6 +74,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_glaberrima_core_8_108_4"
   },
   {
@@ -78,6 +82,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_glumaepatula_core_8_108_4"
   },
   {
@@ -85,6 +90,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_indica_core_8_108_3"
   },
   {
@@ -92,6 +98,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_indicair8_core_8_108_1"
   },
   {
@@ -99,6 +106,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_meridionalis_core_8_108_4"
   },
   {
@@ -106,6 +114,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_nivara_core_8_108_4"
   },
   {
@@ -113,6 +122,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_punctata_core_8_108_4"
   },
   {
@@ -120,6 +130,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
+   "anchor": 1,
    "database": "oryza_rufipogon_core_8_108_11"
   },
   {

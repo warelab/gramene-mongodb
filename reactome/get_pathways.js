@@ -21,7 +21,7 @@ var collections = require('gramene-mongodb-config');
 
 var genesToReactionsFile = argv.gtr || 'Ensembl2PlantReactomeReactions.txt';
 var geneProductMappingFile = argv.gtp || 'gene_ids_by_pathway_and_species.tab';
-var api = argv.api || 'https://plantreactome.oicr.on.ca/ContentService';
+var api = argv.api || 'https://plantreactome.gramene.org/ContentService';
 
 var docs = {};
 var taxonLUT = {}; // key is speciesCode, value is taxon id

@@ -272,10 +272,15 @@ var add_xrefs = {
       if (xref.linkage_type) {
         xr.evidence_code = xref.linkage_type;
       }
-      geneInfo[xref.gene_id].xrefs.push(xr);
       if (xref.synonym) {
-        geneInfo[xref.gene_id].synonyms.push(xref.synonym);
+        if (xref.db_name === 'PanOryza') {
+          xr.id = xref.synonym;
+        }
+        else {
+          geneInfo[xref.gene_id].synonyms.push(xref.synonym);
+        }
       }
+      geneInfo[xref.gene_id].xrefs.push(xr);
     });
   }
 }
