@@ -78,6 +78,7 @@ mapsPromise.then(function(maps) {
                 const taxNode = nodeIdx[map.taxon_id];
                 taxon_offset[map.taxon_id]++;
                 map.left_index = left_index[map.taxon_id] + 0.001 * taxon_offset[map.taxon_id];
+                map.anchor_taxon_id = map.taxon_id;
                 map.taxon_id = map.taxon_id * 1000 + taxon_offset[map.taxon_id];
                 let childNode = Object.assign({},taxNode);
                 childNode.is_a = [childNode._id];
@@ -216,6 +217,7 @@ function get_maps(dbInfo) {
         system_name: meta[species_id]['species.production_name'],
         display_name: meta[species_id]['species.display_name'],
         type: 'genome',
+        is_anchor: !!dbInfo.anchor,
         length: 0,
         regions: {
           names: [],
