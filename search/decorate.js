@@ -19,6 +19,7 @@ if (isGramene) {
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
   var rapdb = require('./rapdb')();
+  var curated = require('./curated')();
   var generifs = require('./generifs')(3);
   var qtls = require('./qtl_adder')();
 }
@@ -28,6 +29,7 @@ var genetreeAdder = require('./genetree_adder')(comparaDatabase);
 var homologAdder = require('./homolog_adder')('9');//collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
+var panOryzaAdder = require('./panoryza_xrefs')();
 var parser = through2.obj(function (line, enc, done) {
   this.push(JSON.parse(line));
   done();
@@ -99,14 +101,14 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 });
 
 var speciesRank = {
-  3702001 : 1, // arabidopsis
-  39947001: 2, // rice
-  4577001 : 3, // maize
-  4558001 : 4 // sorghum
+  sorghum_bicolor : 3, // sorghum
+  arabidopsis_thaliana : 2, // arabidopsis
+  oryza_sativa: 1, // rice
+  zea_maysb73 : 4  // maize
 };
-
+ 
 var speciesRanker = through2.obj(function (obj, enc, done) {
-  obj.species_idx = speciesRank[obj.taxon_id] || obj.taxon_id;
+  obj.species_idx = speciesRank[obj.system_name] || Math.floor(obj.taxon_id/1000);
   this.push(obj);
   done();
 });
@@ -170,9 +172,11 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   if (isGramene) {
     stream = stream.pipe(fixMaizeV4)
       .pipe(fixSorghumV2)
+      .pipe(panOryzaAdder)
       .pipe(fixBarley)
       .pipe(thalemine)
       .pipe(rapdb)
+      .pipe(curated)
       .pipe(generifs)
       .pipe(qtls)
   }

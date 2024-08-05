@@ -9,7 +9,7 @@ var connectionOptions = {
   database: argv.d
 }
 
-var db_type = connectionOptions.database.match(/_(core|otherfeatures)_\d+_\d+/)[1];
+var db_type = connectionOptions.database.match(/_(core|otherfeatures|cdna)_\d+_\d+/)[1];
 var map_id = argv.m;
 if (!map_id) throw 'no map_id specified';
 var taxon_id = argv.t;
@@ -269,18 +269,21 @@ var add_xrefs = {
         db: xref.db_name,
         id: xref.dbprimary_acc
       };
+      var pan_re = /^Os4530\.POR\.1\.pan/;
       if (xref.linkage_type) {
         xr.evidence_code = xref.linkage_type;
       }
       if (xref.synonym) {
-        if (xref.db_name === 'PanOryza') {
-          xr.id = xref.synonym;
+        if (xref.db_name === 'PanOryza' || pan_re.test(xref.synonym)) {
+          // do nothing - handle this separately xr.id = xref.synonym;
         }
         else {
           geneInfo[xref.gene_id].synonyms.push(xref.synonym);
         }
       }
-      geneInfo[xref.gene_id].xrefs.push(xr);
+      if (xref.db_name !== 'PanOryza') {
+        geneInfo[xref.gene_id].xrefs.push(xr);
+      }
     });
   }
 }
