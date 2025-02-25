@@ -29,7 +29,7 @@ var genetreeAdder = require('./genetree_adder')(comparaDatabase);
 var homologAdder = require('./homolog_adder')('9');//collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
-var panOryzaAdder = require('./panoryza_xrefs')();
+var panZeaAdder = require('./panmaize_xrefs')();
 var parser = through2.obj(function (line, enc, done) {
   this.push(JSON.parse(line));
   done();
@@ -101,10 +101,10 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 });
 
 var speciesRank = {
-  sorghum_bicolor : 3, // sorghum
+  sorghum_bicolor : 4, // sorghum
   arabidopsis_thaliana : 2, // arabidopsis
-  oryza_sativa: 1, // rice
-  zea_maysb73 : 4  // maize
+  oryza_sativa: 3, // rice
+  zea_maysb73 : 1  // maize
 };
  
 var speciesRanker = through2.obj(function (obj, enc, done) {
@@ -172,7 +172,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   if (isGramene) {
     stream = stream.pipe(fixMaizeV4)
       .pipe(fixSorghumV2)
-      .pipe(panOryzaAdder)
+      .pipe(panZeaAdder)
       .pipe(fixBarley)
       .pipe(thalemine)
       .pipe(rapdb)
