@@ -3,6 +3,10 @@ var _ = require('lodash');
 var Q = require('q');
 var fs = require('fs');
 var collections = require('gramene-mongodb-config');
+
+var update_tid = {};
+update_tid[381124] = 4577; // special case for maize subspecies
+
 var seen = {};
 function parseAssays() {
   var deferred = Q.defer();
@@ -43,6 +47,9 @@ function parseAssays() {
       assays[_id][fields[2]].push(info);
       if (fields[3] === 'organism') {
         assays[_id].taxon_id = +fields[5].replace(/.*NCBITaxon_/,'');
+        if (update_tid[assays[_id].taxon_id]) {
+          assays[_id].taxon_id = update_tid[assays[_id].taxon_id];
+        }
       }
     }
   })
@@ -92,9 +99,11 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
             var em = experiment_metadata[id];
             em.description = e.experimentDescription;
             em._id = id;
+            em.source = "EBI";
             em.type = e.experimentType;
             if (e.rawExperimentType === "RNASEQ_MRNA_BASELINE") {
               console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
+              console.log(`curl -O ${gxa_url}/${id}/${id}-factors.xml`)
               mongoExperiments.push(em);
             }
             if (e.rawExperimentType === "RNASEQ_MRNA_DIFFERENTIAL") {

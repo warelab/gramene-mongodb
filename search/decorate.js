@@ -30,6 +30,7 @@ var homologAdder = require('./homolog_adder')('9');//collections.getVersion());
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var panZeaAdder = require('./panmaize_xrefs')();
+var grassius = require('./grassius')();
 var parser = through2.obj(function (line, enc, done) {
   this.push(JSON.parse(line));
   done();
@@ -108,7 +109,7 @@ var speciesRank = {
 };
  
 var speciesRanker = through2.obj(function (obj, enc, done) {
-  obj.species_idx = speciesRank[obj.system_name] || Math.floor(obj.taxon_id/1000);
+  obj.species_idx = speciesRank[obj.system_name] || obj.taxon_id; //Math.floor(obj.taxon_id/1000);
   this.push(obj);
   done();
 });
@@ -173,6 +174,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
     stream = stream.pipe(fixMaizeV4)
       .pipe(fixSorghumV2)
       .pipe(panZeaAdder)
+      .pipe(grassius)
       .pipe(fixBarley)
       .pipe(thalemine)
       .pipe(rapdb)
