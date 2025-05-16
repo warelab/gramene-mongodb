@@ -104,6 +104,8 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
             if (e.rawExperimentType === "RNASEQ_MRNA_BASELINE") {
               console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
               console.log(`curl -O ${gxa_url}/${id}/${id}-factors.xml`)
+              console.log(`curl -O ${gxa_url}/${id}/${id}-configuration.xml`)
+              console.log(`curl -O ${gxa_url}/${id}/${id}.idf.txt`)
               mongoExperiments.push(em);
             }
             if (e.rawExperimentType === "RNASEQ_MRNA_DIFFERENTIAL") {
