@@ -212,7 +212,7 @@ function get_maps(dbInfo) {
       running++;
       var map = {
         db: dbInfo.database,
-        _id: meta[species_id].hasOwnProperty('assembly.accession') ? meta[species_id]['assembly.accession'] : meta[species_id]['assembly.name'],
+        _id: meta[species_id]['assembly.accession'] || meta[species_id]['assembly.name'],
         taxon_id: +meta[species_id]['species.taxonomy_id'],
         system_name: meta[species_id]['species.production_name'],
         display_name: meta[species_id]['species.display_name'],

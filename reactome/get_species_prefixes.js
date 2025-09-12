@@ -25,7 +25,7 @@ if (res.statusCode == 200) {
   collections.maps.mongoCollection().then(function(mapsCollection) {
     mapsCollection.find({is_anchor:true},{anchor_taxon_id:1,taxon_id:1,display_name:1}).toArray(function (err, docs) {
       var taxonomy = {};
-      collections.closeMongoDatabase();
+      // collections.closeMongoDatabase();
       docs.forEach(function(doc) {
         var prefix;
         let tid = doc.anchor_taxon_id; //Math.floor(doc.taxon_id / 1000);

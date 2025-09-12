@@ -28,7 +28,14 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
       row[f] = row[f].toString();
     }
   }
+  if (row.system_name && sysnameLUT[row.system_name]) {
+    row.taxon_id = sysnameLUT[row.system_name]
+  }
   row.taxon_name = taxonLUT[row.taxon_id] || 'unknown';
+  if (row.taxon_name === 'unknown') {
+    row.taxon_id = Math.floor(row.taxon_id/1000);
+    row.taxon_name = taxonLUT[row.taxon_id] || 'unknown';
+  }
   this.push(row);
   done();
 });
@@ -306,90 +313,99 @@ var handleBatch = through2.obj(function (query, enc, done) {
 });
 
 var taxonLUT = {};
-collections.taxonomy.mongoCollection().then(function(taxCollection) {
-  taxCollection.find({subset: 'compara'}, {}).toArray(function (err, taxon) {
+var sysnameLUT = {};
+collections.maps.mongoCollection().then(function(mapsCollection) {
+  mapsCollection.find().toArray(function (err, maps) {
     if (err) throw err;
-    var haveGenome = {};
-    taxon.forEach(function(t) {
-      if (t.rank === "genome") {
-        t._id = Math.floor(t._id / 1000);
-      }
-      taxonLUT[t._id] = t.name;
-      if (_.includes(t.subset,'gramene')) {
-        haveGenome[t._id] = true;
-      }
-    });
-    collections.genetrees.mongoCollection().then(function(mongoCollection) {
-      var upsert = insertTreeIntoMongo(mongoCollection);
-
-      var queryForTreeIds = "select root_id from gene_tree_root where"
-      + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
-      comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
+    maps.forEach(function(m) {
+      sysnameLUT[m.system_name] = m.taxon_id
+    })
+    collections.taxonomy.mongoCollection().then(function(taxCollection) {
+      taxCollection.find({subset: 'compara'}, {}).toArray(function (err, taxon) {
         if (err) throw err;
-        var ids = rows.map(function (r) {
-          return r.root_id;
+        var haveGenome = {};
+        taxon.forEach(function(t) {
+          // if (t.rank === "genome") {
+          //   t._id = Math.floor(t._id / 1000);
+          // }
+          taxonLUT[t._id] = t.name;
+          if (_.includes(t.subset,'gramene')) {
+            haveGenome[t._id] = true;
+          }
         });
-        console.error(`processing ${ids.length} trees`);
-        var batches = [];
-        var batchSize = 100;
-        for(var i=0;i<ids.length;i+=batchSize) {
-          var sliced = ids.slice(i,i+batchSize);
-          var whereClause = `r.root_id IN (${sliced.join(',')})`;
-          // this query returns one row per node in the tree; it includes both leaf and
-          // branch nodes. some properties (e.g. system_name) are null for branch nodes
-          // and others (e.g. node_type) are null for leaf nodes.
-          var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
-          + "case when r.stable_id IS NULL\n"
-          + " then CONCAT(\"ORYZA8GT_\",r.root_id)\n"
-          + " else r.stable_id\n"
-          + "end as tree_stable_id,\n"
-          + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
-          + "case when n.node_id = n.root_id\n"
-          + "	then null\n"
-          + "	else n.parent_id\n"
-          + "end as parent_id,\n"
-          + "sm.stable_id as protein_stable_id,\n"
-          + "gene.stable_id as gene_stable_id, gene.display_label as gene_display_label, gene.description as gene_description,\n"
-          + "sq.sequence,\n"
-          + "gam.cigar_line as cigar,\n"
-          + "case when stn.taxon_id IS NULL\n"
-          + " then sm.taxon_id\n"
-          + " else stn.taxon_id\n"
-          + "end as taxon_id,\n"
-          + "g.name as system_name,\n"
-          + "a.node_type,a.bootstrap,a.duplication_confidence_score\n"
-          + "from gene_tree_root r\n"
-          + "	inner join gene_tree_node n on n.root_id = r.root_id\n"
-          + "	left join seq_member sm on sm.seq_member_id = n.seq_member_id\n"
-          + "	left join sequence sq on sm.sequence_id = sq.sequence_id\n"
-          + "	left join gene_member gene on gene.gene_member_id = sm.gene_member_id\n"
-          + "	left join gene_tree_node_attr a on a.node_id = n.node_id\n"
-          + "	left join species_tree_node stn on stn.node_id = a.species_tree_node_id\n"
-          + "	left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = sm.seq_member_id\n"
-          + "	left join genome_db g on g.genome_db_id = sm.genome_db_id\n"
-          + `where ${whereClause}\n`
-          + "order by r.root_id, n.left_index;";
-          batches.push(query);
-        }
-        spigot({objectMode: true, highWaterMark: 1}, batches)
-          .pipe(handleBatch)
-          .pipe(tidyRow)
-          .pipe(convertBuffersToStrings)
-          .pipe(groupRowsByTree)
-          .pipe(makeNestedTree)
-          .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-          .pipe(selectRepresentativeGeneMembers(haveGenome))
-          .pipe(counter)
-          .pipe(upsert)
-          .pipe(serialize)
-          .pipe(fileWriter);
+        collections.genetrees.mongoCollection().then(function(mongoCollection) {
+          var upsert = insertTreeIntoMongo(mongoCollection);
+
+          var queryForTreeIds = "select root_id from gene_tree_root where"
+          + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
+          comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
+            if (err) throw err;
+            var ids = rows.map(function (r) {
+              return r.root_id;
+            });
+            console.error(`processing ${ids.length} trees`);
+            var batches = [];
+            var batchSize = 100;
+            for(var i=0;i<ids.length;i+=batchSize) {
+              var sliced = ids.slice(i,i+batchSize);
+              var whereClause = `r.root_id IN (${sliced.join(',')})`;
+              // this query returns one row per node in the tree; it includes both leaf and
+              // branch nodes. some properties (e.g. system_name) are null for branch nodes
+              // and others (e.g. node_type) are null for leaf nodes.
+              var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
+              + "case when r.stable_id IS NULL\n"
+              + " then CONCAT(\"MAIZE5GT_\",r.root_id)\n"
+              + " else r.stable_id\n"
+              + "end as tree_stable_id,\n"
+              + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
+              + "case when n.node_id = n.root_id\n"
+              + "	then null\n"
+              + "	else n.parent_id\n"
+              + "end as parent_id,\n"
+              + "sm.stable_id as protein_stable_id,\n"
+              + "gene.stable_id as gene_stable_id, gene.display_label as gene_display_label, gene.description as gene_description,\n"
+              + "sq.sequence,\n"
+              + "gam.cigar_line as cigar,\n"
+              + "case when stn.taxon_id IS NULL\n"
+              + " then sm.taxon_id\n"
+              + " else stn.taxon_id\n"
+              + "end as taxon_id,\n"
+              + "g.name as system_name,\n"
+              + "a.node_type,a.bootstrap,a.duplication_confidence_score\n"
+              + "from gene_tree_root r\n"
+              + "	inner join gene_tree_node n on n.root_id = r.root_id\n"
+              + "	left join seq_member sm on sm.seq_member_id = n.seq_member_id\n"
+              + "	left join sequence sq on sm.sequence_id = sq.sequence_id\n"
+              + "	left join gene_member gene on gene.gene_member_id = sm.gene_member_id\n"
+              + "	left join gene_tree_node_attr a on a.node_id = n.node_id\n"
+              + "	left join species_tree_node stn on stn.node_id = a.species_tree_node_id\n"
+              + "	left join gene_align_member gam on gam.gene_align_id = r.gene_align_id and gam.seq_member_id = sm.seq_member_id\n"
+              + "	left join genome_db g on g.genome_db_id = sm.genome_db_id\n"
+              + `where ${whereClause}\n`
+              + "order by r.root_id, n.left_index;";
+              batches.push(query);
+            }
+            spigot({objectMode: true, highWaterMark: 1}, batches)
+              .pipe(handleBatch)
+              .pipe(tidyRow)
+              .pipe(convertBuffersToStrings)
+              .pipe(groupRowsByTree)
+              .pipe(makeNestedTree)
+              .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
+              .pipe(selectRepresentativeGeneMembers(haveGenome))
+              .pipe(counter)
+              .pipe(upsert)
+              .pipe(serialize)
+              .pipe(fileWriter);
         
-        fileWriter.on('finish', function () {
-          comparaMysqlDb.end(function(err) {
-            console.error("finished");
+            fileWriter.on('finish', function () {
+              comparaMysqlDb.end(function(err) {
+                console.error("finished");
+              });
+            });
           });
         });
       });
     });
-  });
+  })
 })

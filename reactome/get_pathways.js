@@ -104,7 +104,7 @@ collections.pathways.mongoCollection().then(function(pathwaysCollection) {
         throw err;
       }
       console.error(`inserted ${res.insertedCount} events to pathways collection`);
-      collections.closeMongoDatabase();
+      // collections.closeMongoDatabase();
     });
   });
 });

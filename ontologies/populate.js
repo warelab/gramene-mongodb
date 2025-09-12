@@ -46,7 +46,7 @@ var ontologies = [
 
 var outDir = argv.t;
 var mongoConfig =  collections.getMongoConfig();
-collections.closeMongoDatabase();
+// collections.closeMongoDatabase();
 ontologies.forEach(function(ontology) {
   var oboFile = outDir+'/'+ontology.collectionName+'.obo'
   var curl = 'curl -L '+ontology.obo+' -o '+oboFile;

@@ -6,7 +6,7 @@ var coreLUT = _.keyBy(cores,'database');
 collections.maps.mongoCollection().then(function(mapsCollection) {
   mapsCollection.find({type:'genome'}).toArray(function (err, genomes) {
     if (err) throw(err);
-    collections.closeMongoDatabase();
+    // collections.closeMongoDatabase();
     genomes.forEach(function(genome) {
       console.log(`echo "${genome.system_name}"`);
       var db = coreLUT[genome.db];
