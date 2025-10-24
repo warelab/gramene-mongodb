@@ -14,7 +14,7 @@ var reader = byline(fs.createReadStream(argv.i));
 var writer = fs.createWriteStream(argv.o);
 var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
 if (isGramene) {
-  var fixMaizeV4 = require('./fix_maize_v5')();
+  var fixMaizeV4 = require('./maizeGDB')();
   var fixSorghumV2 = require('./fix_sorghum_v2')();
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
@@ -31,6 +31,7 @@ var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var panZeaAdder = require('./panmaize_xrefs')();
 var grassius = require('./grassius')();
+// var supertreeAdder = require('./supertrees')();
 var parser = through2.obj(function (line, enc, done) {
   this.push(JSON.parse(line));
   done();
@@ -103,9 +104,9 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 
 var speciesRank = {
   sorghum_bicolor : 4, // sorghum
-  arabidopsis_thaliana : 2, // arabidopsis
-  oryza_sativa: 3, // rice
-  zea_maysb73 : 1  // maize
+  arabidopsis_thaliana : 1, // arabidopsis
+  oryza_sativa: 2, // rice
+  zea_mays : 3  // maize
 };
  
 var speciesRanker = through2.obj(function (obj, enc, done) {
@@ -173,7 +174,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   if (isGramene) {
     stream = stream.pipe(fixMaizeV4)
       .pipe(fixSorghumV2)
-      .pipe(panZeaAdder)
+      // .pipe(panZeaAdder)
       .pipe(grassius)
       .pipe(fixBarley)
       .pipe(thalemine)
@@ -186,6 +187,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
     .pipe(assignCanonicalTranscript)
     .pipe(orderTranscripts)
     .pipe(genetreeAdder)
+    // .pipe(supertreeAdder)
     .pipe(binAdder)
     .pipe(pathwayAdder)
     .pipe(homologAdder)
