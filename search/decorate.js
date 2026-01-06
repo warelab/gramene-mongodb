@@ -31,6 +31,7 @@ var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var panZeaAdder = require('./panmaize_xrefs')();
 var grassius = require('./grassius')();
+var msu6Adder = require('./msu6_adder')();
 var parser = through2.obj(function (line, enc, done) {
   this.push(JSON.parse(line));
   done();
@@ -102,10 +103,10 @@ var orderTranscripts = through2.obj(function (gene, enc, done) {
 });
 
 var speciesRank = {
-  sorghum_bicolor : 4, // sorghum
-  arabidopsis_thaliana : 2, // arabidopsis
+  sorghum_bicolor : 1, // sorghum
+  arabidopsis_thaliana : 4, // arabidopsis
   oryza_sativa: 3, // rice
-  zea_maysb73 : 1  // maize
+  zea_maysb73 : 2  // maize
 };
  
 var speciesRanker = through2.obj(function (obj, enc, done) {
@@ -175,6 +176,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(fixSorghumV2)
       .pipe(panZeaAdder)
       .pipe(grassius)
+      .pipe(msu6Adder)
       .pipe(fixBarley)
       .pipe(thalemine)
       .pipe(rapdb)
