@@ -40,11 +40,11 @@ module.exports = function(sizes) {
     var that = this;
 
     if(gene.bins) {
-      throw new Error('bins already defined on ' + gene._id);
+      // throw new Error('bins already defined on ' + gene._id);
     }
   
     if(!_.isObject(gene) || !_.isNumber(gene.taxon_id) || !_.isObject(gene.location)) {
-      throw new Error('gene is lacking needed info');
+      // throw new Error('gene is lacking needed info');
     }
   
     mapperPromise.then(function(mapper) {

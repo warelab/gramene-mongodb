@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/warelab/gramene-mongodb",
   "dependencies": {
+    "@flatten-js/interval-tree": "^2.0.3",
     "binary-search-bounds": "^2.0.5",
     "byline": "^5.0.0",
     "fast-xml-parser": "^3.20.3",

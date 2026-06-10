@@ -21,7 +21,7 @@ if (isGramene) {
   var rapdb = require('./rapdb')();
   var curated = require('./curated')();
   var generifs = require('./generifs')(3);
-  var qtls = require('./qtl_adder')();
+  var qtls = require('./addQtlXrefs')();
 }
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);

@@ -8,6 +8,7 @@ through2 = require('through2');
 var collections = require('gramene-mongodb-config');
 var argv = require('minimist')(process.argv.slice(2));
 
+var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
 var curated = require('./curated')();
 var reader = byline(fs.createReadStream(argv.i));
 var writer = fs.createWriteStream(argv.o);
@@ -64,7 +65,8 @@ var cleanup = through2.obj(function (gene, enc, done) {
 
 var stream = reader.pipe(parser)
   // .pipe(curated)
-  .pipe(speciesRanker)
+  // .pipe(speciesRanker)
+  .pipe(binAdder)
   .pipe(cleanup)
   .pipe(serializer)
   .pipe(writer);

@@ -115,6 +115,7 @@ mapsPromise.then(function(maps) {
                   }
                 }
                 let ancestors = populate_ancestors(childNode,map.num_genes,inCompara[map.system_name]);
+                map.in_compara = !!inCompara[map.system_name];
                 return map;
               });
               mapsCollection.insertMany(insertThese, function(err, result) {
@@ -217,7 +218,8 @@ function get_maps(dbInfo) {
         system_name: meta[species_id]['species.production_name'],
         display_name: meta[species_id]['species.display_name'],
         type: 'genome',
-        is_anchor: !!dbInfo.anchor,
+        is_anchor: dbInfo.hasOwnProperty('anchor'),
+        in_compara: false,
         length: 0,
         regions: {
           names: [],
