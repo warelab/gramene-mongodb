@@ -2,7 +2,15 @@
 var Q = require('q');
 var through2 = require('through2');
 var _ = require('lodash');
-var lut = require('./OsNipp_IRGSP_MSU_lut.json');
+// OsNipp_IRGSP_MSU_lut.json adds MSU6 rice locus xrefs to the rice anchor genome.
+// It is optional: if the LUT isn't present this adder degrades to a passthrough
+// rather than crashing the whole decorate pipeline at load time.
+var lut = {};
+try {
+  lut = require('./OsNipp_IRGSP_MSU_lut.json');
+} catch (e) {
+  console.error('msu6_adder: OsNipp_IRGSP_MSU_lut.json not found — skipping MSU6 rice xrefs');
+}
 
 function customizer(objValue, srcValue) {
   if (_.isArray(objValue)) {

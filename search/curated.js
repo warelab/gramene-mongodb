@@ -8,8 +8,13 @@ function getCurated() {
   var deferred = Q.defer();
   var url = 'https://dev.gramene.org/cshl_curated_genes.json'
   console.error('curated get('+url+')');
-  fetch(url)
-  .then(res => res.json())
+  // Guard the fetch with a timeout so a hung/unreachable host can't stall the
+  // whole decorate pipeline forever (this stream sits in the gene hot path).
+  var ctrl = new AbortController();
+  var timer = setTimeout(() => ctrl.abort(), 60000);
+  fetch(url, {signal: ctrl.signal})
+  .then(res => { clearTimeout(timer); if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
+  .catch(err => { clearTimeout(timer); console.error('curated fetch failed ('+err.message+') — proceeding with empty curated LUT'); return []; })
   .then(genes => {
     var lut = {};
     genes.forEach(g => {

@@ -46,7 +46,10 @@ var ontologies = [
 
 var outDir = argv.t;
 var mongoConfig =  collections.getMongoConfig();
-// collections.closeMongoDatabase();
+// require('gramene-mongodb-config') opens a mongo connection that keeps the
+// process alive; close it (and exit) once every ontology has been loaded so the
+// script doesn't hang forever after finishing its work.
+var remaining = ontologies.length;
 ontologies.forEach(function(ontology) {
   var oboFile = outDir+'/'+ontology.collectionName+'.obo'
   var curl = 'curl -L '+ontology.obo+' -o '+oboFile;
@@ -82,6 +85,10 @@ ontologies.forEach(function(ontology) {
       exec(load, function(err, stdout, stderr) {
         if (err) throw err;
         console.error('loaded',ontology.collectionName);
+        if (--remaining === 0) {
+          collections.closeMongoDatabase();
+          process.exit(0);
+        }
       })
     });
   });

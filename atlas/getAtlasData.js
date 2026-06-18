@@ -101,6 +101,10 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
             em._id = id;
             em.source = "EBI";
             em.type = e.experimentType;
+            // factors: the experimental variables (e.g. ["developmental stage","organism part"]).
+            // Comes straight from the GXA experiments JSON; was dropped from this build, so
+            // experiments lost their `factors` field (restored to match v10).
+            em.factors = e.experimentalFactors || [];
             if (e.rawExperimentType === "RNASEQ_MRNA_BASELINE") {
               console.log(`curl -O ${gxa_url}/${id}/${id}-tpms.tsv`)
               console.log(`curl -O ${gxa_url}/${id}/${id}-factors.xml`)

@@ -172,6 +172,10 @@ function updateMaps(maps, taxonomy) {
     taxon_offset[map.taxon_id]++;
     map.left_index = taxonomy.left_index[map.taxon_id] + 0.001 * taxon_offset[map.taxon_id];
     map.anchor_taxon_id = map.taxon_id;
+    // in_compara: true for genomes that were in the gene-tree (compara) analysis.
+    // taxonomy.inCompara is keyed by production name from the compara genome_db table
+    // (see getTaxonomy); the same flag drives the taxonomy "compara" subset below.
+    map.in_compara = !!taxonomy.inCompara[map.system_name];
     map.taxon_id = map.taxon_id * 1000 + taxon_offset[map.taxon_id];
     let childNode = Object.assign({},taxNode);
     childNode.is_a = [childNode._id];

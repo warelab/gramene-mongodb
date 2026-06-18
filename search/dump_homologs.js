@@ -254,6 +254,10 @@ connection.query(sql0)
       // all rows have been received
       console.error('all results received');
       connection.end();
+      // require('gramene-mongodb-config') opened a mongo connection that would
+      // otherwise keep this process alive and prevent redis-cli --pipe from
+      // seeing EOF; close it so stdout flushes and the process exits.
+      collections.closeMongoDatabase();
     });
   })
 });

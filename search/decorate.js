@@ -21,7 +21,7 @@ if (isGramene) {
   var rapdb = require('./rapdb')();
   var curated = require('./curated')();
   var generifs = require('./generifs')(3);
-  var qtls = require('./addQtlXrefs')();
+  var qtls = require('./addQtlXrefs')();  // interval-tree containment: union of TO terms from ALL QTLs that fully contain the gene
 }
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
@@ -31,6 +31,7 @@ var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var panZeaAdder = require('./panmaize_xrefs')();
 var grassius = require('./grassius')();
+var vitisSynonymAdder = require('./vitis_synonym_adder')();
 var msu6Adder = require('./msu6_adder')();
 var parser = through2.obj(function (line, enc, done) {
   this.push(JSON.parse(line));
@@ -176,6 +177,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(fixSorghumV2)
       .pipe(panZeaAdder)
       .pipe(grassius)
+      .pipe(vitisSynonymAdder)
       .pipe(msu6Adder)
       .pipe(fixBarley)
       .pipe(thalemine)

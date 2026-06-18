@@ -3,15 +3,9 @@ var Q = require('q');
 
 get_curated().then(function(curated) {
   console.log(JSON.stringify(curated));
-  // collections.curated.mongoCollection().then(function(mongoCurated) {
-  //   mongoCurated.insertMany(curated, function(err, result) {
-  //     if (err) {
-  //       throw err;
-  //     }
-  //     console.log("finished loading curated");
-  //     collections.closeMongoDatabase();
-  //   })
-  // })
+  // the redis client opened by get_generif keeps the event loop alive; exit
+  // explicitly once the curated json has been written to stdout.
+  process.exit(0);
 })
 
 async function get_thalemine() {

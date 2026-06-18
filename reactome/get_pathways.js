@@ -93,6 +93,11 @@ _.forEach(docs, function(doc, id) {
   doc.ancestors = Object.keys(ancestors).map(function(id){return +id});
 });
 
+// exit cleanly once BOTH the pathways insert and the genes->pathways stdout are
+// done (the open config mongo connection would otherwise hang the process).
+var doneInsert = false, doneGenes = false;
+function maybeDone() { if (doneInsert && doneGenes) collections.closeMongoDatabase(); }
+
 // insert docs to mongo
 collections.pathways.mongoCollection().then(function(pathwaysCollection) {
   pathwaysCollection.remove({},function(err) {
@@ -104,7 +109,7 @@ collections.pathways.mongoCollection().then(function(pathwaysCollection) {
         throw err;
       }
       console.error(`inserted ${res.insertedCount} events to pathways collection`);
-      // collections.closeMongoDatabase();
+      doneInsert = true; maybeDone();
     });
   });
 });
@@ -184,6 +189,7 @@ readline.createInterface({
   .on('close', function() {
     console.error('loaded genesToReactions');
     console.log(JSON.stringify(genes,null,'  '));
+    doneGenes = true; maybeDone();
   });
 });
 

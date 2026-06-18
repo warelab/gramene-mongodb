@@ -44,6 +44,7 @@ if (res.statusCode == 200) {
         }
       });
       console.log(JSON.stringify(taxonomy));
+      collections.closeMongoDatabase();   // otherwise the open config connection hangs the process
     });
   });
 }
