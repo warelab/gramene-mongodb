@@ -26,3 +26,20 @@ node_modules
 
 # Webstorm config dir
 .idea
+
+# Generated build artifacts — never commit (downloaded sources, generated luts,
+# runtime dumps). The curated source data (grassius.tsv, vitis_crosswalk.tsv,
+# reactome/vv_orthologs.v3.v4.txt) IS tracked and is intentionally not listed here.
+*/tmp/
+curated/curated.json
+reactome/Ensembl2PlantReactomeReactions.txt
+reactome/UniProt2PlantReactomeReactions.txt
+reactome/gene_ids_by_pathway_and_species.tab
+reactome/genes_to_pathways.json
+reactome/genes_to_pathways.raw.json
+reactome/merge_into_taxonomy.json
+search/genes_to_pathways.json
+search/grassius.fromsource.tsv
+search/grassius.tsv.curated.bak
+search/insertion_errors.jsonl
+trees/inserts.jsonl
