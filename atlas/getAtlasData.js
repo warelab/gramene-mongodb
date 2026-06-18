@@ -4,8 +4,26 @@ var Q = require('q');
 var fs = require('fs');
 var collections = require('gramene-mongodb-config');
 
+// update_tid: remap an EBI Atlas organism taxon to a genome taxon. Atlas tags some experiments with
+// a subspecies/cultivar taxon BELOW a genome's species (e.g. maize subsp. 381124 under Zea mays 4577);
+// those are absent from the local gramene `taxonomy` (genome taxa + ancestors only) so the inclusion
+// test below would drop them. build_taxon_remap.js precomputes a complete descendant->genome map from
+// the compara ncbi_taxa_node tree; load it here. The hardcoded 381124->4577 stays as a fallback for
+// when the remap file is absent (it is also produced dynamically).
 var update_tid = {};
-update_tid[381124] = 4577; // special case for maize subspecies
+update_tid[381124] = 4577; // fallback special case for maize subspecies
+try {
+  var remapPath = require('path').join(__dirname, 'taxon_remap.json');
+  if (fs.existsSync(remapPath)) {
+    var dyn = JSON.parse(fs.readFileSync(remapPath, 'utf8'));
+    Object.keys(dyn).forEach(function (k) { update_tid[k] = dyn[k]; });
+    console.error('loaded ' + Object.keys(dyn).length + ' descendant->genome taxon remaps from taxon_remap.json');
+  } else {
+    console.error('taxon_remap.json not found — using static taxon remap only (run build_taxon_remap.js)');
+  }
+} catch (e) {
+  console.error('taxon_remap.json load failed (' + (e && e.message) + ') — using static taxon remap only');
+}
 
 var seen = {};
 function parseAssays() {
