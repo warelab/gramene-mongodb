@@ -1875,5 +1875,175 @@
    "password": "gram3n3",
    "database": "lathyrus_sativus_core_69_114_1"
   }
+ ],
+ "variations": [
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "arabidopsis_thaliana_variation_70_116_11"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "brachypodium_distachyon_variation_70_116_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "eragrostis_tef_variation_70_116_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "helianthus_annuus_variation_70_116_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "hordeum_vulgare_variation_70_116_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "malus_domestica_golden_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_glaberrima_variation_70_116_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_glumipatula_variation_70_116_15"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_indica_variation_70_116_2"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativa_variation_70_116_7"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "phaseolus_vulgaris_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "sorghum_bicolor_variation_70_116_30"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "theobroma_cacao_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_arinalrfor_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_jagger_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_julius_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_lancer_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_mace_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_mattis_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_norin61_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_stanley_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_aestivum_variation_70_116_4"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "triticum_turgidum_variation_70_116_1"
+  },
+  {
+   "host": "colden",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "zea_mays_variation_70_116_8"
+  }
  ]
 }
