@@ -23,12 +23,17 @@ if (res.statusCode == 200) {
     lut[s.displayName] = s.abbreviation;
   });
   collections.maps.mongoCollection().then(function(mapsCollection) {
-    mapsCollection.find({is_anchor:true},{anchor_taxon_id:1,taxon_id:1,display_name:1}).toArray(function (err, docs) {
+    // Every genome map needs a reactomePrefix, not just anchor genomes: the MAIN release has no
+    // anchors (is_anchor:true matched 0 docs -> empty merge, failing the stage). anchor_taxon_id is
+    // the real NCBI taxid (populated on all genome maps); fall back to floor(taxon_id/1000) since
+    // maps taxon_id carries the *1000 pangenome offset. Reactome only covers ~145 species, so
+    // genomes with no match are simply skipped (logged), not errored.
+    mapsCollection.find({type:'genome'},{anchor_taxon_id:1,taxon_id:1,display_name:1}).toArray(function (err, docs) {
       var taxonomy = {};
       // collections.closeMongoDatabase();
       docs.forEach(function(doc) {
         var prefix;
-        let tid = doc.anchor_taxon_id; //Math.floor(doc.taxon_id / 1000);
+        let tid = doc.anchor_taxon_id || Math.floor(doc.taxon_id / 1000);
         if (lut[tid]) {
           prefix = lut[tid];
         } else if(lut[doc.display_name]) {
