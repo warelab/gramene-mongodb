@@ -6,8 +6,26 @@ var compara = require('../ensembl_db_info.json').compara;
 var collections = require('gramene-mongodb-config');
 var _ = require('lodash');
 
+// mysql.createConnection to colden occasionally throws `connect ETIMEDOUT` under concurrent load
+// (getMaps runs 5 at a time across ~267 cores). A single failure would otherwise reject the whole
+// asyncPool and abort the entire maps load, writing 0 docs. Retry with backoff + a longer connect
+// timeout so a transient blip doesn't kill the build; only give up (and fail loudly) after N tries.
+async function connectWithRetry(dbInfo, attempts = 5) {
+  const cfg = Object.assign({ connectTimeout: 30000 }, dbInfo);
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await mysql.createConnection(cfg);
+    } catch (err) {
+      if (i === attempts) throw err;
+      const wait = 1000 * i;
+      console.error(`  connect to ${dbInfo.database} failed (${err.code || err.message}); retry ${i}/${attempts - 1} in ${wait}ms`);
+      await new Promise(r => setTimeout(r, wait));
+    }
+  }
+}
+
 async function getTaxonomy(dbInfo,maps) {
-  const db = await mysql.createConnection(dbInfo);
+  const db = await connectWithRetry(dbInfo);
   try {
     const taxa = [...new Set(maps.map(m => m.taxon_id))];
 
@@ -58,7 +76,7 @@ async function getTaxonomy(dbInfo,maps) {
 }
 
 async function getMaps(dbInfo) {
-  const core = await mysql.createConnection(dbInfo);
+  const core = await connectWithRetry(dbInfo);
   try {
     const [metaRows] = await core.query(
       'SELECT species_id, meta_key, meta_value FROM meta WHERE species_id IS NOT NULL'
