@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var collections = require('gramene-mongodb-config');
-var variation_dbs = require('../ensembl_db_info.json').variations;
+var variation_dbs = require('../ensembl_db_info.json').variations || [];
 var Q = require('q');
 
 // connect to mysql database
@@ -13,6 +13,11 @@ var sql= 'select s.name as source, pf.object_id as qtl_feature, p.description, p
 get_qtls().then(function(qtls) {
   console.error('got_qtls',qtls.length);
   collections.qtls.mongoCollection().then(function(mongoQTLs) {
+    if (!qtls.length) {                       // insertMany([]) throws "Batch cannot be empty"
+      console.log("no QTLs to load");
+      collections.closeMongoDatabase();
+      return;
+    }
     mongoQTLs.insertMany(qtls, function(err, result) {
       if (err) {
         throw err;
@@ -21,62 +26,105 @@ get_qtls().then(function(qtls) {
       collections.closeMongoDatabase();
     })
   })
-})
+}).catch(function(err) {
+  console.error("dump_qtls failed:", err && err.message || err);
+  process.exit(1);
+});
 
 function get_qtls() {
   var deferred = Q.defer();
   collections.maps.mongoCollection().then(function(mongoMaps) {
     mongoMaps.find().toArray(function(err, docs) {
+      if (err) { deferred.reject(err); return; }
       var qtls = [];
       var toterms = {};
-      var running=0;
-      var connections = [];
       var mapLUT = {};
       console.error("got docs from maps");
       docs.forEach(function(map) {
         mapLUT[map.system_name] = map._id;
       })
-      variation_dbs.forEach((variation_db,idx) => {
-        const db_words = variation_db.database.split('_variation_');
-        const system_name = db_words[0];
-        connections.push(mysql.createConnection(variation_db));
-        if (!connections[idx]) throw "error";
-        connections[idx].connect();
-        running++;
-        // console.error('query',running,system_name,sql);
-        connections[idx].query(sql)
-        .on('error', function(err) {
-          throw err;
-        })
-        .on('result', function(row) {
-          const id = row.qtl_feature.split('_').pop();
-        
-          if (!toterms.hasOwnProperty(id)) {
-            toterms[id] = [];
-            qtls.push({
-              _id: id,
-              location: {
-                map: mapLUT[system_name],
-                region: row.region,
-                start: row.start,
-                end: row.end              
-              },
-              source: row.source,
-              description: row.description,
-              terms: toterms[id]
-            })
+
+      // Load QTLs from each variation db resiliently. The old code opened all N connections at once
+      // and any single `connect ETIMEDOUT` threw fatally, aborting the whole dump (same fragility as
+      // maps/load.js). Now: throttle to MAX_CONC concurrent dbs, give each a 30s connectTimeout, and
+      // retry a transient connect failure before giving up. Accumulation (qtls/toterms/mapLUT) is
+      // unchanged; dbs with no QTLs simply return 0 rows.
+      var MAX_CONC = 4;
+      var TRANSIENT = { ETIMEDOUT:1, ECONNREFUSED:1, PROTOCOL_CONNECTION_LOST:1, ECONNRESET:1, EPIPE:1, PROTOCOL_SEQUENCE_TIMEOUT:1 };
+
+      function processDb(variation_db) {
+        var system_name = variation_db.database.split('_variation_')[0];
+        return new Promise(function(resolve, reject) {
+          var attempt = 0;
+          (function tryConnect() {
+            attempt++;
+            var settled = false;
+            var conn = mysql.createConnection(Object.assign({ connectTimeout: 30000 }, variation_db));
+            conn.on('error', function() {});  // swallow stray async errors; handled explicitly below
+            conn.connect(function(connErr) {
+              if (connErr) {
+                try { conn.destroy(); } catch (e) {}
+                if (TRANSIENT[connErr.code] && attempt < 5) {
+                  var wait = 1000 * attempt;
+                  console.error('  connect ' + variation_db.database + ' failed (' + connErr.code +
+                                '); retry ' + attempt + '/4 in ' + wait + 'ms');
+                  return setTimeout(tryConnect, wait);
+                }
+                return reject(connErr);
+              }
+              conn.query(sql)
+                .on('error', function(qErr) {
+                  if (settled) return; settled = true;
+                  try { conn.destroy(); } catch (e) {}
+                  reject(qErr);
+                })
+                .on('result', function(row) {
+                  var id = row.qtl_feature.split('_').pop();
+                  if (!toterms.hasOwnProperty(id)) {
+                    toterms[id] = [];
+                    qtls.push({
+                      _id: id,
+                      location: {
+                        map: mapLUT[system_name],
+                        region: row.region,
+                        start: row.start,
+                        end: row.end
+                      },
+                      source: row.source,
+                      description: row.description,
+                      terms: toterms[id]
+                    });
+                  }
+                  toterms[id].push(row.term);
+                })
+                .on('end', function() {
+                  if (settled) return; settled = true;
+                  try { conn.end(); } catch (e) {}
+                  resolve();
+                });
+            });
+          })();
+        });
+      }
+
+      // concurrency-limited runner over variation_dbs (resolves even when the list is empty)
+      (async function runAll() {
+        try {
+          var queue = variation_dbs.slice();
+          async function worker() {
+            while (queue.length) {
+              await processDb(queue.shift());
+            }
           }
-          toterms[id].push(row.term);
-        })
-        .on('end', function() {
-          running--;
-          // console.error(idx,'idx', running,'queries remaining');
-          connections[idx].end();
-          if (running === 0) {
-            deferred.resolve(qtls);
-          }
-        });  
-      })
+          var n = Math.min(MAX_CONC, variation_dbs.length) || 0;
+          var workers = [];
+          for (var i = 0; i < n; i++) workers.push(worker());
+          await Promise.all(workers);
+          deferred.resolve(qtls);
+        } catch (e) {
+          deferred.reject(e);
+        }
+      })();
     })
   })
   return deferred.promise;
