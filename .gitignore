@@ -43,3 +43,8 @@ search/grassius.fromsource.tsv
 search/grassius.tsv.curated.bak
 search/insertion_errors.jsonl
 trees/inserts.jsonlatlas/taxon_remap.json
+
+# homolog LMDB store + compara column dumps (build artifacts, see search/build_homologs.js)
+search/homologs.lmdb
+search/homologs.lmdb-lock
+search/tmp_homologs/
