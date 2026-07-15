@@ -43,14 +43,14 @@ module.exports = function() {
   
     lutPromise.then(function(lut) {
       if (lut[gene._id]) {
-        // merge with gene.synonyms
-        if (!gene.hasOwnProperty('synonyms')) {
-          gene.synonyms = [];
+        // pan-gene set ids are alternate ids, not synonyms
+        if (!gene.hasOwnProperty('alt_id')) {
+          gene.alt_id = [];
         }
         lut[gene._id].forEach(syn => {
-          gene.synonyms.push(syn)
+          gene.alt_id.push(syn)
         });
-        gene.synonyms = _.uniq(gene.synonyms);
+        gene.alt_id = _.uniq(gene.alt_id);
         // add xref
         if (!gene.hasOwnProperty('xrefs')) {
           gene.xrefs = [];

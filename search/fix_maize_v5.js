@@ -77,13 +77,16 @@ module.exports = function() {
   
     lutPromise.then(function(lut) {
       if (lut[gene._id]) {
-        // merge with gene.synonyms
+        // v3 gene *ids* (GRMZM.../AC...) are alternate ids; v3 gene *names* are synonyms
+        if (!gene.hasOwnProperty('alt_id')) {
+          gene.alt_id = [];
+        }
         if (!gene.hasOwnProperty('synonyms')) {
           gene.synonyms = [];
         }
         lut[gene._id].v3.forEach(id => {
           if (id != '-') {
-            gene.synonyms.push(id);
+            gene.alt_id.push(id);
           }
         });
         var v3names = [];
@@ -97,6 +100,7 @@ module.exports = function() {
           gene.name = v3names[0];
         }
         gene.synonyms = _.uniq(gene.synonyms);
+        gene.alt_id = _.uniq(gene.alt_id);
         var v3descriptions = [];
         lut[gene._id].descriptions.forEach(v3description => {
           if (v3description != '-' && !v3description.match(/Uncharacterized protein/)) {
