@@ -50,21 +50,21 @@ module.exports = function() {
   
     lutPromise.then(function(lut) {
       if (lut[gene._id]) {
-        // merge with gene.synonyms
-        if (!gene.hasOwnProperty('synonyms')) {
-          gene.synonyms = [];
+        // v1 (Sb...) and v2 (Sobic... phytozome/JGI) ids are alternate ids, not synonyms
+        if (!gene.hasOwnProperty('alt_id')) {
+          gene.alt_id = [];
         }
         lut[gene._id].v1.forEach(id => {
           if (id != '-') {
-            gene.synonyms.push(id);
+            gene.alt_id.push(id);
           }
         });
         lut[gene._id].v2.forEach(id => {
           if (id != '-') {
-            gene.synonyms.push(id);
+            gene.alt_id.push(id);
           }
         });
-        gene.synonyms = _.uniq(gene.synonyms);
+        gene.alt_id = _.uniq(gene.alt_id);
         var v2descriptions = [];
         lut[gene._id].def.forEach(v2description => {
           if (v2description != '-') {
@@ -76,10 +76,11 @@ module.exports = function() {
         }
       }
       else if (match = looks_like_sorghum_v3.exec(gene._id)) {
-        if (!gene.hasOwnProperty('synonyms')) {
-          gene.synonyms = [];
+        // SORBI_3xxx -> Sobic.xxx JGI alternate id
+        if (!gene.hasOwnProperty('alt_id')) {
+          gene.alt_id = [];
         }
-        gene.synonyms.push(`Sobic.${match[1]}`);
+        gene.alt_id.push(`Sobic.${match[1]}`);
       }
       that.push(gene);
       done();

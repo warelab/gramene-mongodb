@@ -71,8 +71,11 @@ module.exports = function() {
         if (gene.name === gene._id && lut[gene._id].name) {
           gene.name = lut[gene._id].name;
         }
-        if (lut[gene._id].synonyms) {
-          gene.synonyms = lut[gene._id].synonyms
+        if (lut[gene._id].synonyms && lut[gene._id].synonyms.length) {
+          // MERGE, don't replace: preserve synonyms added upstream (e.g. fix_sorghum_v2's Sb.../Sobic.
+          // JGI ids). A single-symbol curated gene (e.g. msd2) yields synonyms=[] (empty but truthy),
+          // so the old `gene.synonyms = ...` replace silently wiped those upstream synonyms.
+          gene.synonyms = _.uniq((gene.synonyms || []).concat(lut[gene._id].synonyms));
         }
         if (lut[gene._id].refs) {
           lut[gene._id].refs.forEach(ref => {

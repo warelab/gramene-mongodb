@@ -67,8 +67,10 @@ module.exports = function() {
         if (gene.name === gene._id && lut[gene._id].name) {
           gene.name = lut[gene._id].name;
         }
-        if (lut[gene._id].synonyms) {
-          gene.synonyms = lut[gene._id].synonyms
+        if (lut[gene._id].synonyms && lut[gene._id].synonyms.length) {
+          // MERGE, don't replace (see curated.js): a single-symbol entry yields synonyms=[] (truthy),
+          // and replacing would wipe synonyms added upstream.
+          gene.synonyms = _.uniq((gene.synonyms || []).concat(lut[gene._id].synonyms));
         }
         if (lut[gene._id].refs) {
           lut[gene._id].refs.forEach(ref => {
