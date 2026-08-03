@@ -149,7 +149,7 @@ var loadIntoTreeModelAndDoAQuickSanityCheck = through2.obj(function (tree, enc, 
   done();
 });
 
-var selectRepresentativeGeneMembers = function(haveGenome) {
+var selectRepresentativeGeneMembers = function(haveGenome, anchorTaxa) {
   function indexTree(tree, attrs) {
     tree.indices = _.chain(attrs)
       .map(function (attr) {
@@ -169,6 +169,7 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
     var desc;
     var score = 0;
     var bad = 100;
+    var nonAnchor = 25;   // hosted, but not a reference genome
     var meh = -50;
     var good = -100;
     var curated = -500;
@@ -222,9 +223,17 @@ var selectRepresentativeGeneMembers = function(haveGenome) {
         score -= bad;
       }
     }
+    // Prefer a reference (anchor) genome as the tree's representative, but only mildly: a
+    // non-anchor genome we host is still a perfectly good representative, whereas a taxon we
+    // don't host at all cannot be shown and keeps the full penalty. Grading these apart matters
+    // now that the pan-genome accessions are correctly marked in_compara — flattening them all
+    // to `bad` would let any of ~70 sorghum accessions outrank the reference on a tie.
     if (!haveGenome[node.model.taxon_id]) {
       // console.error("taxon not hosted",node.model.taxon_id);
       score += bad;
+    }
+    else if (!anchorTaxa[node.model.taxon_id]) {
+      score += nonAnchor;
     }
     return score;
   }
@@ -339,6 +348,7 @@ var handleBatch = through2.obj(function (query, enc, done) {
 
 var taxonLUT = {};
 var sysnameLUT = {};
+var anchorTaxa = {};   // taxon_id -> true for maps entries with is_anchor
 // taxon_id -> parent_id, for the species tree's taxa and their ancestors. Used to resolve
 // compara's synthetic pan-genome taxa up to a taxon this build carries (see the walk above).
 // Scoped to the species tree + ancestor closure so we don't pull all ~1M ncbi_taxa_node rows.
@@ -375,7 +385,10 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
     if (err) throw err;
     maps.forEach(function(m) {
       sysnameLUT[m.system_name] = m.taxon_id
+      // reference genomes: preferred as tree representatives (see scoreRepresentative)
+      if (m.is_anchor) anchorTaxa[m.taxon_id] = true;
     })
+    console.error("anchor genomes: " + Object.keys(anchorTaxa).length);
     collections.taxonomy.mongoCollection().then(function(taxCollection) {
       taxCollection.find({subset: 'compara'}, {}).toArray(function (err, taxon) {
         if (err) throw err;
@@ -450,7 +463,7 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
               .pipe(groupRowsByTree)
               .pipe(makeNestedTree)
               .pipe(loadIntoTreeModelAndDoAQuickSanityCheck)
-              .pipe(selectRepresentativeGeneMembers(haveGenome))
+              .pipe(selectRepresentativeGeneMembers(haveGenome, anchorTaxa))
               .pipe(counter)
               .pipe(upsert)
               .pipe(serialize)
