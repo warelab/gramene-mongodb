@@ -11,11 +11,24 @@ async function getTaxonomy(dbInfo,maps) {
   try {
     const taxa = [...new Set(maps.map(m => m.taxon_id))];
 
-    const [genomeRows] = await db.query(`SELECT name from genome_db where taxon_id in (${taxa.join(',')})`);
+    // Which genomes took part in the compara analysis, keyed by production name — the same key
+    // as maps.system_name, which is how the result is looked up.
+    //
+    // This used to select genome_db WHERE taxon_id IN (our maps' taxon ids). That silently
+    // under-reports whenever compara does not key its genomes by the real NCBI taxon: compara 11
+    // assigns synthetic per-genome taxa to the sorghum accessions (sorghum_pi536008 -> 45580011)
+    // while maps still hold the real 4558, so the only rows that matched were the handful of
+    // outgroups carrying a genuine NCBI taxon — 9 of 79 genomes. Names are the stable join here,
+    // and they match exactly, so ask genome_db directly instead of going through taxon ids.
+    // genome_component IS NULL skips the per-component rows of polyploid genomes, which repeat
+    // the same name.
+    const [genomeRows] = await db.query(`SELECT name FROM genome_db WHERE genome_component IS NULL`);
     let inCompara = {};
     genomeRows.forEach(r => {
       inCompara[r.name] = 1;
     });
+    const nMatched = maps.filter(m => inCompara[m.system_name]).length;
+    console.error(`compara genomes: ${genomeRows.length}; of this build's ${maps.length} genomes, ${nMatched} are in compara`);
 
     const [taxTreeRows] = await db.query(`SELECT taxon_id,left_index,right_index from ncbi_taxa_node where taxon_id IN (${taxa.join(',')})`);
     const clauses = taxTreeRows.map(r => `(left_index <= ${r.left_index} and right_index >= ${r.right_index})`);
