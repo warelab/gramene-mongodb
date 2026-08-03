@@ -4,7 +4,14 @@ var collections = require('gramene-mongodb-config');
 var Q = require('q');
 var through2 = require('through2');
 
-var xrefsToProcess = ['domains','GO','PO','TO','taxonomy'];
+// LUT_SOURCES drives both the lookup-table loading below and the zipObject that names
+// the resulting LUTs, so it must stay immutable for the life of the process.
+var LUT_SOURCES = ['domains','GO','PO','TO','taxonomy'];
+// familyRoot and QTL_TO are processed per gene but reuse the taxonomy / TO tables rather
+// than loading their own (see modifyGene). Built once here: this used to be done by
+// push()ing onto the module-level list inside modifyGene and pop()ing at the end, which
+// leaked two entries per gene and silently corrupted the list whenever modifyGene threw.
+var XREFS_TO_PROCESS = LUT_SOURCES.concat(['familyRoot','QTL_TO']);
 var fields = {
   domains: ['id','name','description'],
   GO: ['id','name','namespace','def','subset'],
@@ -21,8 +28,7 @@ function modifyGene(ancestorsLUT,obj) {
     obj.xrefs.push({db:'familyRoot', ids: ['NCBITaxon:'+obj.homology.gene_tree.root_taxon_id]});
   }
   var xrefsKeys = _.keyBy(obj.xrefs,'db');
-  xrefsToProcess.push('familyRoot','QTL_TO');
-  xrefsToProcess.forEach(function(x) {
+  XREFS_TO_PROCESS.forEach(function(x) {
     if (xrefsKeys.hasOwnProperty(x)) {
       var lut = {};
       var specificAnnotations = [];
@@ -43,7 +49,11 @@ function modifyGene(ancestorsLUT,obj) {
           id = id[0];
         }
         if (LUT.hasOwnProperty(id)) {
-          var intId = parseInt(id.match(/\d+/)[0]);
+          var digits = id.match(/\d+/);
+          if (!digits) {
+            throw new Error('ancestor_adder: ' + x + ' xref id "' + id + '" has no numeric part');
+          }
+          var intId = parseInt(digits[0]);
           specificAnnotations.push(intId);
           function subdoc(doc,fieldList) {
             var obj = {};
@@ -55,6 +65,13 @@ function modifyGene(ancestorsLUT,obj) {
           usefulInfo[intId] = subdoc(LUT[id],fields[x]);
           if (!!ec) {
             usefulInfo[intId].evidence_code = ec;
+          }
+          // A LUT doc without an ancestors array is a data problem (e.g. a taxon that is in
+          // the collection but was never given an ancestor chain). Name it explicitly --
+          // this used to blow up as an opaque "cannot read property forEach of undefined".
+          if (!Array.isArray(LUT[id].ancestors)) {
+            throw new Error('ancestor_adder: ' + x + ' lookup doc "' + id +
+                            '" has no ancestors array');
           }
           LUT[id].ancestors.forEach(function(anc) {
             if (anc !== intId) {
@@ -79,20 +96,18 @@ function modifyGene(ancestorsLUT,obj) {
       delete xrefsKeys[x];
     }
   });
-  xrefsToProcess.pop();
-  xrefsToProcess.pop();
   // obj.xrefs = _.values(xrefsKeys);
   return obj;
 }
 
 // create a lookup table from the documents in each aux core
-var promises = xrefsToProcess.map(function(x) {
+var promises = LUT_SOURCES.map(function(x) {
   var deferred = Q.defer();
   var coll = collections[x];
   coll.mongoCollection().then(function(mc) {
     var lut = {};
     mc.find().toArray(function (err, docs) {
-      if (err) deferred.reject(err);
+      if (err) return deferred.reject(err); // without the return, docs is undefined below
       docs.forEach(function(doc) {
         lut[doc.id] = doc;
         if (doc.alt_id) {
@@ -113,19 +128,29 @@ module.exports = function() {
   
   var lutPromise = Q.all(promises).then(function(luts) {
     console.error('ancestor_adder lookup tables done')
-    return _.zipObject(xrefsToProcess, luts);
+    return _.zipObject(LUT_SOURCES, luts);
   });
-  
+
   return through2.obj(function (gene, enc, done) {
     var that = this;
     if(!_.isObject(gene)) {
-      throw new Error('gene is not an object');
+      // was a synchronous throw out of _transform; hand it to the stream instead so it
+      // surfaces as a stream error with the rest of the pipeline's error handling.
+      return done(new Error('ancestor_adder: gene is not an object'));
     }
     lutPromise.then(function(lut) {
       that.push(modifyGene(lut,gene));
       done();
+    }).catch(function (err) {
+      // CRITICAL: anything thrown inside this .then() used to reject silently, so done()
+      // was never called and the whole decorate pipeline deadlocked with no output --
+      // the process just sat idle in the event loop until it was killed. Always report
+      // which gene failed and always settle the callback.
+      console.error('ancestor_adder FAILED on gene ' + (gene && gene._id) + ': ' +
+                    (err && err.stack || err));
+      done(err instanceof Error ? err : new Error(String(err)));
     });
-  });  
+  });
 }
 
 
