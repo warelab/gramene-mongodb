@@ -26,7 +26,7 @@ if (isGramene) {
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
 var genetreeAdder = require('./genetree_adder')(comparaDatabase);
-var homologAdder = require('./homolog_adder')(process.env.HOMOLOG_LMDB || (__dirname + '/homologs.lmdb'));
+var homologAdder = require('./homolog_adder')();   // reads the mongo `homologs` collection
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
 var panZeaAdder = require('./panmaize_xrefs')();
@@ -169,36 +169,76 @@ var upsertGeneIntoMongo = function upsertGeneIntoMongo(mongoCollection) {
   return through2.obj(transform, flush);
 };
 
+// --- stall diagnostics -------------------------------------------------------------------
+// Most adders are `somePromise.then(function(lut){ ...; done(); })` with no rejection handler.
+// If anything in there throws, the rejection is swallowed, done() is never called, and the whole
+// pipeline silently deadlocks: the process sits idle in the event loop producing no output and no
+// error. Rather than guess which stage ate the gene, count what enters each one; a watchdog prints
+// the counters when progress stops, so the stage whose count exceeds the next one's is the culprit.
+var taps = [];
+function tap(name) {
+  var t = { name: name, n: 0, last: null };
+  taps.push(t);
+  return through2.obj(function (gene, enc, done) {
+    t.n++; t.last = gene && gene._id;
+    this.push(gene);
+    done();
+  });
+}
+function reportStall(why) {
+  console.error('=== DECORATE ' + why + ' — genes entering each stage (last gene seen) ===');
+  for (var i = 0; i < taps.length; i++) {
+    var t = taps[i], next = taps[i + 1];
+    var stuck = next && (t.n - next.n) > 0 ? '   <-- ' + (t.n - next.n) + ' gene(s) went in and never came out' : '';
+    console.error('  ' + String(t.n).padStart(9) + '  ' + t.name + '  last=' + t.last + stuck);
+  }
+  console.error('  ' + String(numberDecorated).padStart(9) + '  (written to mongo)');
+}
+var STALL_MS = +(process.env.DECORATE_STALL_MS || 300000);   // 5 min of no progress
+var lastCount = -1, lastMove = Date.now();
+setInterval(function () {
+  // Don't arm until the first gene is written: building the lookup tables legitimately
+  // produces no output for several minutes and must not be reported as a stall.
+  if (numberDecorated === 0) { lastMove = Date.now(); return; }
+  if (numberDecorated !== lastCount) { lastCount = numberDecorated; lastMove = Date.now(); return; }
+  if (Date.now() - lastMove >= STALL_MS) {
+    reportStall('STALLED (no gene written for ' + Math.round(STALL_MS / 1000) + 's)');
+    process.exit(4);          // fail loudly instead of hanging forever
+  }
+}, 30000);
+process.on('SIGUSR2', function () { reportStall('counters on demand'); });
+// -----------------------------------------------------------------------------------------
+
 collections.genes.mongoCollection().then(function(genesCollection) {
   var upsert = upsertGeneIntoMongo(genesCollection);
-  var stream = reader.pipe(parser);
+  var stream = reader.pipe(parser).pipe(tap('parser'));
   if (isGramene) {
-    stream = stream.pipe(fixMaizeV4)
-      .pipe(fixSorghumV2)
-      .pipe(panZeaAdder)
-      .pipe(grassius)
-      .pipe(vitisSynonymAdder)
-      .pipe(msu6Adder)
-      .pipe(fixBarley)
-      .pipe(thalemine)
-      .pipe(rapdb)
-      .pipe(curated)
-      .pipe(generifs)
-      .pipe(qtls)
+    stream = stream.pipe(fixMaizeV4).pipe(tap('fixMaizeV4'))
+      .pipe(fixSorghumV2).pipe(tap('fixSorghumV2'))
+      .pipe(panZeaAdder).pipe(tap('panZeaAdder'))
+      .pipe(grassius).pipe(tap('grassius'))
+      .pipe(vitisSynonymAdder).pipe(tap('vitisSynonymAdder'))
+      .pipe(msu6Adder).pipe(tap('msu6Adder'))
+      .pipe(fixBarley).pipe(tap('fixBarley'))
+      .pipe(thalemine).pipe(tap('thalemine'))
+      .pipe(rapdb).pipe(tap('rapdb'))
+      .pipe(curated).pipe(tap('curated'))
+      .pipe(generifs).pipe(tap('generifs'))
+      .pipe(qtls).pipe(tap('qtls'))
   }
-  stream = stream.pipe(fixTranslationLength)
-    .pipe(assignCanonicalTranscript)
-    .pipe(orderTranscripts)
-    .pipe(genetreeAdder)
-    .pipe(binAdder)
-    .pipe(pathwayAdder)
-    .pipe(homologAdder)
-    .pipe(domainArchitect)
-    .pipe(ancestorAdder)
+  stream = stream.pipe(fixTranslationLength).pipe(tap('fixTranslationLength'))
+    .pipe(assignCanonicalTranscript).pipe(tap('assignCanonicalTranscript'))
+    .pipe(orderTranscripts).pipe(tap('orderTranscripts'))
+    .pipe(genetreeAdder).pipe(tap('genetreeAdder'))
+    .pipe(binAdder).pipe(tap('binAdder'))
+    .pipe(pathwayAdder).pipe(tap('pathwayAdder'))
+    .pipe(homologAdder).pipe(tap('homologAdder'))
+    .pipe(domainArchitect).pipe(tap('domainArchitect'))
+    .pipe(ancestorAdder).pipe(tap('ancestorAdder'))
   if (isGramene) {
-    stream = stream.pipe(speciesRanker);
+    stream = stream.pipe(speciesRanker).pipe(tap('speciesRanker'));
   }
-  stream = stream.pipe(cleanup)
+  stream = stream.pipe(cleanup).pipe(tap('cleanup'))
     .pipe(upsert)
     .pipe(serializer)
     .pipe(writer);
