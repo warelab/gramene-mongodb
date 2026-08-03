@@ -16,6 +16,14 @@ var fs = require('fs');
 var collections = require('gramene-mongodb-config');
 var comparaMysqlDb = mysql.createConnection(compara);
 
+// Synthetic gene-tree stable-id prefix, used when gene_tree_root.stable_id IS NULL. It becomes the
+// tree _id, so it leaks into every downstream homology reference — it must track the release. It
+// was hardcoded 'SB10GT_' and stayed that way through the v11 build, labelling v11 trees with the
+// previous release's prefix; derive it from the config version instead so it can't drift again.
+// Override with GT_PREFIX=... if a release ever needs a different scheme.
+var GT_PREFIX = process.env.GT_PREFIX || ('SB' + collections.getVersion() + 'GT_');
+console.error('genetree stable-id prefix: ' + GT_PREFIX);
+
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
   this.push(_.omitBy(row, _.isNull));
@@ -33,8 +41,25 @@ var convertBuffersToStrings = through2.obj(function (row, encoding, done) {
   }
   row.taxon_name = taxonLUT[row.taxon_id] || 'unknown';
   if (row.taxon_name === 'unknown') {
-    row.taxon_id = Math.floor(row.taxon_id/1000);
-    row.taxon_name = taxonLUT[row.taxon_id] || 'unknown';
+    // Compara injects synthetic pan-genome taxa into its OWN ncbi_taxa_node (compara 11:
+    // 45580039 "Sorghum pi536008pan", parented to 455800000 "Sorghum pan"), so an internal /
+    // root species-tree node can carry a taxon id this build doesn't know. Resolve by walking
+    // UP compara's parent chain to the nearest taxon we actually carry.
+    //
+    // The old code did Math.floor(taxon_id/1000). That happened to undo compara 10's 7-digit
+    // ids, but compara's synthetic numbering is unrelated to ours, so on compara 11 it both
+    // under-shoots (45580039 -> 45580, unknown here and a collision with an unrelated NCBI
+    // taxon) and, for other ids, lands on a REAL but WRONG genome (45580072 is
+    // sorghum_pi534133, which would become 4558007 "chinese amber"). Arithmetic can't work.
+    var t = row.taxon_id, hops = 0;
+    while (t !== undefined && taxonLUT[t] === undefined && hops++ < 12) {
+      t = taxonParent[t];
+    }
+    if (t !== undefined && taxonLUT[t] !== undefined) {
+      row.taxon_id = t;
+      row.taxon_name = taxonLUT[t];
+    }
+    // else: leave the original id with 'unknown' rather than guess.
   }
   this.push(row);
   done();
@@ -314,6 +339,37 @@ var handleBatch = through2.obj(function (query, enc, done) {
 
 var taxonLUT = {};
 var sysnameLUT = {};
+// taxon_id -> parent_id, for the species tree's taxa and their ancestors. Used to resolve
+// compara's synthetic pan-genome taxa up to a taxon this build carries (see the walk above).
+// Scoped to the species tree + ancestor closure so we don't pull all ~1M ncbi_taxa_node rows.
+var taxonParent = {};
+function loadTaxonParents(done) {
+  comparaMysqlDb.query(
+    "select distinct n.taxon_id, n.parent_id from ncbi_taxa_node n"
+    + " join species_tree_node stn on stn.taxon_id = n.taxon_id",
+    function (err, rows) {
+      if (err) throw err;
+      rows.forEach(function (r) { taxonParent[r.taxon_id] = r.parent_id; });
+      (function closure(depth) {
+        if (depth > 8) return done();
+        var need = {};
+        Object.keys(taxonParent).forEach(function (k) {
+          var p = taxonParent[k];
+          if (p && taxonLUT[p] === undefined && taxonParent[p] === undefined) need[p] = 1;
+        });
+        var ids = Object.keys(need);
+        if (!ids.length) return done();
+        comparaMysqlDb.query(
+          "select taxon_id, parent_id from ncbi_taxa_node where taxon_id in (" + ids.join(',') + ")",
+          function (err2, rows2) {
+            if (err2) throw err2;
+            if (!rows2.length) return done();
+            rows2.forEach(function (r) { taxonParent[r.taxon_id] = r.parent_id; });
+            closure(depth + 1);
+          });
+      })(0);
+    });
+}
 collections.maps.mongoCollection().then(function(mapsCollection) {
   mapsCollection.find().toArray(function (err, maps) {
     if (err) throw err;
@@ -333,6 +389,8 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
             haveGenome[t._id] = true;
           }
         });
+        loadTaxonParents(function () {
+        console.error("taxonParent links loaded: " + Object.keys(taxonParent).length);
         collections.genetrees.mongoCollection().then(function(mongoCollection) {
           var upsert = insertTreeIntoMongo(mongoCollection);
 
@@ -354,7 +412,7 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
               // and others (e.g. node_type) are null for leaf nodes.
               var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
               + "case when r.stable_id IS NULL\n"
-              + " then CONCAT(\"SB10GT_\",r.root_id)\n"
+              + " then CONCAT(\"" + GT_PREFIX + "\",r.root_id)\n"
               + " else r.stable_id\n"
               + "end as tree_stable_id,\n"
               + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
@@ -405,6 +463,7 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
             });
           });
         });
+        }); // loadTaxonParents
       });
     });
   })
