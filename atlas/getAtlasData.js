@@ -25,10 +25,22 @@ try {
   console.error('taxon_remap.json load failed (' + (e && e.message) + ') — using static taxon remap only');
 }
 
+// ONLY: restrict this run to specific experiment accessions (comma separated). Used by the
+// incremental `make add-studies` path so one new study can be fetched and loaded without
+// re-downloading and re-inserting all ~360 experiments. Unset = every experiment, as before.
+var ONLY = null;
+if (process.env.ONLY) {
+  ONLY = new Set(String(process.env.ONLY).split(/[,\s]+/).filter(Boolean));
+  console.error('ONLY: restricting to ' + ONLY.size + ' experiment(s): ' + [...ONLY].join(', '));
+}
+
 var seen = {};
 function parseAssays() {
   var deferred = Q.defer();
   var assays = {};
+  // organism label -> taxon id, harvested from the rows that DO carry an NCBITaxon URI. Used to
+  // fill in the rows that don't; see the close handler.
+  var labelTaxon = {};
   require('readline').createInterface({
     input: require('fs').createReadStream(process.argv[2]),
     terminal: false
@@ -64,14 +76,58 @@ function parseAssays() {
     
       assays[_id][fields[2]].push(info);
       if (fields[3] === 'organism') {
-        assays[_id].taxon_id = +fields[5].replace(/.*NCBITaxon_/,'');
-        if (update_tid[assays[_id].taxon_id]) {
-          assays[_id].taxon_id = update_tid[assays[_id].taxon_id];
+        // fields[4] is the organism label, fields[5] the ontology URI. The URI column can be
+        // present-but-empty, and (defensively) absent altogether. The old code did
+        // `+fields[5].replace(...)`, which yields 0 for an empty column and throws for a missing
+        // one -- so a dump without the URI silently produced taxon_id 0 and the experiment was
+        // dropped by the taxonomy test below with no warning at all.
+        var label = (fields[4] || '').trim();
+        var uri = (fields.length > 5 && fields[5] != null) ? fields[5] : '';
+        var taxonMatch = /NCBITaxon_(\d+)/.exec(uri);
+        if (taxonMatch) {
+          var tid = +taxonMatch[1];
+          if (label) labelTaxon[label] = tid;
+          assays[_id].taxon_id = update_tid[tid] || tid;
+        } else if (label) {
+          // Defer: the label may only be resolvable from a row further down the file.
+          assays[_id].organism_label = label;
         }
       }
     }
   })
   .on('close', function() {
+    // Fill in any assay group whose organism row carried no NCBITaxon URI, using the label->taxon
+    // evidence collected from the rows that did. Resolving against the file's own evidence rather
+    // than the local `taxonomy` collection is deliberate: taxonomy stores munged genome display
+    // names ("Zea maysB73" for the Atlas's "Zea mays", "Oryza sativa Japonica Group" for its
+    // "Oryza sativa japonica"), so a name match there would miss exactly those. Verified
+    // unambiguous across both Atlas dumps: 68 distinct organism labels, none mapping to more than
+    // one taxon id.
+    var recovered = 0, noOrganism = 0, unresolved = {};
+    _.forEach(assays, function (a) {
+      var label = a.organism_label;
+      delete a.organism_label;
+      if (a.taxon_id) return;
+      if (!label) { noOrganism++; return; }
+      var tid = labelTaxon[label];
+      if (tid) {
+        a.taxon_id = update_tid[tid] || tid;
+        recovered++;
+      } else {
+        unresolved[label] = (unresolved[label] || 0) + 1;
+      }
+    });
+    if (recovered) {
+      console.error('recovered taxon_id for ' + recovered + ' assay group(s) from the organism ' +
+                    'label (the dump carried no NCBITaxon URI for them)');
+    }
+    Object.keys(unresolved).forEach(function (label) {
+      console.error('WARNING: organism "' + label + '" has no NCBITaxon URI anywhere in this dump; ' +
+                    unresolved[label] + ' assay group(s) have no taxon and will be skipped');
+    });
+    if (noOrganism) {
+      console.error('WARNING: ' + noOrganism + ' assay group(s) had no organism characteristic at all');
+    }
     var experiments = _.groupBy(assays,'experiment');
     deferred.resolve(experiments);
   });
@@ -91,6 +147,7 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
       var experiment_metadata = {};
       var mongoAssays = [];
       _.forEach(experiments, function(experiment, id) {
+        if (ONLY && !ONLY.has(id)) return;
         if (taxonomy.hasOwnProperty(experiment[0].taxon_id)) {
           if (!experiment_metadata.hasOwnProperty(id)) {
             experiment_metadata[id] = {
@@ -138,16 +195,36 @@ collections.taxonomy.mongoCollection().then(function(taxonomyCollection) {
         });
         console.error('parsed experiments?', mongoExperiments.length)
         // insert the assays and experiments to mongodb
+        // Upsert rather than insertMany: both collections are keyed on _id (accession, and
+        // accession.group), so replacing makes this idempotent. That is what lets 55_atlas add a
+        // study without dropping the collections first.
+        var upsertAll = function (col, docs) {
+          if (!docs.length) return Promise.resolve(0);
+          // $set, NOT replaceOne: 55_atlas merges the baseline landingPageDisplayName into
+          // experiments.name AFTER this runs, and a replace would silently wipe it on the next
+          // pass. $set updates the fields we own and leaves everything else alone.
+          var ops = docs.map(function (d) {
+            var set = {};
+            Object.keys(d).forEach(function (k) { if (k !== '_id') set[k] = d[k]; });
+            return { updateOne: { filter: { _id: d._id }, update: { $set: set }, upsert: true } };
+          });
+          return new Promise(function (resolve, reject) {
+            col.bulkWrite(ops, { ordered: false }, function (err) { err ? reject(err) : resolve(docs.length); });
+          });
+        };
         collections.assays.mongoCollection().then(function(assayCol) {
-          assayCol.insertMany(mongoAssays, function(err, result) {
-            if (err) throw err;
-            collections.experiments.mongoCollection().then(function(expCol) {
-              expCol.insertMany(mongoExperiments, function(err, result) {
-                if (err) throw err;
+          return upsertAll(assayCol, mongoAssays).then(function (n) {
+            console.error('upserted ' + n + ' assay group(s)');
+            return collections.experiments.mongoCollection().then(function(expCol) {
+              return upsertAll(expCol, mongoExperiments).then(function (m) {
+                console.error('upserted ' + m + ' experiment(s)');
                 collections.closeMongoDatabase();
-              })
-            })
-          })
+              });
+            });
+          });
+        }).catch(function (e) {
+          console.error('getAtlasData FAILED: ' + (e && e.message || e));
+          process.exit(1);
         })
       });
     });
