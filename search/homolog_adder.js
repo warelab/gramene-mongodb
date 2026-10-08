@@ -1,49 +1,31 @@
 #!/usr/bin/env node
-var Q = require('q');
+// homolog_adder — decorate stage: attach cross-species homologs to each gene.
+// Reads the per-gene homolog store built by build_homologs.js: an on-disk LMDB (dupSort) keyed by gene
+// stable_id, whose values are "<otherStableId>\t<kind>" (one per homolog, both directions written).
+// (Previously this read redis db 9; moved to LMDB because the full-plants homolog set is too large for
+// redis RAM.) Output is unchanged: gene.homology.homologous_genes[kind] = [otherStableId, ...].
 var through2 = require('through2');
-var _ = require('lodash')
+var { open } = require('lmdb');
 
-function getRedis(db) {
-  var deferred = Q.defer();
-  var client = require('redis').createClient();
-  client.select(db, function(err) {
-    if (err) throw err;
-    console.error('homolog_adder redis connection established');
-    deferred.resolve(client);
-  });
-  return deferred.promise;
-}
+module.exports = function (lmdbPath) {
+  var db = open({ path: lmdbPath, readOnly: true, dupSort: true, encoding: 'string' });
+  console.error('homolog_adder reading LMDB ' + lmdbPath);
 
-module.exports = function(db) {
-  
-  var redisPromise = getRedis(db);
-  
   return through2.obj(function (gene, enc, done) {
-    var that = this;
-  
-    redisPromise.then(function(client) {
-
-      client.hgetall(gene._id, function (err, homologs) {
-        if (err) throw err;
-        if (homologs) {
-          if (gene.homology) {
-            gene.homology.homologous_genes = {};
-          }
-          else {
-            gene.homology = {homologous_genes:{}};
-          }
-          for (var geneId in homologs) {
-            var k = homologs[geneId];
-          
-            if (!gene.homology.homologous_genes.hasOwnProperty(k)) {
-              gene.homology.homologous_genes[k] = [];
-            }
-            gene.homology.homologous_genes[k].push(geneId);
-          }
-        }
-        that.push(gene);
-        done();
-      });
-    });
+    var homologous_genes = null;             // stays null (and gene.homology untouched) if no homologs
+    for (var v of db.getValues(gene._id)) {  // empty iterable when the gene has no homologs
+      if (!homologous_genes) {
+        if (gene.homology) gene.homology.homologous_genes = {};
+        else gene.homology = { homologous_genes: {} };
+        homologous_genes = gene.homology.homologous_genes;
+      }
+      var tab = v.indexOf('\t');
+      var otherId = v.slice(0, tab);
+      var kind = v.slice(tab + 1);
+      if (!homologous_genes.hasOwnProperty(kind)) homologous_genes[kind] = [];
+      homologous_genes[kind].push(otherId);
+    }
+    this.push(gene);
+    done();
   });
-}
+};
