@@ -40,7 +40,6 @@ set -euo pipefail
 OUT="${1:-/scratch/olson/legume_idmap}"
 mkdir -p "$OUT"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FEAT="${FEAT_TSV:-${HERE}/../search/legume_community_ids_features.tsv}"
 MY="mysql -h ${MYSQL_HOST} -u ${MYSQL_USER} -p${MYSQL_PASS} -N -s"
 
 OLD_CMP=ensembl_compara_plants_66_108   # Mt4.0  (MedtrA17_4.0)
@@ -55,8 +54,11 @@ NEW_CORE=medicago_truncatula_core_70_116_3
 # 8.4M sequences in the release and the query never returns.
 for spec in "${OLD_CMP}:${OLD_GDB}:mt40" "${NEW_CMP}:${NEW_GDB}:mt50"; do
   db="${spec%%:*}"; rest="${spec#*:}"; gdb="${rest%%:*}"; tag="${rest##*:}"
+  # s.md5sum, not MD5(s.sequence): compara already stores the digest. Computing it here is not
+  # just wasteful, it is how an exploratory version of this query ended up running for 136 minutes
+  # in "Copying to tmp table" and starving everything else on the server.
   ${MY} -D "${db}" -e "
-    SELECT gm.stable_id, MD5(s.sequence)
+    SELECT gm.stable_id, s.md5sum
       FROM seq_member sm
       JOIN sequence s ON sm.sequence_id = s.sequence_id
       JOIN gene_member gm ON gm.gene_member_id = sm.gene_member_id
@@ -78,10 +80,10 @@ for spec in "${OLD_CORE}:mt40" "${NEW_CORE}:mt50"; do
 done
 
 # ---- 3. join, cross-validate, compose -------------------------------------
-OUT="${OUT}" FEAT="${FEAT}" python3 -I - <<'PY'
+OUT="${OUT}" python3 -I - <<'PY'
 import os
 from collections import defaultdict
-OUT = os.environ['OUT']; FEAT = os.environ['FEAT']
+OUT = os.environ['OUT']
 
 def group(path):
     d = defaultdict(set)
@@ -123,29 +125,22 @@ for g, (v, m) in sorted(union.items()):
     seen.add(v); final[g] = (v, m)
 print("  union, strictly 1:1 both sides: %d pairs" % len(final))
 
-# gene-level ensembl -> community id, so the LUT can target the renamed ids
-comm = {}
-with open(FEAT) as fh:
-    hdr = fh.readline().rstrip('\n').split('\t')
-    ix = {c: i for i, c in enumerate(hdr)}
-    for line in fh:
-        f = line.rstrip('\n').split('\t')
-        if len(f) >= len(hdr) and f[ix['species']] == 'medicago_truncatula' \
-           and f[ix['feature_type']] == 'gene':
-            comm[f[ix['ensembl_id']]] = f[ix['community_id']]
-
-# project_expression_via_lut.js reads "<new_id>\t<old_id>". Two variants, because which is correct
-# depends on whether the core rename has been applied.
-n_post = n_pre = 0
-with open(OUT + '/medicago_expression.lut.postrename.txt', 'w') as post, \
-     open(OUT + '/medicago_expression.lut.prerename.txt', 'w') as pre, \
+# project_expression_via_lut.js reads "<new_id>\t<old_id>". The new_id side comes straight out of
+# compara's gene_member, which now holds the community ids -- the core/compara rename has been
+# applied, so no geneNNNN indirection is needed. An earlier version of this script translated
+# geneNNNN -> community id via legume_community_ids_features.tsv; that step is obsolete and was
+# removed rather than left to silently produce nothing. Verified the pair set is unchanged either
+# way: the same 23,073 mappings, just labelled with the ids the databases now use.
+n = 0
+with open(OUT + '/medicago_expression.lut.txt', 'w') as lut, \
      open(OUT + '/mt_crosswalk.tsv', 'w') as cw:
     for g, (v, m) in sorted(final.items()):
         cw.write('%s\t%s\t%s\n' % (g, v, m))
-        pre.write('%s\t%s\n' % (v, g)); n_pre += 1
-        c = comm.get(v)
-        if c:
-            post.write('%s\t%s\n' % (c, g)); n_post += 1
-print("  LUT lines: post-rename=%d  pre-rename=%d" % (n_post, n_pre))
-print("  wrote %s/medicago_expression.lut.{post,pre}rename.txt and mt_crosswalk.tsv" % OUT)
+        lut.write('%s\t%s\n' % (v, g)); n += 1
+stale = [v for v, _ in final.values() if not v.startswith('MtrunA17')]
+if stale:
+    print("  WARNING: %d new_ids are not MtrunA17_* -- is compara renamed? e.g. %s"
+          % (len(stale), stale[:3]))
+print("  LUT lines: %d" % n)
+print("  wrote %s/medicago_expression.lut.txt and mt_crosswalk.tsv" % OUT)
 PY
