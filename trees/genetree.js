@@ -239,42 +239,58 @@ var selectRepresentativeGeneMembers = function(haveGenome, anchorTaxa) {
   }
 
   var transform = function (tree, enc, done) {
+    // Walk the leaf NODES, not an id-keyed index. gene_stable_id is NOT unique across the
+    // genomes in this release: medicago_truncatula names all 50,739 of its genes geneNNNN, and
+    // lablab_purpureus_gca030347555v1cm does the same for 24,972 of its 25,505, sharing 24,925
+    // ids with it. indexTree() builds a plain map (`result[node.model[attr]] = node`), so for a
+    // tree containing both genomes' copy of e.g. `gene478` only ONE leaf survived the index and
+    // the other was left with no `representative` at all. genetree_adder.js then threw
+    // "Cannot read properties of undefined (reading 'score')" on it and took down the whole
+    // decorate -- 3 bad nodes out of 170,249 trees, found only by scanning every tree.
+    //
+    // The index itself is still built, unchanged, for anything that reads tree.indices; only
+    // representative assignment moves off it, because that has to be per NODE: every leaf needs
+    // one, whether or not another leaf happens to share its id.
     indexTree(tree.treeModel,['gene_stable_id']);
-    var leaves = tree.treeModel.indices.gene_stable_id;
-    for (var id in leaves) {
-      if (id !== '_attr') {
-        var node = leaves[id];
-        node.model.representative = {
-          id: id,
-          score: scoreRepresentative(node) // a lower score is better
-        };
-        while (node.hasOwnProperty('parent')) {
-          var parent = node.parent;
-          var newScore = node.model.representative.score + node.model.distance_to_parent;
-          if (!parent.model.hasOwnProperty('representative')) {
+    var leafNodes = [];
+    tree.treeModel.walk(function (n) {
+      if ((!n.children || n.children.length === 0) && n.model.hasOwnProperty('gene_stable_id')) {
+        leafNodes.push(n);
+      }
+    });
+    leafNodes.forEach(function (leaf) {
+      var id = leaf.model.gene_stable_id;
+      var node = leaf;
+      node.model.representative = {
+        id: id,
+        score: scoreRepresentative(node) // a lower score is better
+      };
+      while (node.hasOwnProperty('parent')) {
+        var parent = node.parent;
+        var newScore = node.model.representative.score + node.model.distance_to_parent;
+        if (!parent.model.hasOwnProperty('representative')) {
+          parent.model.representative = {
+            id: id,
+            score: newScore
+          };
+        }
+        else {
+          // parent node already has a representative.
+          // check if this one is better
+          if (newScore < parent.model.representative.score) {
             parent.model.representative = {
               id: id,
               score: newScore
             };
           }
           else {
-            // parent node already has a representative.
-            // check if this one is better
-            if (newScore < parent.model.representative.score) {
-              parent.model.representative = {
-                id: id,
-                score: newScore
-              };
-            }
-            else {
-              // keep the same representative, break out of the while loop
-              break;
-            }
+            // keep the same representative, break out of the while loop
+            break;
           }
-          node = parent;
         }
+        node = parent;
       }
-    }
+    });
     this.push(tree);
     done();
   };

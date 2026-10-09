@@ -129,31 +129,49 @@ function getLut(main_db) {
           });
         
           var isAT = new RegExp(/^AT/);
+          // A node can legitimately arrive here with no `representative`: trees/genetree.js used
+          // to assign them from a gene_stable_id-keyed index, and two leaves in one tree can
+          // share an id (medicago_truncatula and lablab_purpureus both name their genes
+          // geneNNNN and share 24,925 ids), so the second leaf got none. That is fixed in the
+          // builder, but a single such node used to abort the entire 16.1M-gene decorate with
+          // "Cannot read properties of undefined (reading 'score')" after the trees had loaded.
+          // Skipping the node and reporting the count is the right failure mode here: the
+          // representative only drives display, so one unlabelled subtree is worth vastly less
+          // than the whole stage. Note that walk()'s `return false` does NOT prune -- children
+          // are visited regardless -- so the node and each child are checked separately.
+          var repless = 0;
           if (!tree.representative) {
-            console.mylog('no rep in tree',JSON.stringify(tree,null,2));
+            mylog('no representative on root of tree ' + tree.tree_stable_id + ' - skipping propagation');
           }
-          if (tree.representative.id.match(isAT)) {
-            tree.ath_rep = tree.representative;
-          }
-          // starting at the root of the tree, assign good representatives to their bad children
-          walk(tree, function (node) {
-            if (node.representative.score >= -60) return false; // there's no hope for this subtree
-            if (node.children) {
-              node.children.forEach(function(child) {
-                if (child.representative.score > .8*node.representative.score) {
-                  child.representative.score = node.representative.score;
-                  child.representative.id = node.representative.id;
-                }
-                // try to add an arabidopsis representative
-                if (child.representative.id.match(isAT)) {
-                  child.ath_rep = child.representative;
-                }
-                else if (node.ath_rep) {
-                  child.ath_rep = node.ath_rep;
-                }
-              });
+          else {
+            if (tree.representative.id.match(isAT)) {
+              tree.ath_rep = tree.representative;
             }
-          });
+            // starting at the root of the tree, assign good representatives to their bad children
+            walk(tree, function (node) {
+              if (!node.representative) { repless++; return false; }
+              if (node.representative.score >= -60) return false; // there's no hope for this subtree
+              if (node.children) {
+                node.children.forEach(function(child) {
+                  if (!child.representative) { repless++; return; }
+                  if (child.representative.score > .8*node.representative.score) {
+                    child.representative.score = node.representative.score;
+                    child.representative.id = node.representative.id;
+                  }
+                  // try to add an arabidopsis representative
+                  if (child.representative.id.match(isAT)) {
+                    child.ath_rep = child.representative;
+                  }
+                  else if (node.ath_rep) {
+                    child.ath_rep = node.ath_rep;
+                  }
+                });
+              }
+            });
+          }
+          if (repless) {
+            mylog('tree ' + tree.tree_stable_id + ': ' + repless + ' node(s) with no representative - skipped');
+          }
           // find duplication nodes with > 50% confidence
           var duplications = [];
           walk(tree,function(node) {
@@ -179,8 +197,15 @@ function getLut(main_db) {
               lookupValue.duplications = Object.keys(leaf.duplications).map(function(tid) {return +tid});
             }
             // non-arabidopsis genes also get a closest arabidopsis ortholog representative
+            // Same shape of bug as the walk above: this guard called console.mylog, which does
+            // not exist (the logger is `mylog`), so it threw a TypeError instead of logging and
+            // then fell through to deref `.representative` regardless. Treat a repless leaf the
+            // way the next branch treats an unusable representative -- record the tree
+            // association and move on.
             if (!leaf.representative) {
-              console.mylog('leaf lacks representative', leaf);
+              mylog('leaf ' + id + ' in tree ' + tree.tree_stable_id + ' lacks a representative');
+              acc[id] = lookupValue;
+              return;
             }
             if (leaf.representative.score >= -60 || leaf.taxon_id === 3702001) {
               // no representative
