@@ -274,14 +274,22 @@ SELECT 'seq_member', genome_db_id, COUNT(*),
             out.write("-- staged %d rows into %s\n\n" % (len(pairs), name))
 
         out.write("-- --- 3. rename ---------------------------------------------------------\n")
-        out.write("UPDATE gene_member gm\n"
-                  "  JOIN gramene_cmp_gene_map m\n"
-                  "    ON m.genome_db_id = gm.genome_db_id AND m.old_id = gm.stable_id\n"
-                  "   SET gm.stable_id = m.new_id;        -- expect %d rows\n\n" % len(gene_pairs))
-        out.write("UPDATE seq_member sm\n"
-                  "  JOIN gramene_cmp_seq_map m\n"
-                  "    ON m.genome_db_id = sm.genome_db_id AND m.old_id = sm.stable_id\n"
-                  "   SET sm.stable_id = m.new_id;        -- expect %d rows\n\n" % len(seq_pairs))
+        # One statement per genome, with an explicit genome_db_id predicate. Restricting it only
+        # inside the JOIN condition is NOT sargable: MySQL 5.5 then full-scans gene_member (14.5M
+        # rows) and seq_member (17.5M) probing the staging table per row, and because both are
+        # MyISAM the write lock blocks every reader meanwhile. Both tables carry UNIQUE KEY
+        # genome_db_stable_id (genome_db_id, stable_id), so the predicate makes each statement an
+        # index range over just that genome's rows.
+        for tbl, alias, mapname, which in (('gene_member', 'gm', 'gramene_cmp_gene_map', gene_pairs),
+                                           ('seq_member', 'sm', 'gramene_cmp_seq_map', seq_pairs)):
+            for sp, gdb in sorted(GDB.items(), key=lambda kv: kv[1]):
+                n_rows = sum(1 for g, _, _ in which if g == gdb)
+                out.write("UPDATE %s %s\n"
+                          "  JOIN %s m\n"
+                          "    ON m.genome_db_id = %s.genome_db_id AND m.old_id = %s.stable_id\n"
+                          "   SET %s.stable_id = m.new_id\n"
+                          " WHERE %s.genome_db_id = %d;    -- %s, expect %d rows\n\n"
+                          % (tbl, alias, mapname, alias, alias, alias, alias, gdb, sp, n_rows))
 
         out.write("-- --- 4. verify ---------------------------------------------------------\n")
         out.write("""SELECT 'gene_member' AS tbl, genome_db_id, COUNT(*) AS total,
