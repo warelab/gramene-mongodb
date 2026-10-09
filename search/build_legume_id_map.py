@@ -72,16 +72,19 @@ def mysql(db, sql):
 def ensembl_genes(db, generic_only=True):
     """gene stable_id, accession, start, end, strand, biotype, and its translation ids."""
     where = "WHERE g.stable_id REGEXP '^gene[0-9]+$'" if generic_only else ''
+    # Both genomes are strictly one transcript per gene (verified: MAX(count)=1), so
+    # GROUP_CONCAT yields a single value and the gene -> transcript -> translation chain is 1:1.
     rows = mysql(db, """
         SELECT g.stable_id, sr.name, g.seq_region_start, g.seq_region_end, g.seq_region_strand,
-               g.biotype, IFNULL(GROUP_CONCAT(DISTINCT tl.stable_id),'')
+               g.biotype, IFNULL(GROUP_CONCAT(DISTINCT tl.stable_id),''),
+               IFNULL(GROUP_CONCAT(DISTINCT t.stable_id),'')
           FROM gene g
           JOIN seq_region sr ON g.seq_region_id = sr.seq_region_id
           LEFT JOIN transcript t ON t.gene_id = g.gene_id
           LEFT JOIN translation tl ON tl.transcript_id = t.transcript_id
         %s
         GROUP BY g.gene_id;""" % where)
-    return [r for r in rows if len(r) >= 7]
+    return [r for r in rows if len(r) >= 8]
 
 
 # --------------------------------------------------------------------------- medicago
@@ -159,90 +162,134 @@ def parse_lis_gff():
                 gene_meta[attrs.get('ID', '')] = (attrs.get('Name', ''), attrs.get('Note', ''),
                                                   attrs.get('Dbxref', ''), attrs.get('Ontology_term', ''))
             elif f[2] == 'mRNA':
+                # The native transcript id is the mRNA ID minus the datastore prefix. For lablab
+                # the suffix is NOT always .1 (.1 x21390, .2 x1986, .3 x924, .4 x379, .5 x166),
+                # because Ensembl imported whichever model LIS marked representative -- so this is
+                # read, never derived.
+                tx = attrs.get('ID', '').replace('labpu.Highworth.gnm1.ann1.', '')
                 pending.append((chrmap.get(f[0], f[0]), f[3], f[4],
-                                '1' if f[6] == '+' else '-1', attrs.get('Parent', '')))
-    for acc, s, e, strand, parent in pending:
+                                '1' if f[6] == '+' else '-1', attrs.get('Parent', ''), tx))
+    for acc, s, e, strand, parent, tx in pending:
         meta = gene_meta.get(parent)
         if meta:
-            key2native[(acc, s, e, strand)].append(meta)
+            key2native[(acc, s, e, strand)].append(meta + (tx,))
     return key2native
 
 
+def load_tsv(path, default=None):
+    d = {}
+    if os.path.exists(path):
+        for line in open(path, errors='replace'):
+            f = line.rstrip('\n').split('\t')
+            if len(f) >= 2:
+                d[f[0]] = f[1]
+    return d
+
+
+def toulouse(locus_tag):
+    """INSDC locus_tag -> the form the Toulouse portal and LegumeInfo publish, which differs only
+    by the underscore: MtrunA17_Chr1g0146101 -> MtrunA17Chr1g0146101."""
+    return locus_tag.replace('MtrunA17_', 'MtrunA17', 1) if locus_tag else ''
+
+
+GENE_COLS = ['species', 'ensembl_gene_id', 'community_gene_id', 'community_id_alternatives',
+             'gene_symbol', 'seq_region', 'start', 'end', 'strand', 'biotype', 'description',
+             'dbxref', 'ontology_term', 'ensembl_transcript_id', 'community_transcript_id',
+             'ensembl_translation_id', 'community_translation_id', 'join_method', 'confidence']
+FEAT_COLS = ['species', 'feature_type', 'ensembl_id', 'community_id', 'community_id_alt',
+             'parent_ensembl_gene', 'join_method', 'confidence']
+
+
 def main():
-    cols = ['species', 'ensembl_gene_id', 'community_gene_id', 'community_id_alternatives',
-            'seq_region', 'start', 'end', 'strand', 'biotype', 'description', 'dbxref',
-            'ontology_term', 'ensembl_translation', 'join_method', 'confidence']
     n = defaultdict(int)
-    with open(OUT, 'w') as out:
-        out.write('\t'.join(cols) + '\n')
+    feat_path = OUT.replace('.tsv', '_features.tsv')
+    gout = open(OUT, 'w')
+    fout = open(feat_path, 'w')
+    gout.write('\t'.join(GENE_COLS) + '\n')
+    fout.write('\t'.join(FEAT_COLS) + '\n')
 
-        # ---- medicago ----
-        prot2locus, extent2locus, locus_product = parse_medicago_ft()
-        sys.stderr.write('medicago: %d protein->locus_tag, %d gene extents, %d products\n'
-                         % (len(prot2locus), len(extent2locus), len(locus_product)))
-        for gid, acc, s, e, strand, biotype, trans in ensembl_genes(MT_DB):
-            native = ''
-            method = conf = ''
-            for t in [x for x in trans.split(',') if x]:
-                if t in prot2locus:
-                    native, method, conf = prot2locus[t], 'protein_id', 'exact'
-                    break
-            if not native:
-                native = extent2locus.get((acc, s, e), '')
-                if native:
-                    method, conf = 'gene_extent', 'exact'
-            n['mt_total'] += 1
-            n['mt_' + (method or 'unmatched')] += 1
-            out.write('\t'.join(['medicago_truncatula', gid, native, '', acc, s, e, strand, biotype,
-                                 locus_product.get(native, ''), '', '', trans,
-                                 method or 'none', conf or 'unmatched']) + '\n')
+    def emit(species, gid, community, alts, symbol, acc, st, en, strand, biotype, desc, dbx, onto,
+             etx, ctx, etl, ctl, ctx_alt, ctl_alt, method, conf):
+        gout.write('\t'.join([species, gid, community, alts, symbol, acc, st, en, strand, biotype,
+                               desc, dbx, onto, etx, ctx, etl, ctl, method, conf]) + '\n')
+        fout.write('\t'.join([species, 'gene', gid, community, alts, gid, method, conf]) + '\n')
+        if etx:
+            fout.write('\t'.join([species, 'transcript', etx, ctx, ctx_alt, gid, method, conf]) + '\n')
+        if etl:
+            fout.write('\t'.join([species, 'translation', etl, ctl, ctl_alt, gid, method, conf]) + '\n')
+        n[species + '_gene'] += 1
+        n[species + '_transcript'] += 1 if etx else 0
+        n[species + '_translation'] += 1 if etl else 0
+        n[species + '_' + conf] += 1
 
-        # ---- lablab ----
-        # Two passes, because 199 coordinate sets in the LIS annotation are shared by more than one
-        # gene locus -- 198 of them with byte-identical exon structures, i.e. the same model given
-        # two ids upstream. Every such group has exactly as many Ensembl genes as candidate ids
-        # (187 2x2, 11 3x3, 1 4x4), so the candidates are dealt out 1:1 in sorted order. WHICH
-        # duplicate gets which id is immaterial when the models are identical, but it must be
-        # deterministic and it must stay unique -- handing every gene in a group the same
-        # "first" candidate would manufacture a fresh collision, which is the bug being fixed.
-        key2native = parse_lis_gff()
-        sys.stderr.write('lablab: %d mRNA coordinate keys from LIS\n' % len(key2native))
-        lp_rows = []
-        groups = defaultdict(list)
-        for gid, acc, s, e, strand, biotype, trans in ensembl_genes(LP_DB):
-            k = (acc, s, e, strand)
-            lp_rows.append([gid, acc, s, e, strand, biotype, trans, k])
-            groups[k].append(gid)
-        assigned = {}
-        for k, gids in groups.items():
-            uniq = sorted({h[0]: h for h in key2native.get(k, [])}.items())
-            if len(uniq) > 1 and len(uniq) == len(gids):
-                for gid, (name, meta) in zip(sorted(gids), uniq):
-                    others = [nm for nm, _ in uniq if nm != name]
-                    assigned[gid] = (name, meta, '|'.join(others), 'arbitrated_duplicate')
-        for gid, acc, s, e, strand, biotype, trans, k in lp_rows:
-            if gid in assigned:
-                name, meta, alts, conf = assigned[gid]
-                _, note, dbx, onto = meta
-                method = 'mrna_coord'
+    # ---- medicago ----
+    prot2locus, extent2locus, locus_product = parse_medicago_ft()
+    symbols = load_tsv(os.path.join(W, 'mt_symbols.tsv'))
+    mt_tx = load_tsv(os.path.join(W, 'mt_tx.tsv'))
+    sys.stderr.write('medicago: %d protein->locus_tag, %d extents, %d products, %d symbols, %d tx\n'
+                     % (len(prot2locus), len(extent2locus), len(locus_product), len(symbols), len(mt_tx)))
+    for gid, acc, st, en, strand, biotype, trans, tx in ensembl_genes(MT_DB):
+        native = ''
+        method = conf = ''
+        tl_ids = [x for x in trans.split(',') if x]
+        for t in tl_ids:
+            if t in prot2locus:
+                native, method, conf = prot2locus[t], 'protein_id', 'exact'
+                break
+        if not native:
+            native = extent2locus.get((acc, st, en), '')
+            if native:
+                method, conf = 'gene_extent', 'exact'
+        # All 44,623 LIS medicago mRNAs end in .1, so the transcript id is <gene>.1 without
+        # ambiguity. Prefer the published Toulouse id where LIS covers the gene.
+        ctx = native + '.1' if native else ''
+        ctx_alt = mt_tx.get(native, (toulouse(native) + '.1') if native else '')
+        emit('medicago_truncatula', gid, native, '', symbols.get(native, ''), acc, st, en, strand,
+             biotype, locus_product.get(native, ''), '', '',
+             tx, ctx, tl_ids[0] if tl_ids else '', ctx,
+             ctx_alt, tl_ids[0] if tl_ids else '',
+             method or 'none', conf or 'unmatched')
+
+    # ---- lablab ----
+    key2native = parse_lis_gff()
+    sys.stderr.write('lablab: %d mRNA coordinate keys from LIS\n' % len(key2native))
+    lp_rows = []
+    groups = defaultdict(list)
+    for gid, acc, st, en, strand, biotype, trans, tx in ensembl_genes(LP_DB):
+        k = (acc, st, en, strand)
+        lp_rows.append([gid, acc, st, en, strand, biotype, trans, tx, k])
+        groups[k].append(gid)
+    assigned = {}
+    for k, gids in groups.items():
+        uniq = sorted({h[0]: h for h in key2native.get(k, [])}.items())
+        if len(uniq) > 1 and len(uniq) == len(gids):
+            for g, (name, meta) in zip(sorted(gids), uniq):
+                others = [nm for nm, _ in uniq if nm != name]
+                assigned[g] = (name, meta, '|'.join(others), 'arbitrated_duplicate')
+    for gid, acc, st, en, strand, biotype, trans, tx, k in lp_rows:
+        if gid in assigned:
+            name, meta, alts, conf = assigned[gid]
+            _, note, dbx, onto, ntx = meta
+            method = 'mrna_coord'
+        else:
+            hits = {h[0]: h for h in key2native.get(k, [])}
+            if len(hits) == 1:
+                name, (_, note, dbx, onto, ntx) = next(iter(hits.items()))
+                alts, method, conf = '', 'mrna_coord', 'exact'
             else:
-                hits = {h[0]: h for h in key2native.get(k, [])}
-                if len(hits) == 1:
-                    name, (_, note, dbx, onto) = next(iter(hits.items()))
-                    alts, method, conf = '', 'mrna_coord', 'exact'
-                else:
-                    name = '|'.join(sorted(hits)) if hits else ''
-                    note = dbx = onto = alts = ''
-                    method = 'mrna_coord' if hits else 'none'
-                    conf = 'ambiguous' if hits else 'unmatched'
-            n['lp_total'] += 1
-            n['lp_' + conf] += 1
-            out.write('\t'.join(['lablab_purpureus', gid, name, alts, acc, s, e, strand, biotype,
-                                 note, dbx, onto, trans, method, conf]) + '\n')
+                name = '|'.join(sorted(hits)) if hits else ''
+                note = dbx = onto = alts = ntx = ''
+                method = 'mrna_coord' if hits else 'none'
+                conf = 'ambiguous' if hits else 'unmatched'
+        tl_ids = [x for x in trans.split(',') if x]
+        emit('lablab_purpureus', gid, name, alts, '', acc, st, en, strand, biotype, note, dbx, onto,
+             tx, ntx, tl_ids[0] if tl_ids else '', ntx, '', '', method, conf)
 
+    gout.close()
+    fout.close()
     for k in sorted(n):
-        sys.stderr.write('  %-18s %d\n' % (k, n[k]))
-    sys.stderr.write('wrote %s\n' % OUT)
+        sys.stderr.write('  %-34s %d\n' % (k, n[k]))
+    sys.stderr.write('wrote %s\n       %s\n' % (OUT, feat_path))
 
 
 if __name__ == '__main__':
