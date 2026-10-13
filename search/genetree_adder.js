@@ -99,18 +99,25 @@ function getLut(main_db) {
       if (err) throw err;
       var countOfGenes = 0;
 
-      var geneTrees = {main:[],aux:[]};
+      // Group by tree_set -- the tag trees/genetree.js writes onto each tree. This was a
+      // main/aux split on compara_db, which could only ever express two sets; there are now six:
+      // the default plants trees plus the four crop cultivar clustersets and the pan-homology
+      // trees. Each set becomes genes.homology.<set>, so a consumer reads the homology object's
+      // keys to learn which trees a gene is in.
+      //
+      // The fallback keeps a part-rebuilt collection working: a doc written before tree_set
+      // existed is attributed by compara_db exactly as before, and its 'pan_tree' key matches the
+      // pre-existing Solr field of that name. Pan-homology trees are not loaded, so in practice
+      // every doc carries a tree_set and the fallback never fires.
+      var geneTrees = {};
       docs.forEach(function(doc) {
-        if (doc.compara_db === main_db) {
-          geneTrees.main.push(doc);
-        }
-        else {
-          geneTrees.aux.push(doc);
-        }
+        var set = doc.tree_set || (doc.compara_db === main_db ? 'gene_tree' : 'pan_tree');
+        (geneTrees[set] = geneTrees[set] || []).push(doc);
       });
-      mylog(`genetree_adder ${geneTrees.main.length} main trees`);
-      mylog(`genetree_adder ${geneTrees.aux.length} aux trees`);
-      var genetreeIdLut = {main:{},aux:{}};
+      Object.keys(geneTrees).sort().forEach(function (set) {
+        mylog(`genetree_adder ${geneTrees[set].length} trees in set '${set}'`);
+      });
+      var genetreeIdLut = {};
       for (var treeType in geneTrees) {
         genetreeIdLut[treeType] = geneTrees[treeType].reduce(function (acc, tree) {
           // var tree = new TreeModel().parse(doc);
@@ -285,17 +292,19 @@ module.exports = function(db) {
     var that = this;
   
     lutPromise.then(function(genetreeLUT) {
-      if (genetreeLUT.main.hasOwnProperty(gene._id)) {
-        if (! gene.hasOwnProperty('homology')) {
-          gene.homology = {};
+      // One key per tree set the gene appears in. A gene can legitimately be in several -- a
+      // wheat cultivar gene sits in both the default plants tree and the wheat_cultivars tree --
+      // so these are additive rather than exclusive, and the absence of a key simply means the
+      // gene is not in that set.
+      var sets = Object.keys(genetreeLUT);
+      for (var si = 0; si < sets.length; si++) {
+        var set = sets[si];
+        if (genetreeLUT[set].hasOwnProperty(gene._id)) {
+          if (! gene.hasOwnProperty('homology')) {
+            gene.homology = {};
+          }
+          gene.homology[set] = genetreeLUT[set][gene._id];
         }
-        gene.homology.gene_tree = genetreeLUT.main[gene._id];
-      }
-      if (genetreeLUT.aux.hasOwnProperty(gene._id)) {
-        if (! gene.hasOwnProperty('homology')) {
-          gene.homology = {};
-        }
-        gene.homology.pan_tree = genetreeLUT.aux[gene._id];
       }
       that.push(gene);
       done();

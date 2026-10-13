@@ -1,6 +1,28 @@
 var mysql = require('mysql');
 var TreeModel = require('tree-model');
 var compara = require('../ensembl_db_info.json').compara;
+
+// ---- tree sets -------------------------------------------------------------
+// This script builds ONE tree set per run, selected by env; 35_genetrees invokes it once per set.
+// Doing it that way rather than looping internally leaves the single module-level mysql connection
+// and the whole stream pipeline untouched, and gives per-set logging and resumability.
+//
+//   TREE_SET          the key written onto each tree doc, which genetree_adder turns into
+//                     genes.homology.<TREE_SET>                      (default 'gene_tree')
+//   CLUSTERSET        gene_tree_root.clusterset_id to select         (default 'default')
+//   TREE_ID_PREFIX    if set, the stable_id's leading '<CLUSTERSET>_' is replaced by this, so
+//                     barley_cultivars_PTHR10000_SF7 -> EplBarleyGT_PTHR10000_SF7. The family part
+//                     (PANTHER/TreeFam) survives, so an id stays traceable upstream.
+//
+// Only trees WITH a stable_id are taken. For 'default' that is every tree, but the cultivar
+// clustersets hold 162,111 smaller unnamed fragments (avg 10-29 genes against 45-178 for the named
+// ones) beside 54,034 published trees, and un-citable fragments are not wanted in the index.
+var TREE_SET = process.env.TREE_SET || 'gene_tree';
+var CLUSTERSET = process.env.CLUSTERSET || 'default';
+var TREE_ID_PREFIX = process.env.TREE_ID_PREFIX || '';
+console.error('tree set: ' + TREE_SET + '  clusterset: ' + CLUSTERSET +
+              '  database: ' + compara.database +
+              (TREE_ID_PREFIX ? '  id prefix: ' + TREE_ID_PREFIX : '  ids: as published'));
 var isCurated = require('../curated/curated.json');
 function childNodeComparator(a, b) {
   return a.left_index < b.left_index ? 1 : -1;
@@ -16,13 +38,9 @@ var fs = require('fs');
 var collections = require('gramene-mongodb-config');
 var comparaMysqlDb = mysql.createConnection(compara);
 
-// Synthetic gene-tree stable-id prefix, used when gene_tree_root.stable_id IS NULL. It becomes the
-// tree _id, so it leaks into every downstream homology reference — it must track the release. It
-// was hardcoded 'SB10GT_' and stayed that way through the v11 build, labelling v11 trees with the
-// previous release's prefix; derive it from the config version instead so it can't drift again.
-// Override with GT_PREFIX=... if a release ever needs a different scheme.
-var GT_PREFIX = process.env.GT_PREFIX || ('SB' + collections.getVersion() + 'GT_');
-console.error('genetree stable-id prefix: ' + GT_PREFIX);
+// NB there is no synthetic-id fallback any more. Tree selection now requires stable_id IS NOT
+// NULL, so every tree has a published id; the old GT_PREFIX ('SB<version>GT_') never fired on a
+// plants release anyway, and leaving it defined meant logging a SorghumBase prefix on every run.
 
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
@@ -328,6 +346,7 @@ var insertTreeIntoMongo = function insertTreeIntoMongo(mongoCollection) {
   var transform = function (tree, enc, done) {
     var throughThis = this;
     tree.nested.compara_db = compara.database; // so we can pull out just the gene trees we want later
+    tree.nested.tree_set = TREE_SET;           // -> genes.homology.<tree_set> in genetree_adder
     mongoCollection.insertOne(tree.nested,function (err, count, status) {
 			throughThis.push({err: err, status: status, _id: tree.nested._id});
       done();
@@ -423,8 +442,11 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
         collections.genetrees.mongoCollection().then(function(mongoCollection) {
           var upsert = insertTreeIntoMongo(mongoCollection);
 
+          // stable_id IS NOT NULL is load-bearing now: a no-op for 'default' (all 170,253 have
+          // ids) but it excludes the unnamed cultivar fragments described at the top.
           var queryForTreeIds = "select root_id from gene_tree_root where"
-          + " tree_type='tree' and clusterset_id = 'default';";//" and stable_id IS NOT NULL;";
+          + " tree_type='tree' and clusterset_id = " + comparaMysqlDb.escape(CLUSTERSET)
+          + " and stable_id IS NOT NULL;";
           comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
             if (err) throw err;
             var ids = rows.map(function (r) {
@@ -440,10 +462,18 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
               // branch nodes. some properties (e.g. system_name) are null for branch nodes
               // and others (e.g. node_type) are null for leaf nodes.
               var query = "select r.root_id,\n" //r.stable_id as tree_stable_id,\n"
-              + "case when r.stable_id IS NULL\n"
-              + " then CONCAT(\"" + GT_PREFIX + "\",r.root_id)\n"
-              + " else r.stable_id\n"
-              + "end as tree_stable_id,\n"
+              // The tree id. stable_id is guaranteed non-null by the root selection above, so the
+              // old GT_PREFIX fallback for NULL ids is gone rather than left as dead code with a
+              // stale prefix. Where TREE_ID_PREFIX is set, the leading '<clusterset>_' is swapped
+              // for it -- guarded by a LIKE so an id that does NOT carry that prefix is passed
+              // through untouched instead of being silently truncated by SUBSTRING.
+              + (TREE_ID_PREFIX
+                  ? "case when r.stable_id LIKE " + comparaMysqlDb.escape(CLUSTERSET + '\\_%') + "\n"
+                    + " then CONCAT(" + comparaMysqlDb.escape(TREE_ID_PREFIX)
+                    + ", SUBSTRING(r.stable_id, " + (CLUSTERSET.length + 2) + "))\n"
+                    + " else r.stable_id\n"
+                    + "end as tree_stable_id,\n"
+                  : "r.stable_id as tree_stable_id,\n")
               + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
               + "case when n.node_id = n.root_id\n"
               + "	then null\n"
