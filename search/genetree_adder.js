@@ -92,34 +92,35 @@ function mylog(str) {
 function getLut(main_db) {
   var deferred = Q.defer();
   collections.genetrees.mongoCollection().then(function(coll) {
-    mylog('genetree_adder find() started');
-    coll.find().toArray(function (err, docs) {
-      mylog('loaded '+docs.length+' gene trees from mongodb');
-      // collections.closeMongoDatabase();
-      if (err) throw err;
-      var countOfGenes = 0;
+    // STREAMED, NOT toArray(). The collection is 224,197 trees / 12.4 GB of uncompressed BSON
+    // (the four cultivar sets are 7.0 GB of that: their trees average 123-202 KB against the
+    // default set's 34 KB, because a cultivar clusterset packs many closely-related genomes).
+    // toArray() materialises all of it as live JS objects at once, several times the BSON size in
+    // heap, and on 2026-10-13 that aborted at 16.4 GB with
+    //   FATAL ERROR: NewSpace::EnsureCurrentCapacity Allocation failed
+    // which is the OS refusing memory, NOT V8's configured limit -- the limit really was 48 GB
+    // (verified: heap_size_limit 49344 MB), and mongod alone held 101.5 GB RSS with 38 of 63 GB
+    // of swap already gone. Raising the heap therefore would not have helped.
+    //
+    // Nothing here needed the whole array: the per-tree body below only ever reads one tree, and
+    // the only cross-tree state is the countOfGenes tally and the LUT itself. So we stream the
+    // cursor and keep just the LUT -- one entry per gene per set, which is far smaller than the
+    // trees it is derived from. Keep it streamed; the collection only grows.
+    var countOfGenes = 0;
+    var genetreeIdLut = {};
+    var setCounts = {};
+    var treesSeen = 0;
 
-      // Group by tree_set -- the tag trees/genetree.js writes onto each tree. This was a
-      // main/aux split on compara_db, which could only ever express two sets; there are now six:
-      // the default plants trees plus the four crop cultivar clustersets and the pan-homology
-      // trees. Each set becomes genes.homology.<set>, so a consumer reads the homology object's
-      // keys to learn which trees a gene is in.
-      //
-      // The fallback keeps a part-rebuilt collection working: a doc written before tree_set
-      // existed is attributed by compara_db exactly as before, and its 'pan_tree' key matches the
-      // pre-existing Solr field of that name. Pan-homology trees are not loaded, so in practice
-      // every doc carries a tree_set and the fallback never fires.
-      var geneTrees = {};
-      docs.forEach(function(doc) {
-        var set = doc.tree_set || (doc.compara_db === main_db ? 'gene_tree' : 'pan_tree');
-        (geneTrees[set] = geneTrees[set] || []).push(doc);
-      });
-      Object.keys(geneTrees).sort().forEach(function (set) {
-        mylog(`genetree_adder ${geneTrees[set].length} trees in set '${set}'`);
-      });
-      var genetreeIdLut = {};
-      for (var treeType in geneTrees) {
-        genetreeIdLut[treeType] = geneTrees[treeType].reduce(function (acc, tree) {
+    // Bucket by tree_set -- the tag trees/genetree.js writes onto each tree. This was a main/aux
+    // split on compara_db, which could only ever express two sets; there are now five: the default
+    // plants trees plus the four crop cultivar clustersets. Each becomes genes.homology.<set>, so a
+    // consumer reads the homology object's keys to learn which trees a gene is in.
+    //
+    // The fallback keeps a part-rebuilt collection working: a doc written before tree_set existed
+    // is attributed by compara_db exactly as before, and its 'pan_tree' key matches the
+    // pre-existing Solr field of that name. Pan trees are not loaded, so in practice every doc
+    // carries a tree_set and the fallback never fires.
+    var addTreeToLut = function (acc, tree) {
           // var tree = new TreeModel().parse(doc);
 
           var lookupValue = {
@@ -274,10 +275,41 @@ function getLut(main_db) {
             ++countOfGenes;
           });
           return acc;
-        }, {});
+    };
+
+    mylog('genetree_adder streaming trees from mongodb');
+    // noCursorTimeout + a modest batchSize: the per-tree work below is CPU-heavy (calc_identity
+    // walks the full alignment for every leaf, ~11M leaves across the five sets), so the gap
+    // between getMore calls can exceed mongod's 10-minute cursorTimeoutMillis. On 2026-10-13 that
+    // killed the cursor mid-iteration after ~55 minutes of CPU and the run then hung silently.
+    coll.find({}, {noCursorTimeout: true, batchSize: 200}).forEach(function (doc) {
+      var set = doc.tree_set || (doc.compara_db === main_db ? 'gene_tree' : 'pan_tree');
+      setCounts[set] = (setCounts[set] || 0) + 1;
+      if (!genetreeIdLut[set]) { genetreeIdLut[set] = {}; }
+      addTreeToLut(genetreeIdLut[set], doc);
+      // Progress with heap, so a future memory problem is visible as it builds rather than only
+      // as an abort. 20k keeps this to ~11 lines for the current collection.
+      if (++treesSeen % 20000 === 0) {
+        mylog('  ' + treesSeen + ' trees -> ' + countOfGenes + ' gene entries, heap ' +
+              Math.round(process.memoryUsage().heapUsed / 1048576) + ' MB');
       }
-      mylog('genetreeIdLut ready');
+    }).then(function () {
+      Object.keys(setCounts).sort().forEach(function (set) {
+        mylog('genetree_adder ' + setCounts[set] + " trees in set '" + set + "'");
+      });
+      mylog('genetreeIdLut ready: ' + treesSeen + ' trees, ' + countOfGenes +
+            ' gene entries, heap ' +
+            Math.round(process.memoryUsage().heapUsed / 1048576) + ' MB');
       deferred.resolve(genetreeIdLut);
+    }, function (err) {
+      // Do not just reject: the only consumer does lutPromise.then(fn) with no error handler, so a
+      // rejection here previously vanished and the stage hung instead of failing. This is
+      // unrecoverable -- without the LUT every gene would be written with no homology -- so fail
+      // loudly and let the stage's set -e stop the build.
+      mylog('FATAL: genetree LUT build failed after ' + treesSeen + ' trees: ' +
+            (err && err.stack || err));
+      deferred.reject(err);
+      process.exit(1);
     });
   });
   return deferred.promise;
