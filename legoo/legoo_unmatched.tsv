@@ -1,0 +1,104 @@
+#reason	acronym	candidate_ids
+not_in_core	MtPR10-6	MtrunA17_Chr2g0295064
+duplicate_gene(kept HDAC-like7)	MtHDA4	MtrunA17_Chr3g0117101
+not_in_core	MtRLP1	MtrunA17_Chr4g0035444
+not_in_core	MtSUNN	MtrunA17_Chr4g0035464,MtrunA17_Chr4R0219050
+duplicate_gene(kept MtSC9)	MtPCY83	MtrunA17_Chr4g0045291
+not_in_core	MtPCY87|MtSC10	MtrunA17_Chr4g0045304,MtrunA17_Chr4g0045304
+not_in_core	MtNCR-new87	MtrunA17_Chr5g0424394,MtrunA17_Chr5g0424394
+duplicate_gene(kept MtWAKL8)	MtLYR4	MtrunA17_Chr5g0439331
+duplicate_gene(kept MtPCY73)	MtENODL32	MtrunA17_Chr5g0440801
+duplicate_gene(kept MtCRP3710)	MtECL10	MtrunA17_Chr8g0349451
+duplicate_gene(kept MtCYP79D14)	MtCYP79D42	MtrunA17_Chr8g0372341
+duplicate_gene(kept MtCYP736A139)	MtCYP736A140	MtrunA17_Chr8g0382901
+duplicate_gene(kept MtENODL51)	MtPCY9	MtrunA17_Chr8g0387811
+duplicate_gene(kept MtCYP736A142)	MtCYP736A142	MtrunA17_Chr8g0390881
+not_in_core	MtCYP733A1	MtrunA17_Chr6g0463544
+no_locus_tag	MtHAC9	
+no_locus_tag	MtHAG11	
+no_locus_tag	MtHAG25	
+no_locus_tag	MtHAG26	
+no_locus_tag	MtHAG27	
+no_locus_tag	MtHAG38	
+no_locus_tag	MtHAG50	
+not_in_core	MtHDA3	MtrunA17_Chr3g0117104
+no_locus_tag	MtHDMA10	
+no_locus_tag	MtSDG67	
+no_locus_tag	MtSDG68	
+no_locus_tag	MtSDG69	
+no_locus_tag	MtSDG70	
+no_locus_tag	MtCLE15	
+no_locus_tag	MtCLE19	
+no_locus_tag	MtCLE22	
+no_locus_tag	MtCLE26	
+no_locus_tag	MtCLE27	
+no_locus_tag	MtCLE30	
+no_locus_tag	MtCLE34	
+no_locus_tag	MtCLE36	
+no_locus_tag	MtCLE37	
+no_locus_tag	MtCLE40	
+no_locus_tag	MtCLE50	
+no_locus_tag	MtCML14	
+no_locus_tag	MtCML24	
+no_locus_tag	MtCML26	
+no_locus_tag	MtCML28	
+no_locus_tag	MtCML30	
+no_locus_tag	MtCML9	
+no_locus_tag	MtCYP714C1	
+duplicate_gene(kept MtCYP89A33)	MtCYP89A32	MtrunA17_Chr2g0280081
+no_locus_tag	MtENODL4	
+no_locus_tag	MtFPN1	
+no_locus_tag	MtGA2ox13	
+no_locus_tag	MtGA2ox5	
+no_locus_tag	MtGA2ox9	
+no_locus_tag	MtGAOL2	
+no_locus_tag	MtHPT10	
+no_locus_tag	MtHPT9	
+no_locus_tag	MtKASH6	
+no_locus_tag	MtLb12	
+no_locus_tag	MtMATE32	
+no_locus_tag	MtMATE67	
+no_locus_tag	MtMYB005	
+no_locus_tag	MtMYB026	
+no_locus_tag	MtMYB027	
+no_locus_tag	MtMYB029	
+no_locus_tag	MtMYB037	
+no_locus_tag	MtMYB077	
+no_locus_tag	MtMYB081	
+no_locus_tag	MtMYB085	
+no_locus_tag	MtMYB086	
+no_locus_tag	MtMYB104	
+no_locus_tag	MtMYB124	
+no_locus_tag	MtMYB140	
+no_locus_tag	MtMYB141	
+no_locus_tag	MtMYB143	
+no_locus_tag	MtMYB144	
+no_locus_tag	MtMYB147	
+not_in_core	MtNCR119e	MtrunA17_Chr4g0012234
+not_in_core	MtNCR249b	MtrunA17_Chr4g0022134
+not_in_core	MtNCR249c	MtrunA17_Chr4g0022144
+no_locus_tag	MtNPF4.8	
+no_locus_tag	MtNPF5.14	
+no_locus_tag	MtNPF5.15	
+no_locus_tag	MtNPF5.2	
+no_locus_tag	MtNPF5.21	
+no_locus_tag	MtNPF6.2	
+no_locus_tag	MtPrx[P]101	
+no_locus_tag	MtPrx[P]69	
+no_locus_tag	MtRGF14	
+no_locus_tag	MtRGF15	
+no_locus_tag	MtRGF4	
+no_locus_tag	MtRRB18	
+no_locus_tag	MtSbtM1b	
+no_locus_tag	MtSWEET2.3	
+no_locus_tag	MtSWEET2c	
+no_locus_tag	MtTPS16	
+no_locus_tag	MtTPS17	
+no_locus_tag	MtTPS18	
+no_locus_tag	MtVTL4	
+no_locus_tag	MtVTL6	
+no_locus_tag	MtWOX9c	
+no_locus_tag	MtWOX9d	
+no_locus_tag	truncated MATE	
+no_locus_tag	truncated MATE	
+no_locus_tag	truncated MATE	
