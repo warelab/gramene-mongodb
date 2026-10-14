@@ -82,10 +82,35 @@ mysql -h <host> -u <writer> -p <db> < sql/02_legoo_backup.sql
 mysql -h <host> -u <writer> -p <db> < sql/03_legoo_load.sql
 ```
 
+## Making the acronym searchable for genes that kept their own name
+
+`03_legoo_load.sql` never overwrites an existing display name, so for 202 genes the LeGOO xref is
+present but is not the gene's `display_xref`. `dump_genes.js` collects synonyms only from the
+display xref, so those genes' curated acronyms would never reach the search index -- 202 acronyms
+plus 42 alternative spellings. `gen_display_synonyms_sql.py` attaches them to the gene's existing
+display xref instead, which is where the dump looks:
+
+```bash
+python3 -I gen_display_synonyms_sql.py     # -> sql/04_legoo_display_synonyms.sql (+ 98_..._revert)
+```
+
+These are genuinely different community names for one gene and both should find it: `LEC5` ->
+`MtLEC5`, `PHAN` -> `MtAS1`, `aos` -> `MtAOS1`. `INSERT IGNORE`, and pairs already present are
+skipped at generation time, so the revert deletes exactly what the load added.
+
 ## Getting it into the search index
 
-`gene.display_xref_id` and `gene.description` are read by `40_genes_dump`, so the search index does
-not see this until medicago is re-dumped. A full `50_genes_decorate` re-run costs hours on 16.1M
-genes for the sake of 4,404 documents, so the cheap path is to patch those documents in
-`search70.genes` directly and let `60_solr` index them. Because the core is updated too, the next
-full rebuild regenerates the same result from source, so this creates no drift.
+`gene.display_xref_id`, `gene.description` and the display xref's `external_synonym` rows are all
+read by `40_genes_dump`, so the search index sees this only once medicago is re-dumped.
+
+**Preferred: re-dump medicago.** With 01-04 applied the core is the complete source of truth, so
+deleting `search/tmp/medicago_truncatula.json.gz` and re-running `40_genes_dump` re-dumps that one
+genome (stage 40 is per-genome resumable) and the following `50_genes_decorate` carries every name,
+description and synonym with no patching at all. Note the line-count check cannot detect this
+change -- the gene count is identical -- so the dump file must be **deleted** to force it.
+
+**Fallback: `patch_search_genes.js`.** Patches the 4,399 documents in `<db>.genes` in place, for
+when a full decorate is not being run anyway. It writes byte-identical strings to what the core
+holds, so it never conflicts with a later re-dump. It is the only route that does not require
+stage 40/50, but it has to be re-applied after any `50_genes_decorate`, which drops the
+collection.
