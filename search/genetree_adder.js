@@ -278,22 +278,48 @@ function getLut(main_db) {
     };
 
     mylog('genetree_adder streaming trees from mongodb');
-    // noCursorTimeout + a modest batchSize: the per-tree work below is CPU-heavy (calc_identity
-    // walks the full alignment for every leaf, ~11M leaves across the five sets), so the gap
-    // between getMore calls can exceed mongod's 10-minute cursorTimeoutMillis. On 2026-10-13 that
-    // killed the cursor mid-iteration after ~55 minutes of CPU and the run then hung silently.
-    coll.find({}, {noCursorTimeout: true, batchSize: 200}).forEach(function (doc) {
-      var set = doc.tree_set || (doc.compara_db === main_db ? 'gene_tree' : 'pan_tree');
-      setCounts[set] = (setCounts[set] || 0) + 1;
-      if (!genetreeIdLut[set]) { genetreeIdLut[set] = {}; }
-      addTreeToLut(genetreeIdLut[set], doc);
-      // Progress with heap, so a future memory problem is visible as it builds rather than only
-      // as an abort. 20k keeps this to ~11 lines for the current collection.
-      if (++treesSeen % 20000 === 0) {
-        mylog('  ' + treesSeen + ' trees -> ' + countOfGenes + ' gene entries, heap ' +
-              Math.round(process.memoryUsage().heapUsed / 1048576) + ' MB');
-      }
-    }).then(function () {
+    // PAGED BY _id, not one long-lived cursor. A single cursor over this collection failed twice
+    // on 2026-10-13/14, in two different ways, because the per-tree work below is slow enough
+    // (calc_identity walks the full alignment for every one of ~11M leaves) that the cursor stays
+    // open for the better part of an hour:
+    //   1. mongod's 10-minute cursorTimeoutMillis killed it mid-iteration;
+    //   2. with noCursorTimeout set, iteration instead stopped dead at 220,000 of 224,197 trees --
+    //      cursor gone server-side, zero CPU, no pending I/O, the forEach promise never settling
+    //      and neither callback ever firing, so the stage sat idle indefinitely.
+    // Paging sidesteps the whole class of problem: no query lives more than a few seconds, nothing
+    // depends on server-side cursor state surviving our CPU time, and a failed page rejects
+    // normally. _id is the tree stable id and is always indexed, so the sort is free.
+    var PAGE = 2000;
+
+    var processPage = function (lastId) {
+      var q = lastId === null ? {} : {_id: {$gt: lastId}};
+      return coll.find(q).sort({_id: 1}).limit(PAGE).toArray().then(function (docs) {
+        if (!docs.length) { return null; }
+        for (var k = 0; k < docs.length; k++) {
+          var doc = docs[k];
+          var set = doc.tree_set || (doc.compara_db === main_db ? 'gene_tree' : 'pan_tree');
+          setCounts[set] = (setCounts[set] || 0) + 1;
+          if (!genetreeIdLut[set]) { genetreeIdLut[set] = {}; }
+          addTreeToLut(genetreeIdLut[set], doc);
+          // Progress with heap, so a memory problem is visible as it builds rather than only as an
+          // abort, and so a stall is visible at all -- the two hangs above were silent.
+          if (++treesSeen % 20000 === 0) {
+            mylog('  ' + treesSeen + ' trees -> ' + countOfGenes + ' gene entries, heap ' +
+                  Math.round(process.memoryUsage().heapUsed / 1048576) + ' MB');
+          }
+        }
+        return docs[docs.length - 1]._id;
+      });
+    };
+
+    var nextPage = function (lastId) {
+      return processPage(lastId).then(function (next) {
+        return next === null ? undefined : nextPage(next);
+      });
+    };
+
+    mylog('genetree_adder paging trees from mongodb (' + PAGE + ' per query)');
+    nextPage(null).then(function () {
       Object.keys(setCounts).sort().forEach(function (set) {
         mylog('genetree_adder ' + setCounts[set] + " trees in set '" + set + "'");
       });
@@ -303,9 +329,7 @@ function getLut(main_db) {
       deferred.resolve(genetreeIdLut);
     }, function (err) {
       // Do not just reject: the only consumer does lutPromise.then(fn) with no error handler, so a
-      // rejection here previously vanished and the stage hung instead of failing. This is
-      // unrecoverable -- without the LUT every gene would be written with no homology -- so fail
-      // loudly and let the stage's set -e stop the build.
+      // rejection here previously vanished and the stage hung instead of failing.
       mylog('FATAL: genetree LUT build failed after ' + treesSeen + ' trees: ' +
             (err && err.stack || err));
       deferred.reject(err);
