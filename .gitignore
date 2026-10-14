@@ -49,3 +49,5 @@ search/sql/*.sql
 !search/sql/*.sql.gz
 # LUT backups written by legoo/add_expression_mappings.py
 atlas/new_old.lut.txt.bak.*
+__pycache__/
+*.pyc
