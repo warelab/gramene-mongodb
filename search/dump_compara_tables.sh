@@ -132,10 +132,15 @@ dump_sorted_by_hid() {  # name  sql  table
 dump gene_member     "SELECT gene_member_id, stable_id, genome_db_id, dnafrag_id, dnafrag_start, dnafrag_end, dnafrag_strand FROM gene_member" gene_member
 dump genome_db       "SELECT genome_db_id, name FROM genome_db" genome_db
 # tree_roots replaces the old default_roots dump, which selected only clusterset_id='default' and
-# which NOTHING ever read -- grep found the line that created it and no consumer. Now it carries
-# clusterset_id and tree_type for EVERY root, so build_homologs.js can attribute each homology to
-# the tree set it came from (default -> gene_tree, rice_cultivars -> rice, ...) instead of pooling
-# them into one undifferentiated bucket.
+# which NOTHING ever read -- grep found the line that created it and no consumer, yet its name made
+# it look like a filter and cost real time to rule out when homologs went missing.
+#
+# BE CLEAR: tree_roots is NOT consumed either, today. It carries root_id, clusterset_id and
+# tree_type for every root so that homologies CAN be attributed to the tree set they came from, but
+# the release-70 decision was to keep homologs merged in one homology.homologous_genes[kind] bucket
+# (moving them would break the primers API's homology.homologous_genes.<kind> projection and both
+# mongo2solr paths). It is 4.3 MB and makes per-set attribution addable without re-dumping 2.1B
+# rows. Do not infer from its existence that anything filters on it.
 dump tree_roots      "SELECT root_id, clusterset_id, tree_type FROM gene_tree_root" gene_tree_root
 dump synteny         "SELECT dr.dnafrag_id, dr.dnafrag_start, dr.dnafrag_end, dr.synteny_region_id, d.genome_db_id FROM dnafrag_region dr, dnafrag d WHERE d.dnafrag_id=dr.dnafrag_id AND dr.dnafrag_end-dr.dnafrag_start<10000000 ORDER BY dr.synteny_region_id, d.genome_db_id DESC"
 dump_sorted_by_hid homology_member "SELECT homology_id, gene_member_id, perc_pos FROM homology_member" homology_member
