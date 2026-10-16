@@ -35,8 +35,15 @@ db.genes.createIndex({'location.map':1,'location.region':1,'location.start':1})
 // location based index for dumping sorted genes for solr
 db.genes.createIndex({'species_idx':1,'db_type':1,'gene_idx':1});
 
-// gene tree index for adding domain annotations to gene tree leaf nodes
+// gene tree indexes for adding domain annotations to gene tree leaf nodes.
+// One per tree set: add_domains_to_tree.js looks genes up by homology.<set>.id, where <set> is
+// the tree's own tree_set. Without the cultivar indexes each of the 54,948 cultivar trees would
+// scan all 16.1M gene docs.
 db.genes.createIndex({'homology.gene_tree.id':1});
+db.genes.createIndex({'homology.barley.id':1});
+db.genes.createIndex({'homology.oat.id':1});
+db.genes.createIndex({'homology.wheat.id':1});
+db.genes.createIndex({'homology.rice.id':1});
 
 // gene tree index so we can extract trees based on the compara_db name
 // db.genetree.createIndex({'compara_db':1});

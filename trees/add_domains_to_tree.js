@@ -8,8 +8,21 @@ var collections = require('gramene-mongodb-config');
 var decorateTree = function(geneCollection, iprInfo) { 
   return through2.obj(function decorateTree(mongoTree, encoding, done) {
     var throughThis = this;
+    // Look the genes up under THIS tree's own set key, not a hardcoded 'gene_tree'.
+    // genetree.js tags every tree with tree_set (gene_tree | barley | oat | wheat | rice) and
+    // genetree_adder writes each gene's membership to genes.homology.<set>.id, so a cultivar
+    // tree's leaves are reachable only via homology.rice.id, homology.barley.id and so on.
+    // This was hardcoded to homology.gene_tree.id, which matched nothing for all 54,948 cultivar
+    // trees: they were streamed, found zero genes, and were written back undecorated -- no
+    // domains, taxa, transcript counts or exon junctions on any cultivar leaf. Harmless rather
+    // than corrupting, because every write below is guarded by hasOwnProperty, but silent.
+    // indexCommands.txt carries a matching index per set; without it each lookup would scan all
+    // 16.1M gene docs.
+    var setKey = mongoTree.tree_set || 'gene_tree';
+    var geneQuery = {};
+    geneQuery['homology.' + setKey + '.id'] = mongoTree._id;
     geneCollection.find(
-      {'homology.gene_tree.id': mongoTree._id},
+      geneQuery,
       {'gene_structure':1,'taxon_id':1})
     .toArray(function (err, geneDocs) {
       if (err) throw err;
