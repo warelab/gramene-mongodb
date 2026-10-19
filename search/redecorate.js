@@ -28,15 +28,12 @@ var serializer = through2.obj(function (obj, enc, done) {
   done();
 });
 
-var speciesRank = {
-  sorghum_bicolor : 3, // sorghum
-  arabidopsis_thaliana : 2, // arabidopsis
-  oryza_sativa: 1, // rice
-  zea_maysb73 : 4  // maize
-};
- 
+// species ordering now lives in ./species_rank.js -- decorate.js and redecorate.js used to carry
+// separate, conflicting copies of this map and of the fallback.
+var rankFor = require('./species_rank').rankFor;
+
 var speciesRanker = through2.obj(function (obj, enc, done) {
-  obj.species_idx = speciesRank[obj.system_name] || Math.floor(obj.taxon_id/1000);
+  obj.species_idx = rankFor(obj);
   this.push(obj);
   done();
 });
