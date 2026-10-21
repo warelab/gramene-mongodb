@@ -14,9 +14,11 @@ var compara = require('../ensembl_db_info.json').compara;
 //                     barley_cultivars_PTHR10000_SF7 -> EplBarleyGT_PTHR10000_SF7. The family part
 //                     (PANTHER/TreeFam) survives, so an id stays traceable upstream.
 //
-// Only trees WITH a stable_id are taken. For 'default' that is every tree, but the cultivar
-// clustersets hold 162,111 smaller unnamed fragments (avg 10-29 genes against 45-178 for the named
-// ones) beside 54,034 published trees, and un-citable fragments are not wanted in the index.
+// EVERY tree of the clusterset is taken, named or not. The cultivar clustersets hold 162,111
+// trees with no stable_id beside 54,034 published ones; those unnamed trees get a synthetic
+// <prefix>root<root_id> id (see the id construction below, including why such an id is not
+// stable across releases). They were excluded until the 3,821,574 genes that had
+// homologous_genes but no tree at all made the cost of excluding them clear.
 var TREE_SET = process.env.TREE_SET || 'gene_tree';
 var CLUSTERSET = process.env.CLUSTERSET || 'default';
 var TREE_ID_PREFIX = process.env.TREE_ID_PREFIX || '';
@@ -38,9 +40,8 @@ var fs = require('fs');
 var collections = require('gramene-mongodb-config');
 var comparaMysqlDb = mysql.createConnection(compara);
 
-// NB there is no synthetic-id fallback any more. Tree selection now requires stable_id IS NOT
-// NULL, so every tree has a published id; the old GT_PREFIX ('SB<version>GT_') never fired on a
-// plants release anyway, and leaving it defined meant logging a SorghumBase prefix on every run.
+// NB the synthetic-id fallback is back, but derived from root_id rather than the old GT_PREFIX
+// ('SB<version>GT_'), which never fired on a plants release and only logged a SorghumBase prefix.
 
 var tidyRow = through2.obj(function (row, encoding, done) {
   // remove null properties
@@ -442,11 +443,15 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
         collections.genetrees.mongoCollection().then(function(mongoCollection) {
           var upsert = insertTreeIntoMongo(mongoCollection);
 
-          // stable_id IS NOT NULL is load-bearing now: a no-op for 'default' (all 170,253 have
-          // ids) but it excludes the unnamed cultivar fragments described at the top.
+          // EVERY tree of this clusterset, named or not. The old `stable_id IS NOT NULL` filter
+          // dropped 162,111 cultivar trees, and with them the tree membership of 3,821,574 genes
+          // that still carried homologous_genes (which comes from homology_member and never
+          // depended on stable_id) -- so the site showed homologs with no tree to open. The
+          // "unnamed means small fragment" assumption behind that filter holds on average but
+          // fails badly in the tail: 1,615 of the unnamed trees have 250+ leaves and average
+          // 1,056, e.g. wheat_cultivars root 2002288464 with 1,235 leaves over 4 taxa.
           var queryForTreeIds = "select root_id from gene_tree_root where"
-          + " tree_type='tree' and clusterset_id = " + comparaMysqlDb.escape(CLUSTERSET)
-          + " and stable_id IS NOT NULL;";
+          + " tree_type='tree' and clusterset_id = " + comparaMysqlDb.escape(CLUSTERSET) + ";";
           comparaMysqlDb.query(queryForTreeIds, function (err, rows, fields) {
             if (err) throw err;
             var ids = rows.map(function (r) {
@@ -467,13 +472,28 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
               // stale prefix. Where TREE_ID_PREFIX is set, the leading '<clusterset>_' is swapped
               // for it -- guarded by a LIKE so an id that does NOT carry that prefix is passed
               // through untouched instead of being silently truncated by SUBSTRING.
+              // An unnamed tree gets a synthetic id: <prefix>root<root_id>, e.g.
+              // EplWheatGT_root2002288464. The 'root' marker cannot collide with a published id,
+              // whose suffix is always a PANTHER/TreeFam family (PTHR10000_SF7, TF105094).
+              //
+              // CAVEAT, and the reason the ids are marked this way: gene_tree_root.root_id is NOT
+              // stable across compara releases, so these ids churn between releases while the
+              // family-based ones do not. A bookmarked synthetic tree URL can therefore break at
+              // the next release. tidyRow drops null properties, so leaving the id null is not an
+              // option either -- the tree would load with a generated ObjectId and be unreachable
+              // by id.
               + (TREE_ID_PREFIX
-                  ? "case when r.stable_id LIKE " + comparaMysqlDb.escape(CLUSTERSET + '\\_%') + "\n"
+                  ? "case when r.stable_id IS NULL\n"
+                    + " then CONCAT(" + comparaMysqlDb.escape(TREE_ID_PREFIX) + ", 'root', r.root_id)\n"
+                    + " when r.stable_id LIKE " + comparaMysqlDb.escape(CLUSTERSET + '\\_%') + "\n"
                     + " then CONCAT(" + comparaMysqlDb.escape(TREE_ID_PREFIX)
                     + ", SUBSTRING(r.stable_id, " + (CLUSTERSET.length + 2) + "))\n"
                     + " else r.stable_id\n"
                     + "end as tree_stable_id,\n"
-                  : "r.stable_id as tree_stable_id,\n")
+                  : "case when r.stable_id IS NULL\n"
+                    + " then CONCAT(" + comparaMysqlDb.escape(CLUSTERSET + '_root') + ", r.root_id)\n"
+                    + " else r.stable_id\n"
+                    + "end as tree_stable_id,\n")
               + "n.node_id,n.distance_to_parent,n.left_index,n.right_index,\n"
               + "case when n.node_id = n.root_id\n"
               + "	then null\n"
