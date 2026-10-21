@@ -26,12 +26,25 @@
 # COUNT(*) is answered from stored metadata and reads nothing at all.
 set -euo pipefail
 
-: "${MYSQL_HOST:?set MYSQL_HOST (source build/config.sh)}"
+# Source the build config ourselves when the caller has not. Requiring the caller to do it made
+# this script a silent no-op in the one place it matters most: a build chain that exports only the
+# vars its stages need calls this, it exits 1 on the unset MYSQL_HOST, the chain logs the rc and
+# carries on, and 35_genetrees then runs against a cold cache -- 0 trees/min at the start of a
+# 386k-tree stage, against 1,000-2,600/min warm. Explicit env still wins; this only fills gaps.
+if [ -z "${MYSQL_HOST:-}" ] || [ -z "${MYSQL_USER:-}" ]; then
+  _cfg="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../build" 2>/dev/null && pwd)/config.sh"
+  if [ -r "${_cfg}" ]; then
+    # shellcheck disable=SC1090
+    . "${_cfg}" >/dev/null 2>&1 || true
+    echo "sourced ${_cfg} for the mysql connection" >&2
+  fi
+fi
+
+: "${MYSQL_HOST:?set MYSQL_HOST (or run from a tree where ../../build/config.sh is readable)}"
 : "${MYSQL_USER:?set MYSQL_USER}"
-: "${MYSQL_PASS:?set MYSQL_PASS}"
 COMPARA_DB="${COMPARA_DB:-$(node -e "console.log(require('../ensembl_db_info.json').compara.database)" 2>/dev/null || echo ensembl_compara_plants_70_116)}"
 
-MY=(mysql -h "${MYSQL_HOST}" -u "${MYSQL_USER}" -p"${MYSQL_PASS}" -N -s -D "${COMPARA_DB}")
+MY=(mysql -h "${MYSQL_HOST}" -u "${MYSQL_USER}" ${MYSQL_PASS:+-p"${MYSQL_PASS}"} -N -s -D "${COMPARA_DB}")
 
 echo "warming ${COMPARA_DB} tree-dump working set (~33 GB, read-only)"
 # Smallest and most randomly-accessed first, so the stage benefits as early as possible.
