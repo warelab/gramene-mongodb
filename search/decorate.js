@@ -26,6 +26,9 @@ if (isGramene) {
 var pathwayLUT = require(argv.p);
 var pathwayAdder = require('./doc_merger')(pathwayLUT);
 var genetreeAdder = require('./genetree_adder')(comparaDatabase);
+// Attaches homology.<set>.supertree for every set, straight after the ids it keys off. Must come
+// AFTER genetreeAdder, which is what writes homology.<set>.id.
+var supertreeAdder = require('./supertrees')();
 var homologAdder = require('./homolog_adder')();   // reads the mongo `homologs` collection
 var domainArchitect = require('./domain_architect')();
 var ancestorAdder = require('./ancestor_adder')();
@@ -227,6 +230,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
     .pipe(assignCanonicalTranscript).pipe(tap('assignCanonicalTranscript'))
     .pipe(orderTranscripts).pipe(tap('orderTranscripts'))
     .pipe(genetreeAdder).pipe(tap('genetreeAdder'))
+    .pipe(supertreeAdder).pipe(tap('supertreeAdder'))
     .pipe(binAdder).pipe(tap('binAdder'))
     .pipe(pathwayAdder).pipe(tap('pathwayAdder'))
     .pipe(homologAdder).pipe(tap('homologAdder'))
