@@ -44,6 +44,13 @@ function buildMaps() {
                 + 'from gene_tree_root s, gene_tree_node sn, gene_tree_node tn, gene_tree_root t\n'
                 + 'where s.clusterset_id = ' + esc(ts.clusterset) + "\n"
                 + "  and s.tree_type = 'supertree'\n"
+                // Constrain the SUBTREE too. Without this the join also returns supertrees nested
+                // under supertrees -- 106 such links in default, 95 oat, 88 barley, 63 wheat,
+                // 3 rice. They map a supertree id to its parent supertree, which no gene can ever
+                // carry (supertree nodes hold no genes), so they were harmless but inflated the
+                // map and made the logged counts misleading. r69's query had the same gap.
+                + "  and t.tree_type = 'tree'\n"
+                + '  and t.clusterset_id = s.clusterset_id\n'
                 + '  and s.root_id = sn.parent_id\n'
                 + '  and sn.node_id = tn.parent_id\n'
                 + '  and tn.node_id = tn.root_id\n'
