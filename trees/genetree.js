@@ -343,13 +343,39 @@ var counter = (function () {
   return through2.obj(transform, flush);
 })();
 
+// Insert outcomes. These used to be pushed into a stream and forgotten: the transform calls
+// done() whether or not the insert failed, so nothing failed the stage, and the single file the
+// errors landed in was truncated on every run (see the writer below). 147 trees across the four
+// cultivar sets went missing from release 70 that way -- every one rejected by the server for
+// exceeding the BSON nested-object depth limit (deeper than ~112 tree levels, since each tree
+// level costs two BSON levels), taking the tree membership of ~120,014 genes with them.
+var insertErrors = 0;
+var insertOk = 0;
+var insertErrorKinds = {};
+
 var insertTreeIntoMongo = function insertTreeIntoMongo(mongoCollection) {
   var transform = function (tree, enc, done) {
     var throughThis = this;
     tree.nested.compara_db = compara.database; // so we can pull out just the gene trees we want later
     tree.nested.tree_set = TREE_SET;           // -> genes.homology.<tree_set> in genetree_adder
     mongoCollection.insertOne(tree.nested,function (err, count, status) {
-			throughThis.push({err: err, status: status, _id: tree.nested._id});
+        if (err) {
+          insertErrors++;
+          // Group by the error KIND, not the raw message. A depth rejection names the offending
+          // field path in full -- 'documents.0.children.0.children.0...' repeated twice, ~2.7 KB
+          // -- and the path length varies per tree, so keying on the whole message would print
+          // one summary line per failing tree instead of one per reason.
+          var emsg = err.message || String(err);
+          var ekind = emsg.split(' in element with field name')[0].substring(0, 160);
+          insertErrorKinds[ekind] = (insertErrorKinds[ekind] || 0) + 1;
+          // The log keeps the full message, capped, so the field path is still there to inspect.
+          throughThis.push({err: emsg.substring(0, 500), code: err.code,
+                            status: status, _id: tree.nested._id});
+        }
+        else {
+          insertOk++;
+          throughThis.push({err: null, status: status, _id: tree.nested._id});
+        }
       done();
     });
   };
@@ -369,7 +395,12 @@ var serialize = through2.obj(function (r, enc, done) {
   done();
 });
 
-var fileWriter = fs.createWriteStream('./inserts.jsonl');
+// One file per tree set. './inserts.jsonl' is truncated by createWriteStream on every run and
+// 35_genetrees runs this script once per set, so only the LAST set's outcomes ever survived --
+// barley's 105 failures were overwritten by oat, then wheat, then rice. speciesTree.js in this
+// same directory also writes './inserts.jsonl', so those two clobbered each other as well.
+var INSERT_LOG = './inserts.genetree.' + TREE_SET + '.jsonl';
+var fileWriter = fs.createWriteStream(INSERT_LOG);
 
 var handleBatch = through2.obj(function (query, enc, done) {
   var that = this;
@@ -537,7 +568,18 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
         
             fileWriter.on('finish', function () {
               comparaMysqlDb.end(function(err) {
-                console.error("finished");
+                console.error('inserted ' + insertOk + ' trees into set ' + TREE_SET
+                              + '; ' + insertErrors + ' failed (log: ' + INSERT_LOG + ')');
+                if (insertErrors) {
+                  Object.keys(insertErrorKinds).forEach(function (kind) {
+                    console.error('  ' + insertErrorKinds[kind] + ' x ' + kind);
+                  });
+                  console.error('FAILED: ' + insertErrors + ' tree(s) not stored for set '
+                                + TREE_SET + '. A tree rejected for nested-object depth cannot be'
+                                + ' stored in the nested shape at all, however often it is retried.');
+                  process.exitCode = 1;
+                }
+                console.error('finished');
               });
             });
           });

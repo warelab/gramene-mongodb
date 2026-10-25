@@ -261,7 +261,9 @@ var serialize = through2.obj(function (r, enc, done) {
   done();
 });
 
-var fileWriter = fs.createWriteStream('./inserts.jsonl');
+// Its own file. genetree.js in this directory also wrote './inserts.jsonl', so whichever ran
+// last silently truncated the other's record of what it had stored.
+var fileWriter = fs.createWriteStream('./inserts.speciesTree.jsonl');
 
 collections.maps.mongoCollection().then(function(mapsCollection) {
   mapsCollection.find({type: 'genome'}, {}).toArray(function (err, genomes) {
