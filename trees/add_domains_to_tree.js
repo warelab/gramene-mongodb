@@ -1,4 +1,5 @@
 var TreeModel = require('tree-model');
+var shape = require('gramene-mongodb-config/tree_shape');
 var treeModel = new TreeModel();
 var _ = require('lodash');
 var through2 = require('through2');
@@ -6,8 +7,13 @@ var comparaDatabase = require('../ensembl_db_info.json').compara.database;
 var collections = require('gramene-mongodb-config');
 
 var decorateTree = function(geneCollection, iprInfo) { 
-  return through2.obj(function decorateTree(mongoTree, encoding, done) {
+  return through2.obj(function decorateTree(storedTree, encoding, done) {
     var throughThis = this;
+    // Trees are STORED FLAT; rebuild the nested form so the TreeModel walk below is unchanged.
+    // The nested shape cannot hold a tree deeper than ~112 levels (the server rejects it for
+    // nested-object depth), which is why storage moved. A doc written before the change is
+    // already nested and has no `nodes`, so pass that through as it is.
+    var mongoTree = storedTree.nodes ? shape.toNested(storedTree) : storedTree;
     // Look the genes up under THIS tree's own set key, not a hardcoded 'gene_tree'.
     // genetree.js tags every tree with tree_set (gene_tree | barley | oat | wheat | rice) and
     // genetree_adder writes each gene's membership to genes.homology.<set>.id, so a cultivar
@@ -137,9 +143,14 @@ var upsertTreeIntoMongo = function upsertTreeIntoMongo(mongoCollection) {
   var nTrees = 0;
   var transform = function (tree, enc, done) {
     var throughThis = this;
+    // Write the FLAT shape back. $set with the whole document replaces `nodes` wholesale, just
+    // as it replaced `children` before; the annotations ride on the leaf nodes either way.
+    var flat = shape.fromNested(tree);
+    flat.n_nodes = flat.nodes.length;
+    flat.max_depth = shape.maxDepth(tree);
     mongoCollection.updateOne(
-      {_id: tree._id},
-      { $set: tree},
+      {_id: flat._id},
+      { $set: flat},
       function (err, count, status) {
         //throughThis.push({err: err, status: status, _id: tree._id});
         nTrees++;

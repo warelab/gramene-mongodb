@@ -38,6 +38,7 @@ var spigot = require('stream-spigot');
 var fs = require('fs');
 //var MongoClient = require('mongodb').MongoClient;
 var collections = require('gramene-mongodb-config');
+var shape = require('gramene-mongodb-config/tree_shape');
 var comparaMysqlDb = mysql.createConnection(compara);
 
 // NB the synthetic-id fallback is back, but derived from root_id rather than the old GT_PREFIX
@@ -358,7 +359,20 @@ var insertTreeIntoMongo = function insertTreeIntoMongo(mongoCollection) {
     var throughThis = this;
     tree.nested.compara_db = compara.database; // so we can pull out just the gene trees we want later
     tree.nested.tree_set = TREE_SET;           // -> genes.homology.<tree_set> in genetree_adder
-    mongoCollection.insertOne(tree.nested,function (err, count, status) {
+
+    // STORE FLAT. Everything upstream of here still works on the nested form in memory, where
+    // depth costs nothing; only the stored shape changes. The nested form cannot be stored at all
+    // past ~112 levels -- the server rejects it for nested-object depth, which silently cost
+    // release 70 its 147 deepest trees and ~120,014 genes' tree membership. fromNested is a
+    // byte-exact inverse of toNested (see tree_shape.js), so /genetrees still serves what it
+    // always served once the reader reconstructs.
+    var doc = shape.fromNested(tree.nested);
+    // Diagnostics at the top level, where they are queryable and do NOT reach the reconstructed
+    // document: toNested rebuilds from nodes[0], so anything added here is dropped on the way out.
+    doc.n_nodes = doc.nodes.length;
+    doc.max_depth = shape.maxDepth(tree.nested);
+
+    mongoCollection.insertOne(doc,function (err, count, status) {
         if (err) {
           insertErrors++;
           // Group by the error KIND, not the raw message. A depth rejection names the offending
@@ -370,11 +384,11 @@ var insertTreeIntoMongo = function insertTreeIntoMongo(mongoCollection) {
           insertErrorKinds[ekind] = (insertErrorKinds[ekind] || 0) + 1;
           // The log keeps the full message, capped, so the field path is still there to inspect.
           throughThis.push({err: emsg.substring(0, 500), code: err.code,
-                            status: status, _id: tree.nested._id});
+                            status: status, _id: doc._id});
         }
         else {
           insertOk++;
-          throughThis.push({err: null, status: status, _id: tree.nested._id});
+          throughThis.push({err: null, status: status, _id: doc._id});
         }
       done();
     });

@@ -3,7 +3,8 @@ var _ = require('lodash'),
   Q = require('q'),
   TreeModel = require('tree-model'),
   collections = require('gramene-mongodb-config'),
-  through2 = require('through2');
+  through2 = require('through2'),
+  shape = require('gramene-mongodb-config/tree_shape');
 
 function cigarToConsensus(cigar, seq) {
 
@@ -300,7 +301,16 @@ function getLut(main_db) {
           var set = doc.tree_set || (doc.compara_db === main_db ? 'gene_tree' : 'pan_tree');
           setCounts[set] = (setCounts[set] || 0) + 1;
           if (!genetreeIdLut[set]) { genetreeIdLut[set] = {}; }
-          addTreeToLut(genetreeIdLut[set], doc);
+          // Trees are STORED FLAT (one nodes array, each node naming its parent) because the nested
+          // shape cannot hold a tree deeper than ~112 levels -- the server rejects it for
+          // nested-object depth, which cost release 70 its 147 deepest trees. Rebuild the nested
+          // form here so everything below is unchanged; it is byte-exact (trees/tree_shape.js) and
+          // transient, one tree at a time, so the paging above still bounds the heap.
+          //
+          // A doc written before this change is already nested and has no `nodes`, so take it as it
+          // is rather than failing -- that keeps a part-rebuilt collection usable, the same
+          // courtesy the tree_set fallback above extends.
+          addTreeToLut(genetreeIdLut[set], doc.nodes ? shape.toNested(doc) : doc);
           // Progress with heap, so a memory problem is visible as it builds rather than only as an
           // abort, and so a stall is visible at all -- the two hangs above were silent.
           if (++treesSeen % 20000 === 0) {
