@@ -18,10 +18,42 @@ var res = request('GET', url);
 if (res.statusCode == 200) {
   var PRspecies = JSON.parse(res.getBody());
   var lut = {};
+  var prNames = [];
   PRspecies.forEach(function(s) {
     lut[s.taxId] = s.abbreviation;
     lut[s.displayName] = s.abbreviation;
+    prNames.push({name: s.displayName, abbreviation: s.abbreviation});
   });
+
+  // Last resort for a genome that neither key matched, when the two names differ only by how
+  // specific they are. Release 70 had two such genomes, both of which DO have a Plant Reactome
+  // projection that their own genes already cite:
+  //   * triticum_spelta -- anchor taxid 58933, display name "Triticum spelta", while Plant Reactome
+  //     lists "Triticum spelta subsp. spelta" under the subspecies taxid. Its genes carry R-TSP-*.
+  //   * brassica_rapa_ro18 -- anchor taxid 1813537 (a B. rapa subspecies), display name "Brassica
+  //     rapa R-o-18", while Plant Reactome lists plain "Brassica rapa". Its genes carry R-BRA-*.
+  // Getting no prefix is not harmless: it leaves the species out of the hierarchy build entirely,
+  // so its genes get pathway annotations (those come from the reactions file, which is keyed on
+  // gene id) but no lineage_ field to render them against. Match when either name is a prefix of
+  // the other at a word boundary, preferring the most specific Reactome name. This runs ONLY for a
+  // genome that would otherwise get no prefix at all, so it cannot change an existing assignment.
+  function prefixByName(displayName) {
+    function boundary(longer, shorter) {
+      if (longer.indexOf(shorter) !== 0) {
+        return false;
+      }
+      var next = longer.charAt(shorter.length);
+      return next === '' || !/[A-Za-z0-9]/.test(next);
+    }
+    var hits = prNames.filter(function(p) {
+      return boundary(displayName, p.name) || boundary(p.name, displayName);
+    });
+    if (! hits.length) {
+      return undefined;
+    }
+    hits.sort(function(a,b) { return b.name.length - a.name.length; });
+    return hits[0];
+  }
   collections.maps.mongoCollection().then(function(mapsCollection) {
     // Every genome map needs a reactomePrefix, not just anchor genomes: the MAIN release has no
     // anchors (is_anchor:true matched 0 docs -> empty merge, failing the stage). anchor_taxon_id is
@@ -38,6 +70,12 @@ if (res.statusCode == 200) {
           prefix = lut[tid];
         } else if(lut[doc.display_name]) {
           prefix = lut[doc.display_name];
+        } else {
+          let byName = prefixByName(doc.display_name);
+          if (byName) {
+            prefix = byName.abbreviation;
+            console.error(`prefix by name: ${doc.display_name} -> ${prefix} (Plant Reactome "${byName.name}")`);
+          }
         }
         if (prefix) {
           taxonomy[doc.taxon_id] = {
