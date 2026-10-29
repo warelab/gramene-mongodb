@@ -15,7 +15,10 @@ module.exports = function () {
   return require('./curated_source')({
     label: 'rapdb',
     source: 'rap-db',
-    urls: ['https://dev.gramene.org/oryza/rapdb/curated_genes.json'],
+    urls: [
+      'https://rapdb.dna.naro.go.jp/curated_genes/curated_genes.json',
+      'https://dev.gramene.org/oryza/rapdb/curated_genes.json'
+    ],
     refTextField: 'title'
   });
 };
