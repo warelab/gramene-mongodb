@@ -26,24 +26,42 @@ async function get_thalemine() {
 }
 
 function get_rapdb() {
-  var deferred = Q.defer();
-  var url = 'https://rapdb.dna.affrc.go.jp/curated_genes/curated_genes.json'
-  url = 'https://dev.gramene.org/oryza/rapdb/curated_genes.json' // local mirror
-  console.error('rapdb get('+url+')');
-  fetch(url)
-  .then(res => res.json())
-  .then(genes => {
-    var lut = {};
-    genes.forEach(g => {
-      if (!lut.hasOwnProperty(g.locus)) {
-        lut[g.locus] = 1;
-      }
-    });
-    console.error('rapdb lookup table');
-    deferred.resolve(Object.keys(lut));
-  });
-
-  return deferred.promise;
+  // Upstream first, the dev.gramene.org mirror as fallback. The old hardcoded affrc.go.jp host does
+  // not answer at all, and it was dead code anyway -- the next line overwrote it with the mirror.
+  // The fetch is guarded because it was not: a bare fetch().then(res => res.json()) with no timeout,
+  // no res.ok check and no .catch makes a slow mirror an uncaught rejection that kills this stage,
+  // and dev.gramene.org does intermittently connect-time-out.
+  var urls = [
+    'https://rapdb.dna.naro.go.jp/curated_genes/curated_genes.json',
+    'https://dev.gramene.org/oryza/rapdb/curated_genes.json'
+  ];
+  function attempt(i) {
+    if (i >= urls.length) {
+      console.error('rapdb: every source URL failed -- continuing with no rapdb loci');
+      return Q.resolve([]);
+    }
+    console.error('rapdb get(' + urls[i] + ')');
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 60000);
+    return Q(fetch(urls[i], {signal: ctrl.signal})
+      .then(function (res) {
+        clearTimeout(timer);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }))
+      .then(function (genes) {
+        var lut = {};
+        genes.forEach(function (g) { if (g && g.locus) lut[g.locus] = 1; });
+        console.error('rapdb lookup table: ' + Object.keys(lut).length + ' loci');
+        return Object.keys(lut);
+      })
+      .catch(function (err) {
+        clearTimeout(timer);
+        console.error('rapdb fetch failed for ' + urls[i] + ' (' + err.message + ')');
+        return attempt(i + 1);
+      });
+  }
+  return attempt(0);
 }
 function getRedis(db) {
   var deferred = Q.defer();

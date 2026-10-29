@@ -16,6 +16,10 @@ module.exports = function () {
   return require('./curated_source')({
     label: 'curated',
     source: 'CSHL',
+    localFile: 'cshl_curated_genes.json',
+    // Legacy fallback only, and deliberately last: this is the frozen 158-entry feed the build used
+    // to depend on. If the tracked artifact is ever missing, degrading to it beats degrading to
+    // nothing -- but the coverage drop will be obvious in the log.
     urls: ['https://dev.gramene.org/cshl_curated_genes.json'],
     refTextField: 'description'
   });

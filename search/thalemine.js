@@ -4,6 +4,11 @@ var through2 = require('through2');
 var _ = require('lodash');
 var request = require('request');
 
+// ThaleMine's absent-value sentinels, as they arrive over the tab format.
+function usable(v) {
+  return !!v && v !== 'NULL' && v !== '""' && v !== '\\N' && v.trim() !== '';
+}
+
 function getThalemine() {
   var deferred = Q.defer();
   var url = 'https://bar.utoronto.ca/thalemine/service/query/results?query=%3Cquery+name%3D%22%22+model%3D%22genomic%22+view%3D%22Gene.primaryIdentifier+Gene.symbol+Gene.tairCuratorSummary+Gene.briefDescription%22+longDescription%3D%22%22+sortOrder%3D%22Gene.primaryIdentifier+asc%22%3E%3Cconstraint+path%3D%22Gene.symbol%22+op%3D%22IS+NOT+NULL%22%2F%3E%3C%2Fquery%3E&format=tab';
@@ -40,9 +45,17 @@ module.exports = function() {
   
     thaleminePromise.then(function(lut) {
       if (lut[gene._id]) {
-        if (lut[gene._id].curatorSummary != '""') gene.summary = lut[gene._id].curatorSummary;
-        if (lut[gene._id].briefDescription) gene.description = lut[gene._id].briefDescription;
-        if (gene.name === gene._id) gene.name = lut[gene._id].symbol;
+        // ThaleMine returns the four-character string "NULL" for an absent value, on 19,850 of its
+        // 38,194 rows. The old guard only screened '""', so "NULL" was written straight into
+        // gene.summary -- 15,511 Arabidopsis docs in the live collection carry it, and it reaches
+        // the index and the API. The client happens to screen it (GeneList.js: summary !== "NULL"),
+        // so nothing displays wrong today, but it inflates every summary count and any new consumer
+        // of the field would have to know the sentinel. Screen it here instead.
+        if (usable(lut[gene._id].curatorSummary)) gene.summary = lut[gene._id].curatorSummary;
+        if (usable(lut[gene._id].briefDescription)) gene.description = lut[gene._id].briefDescription;
+        // Guarded on the symbol too: the query constrains symbol IS NOT NULL, but a header or
+        // trailing line would otherwise set gene.name to a sentinel or the empty string.
+        if (gene.name === gene._id && usable(lut[gene._id].symbol)) gene.name = lut[gene._id].symbol;
       }
       that.push(gene);
       done();

@@ -40,9 +40,14 @@ reactome/genes_to_pathways.raw.json
 reactome/merge_into_taxonomy.json
 search/genes_to_pathways.json
 search/grassius.fromsource.tsv
+# 29_curated_sources downloads into a .fromsheet/.fromsource file and only promotes it over the
+# tracked artifact once it passes the stage's gate, so the intermediates are disposable.
+search/cshl_curated_genes.fromsheet.json
+search/maizegdb_go.csv.gz.fromsource
 search/grassius.tsv.curated.bak
 search/insertion_errors.jsonl
-trees/inserts.jsonlatlas/taxon_remap.json
+trees/inserts.jsonl
+atlas/taxon_remap.json
 search/legume_community_ids.tsv
 search/legume_community_ids_features.tsv
 search/sql/*.sql
