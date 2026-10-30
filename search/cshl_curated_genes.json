@@ -65,7 +65,7 @@
  },
  {
   "locus": "AT5G56540",
-  "gene_symbols": "At5g56540",
+  "gene_symbols": "AGP14",
   "gene_names": "AGP14",
   "references": {
    "21248074": {
@@ -81,8 +81,8 @@
  },
  {
   "locus": "SORBI_3001G005700",
-  "gene_symbols": "",
-  "gene_names": "SbACP1",
+  "gene_symbols": "SbACP1",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -97,8 +97,8 @@
  },
  {
   "locus": "SORBI_3001G012300",
-  "gene_symbols": "",
-  "gene_names": "CYP79A1",
+  "gene_symbols": "CYP79A1",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -133,8 +133,8 @@
  },
  {
   "locus": "SORBI_3001G018100",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK1",
+  "gene_symbols": "SbCDPK1",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -197,8 +197,8 @@
  },
  {
   "locus": "SORBI_3001G033300",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA1",
+  "gene_symbols": "SbEXPA1",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -340,8 +340,8 @@
  },
  {
   "locus": "SORBI_3001G063500",
-  "gene_symbols": "",
-  "gene_names": "SbFLA1",
+  "gene_symbols": "SbFLA1",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -372,8 +372,8 @@
  },
  {
   "locus": "SORBI_3001G078800",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK2",
+  "gene_symbols": "SbCDPK2",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -388,8 +388,8 @@
  },
  {
   "locus": "SORBI_3001G080700",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK3",
+  "gene_symbols": "SbCDPK3",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -548,8 +548,8 @@
  },
  {
   "locus": "SORBI_3001G107500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK4",
+  "gene_symbols": "SbCDPK4",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -692,8 +692,8 @@
  },
  {
   "locus": "SORBI_3001G153100",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR1;1",
+  "gene_symbols": "SbSULTR1;1",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -728,8 +728,8 @@
  },
  {
   "locus": "SORBI_3001G155600",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB1",
+  "gene_symbols": "SbEXPB1",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -744,8 +744,8 @@
  },
  {
   "locus": "SORBI_3001G155700",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB2",
+  "gene_symbols": "SbEXPB2",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -808,8 +808,8 @@
  },
  {
   "locus": "SORBI_3001G160500",
-  "gene_symbols": "",
-  "gene_names": "SbPAL6",
+  "gene_symbols": "SbPAL6",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -824,8 +824,8 @@
  },
  {
   "locus": "SORBI_3001G168400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK5",
+  "gene_symbols": "SbCDPK5",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -841,7 +841,7 @@
  {
   "locus": "SORBI_3001G169100",
   "gene_symbols": "SbPHT4;1",
-  "gene_names": "Sb01g014790",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -936,8 +936,8 @@
  },
  {
   "locus": "SORBI_3001G175600",
-  "gene_symbols": "",
-  "gene_names": "SbACP2",
+  "gene_symbols": "SbACP2",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -952,7 +952,7 @@
  },
  {
   "locus": "SORBI_3001G178100",
-  "gene_symbols": "",
+  "gene_symbols": "SbIMP-1",
   "gene_names": "SbIMP-1",
   "references": {
    "42787373": {
@@ -984,8 +984,8 @@
  },
  {
   "locus": "SORBI_3001G185900",
-  "gene_symbols": "",
-  "gene_names": "SbCYP79A89",
+  "gene_symbols": "SbCYP79A89",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -1000,8 +1000,8 @@
  },
  {
   "locus": "SORBI_3001G187400",
-  "gene_symbols": "",
-  "gene_names": "CYP79A91",
+  "gene_symbols": "CYP79A91",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -1016,8 +1016,8 @@
  },
  {
   "locus": "SORBI_3001G187500",
-  "gene_symbols": "",
-  "gene_names": "CYP79A92",
+  "gene_symbols": "CYP79A92",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -1032,8 +1032,8 @@
  },
  {
   "locus": "SORBI_3001G187600",
-  "gene_symbols": "",
-  "gene_names": "CYP79A93",
+  "gene_symbols": "CYP79A93",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -1080,8 +1080,8 @@
  },
  {
   "locus": "SORBI_3001G208500",
-  "gene_symbols": "",
-  "gene_names": "SbTIP1-3",
+  "gene_symbols": "SbTIP1-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -1135,7 +1135,7 @@
  {
   "locus": "SORBI_3001G234800",
   "gene_symbols": "SbPHT1;1",
-  "gene_names": "Sb01g020570",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -1151,7 +1151,7 @@
  {
   "locus": "SORBI_3001G234900",
   "gene_symbols": "SbPHT1;2",
-  "gene_names": "Sb01g020580",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -1166,8 +1166,8 @@
  },
  {
   "locus": "SORBI_3001G237800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA2",
+  "gene_symbols": "SbEXPA2",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1182,8 +1182,8 @@
  },
  {
   "locus": "SORBI_3001G237900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA3",
+  "gene_symbols": "SbEXPA3",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1198,8 +1198,8 @@
  },
  {
   "locus": "SORBI_3001G238000",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA4",
+  "gene_symbols": "SbEXPA4",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1214,8 +1214,8 @@
  },
  {
   "locus": "SORBI_3001G238100",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA5",
+  "gene_symbols": "SbEXPA5",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1230,8 +1230,8 @@
  },
  {
   "locus": "SORBI_3001G238200",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA6",
+  "gene_symbols": "SbEXPA6",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1246,8 +1246,8 @@
  },
  {
   "locus": "SORBI_3001G238300",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA7",
+  "gene_symbols": "SbEXPA7",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1262,8 +1262,8 @@
  },
  {
   "locus": "SORBI_3001G238400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA8",
+  "gene_symbols": "SbEXPA8",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1278,8 +1278,8 @@
  },
  {
   "locus": "SORBI_3001G244500",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR3;1",
+  "gene_symbols": "SbSULTR3;1",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -1423,7 +1423,7 @@
  {
   "locus": "SORBI_3001G267100",
   "gene_symbols": "SbLAX1",
-  "gene_names": "SbLAX1",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -1476,8 +1476,8 @@
  },
  {
   "locus": "SORBI_3001G294400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK6",
+  "gene_symbols": "SbCDPK6",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -1492,8 +1492,8 @@
  },
  {
   "locus": "SORBI_3001G300400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB3",
+  "gene_symbols": "SbEXPB3",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1508,8 +1508,8 @@
  },
  {
   "locus": "SORBI_3001G300500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB4",
+  "gene_symbols": "SbEXPB4",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1524,8 +1524,8 @@
  },
  {
   "locus": "SORBI_3001G300700",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB5",
+  "gene_symbols": "SbEXPB5",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1540,8 +1540,8 @@
  },
  {
   "locus": "SORBI_3001G300800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB6",
+  "gene_symbols": "SbEXPB6",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1556,8 +1556,8 @@
  },
  {
   "locus": "SORBI_3001G300900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB7",
+  "gene_symbols": "SbEXPB7",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1572,8 +1572,8 @@
  },
  {
   "locus": "SORBI_3001G301000",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB8",
+  "gene_symbols": "SbEXPB8",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1588,8 +1588,8 @@
  },
  {
   "locus": "SORBI_3001G301300",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB9",
+  "gene_symbols": "SbEXPB9",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1604,8 +1604,8 @@
  },
  {
   "locus": "SORBI_3001G301400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB10",
+  "gene_symbols": "SbEXPB10",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1620,8 +1620,8 @@
  },
  {
   "locus": "SORBI_3001G301500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB11",
+  "gene_symbols": "SbEXPB11",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1636,8 +1636,8 @@
  },
  {
   "locus": "SORBI_3001G301600",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB12",
+  "gene_symbols": "SbEXPB12",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1716,8 +1716,8 @@
  },
  {
   "locus": "SORBI_3001G306200",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB13",
+  "gene_symbols": "SbEXPB13",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1732,8 +1732,8 @@
  },
  {
   "locus": "SORBI_3001G306400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB14",
+  "gene_symbols": "SbEXPB14",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1748,8 +1748,8 @@
  },
  {
   "locus": "SORBI_3001G306500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB15",
+  "gene_symbols": "SbEXPB15",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1896,8 +1896,8 @@
  },
  {
   "locus": "SORBI_3001G312900",
-  "gene_symbols": "SbTST1",
-  "gene_names": "SbTMT1",
+  "gene_symbols": "SbTMT1, SbTST1",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "Tonoplast Sugar Transporters"
@@ -1915,8 +1915,8 @@
  },
  {
   "locus": "SORBI_3001G314600",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA9",
+  "gene_symbols": "SbEXPA9",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -1931,8 +1931,8 @@
  },
  {
   "locus": "SORBI_3001G315700",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK7",
+  "gene_symbols": "SbCDPK7",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -1947,8 +1947,8 @@
  },
  {
   "locus": "SORBI_3001G320200",
-  "gene_symbols": "",
-  "gene_names": "SbPLDβ1",
+  "gene_symbols": "SbPLDβ1",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -2011,8 +2011,8 @@
  },
  {
   "locus": "SORBI_3001G334700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK1",
+  "gene_symbols": "SbWAK1",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -2027,8 +2027,8 @@
  },
  {
   "locus": "SORBI_3001G339600",
-  "gene_symbols": "",
-  "gene_names": "SbZIP2",
+  "gene_symbols": "SbZIP2",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -2187,8 +2187,8 @@
  },
  {
   "locus": "SORBI_3001G349800",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα1",
+  "gene_symbols": "SbPLDα1",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -2235,8 +2235,8 @@
  },
  {
   "locus": "SORBI_3001G356400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA10",
+  "gene_symbols": "SbEXPA10",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -2283,8 +2283,8 @@
  },
  {
   "locus": "SORBI_3001G370700",
-  "gene_symbols": "",
-  "gene_names": "SbACP3",
+  "gene_symbols": "SbACP3",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -2316,7 +2316,7 @@
  {
   "locus": "SORBI_3001G373600",
   "gene_symbols": "SbSWEET12III",
-  "gene_names": "Sb01g035490",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -2364,7 +2364,7 @@
  {
   "locus": "SORBI_3001G377600",
   "gene_symbols": "SbSWEET16IV",
-  "gene_names": "Sb01g035840",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -2379,8 +2379,8 @@
  },
  {
   "locus": "SORBI_3001G389900",
-  "gene_symbols": "",
-  "gene_names": "SbSIP2-1",
+  "gene_symbols": "SbSIP2-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -2395,8 +2395,8 @@
  },
  {
   "locus": "SORBI_3001G390300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK8",
+  "gene_symbols": "SbCDPK8",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -2443,8 +2443,8 @@
  },
  {
   "locus": "SORBI_3001G403100",
-  "gene_symbols": "Sb01g038130",
-  "gene_names": "SbLAC1",
+  "gene_symbols": "SbLAC1",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -2507,8 +2507,8 @@
  },
  {
   "locus": "SORBI_3001G415300",
-  "gene_symbols": "SbABCB1",
-  "gene_names": "SbPGP1",
+  "gene_symbols": "SbPGP1, SbABCB1",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -2577,8 +2577,8 @@
  },
  {
   "locus": "SORBI_3001G422300",
-  "gene_symbols": "Sb01g039690",
-  "gene_names": "SbLAC2",
+  "gene_symbols": "SbLAC2",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -2626,7 +2626,7 @@
  {
   "locus": "SORBI_3001G428500",
   "gene_symbols": "SbPHT3;1",
-  "gene_names": "Sb01g040260",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -2754,7 +2754,7 @@
  {
   "locus": "SORBI_3001G439000",
   "gene_symbols": "SbLAX2",
-  "gene_names": "SbLAX2",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -2864,8 +2864,8 @@
  },
  {
   "locus": "SORBI_3001G470600",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR1;2",
+  "gene_symbols": "SbSULTR1;2",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -2880,8 +2880,8 @@
  },
  {
   "locus": "SORBI_3001G470800",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR2;1",
+  "gene_symbols": "SbSULTR2;1",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -2896,8 +2896,8 @@
  },
  {
   "locus": "SORBI_3001G470900",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR2;2",
+  "gene_symbols": "SbSULTR2;2",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -3024,8 +3024,8 @@
  },
  {
   "locus": "SORBI_3001G496800",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR3;2",
+  "gene_symbols": "SbSULTR3;2",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -3040,8 +3040,8 @@
  },
  {
   "locus": "SORBI_3001G499701",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA11",
+  "gene_symbols": "SbEXPA11",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3056,8 +3056,8 @@
  },
  {
   "locus": "SORBI_3001G499800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA12",
+  "gene_symbols": "SbEXPA12",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3072,8 +3072,8 @@
  },
  {
   "locus": "SORBI_3001G499900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA13",
+  "gene_symbols": "SbEXPA13",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3089,7 +3089,7 @@
  {
   "locus": "SORBI_3001G502000",
   "gene_symbols": "SbPHT1;3",
-  "gene_names": "Sb01g046890",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -3105,7 +3105,7 @@
  {
   "locus": "SORBI_3001G502100",
   "gene_symbols": "SbPHT1;4",
-  "gene_names": "Sb01g046900",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -3120,8 +3120,8 @@
  },
  {
   "locus": "SORBI_3001G505100",
-  "gene_symbols": "",
-  "gene_names": "SbTIP1-1",
+  "gene_symbols": "SbTIP1-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3173,7 +3173,7 @@
  {
   "locus": "SORBI_3001G513400",
   "gene_symbols": "SbPHT1;5",
-  "gene_names": "Sb01g047910",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -3188,8 +3188,8 @@
  },
  {
   "locus": "SORBI_3001G516500",
-  "gene_symbols": "",
-  "gene_names": "SbEXLB1",
+  "gene_symbols": "SbEXLB1",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3204,8 +3204,8 @@
  },
  {
   "locus": "SORBI_3001G521850",
-  "gene_symbols": "",
-  "gene_names": "SbFLA2",
+  "gene_symbols": "SbFLA2",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -3220,8 +3220,8 @@
  },
  {
   "locus": "SORBI_3001G529800",
-  "gene_symbols": "",
-  "gene_names": "SbPLDβ2",
+  "gene_symbols": "SbPLDβ2",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -3236,8 +3236,8 @@
  },
  {
   "locus": "SORBI_3001G530600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK9",
+  "gene_symbols": "SbCDPK9",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -3252,8 +3252,8 @@
  },
  {
   "locus": "SORBI_3001G535900",
-  "gene_symbols": "",
-  "gene_names": "SbTIP3-1",
+  "gene_symbols": "SbTIP3-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3284,8 +3284,8 @@
  },
  {
   "locus": "SORBI_3001G539760",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB16",
+  "gene_symbols": "SbEXPB16",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3348,8 +3348,8 @@
  },
  {
   "locus": "SORBI_3001G542100",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB17",
+  "gene_symbols": "SbEXPB17",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3364,8 +3364,8 @@
  },
  {
   "locus": "SORBI_3001G542200",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB18",
+  "gene_symbols": "SbEXPB18",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3380,8 +3380,8 @@
  },
  {
   "locus": "SORBI_3002G001300",
-  "gene_symbols": "Sb02g000300",
-  "gene_names": "SbLAC3",
+  "gene_symbols": "SbLAC3",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -3396,8 +3396,8 @@
  },
  {
   "locus": "SORBI_3002G010300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK10",
+  "gene_symbols": "SbCDPK10",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -3428,8 +3428,8 @@
  },
  {
   "locus": "SORBI_3002G021900",
-  "gene_symbols": "",
-  "gene_names": "SbWAK2",
+  "gene_symbols": "SbWAK2",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -3444,8 +3444,8 @@
  },
  {
   "locus": "SORBI_3002G023000",
-  "gene_symbols": "",
-  "gene_names": "SbWAK3",
+  "gene_symbols": "SbWAK3",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -3508,8 +3508,8 @@
  },
  {
   "locus": "SORBI_3002G034700",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK11",
+  "gene_symbols": "SbCDPK11",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -3560,8 +3560,8 @@
  },
  {
   "locus": "SORBI_3002G039700",
-  "gene_symbols": "",
-  "gene_names": "SbFLA3",
+  "gene_symbols": "SbFLA3",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -3596,8 +3596,8 @@
  },
  {
   "locus": "SORBI_3002G047700",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK12, SbCDPK13",
+  "gene_symbols": "SbCDPK12, SbCDPK13",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -3740,8 +3740,8 @@
  },
  {
   "locus": "SORBI_3002G078300",
-  "gene_symbols": "",
-  "gene_names": "SbACP4",
+  "gene_symbols": "SbACP4",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -3756,8 +3756,8 @@
  },
  {
   "locus": "SORBI_3002G083200",
-  "gene_symbols": "",
-  "gene_names": "SbZIP8",
+  "gene_symbols": "SbZIP8",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -3804,8 +3804,8 @@
  },
  {
   "locus": "SORBI_3002G098900",
-  "gene_symbols": "",
-  "gene_names": "SbPLDδ2",
+  "gene_symbols": "SbPLDδ2",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -3853,7 +3853,7 @@
  {
   "locus": "SORBI_3002G116100",
   "gene_symbols": "SbPHT1;6",
-  "gene_names": "Sb02g009880",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -3868,8 +3868,8 @@
  },
  {
   "locus": "SORBI_3002G124400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB19",
+  "gene_symbols": "SbEXPB19",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3884,8 +3884,8 @@
  },
  {
   "locus": "SORBI_3002G124500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB20",
+  "gene_symbols": "SbEXPB20",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -3900,8 +3900,8 @@
  },
  {
   "locus": "SORBI_3002G124700",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-2",
+  "gene_symbols": "SbPIP2-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3916,8 +3916,8 @@
  },
  {
   "locus": "SORBI_3002G125000",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-6",
+  "gene_symbols": "SbPIP2-6",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3932,8 +3932,8 @@
  },
  {
   "locus": "SORBI_3002G125200",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-1",
+  "gene_symbols": "SbPIP2-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3948,8 +3948,8 @@
  },
  {
   "locus": "SORBI_3002G125300",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-8",
+  "gene_symbols": "SbPIP2-8",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3964,8 +3964,8 @@
  },
  {
   "locus": "SORBI_3002G125500",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-4",
+  "gene_symbols": "SbPIP2-4",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -3980,8 +3980,8 @@
  },
  {
   "locus": "SORBI_3002G125700",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-6",
+  "gene_symbols": "SbPIP2-6",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -4044,8 +4044,8 @@
  },
  {
   "locus": "SORBI_3002G143500",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR4",
+  "gene_symbols": "SbSULTR4",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -4076,8 +4076,8 @@
  },
  {
   "locus": "SORBI_3002G156400",
-  "gene_symbols": "SbABCB2",
-  "gene_names": "SbPGP2",
+  "gene_symbols": "SbPGP2, SbABCB2",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -4226,8 +4226,8 @@
  },
  {
   "locus": "SORBI_3002G166150",
-  "gene_symbols": "",
-  "gene_names": "SbWAK4",
+  "gene_symbols": "SbWAK4",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -4294,8 +4294,8 @@
  },
  {
   "locus": "SORBI_3002G169200",
-  "gene_symbols": "",
-  "gene_names": "SbWAK5",
+  "gene_symbols": "SbWAK5",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -4358,8 +4358,8 @@
  },
  {
   "locus": "SORBI_3002G186300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK14",
+  "gene_symbols": "SbCDPK14",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -4422,8 +4422,8 @@
  },
  {
   "locus": "SORBI_3002G204500",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα2",
+  "gene_symbols": "SbPLDα2",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -4455,7 +4455,7 @@
  {
   "locus": "SORBI_3002G224100",
   "gene_symbols": "SbPHT3;2",
-  "gene_names": "Sb02g026490",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -4570,8 +4570,8 @@
  },
  {
   "locus": "SORBI_3002G237000",
-  "gene_symbols": "",
-  "gene_names": "SbFLA5",
+  "gene_symbols": "SbFLA5",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -4586,8 +4586,8 @@
  },
  {
   "locus": "SORBI_3002G238500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK15, SbCDPK16",
+  "gene_symbols": "SbCDPK15, SbCDPK16",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -4602,8 +4602,8 @@
  },
  {
   "locus": "SORBI_3002G244300",
-  "gene_symbols": "",
-  "gene_names": "SbFLA4, SbFLA6",
+  "gene_symbols": "SbFLA4, SbFLA6",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -4634,8 +4634,8 @@
  },
  {
   "locus": "SORBI_3002G249700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK6",
+  "gene_symbols": "SbWAK6",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -4651,7 +4651,7 @@
  {
   "locus": "SORBI_3002G257001",
   "gene_symbols": "SbPIN1",
-  "gene_names": "SbPIN1",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -4768,8 +4768,8 @@
  },
  {
   "locus": "SORBI_3002G280400",
-  "gene_symbols": "",
-  "gene_names": "SbACP5",
+  "gene_symbols": "SbACP5",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -4784,8 +4784,8 @@
  },
  {
   "locus": "SORBI_3002G281000",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-7",
+  "gene_symbols": "SbPIP2-7",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -4800,8 +4800,8 @@
  },
  {
   "locus": "SORBI_3002G282500",
-  "gene_symbols": "",
-  "gene_names": "SbPLDδ1",
+  "gene_symbols": "SbPLDδ1",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -4817,7 +4817,7 @@
  {
   "locus": "SORBI_3002G291800",
   "gene_symbols": "SbPHT3;3",
-  "gene_names": "Sb02g032310",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -4858,7 +4858,7 @@
  {
   "locus": "SORBI_3002G293500",
   "gene_symbols": "SbPHT4;2",
-  "gene_names": "Sb02g032440",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -4937,8 +4937,8 @@
  },
  {
   "locus": "SORBI_3002G305800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA14",
+  "gene_symbols": "SbEXPA14",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -4985,8 +4985,8 @@
  },
  {
   "locus": "SORBI_3002G317300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK17, SbCDPK18",
+  "gene_symbols": "SbCDPK17, SbCDPK18",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5113,8 +5113,8 @@
  },
  {
   "locus": "SORBI_3002G351000",
-  "gene_symbols": "",
-  "gene_names": "SbFLA7",
+  "gene_symbols": "SbFLA7",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -5261,8 +5261,8 @@
  },
  {
   "locus": "SORBI_3002G376500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK19",
+  "gene_symbols": "SbCDPK19",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5293,8 +5293,8 @@
  },
  {
   "locus": "SORBI_3002G379400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK20",
+  "gene_symbols": "SbCDPK20",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5429,8 +5429,8 @@
  },
  {
   "locus": "SORBI_3002G424350",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK21",
+  "gene_symbols": "SbCDPK21",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5461,8 +5461,8 @@
  },
  {
   "locus": "SORBI_3002G431600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK22",
+  "gene_symbols": "SbCDPK22",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5477,8 +5477,8 @@
  },
  {
   "locus": "SORBI_3003G006600",
-  "gene_symbols": "",
-  "gene_names": "SbTIP4-1",
+  "gene_symbols": "SbTIP4-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -5493,8 +5493,8 @@
  },
  {
   "locus": "SORBI_3003G007200",
-  "gene_symbols": "",
-  "gene_names": "SbTIP4-4",
+  "gene_symbols": "SbTIP4-4",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -5526,7 +5526,7 @@
  {
   "locus": "SORBI_3003G015200",
   "gene_symbols": "SbSWEET3BI",
-  "gene_names": "Sb03g001520",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -5573,8 +5573,8 @@
  },
  {
   "locus": "SORBI_3003G024800",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK23",
+  "gene_symbols": "SbCDPK23",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5589,8 +5589,8 @@
  },
  {
   "locus": "SORBI_3003G026400",
-  "gene_symbols": "",
-  "gene_names": "SbNIP1-2",
+  "gene_symbols": "SbNIP1-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -5637,8 +5637,8 @@
  },
  {
   "locus": "SORBI_3003G029700",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK24",
+  "gene_symbols": "SbCDPK24",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5653,8 +5653,8 @@
  },
  {
   "locus": "SORBI_3003G034600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK25",
+  "gene_symbols": "SbCDPK25",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -5685,8 +5685,8 @@
  },
  {
   "locus": "SORBI_3003G047900",
-  "gene_symbols": "",
-  "gene_names": "SbBOR1",
+  "gene_symbols": "SbBOR1",
+  "gene_names": "",
   "references": {
    "35406892": {
     "description": "Boron transporters (BORs)"
@@ -5717,8 +5717,8 @@
  },
  {
   "locus": "SORBI_3003G050400",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα3",
+  "gene_symbols": "SbPLDα3",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -5781,8 +5781,8 @@
  },
  {
   "locus": "SORBI_3003G059900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA15",
+  "gene_symbols": "SbEXPA15",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -5829,8 +5829,8 @@
  },
  {
   "locus": "SORBI_3003G062000",
-  "gene_symbols": "",
-  "gene_names": "SbFLA8",
+  "gene_symbols": "SbFLA8",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -5861,8 +5861,8 @@
  },
  {
   "locus": "SORBI_3003G098100",
-  "gene_symbols": "",
-  "gene_names": "SbNIP4-1",
+  "gene_symbols": "SbNIP4-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -5878,7 +5878,7 @@
  {
   "locus": "SORBI_3003G101000",
   "gene_symbols": "SbPHO1;1",
-  "gene_names": "Sb03g008460",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -5938,8 +5938,8 @@
  },
  {
   "locus": "SORBI_3003G111900",
-  "gene_symbols": "Sb03g009410",
-  "gene_names": "SbLAC4",
+  "gene_symbols": "SbLAC4",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -5954,8 +5954,8 @@
  },
  {
   "locus": "SORBI_3003G112100",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA16",
+  "gene_symbols": "SbEXPA16",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -5970,8 +5970,8 @@
  },
  {
   "locus": "SORBI_3003G113800",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK26",
+  "gene_symbols": "SbCDPK26",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -6050,8 +6050,8 @@
  },
  {
   "locus": "SORBI_3003G128800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA17",
+  "gene_symbols": "SbEXPA17",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -6083,7 +6083,7 @@
  {
   "locus": "SORBI_3003G133700",
   "gene_symbols": "SbPHT4;3",
-  "gene_names": "Sb03g011370",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -6098,8 +6098,8 @@
  },
  {
   "locus": "SORBI_3003G139300",
-  "gene_symbols": "SbABCB3",
-  "gene_names": "SbPGP3",
+  "gene_symbols": "SbPGP3, SbABCB3",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -6136,8 +6136,8 @@
  },
  {
   "locus": "SORBI_3003G141500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK27, SbCDPK28",
+  "gene_symbols": "SbCDPK27, SbCDPK28",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -6184,8 +6184,8 @@
  },
  {
   "locus": "SORBI_3003G147000",
-  "gene_symbols": "",
-  "gene_names": "SbPLDζ",
+  "gene_symbols": "SbPLDζ",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -6248,8 +6248,8 @@
  },
  {
   "locus": "SORBI_3003G175100",
-  "gene_symbols": "",
-  "gene_names": "SbWAK7",
+  "gene_symbols": "SbWAK7",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -6360,8 +6360,8 @@
  },
  {
   "locus": "SORBI_3003G180400",
-  "gene_symbols": "SbABCB4",
-  "gene_names": "SbPGP4",
+  "gene_symbols": "SbPGP4, SbABCB4",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -6399,7 +6399,7 @@
  {
   "locus": "SORBI_3003G182800",
   "gene_symbols": "SbSWEET2AI",
-  "gene_names": "Sb03g024250",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -6431,7 +6431,7 @@
  {
   "locus": "SORBI_3003G186800",
   "gene_symbols": "SbPHT4;4",
-  "gene_names": "Sb03g025190",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -6500,8 +6500,8 @@
  },
  {
   "locus": "SORBI_3003G208700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK8",
+  "gene_symbols": "SbWAK8",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -6517,7 +6517,7 @@
  {
   "locus": "SORBI_3003G213000",
   "gene_symbols": "SbSWEET6II",
-  "gene_names": "Sb03g027260",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -6548,8 +6548,8 @@
  },
  {
   "locus": "SORBI_3003G225200",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK29",
+  "gene_symbols": "SbCDPK29",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -6564,8 +6564,8 @@
  },
  {
   "locus": "SORBI_3003G229400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK30",
+  "gene_symbols": "SbCDPK30",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -6616,8 +6616,8 @@
  },
  {
   "locus": "SORBI_3003G231400",
-  "gene_symbols": "Sb03g028920",
-  "gene_names": "SbLAC5",
+  "gene_symbols": "SbLAC5",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -6633,7 +6633,7 @@
  {
   "locus": "SORBI_3003G235800",
   "gene_symbols": "SbPIN2",
-  "gene_names": "SbPIN2",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -6735,7 +6735,7 @@
  {
   "locus": "SORBI_3003G243400",
   "gene_symbols": "SbPHT1;7",
-  "gene_names": "Sb03g029970",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -6750,8 +6750,8 @@
  },
  {
   "locus": "SORBI_3003G250700",
-  "gene_symbols": "",
-  "gene_names": "SbFLA9",
+  "gene_symbols": "SbFLA9",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -6830,8 +6830,8 @@
  },
  {
   "locus": "SORBI_3003G267100",
-  "gene_symbols": "SbABCB5",
-  "gene_names": "SbPGP5",
+  "gene_symbols": "SbPGP5, SbABCB5",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -6852,8 +6852,8 @@
  },
  {
   "locus": "SORBI_3003G267300",
-  "gene_symbols": "SbABCB6",
-  "gene_names": "SbPGP6",
+  "gene_symbols": "SbPGP6, SbABCB6",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -6874,8 +6874,8 @@
  },
  {
   "locus": "SORBI_3003G267700",
-  "gene_symbols": "SbABCB7",
-  "gene_names": "SbPGP7",
+  "gene_symbols": "SbPGP7, SbABCB7",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -6897,7 +6897,7 @@
  {
   "locus": "SORBI_3003G269300",
   "gene_symbols": "SbSWEET2BI",
-  "gene_names": "Sb03g032190",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -6928,8 +6928,8 @@
  },
  {
   "locus": "SORBI_3003G273600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK32",
+  "gene_symbols": "SbCDPK32",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -6993,7 +6993,7 @@
  {
   "locus": "SORBI_3003G276700",
   "gene_symbols": "SbPIN3",
-  "gene_names": "SbPIN3",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -7034,8 +7034,8 @@
  },
  {
   "locus": "SORBI_3003G278600",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR3;3",
+  "gene_symbols": "SbSULTR3;3",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -7050,8 +7050,8 @@
  },
  {
   "locus": "SORBI_3003G281400",
-  "gene_symbols": "SbABCB8",
-  "gene_names": "SbPGP8",
+  "gene_symbols": "SbPGP8, SbABCB8",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -7120,8 +7120,8 @@
  },
  {
   "locus": "SORBI_3003G284000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK33",
+  "gene_symbols": "SbCDPK33",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7240,8 +7240,8 @@
  },
  {
   "locus": "SORBI_3003G311900",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK34, SbCDPK35",
+  "gene_symbols": "SbCDPK34, SbCDPK35",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7273,7 +7273,7 @@
  {
   "locus": "SORBI_3003G327500",
   "gene_symbols": "SbPIN4",
-  "gene_names": "SbPIN4",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -7294,8 +7294,8 @@
  },
  {
   "locus": "SORBI_3003G329600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK36",
+  "gene_symbols": "SbCDPK36",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7310,8 +7310,8 @@
  },
  {
   "locus": "SORBI_3003G330300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK37",
+  "gene_symbols": "SbCDPK37",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7326,8 +7326,8 @@
  },
  {
   "locus": "SORBI_3003G338801",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA18",
+  "gene_symbols": "SbEXPA18",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -7358,8 +7358,8 @@
  },
  {
   "locus": "SORBI_3003G341500",
-  "gene_symbols": "Sb03g038550",
-  "gene_names": "SbLAC6",
+  "gene_symbols": "SbLAC6",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7374,8 +7374,8 @@
  },
  {
   "locus": "SORBI_3003G345000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK38",
+  "gene_symbols": "SbCDPK38",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7390,8 +7390,8 @@
  },
  {
   "locus": "SORBI_3003G345200",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK39",
+  "gene_symbols": "SbCDPK39",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7406,8 +7406,8 @@
  },
  {
   "locus": "SORBI_3003G349300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK40, SbCDPK41",
+  "gene_symbols": "SbCDPK40, SbCDPK41",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -7438,8 +7438,8 @@
  },
  {
   "locus": "SORBI_3003G351900",
-  "gene_symbols": "",
-  "gene_names": "SbFLA10",
+  "gene_symbols": "SbFLA10",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -7470,8 +7470,8 @@
  },
  {
   "locus": "SORBI_3003G352700",
-  "gene_symbols": "Sb03g039520",
-  "gene_names": "SbLAC7",
+  "gene_symbols": "SbLAC7",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7486,8 +7486,8 @@
  },
  {
   "locus": "SORBI_3003G352800",
-  "gene_symbols": "Sb03g039530",
-  "gene_names": "SbLAC8",
+  "gene_symbols": "SbLAC8",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7502,8 +7502,8 @@
  },
  {
   "locus": "SORBI_3003G353200",
-  "gene_symbols": "Sb03g039570",
-  "gene_names": "SbLAC9",
+  "gene_symbols": "SbLAC9",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7550,8 +7550,8 @@
  },
  {
   "locus": "SORBI_3003G357500",
-  "gene_symbols": "Sb03g039960",
-  "gene_names": "SbLAC10",
+  "gene_symbols": "SbLAC10",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7566,8 +7566,8 @@
  },
  {
   "locus": "SORBI_3003G357600",
-  "gene_symbols": "Sb03g039970",
-  "gene_names": "SbLAC11",
+  "gene_symbols": "SbLAC11",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7582,8 +7582,8 @@
  },
  {
   "locus": "SORBI_3003G357700",
-  "gene_symbols": "Sb03g039980",
-  "gene_names": "SbLAC12",
+  "gene_symbols": "SbLAC12",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -7599,7 +7599,7 @@
  {
   "locus": "SORBI_3003G358900",
   "gene_symbols": "SbPHT4;5",
-  "gene_names": "Sb03g040080",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -7615,7 +7615,7 @@
  {
   "locus": "SORBI_3003G361300",
   "gene_symbols": "SbLAX3",
-  "gene_names": "SbLAX3",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -7653,7 +7653,7 @@
  {
   "locus": "SORBI_3003G377700",
   "gene_symbols": "SbSWEET1AI",
-  "gene_names": "Sb03g041740",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -7781,7 +7781,7 @@
  {
   "locus": "SORBI_3003G403900",
   "gene_symbols": "SbPIN5",
-  "gene_names": "SbPIN5",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -7898,8 +7898,8 @@
  },
  {
   "locus": "SORBI_3003G443700",
-  "gene_symbols": "",
-  "gene_names": "SbZIP1",
+  "gene_symbols": "SbZIP1",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -7930,8 +7930,8 @@
  },
  {
   "locus": "SORBI_3003G444400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA19",
+  "gene_symbols": "SbEXPA19",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -7946,8 +7946,8 @@
  },
  {
   "locus": "SORBI_3003G445300",
-  "gene_symbols": "",
-  "gene_names": "SbTIP1-2",
+  "gene_symbols": "SbTIP1-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -7962,8 +7962,8 @@
  },
  {
   "locus": "SORBI_3003G445500",
-  "gene_symbols": "SbABCB9",
-  "gene_names": "SbPGP9",
+  "gene_symbols": "SbPGP9, SbABCB9",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -8000,8 +8000,8 @@
  },
  {
   "locus": "SORBI_3004G008100",
-  "gene_symbols": "",
-  "gene_names": "SbWAK9",
+  "gene_symbols": "SbWAK9",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -8032,8 +8032,8 @@
  },
  {
   "locus": "SORBI_3004G016900",
-  "gene_symbols": "",
-  "gene_names": "SbPLDδ3",
+  "gene_symbols": "SbPLDδ3",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -8048,8 +8048,8 @@
  },
  {
   "locus": "SORBI_3004G021000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK42",
+  "gene_symbols": "SbCDPK42",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8064,8 +8064,8 @@
  },
  {
   "locus": "SORBI_3004G025000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK43, SbCDPK44",
+  "gene_symbols": "SbCDPK43, SbCDPK44",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8096,8 +8096,8 @@
  },
  {
   "locus": "SORBI_3004G040200",
-  "gene_symbols": "SbMPK14",
-  "gene_names": "SbCDPK45",
+  "gene_symbols": "SbMPK14, SbCDPK45",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8167,7 +8167,7 @@
  },
  {
   "locus": "SORBI_3004G055500",
-  "gene_symbols": "",
+  "gene_symbols": "SbIMP-3",
   "gene_names": "SbIMP-3",
   "references": {
    "42787373": {
@@ -8183,8 +8183,8 @@
  },
  {
   "locus": "SORBI_3004G062300",
-  "gene_symbols": "",
-  "gene_names": "SbFLA11",
+  "gene_symbols": "SbFLA11",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -8247,8 +8247,8 @@
  },
  {
   "locus": "SORBI_3004G073500",
-  "gene_symbols": "SbABCB11",
-  "gene_names": "SbPGP11",
+  "gene_symbols": "SbPGP11, SbABCB11",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -8269,8 +8269,8 @@
  },
  {
   "locus": "SORBI_3004G073600",
-  "gene_symbols": "SbABCB12",
-  "gene_names": "SbPGP12",
+  "gene_symbols": "SbPGP12, SbABCB12",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -8400,8 +8400,8 @@
  },
  {
   "locus": "SORBI_3004G099300",
-  "gene_symbols": "SbTST2",
-  "gene_names": "SbTMT2",
+  "gene_symbols": "SbTMT2, SbTST2",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "Tonoplast Sugar Transporters"
@@ -8419,8 +8419,8 @@
  },
  {
   "locus": "SORBI_3004G102200",
-  "gene_symbols": "",
-  "gene_names": "SbNIP1-1",
+  "gene_symbols": "SbNIP1-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -8435,8 +8435,8 @@
  },
  {
   "locus": "SORBI_3004G104900",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK46",
+  "gene_symbols": "SbCDPK46",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8483,8 +8483,8 @@
  },
  {
   "locus": "SORBI_3004G119600",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA20",
+  "gene_symbols": "SbEXPA20",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8499,8 +8499,8 @@
  },
  {
   "locus": "SORBI_3004G119800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA21",
+  "gene_symbols": "SbEXPA21",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8515,8 +8515,8 @@
  },
  {
   "locus": "SORBI_3004G121600",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA22",
+  "gene_symbols": "SbEXPA22",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8531,8 +8531,8 @@
  },
  {
   "locus": "SORBI_3004G121700",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA23",
+  "gene_symbols": "SbEXPA23",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8547,8 +8547,8 @@
  },
  {
   "locus": "SORBI_3004G121800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA24",
+  "gene_symbols": "SbEXPA24",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8563,8 +8563,8 @@
  },
  {
   "locus": "SORBI_3004G121900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA25",
+  "gene_symbols": "SbEXPA25",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8579,8 +8579,8 @@
  },
  {
   "locus": "SORBI_3004G127400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK47",
+  "gene_symbols": "SbCDPK47",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8612,7 +8612,7 @@
  {
   "locus": "SORBI_3004G133500",
   "gene_symbols": "SbSWEET4BII",
-  "gene_names": "Sb04g012910",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -8628,7 +8628,7 @@
  {
   "locus": "SORBI_3004G133600",
   "gene_symbols": "SbSWEET4CII",
-  "gene_names": "Sb04g012920",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -8660,7 +8660,7 @@
  {
   "locus": "SORBI_3004G136600",
   "gene_symbols": "SbSWEET4AII",
-  "gene_names": "Sb04g015420",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -8692,7 +8692,7 @@
  {
   "locus": "SORBI_3004G157100",
   "gene_symbols": "SbSWEET15III",
-  "gene_names": "Sb04g021000",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -8755,8 +8755,8 @@
  },
  {
   "locus": "SORBI_3004G173500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK48",
+  "gene_symbols": "SbCDPK48",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8771,8 +8771,8 @@
  },
  {
   "locus": "SORBI_3004G174600",
-  "gene_symbols": "SbABCB13",
-  "gene_names": "SbPGP13",
+  "gene_symbols": "SbPGP13, SbABCB13",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -8825,8 +8825,8 @@
  },
  {
   "locus": "SORBI_3004G189900",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK49",
+  "gene_symbols": "SbCDPK49",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8841,8 +8841,8 @@
  },
  {
   "locus": "SORBI_3004G191600",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB21",
+  "gene_symbols": "SbEXPB21",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -8858,7 +8858,7 @@
  {
   "locus": "SORBI_3004G199900",
   "gene_symbols": "SbPHT2;1",
-  "gene_names": "Sb04g024630",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -8895,8 +8895,8 @@
  },
  {
   "locus": "SORBI_3004G202500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK50",
+  "gene_symbols": "SbCDPK50",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -8959,8 +8959,8 @@
  },
  {
   "locus": "SORBI_3004G211000",
-  "gene_symbols": "",
-  "gene_names": "SbWAK10",
+  "gene_symbols": "SbWAK10",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -9007,8 +9007,8 @@
  },
  {
   "locus": "SORBI_3004G216200",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK51",
+  "gene_symbols": "SbCDPK51",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -9023,8 +9023,8 @@
  },
  {
   "locus": "SORBI_3004G219700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK11",
+  "gene_symbols": "SbWAK11",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -9039,8 +9039,8 @@
  },
  {
   "locus": "SORBI_3004G220300",
-  "gene_symbols": "",
-  "gene_names": "SbPAL1",
+  "gene_symbols": "SbPAL1",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -9055,8 +9055,8 @@
  },
  {
   "locus": "SORBI_3004G220400",
-  "gene_symbols": "",
-  "gene_names": "SbPAL2",
+  "gene_symbols": "SbPAL2",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -9071,8 +9071,8 @@
  },
  {
   "locus": "SORBI_3004G220500",
-  "gene_symbols": "",
-  "gene_names": "SbPAL3",
+  "gene_symbols": "SbPAL3",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -9087,8 +9087,8 @@
  },
  {
   "locus": "SORBI_3004G220600",
-  "gene_symbols": "",
-  "gene_names": "SbPAL4",
+  "gene_symbols": "SbPAL4",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -9103,8 +9103,8 @@
  },
  {
   "locus": "SORBI_3004G220700",
-  "gene_symbols": "",
-  "gene_names": "SbPAL5",
+  "gene_symbols": "SbPAL5",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -9119,8 +9119,8 @@
  },
  {
   "locus": "SORBI_3004G222000",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-3",
+  "gene_symbols": "SbPIP2-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -9151,8 +9151,8 @@
  },
  {
   "locus": "SORBI_3004G223400",
-  "gene_symbols": "",
-  "gene_names": "SbWAK12",
+  "gene_symbols": "SbWAK12",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -9167,8 +9167,8 @@
  },
  {
   "locus": "SORBI_3004G223500",
-  "gene_symbols": "",
-  "gene_names": "SbWAK13",
+  "gene_symbols": "SbWAK13",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -9183,8 +9183,8 @@
  },
  {
   "locus": "SORBI_3004G227900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB22",
+  "gene_symbols": "SbEXPB22",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -9215,8 +9215,8 @@
  },
  {
   "locus": "SORBI_3004G235900",
-  "gene_symbols": "Sb04g027850",
-  "gene_names": "SbLAC13",
+  "gene_symbols": "SbLAC13",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -9231,8 +9231,8 @@
  },
  {
   "locus": "SORBI_3004G236000",
-  "gene_symbols": "Sb04g027860",
-  "gene_names": "SbLAC14",
+  "gene_symbols": "SbLAC14",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -9247,8 +9247,8 @@
  },
  {
   "locus": "SORBI_3004G236100",
-  "gene_symbols": "–",
-  "gene_names": "SbLAC15",
+  "gene_symbols": "SbLAC15",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -9263,8 +9263,8 @@
  },
  {
   "locus": "SORBI_3004G238100",
-  "gene_symbols": "",
-  "gene_names": "SbNIP2-1",
+  "gene_symbols": "SbNIP2-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -9295,8 +9295,8 @@
  },
  {
   "locus": "SORBI_3004G238801",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA26",
+  "gene_symbols": "SbEXPA26",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -9312,7 +9312,7 @@
  {
   "locus": "SORBI_3004G240900",
   "gene_symbols": "SbPIN6",
-  "gene_names": "SbPIN6",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -9349,8 +9349,8 @@
  },
  {
   "locus": "SORBI_3004G254300",
-  "gene_symbols": "",
-  "gene_names": "SbFLA12",
+  "gene_symbols": "SbFLA12",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -9365,8 +9365,8 @@
  },
  {
   "locus": "SORBI_3004G255800",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK52",
+  "gene_symbols": "SbCDPK52",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -9453,8 +9453,8 @@
  },
  {
   "locus": "SORBI_3004G274600",
-  "gene_symbols": "SbABCB14",
-  "gene_names": "SbPGP14",
+  "gene_symbols": "SbPGP14, SbABCB14",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -9491,8 +9491,8 @@
  },
  {
   "locus": "SORBI_3004G279100",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK53",
+  "gene_symbols": "SbCDPK53",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -9598,8 +9598,8 @@
  },
  {
   "locus": "SORBI_3004G288700",
-  "gene_symbols": "",
-  "gene_names": "SbPIP1-3",
+  "gene_symbols": "SbPIP1-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -9822,8 +9822,8 @@
  },
  {
   "locus": "SORBI_3004G294300",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB23",
+  "gene_symbols": "SbEXPB23",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -9838,8 +9838,8 @@
  },
  {
   "locus": "SORBI_3004G294400",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB24",
+  "gene_symbols": "SbEXPB24",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -9854,8 +9854,8 @@
  },
  {
   "locus": "SORBI_3004G294500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB25",
+  "gene_symbols": "SbEXPB25",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -9870,8 +9870,8 @@
  },
  {
   "locus": "SORBI_3004G295100",
-  "gene_symbols": "",
-  "gene_names": "SbTIP2-1",
+  "gene_symbols": "SbTIP2-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -9903,7 +9903,7 @@
  {
   "locus": "SORBI_3004G310300",
   "gene_symbols": "SbPHT3;4",
-  "gene_names": "Sb04g034260",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -9918,8 +9918,8 @@
  },
  {
   "locus": "SORBI_3004G314200",
-  "gene_symbols": "Sb04g034610",
-  "gene_names": "SbLAC16",
+  "gene_symbols": "SbLAC16",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -9934,8 +9934,8 @@
  },
  {
   "locus": "SORBI_3004G314300",
-  "gene_symbols": "Sb04g034620",
-  "gene_names": "SbLAC17",
+  "gene_symbols": "SbLAC17",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -10046,7 +10046,7 @@
  },
  {
   "locus": "SORBI_3004G337000",
-  "gene_symbols": "",
+  "gene_symbols": "SbIMP-4",
   "gene_names": "SbIMP-4",
   "references": {
    "42787373": {
@@ -10062,8 +10062,8 @@
  },
  {
   "locus": "SORBI_3004G338200",
-  "gene_symbols": "",
-  "gene_names": "SbWAK14",
+  "gene_symbols": "SbWAK14",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -10110,8 +10110,8 @@
  },
  {
   "locus": "SORBI_3004G345200",
-  "gene_symbols": "",
-  "gene_names": "SbWAK15",
+  "gene_symbols": "SbWAK15",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -10151,8 +10151,8 @@
  },
  {
   "locus": "SORBI_3004G351200",
-  "gene_symbols": "",
-  "gene_names": "SbPIP1-5",
+  "gene_symbols": "SbPIP1-5",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -10238,8 +10238,8 @@
  },
  {
   "locus": "SORBI_3005G005800",
-  "gene_symbols": "Sb05g000680",
-  "gene_names": "SbLAC18",
+  "gene_symbols": "SbLAC18",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -10286,8 +10286,8 @@
  },
  {
   "locus": "SORBI_3005G024200",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK55, SbCDPK56, SbCDPK57",
+  "gene_symbols": "SbCDPK55, SbCDPK56, SbCDPK57",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -10303,7 +10303,7 @@
  {
   "locus": "SORBI_3005G025900",
   "gene_symbols": "SbPIN7",
-  "gene_names": "SbPIN7",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -10459,7 +10459,7 @@
  {
   "locus": "SORBI_3005G052500",
   "gene_symbols": "SbLAX4",
-  "gene_names": "SbLAX4",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -10480,8 +10480,8 @@
  },
  {
   "locus": "SORBI_3005G056600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK58",
+  "gene_symbols": "SbCDPK58",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -10512,8 +10512,8 @@
  },
  {
   "locus": "SORBI_3005G070200",
-  "gene_symbols": "",
-  "gene_names": "SbWAK16",
+  "gene_symbols": "SbWAK16",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -10560,8 +10560,8 @@
  },
  {
   "locus": "SORBI_3005G091600",
-  "gene_symbols": "",
-  "gene_names": "SbSIP1-1",
+  "gene_symbols": "SbSIP1-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -10576,8 +10576,8 @@
  },
  {
   "locus": "SORBI_3005G106600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK59, SbCDPK60",
+  "gene_symbols": "SbCDPK59, SbCDPK60",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -10641,7 +10641,7 @@
  {
   "locus": "SORBI_3005G123500",
   "gene_symbols": "SbSWEET14III",
-  "gene_names": "Sb05g018110",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -10656,8 +10656,8 @@
  },
  {
   "locus": "SORBI_3005G128100",
-  "gene_symbols": "",
-  "gene_names": "SbACP6",
+  "gene_symbols": "SbACP6",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -10720,8 +10720,8 @@
  },
  {
   "locus": "SORBI_3005G156700",
-  "gene_symbols": "Sb05g021890",
-  "gene_names": "SbLAC19",
+  "gene_symbols": "SbLAC19",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -10736,8 +10736,8 @@
  },
  {
   "locus": "SORBI_3005G157600",
-  "gene_symbols": "",
-  "gene_names": "CYP79A94",
+  "gene_symbols": "CYP79A94",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -10752,8 +10752,8 @@
  },
  {
   "locus": "SORBI_3005G158200",
-  "gene_symbols": "",
-  "gene_names": "CYP79A95",
+  "gene_symbols": "CYP79A95",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -10788,8 +10788,8 @@
  },
  {
   "locus": "SORBI_3005G163800",
-  "gene_symbols": "Sb05g022480",
-  "gene_names": "SbLAC20",
+  "gene_symbols": "SbLAC20",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -10868,8 +10868,8 @@
  },
  {
   "locus": "SORBI_3005G179200",
-  "gene_symbols": "",
-  "gene_names": "SbWAK17",
+  "gene_symbols": "SbWAK17",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -10932,8 +10932,8 @@
  },
  {
   "locus": "SORBI_3005G191900",
-  "gene_symbols": "",
-  "gene_names": "SbTMT3",
+  "gene_symbols": "SbTMT3",
+  "gene_names": "",
   "references": {
    "37372320": {
     "description": "tonoplast monosaccharide transporter"
@@ -10948,8 +10948,8 @@
  },
  {
   "locus": "SORBI_3005G198500",
-  "gene_symbols": "Sb05g025570",
-  "gene_names": "SbLAC21",
+  "gene_symbols": "SbLAC21",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -11080,8 +11080,8 @@
  },
  {
   "locus": "SORBI_3005G215300",
-  "gene_symbols": "Sb05g026630",
-  "gene_names": "SbLAC22",
+  "gene_symbols": "SbLAC22",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -11096,8 +11096,8 @@
  },
  {
   "locus": "SORBI_3005G222500",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα4",
+  "gene_symbols": "SbPLDα4",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -11112,8 +11112,8 @@
  },
  {
   "locus": "SORBI_3005G222700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK18",
+  "gene_symbols": "SbWAK18",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -11416,8 +11416,8 @@
  },
  {
   "locus": "SORBI_3006G014800",
-  "gene_symbols": "SbABCB15",
-  "gene_names": "SbPGP15",
+  "gene_symbols": "SbPGP15, SbABCB15",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -11519,7 +11519,7 @@
  {
   "locus": "SORBI_3006G026800",
   "gene_symbols": "SbPHT1;8",
-  "gene_names": "Sb06g002540",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -11535,7 +11535,7 @@
  {
   "locus": "SORBI_3006G026900",
   "gene_symbols": "SbPHT1;9",
-  "gene_names": "Sb06g002560",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -11551,7 +11551,7 @@
  {
   "locus": "SORBI_3006G027300",
   "gene_symbols": "SbPHT1;10",
-  "gene_names": "Sb06g002800",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -11582,8 +11582,8 @@
  },
  {
   "locus": "SORBI_3006G031900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA27",
+  "gene_symbols": "SbEXPA27",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -11778,8 +11778,8 @@
  },
  {
   "locus": "SORBI_3006G083000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK61, SbCDPK62",
+  "gene_symbols": "SbCDPK61, SbCDPK62",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -11863,7 +11863,7 @@
  {
   "locus": "SORBI_3006G097400",
   "gene_symbols": "SbPHT3;5",
-  "gene_names": "Sb06g018210",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -11937,8 +11937,8 @@
  },
  {
   "locus": "SORBI_3006G104500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK63",
+  "gene_symbols": "SbCDPK63",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -11953,8 +11953,8 @@
  },
  {
   "locus": "SORBI_3006G105600",
-  "gene_symbols": "SbABCB16",
-  "gene_names": "SbPGP16",
+  "gene_symbols": "SbPGP16, SbABCB16",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -12023,8 +12023,8 @@
  },
  {
   "locus": "SORBI_3006G115800",
-  "gene_symbols": "",
-  "gene_names": "SbFLA13",
+  "gene_symbols": "SbFLA13",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -12039,8 +12039,8 @@
  },
  {
   "locus": "SORBI_3006G115900",
-  "gene_symbols": "",
-  "gene_names": "SbFLA14",
+  "gene_symbols": "SbFLA14",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -12071,8 +12071,8 @@
  },
  {
   "locus": "SORBI_3006G123100",
-  "gene_symbols": "SbABCB17",
-  "gene_names": "SbPGP17",
+  "gene_symbols": "SbPGP17, SbABCB17",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -12189,8 +12189,8 @@
  },
  {
   "locus": "SORBI_3006G148400",
-  "gene_symbols": "",
-  "gene_names": "SbWAK19",
+  "gene_symbols": "SbWAK19",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -12205,8 +12205,8 @@
  },
  {
   "locus": "SORBI_3006G148500",
-  "gene_symbols": "",
-  "gene_names": "SbWAK20",
+  "gene_symbols": "SbWAK20",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -12221,8 +12221,8 @@
  },
  {
   "locus": "SORBI_3006G148800",
-  "gene_symbols": "",
-  "gene_names": "SbPAL7",
+  "gene_symbols": "SbPAL7",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -12237,8 +12237,8 @@
  },
  {
   "locus": "SORBI_3006G148900",
-  "gene_symbols": "",
-  "gene_names": "SbPAL8",
+  "gene_symbols": "SbPAL8",
+  "gene_names": "",
   "references": {
    "36581623": {
     "description": "Phenylalanine ammonia-lyase"
@@ -12253,8 +12253,8 @@
  },
  {
   "locus": "SORBI_3006G150100",
-  "gene_symbols": "",
-  "gene_names": "SbPIP2-5",
+  "gene_symbols": "SbPIP2-5",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -12269,8 +12269,8 @@
  },
  {
   "locus": "SORBI_3006G155300",
-  "gene_symbols": "",
-  "gene_names": "SbTIP3-3",
+  "gene_symbols": "SbTIP3-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -12340,8 +12340,8 @@
  },
  {
   "locus": "SORBI_3006G170500",
-  "gene_symbols": "",
-  "gene_names": "SbTIP5-1",
+  "gene_symbols": "SbTIP5-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -12356,8 +12356,8 @@
  },
  {
   "locus": "SORBI_3006G170600",
-  "gene_symbols": "",
-  "gene_names": "SbTIP2-3",
+  "gene_symbols": "SbTIP2-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -12372,8 +12372,8 @@
  },
  {
   "locus": "SORBI_3006G171100",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB26",
+  "gene_symbols": "SbEXPB26",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12388,8 +12388,8 @@
  },
  {
   "locus": "SORBI_3006G171200",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB27",
+  "gene_symbols": "SbEXPB27",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12404,8 +12404,8 @@
  },
  {
   "locus": "SORBI_3006G171300",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB28",
+  "gene_symbols": "SbEXPB28",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12496,8 +12496,8 @@
  },
  {
   "locus": "SORBI_3006G176700",
-  "gene_symbols": "SbPIP1.1",
-  "gene_names": "SbPIP1-4",
+  "gene_symbols": "SbPIP1.1, SbPIP1-4",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -12540,8 +12540,8 @@
  },
  {
   "locus": "SORBI_3006G186300",
-  "gene_symbols": "",
-  "gene_names": "SbFLA15",
+  "gene_symbols": "SbFLA15",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -12597,8 +12597,8 @@
  },
  {
   "locus": "SORBI_3006G191700",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA28",
+  "gene_symbols": "SbEXPA28",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12629,8 +12629,8 @@
  },
  {
   "locus": "SORBI_3006G192500",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK64",
+  "gene_symbols": "SbCDPK64",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -12677,8 +12677,8 @@
  },
  {
   "locus": "SORBI_3006G212200",
-  "gene_symbols": "",
-  "gene_names": "SbZIP3",
+  "gene_symbols": "SbZIP3",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -12789,8 +12789,8 @@
  },
  {
   "locus": "SORBI_3006G236700",
-  "gene_symbols": "SbABCB18",
-  "gene_names": "SbPGP18",
+  "gene_symbols": "SbPGP18, SbABCB18",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -12827,8 +12827,8 @@
  },
  {
   "locus": "SORBI_3006G241700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK21",
+  "gene_symbols": "SbWAK21",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -12843,8 +12843,8 @@
  },
  {
   "locus": "SORBI_3006G243700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK22",
+  "gene_symbols": "SbWAK22",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -12859,8 +12859,8 @@
  },
  {
   "locus": "SORBI_3006G243800",
-  "gene_symbols": "",
-  "gene_names": "SbWAK23",
+  "gene_symbols": "SbWAK23",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -12875,8 +12875,8 @@
  },
  {
   "locus": "SORBI_3006G244000",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR3;4",
+  "gene_symbols": "SbSULTR3;4",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -12935,8 +12935,8 @@
  },
  {
   "locus": "SORBI_3007G018000",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA29",
+  "gene_symbols": "SbEXPA29",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12951,8 +12951,8 @@
  },
  {
   "locus": "SORBI_3007G019900",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA30",
+  "gene_symbols": "SbEXPA30",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12967,8 +12967,8 @@
  },
  {
   "locus": "SORBI_3007G020100",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA31",
+  "gene_symbols": "SbEXPA31",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12983,8 +12983,8 @@
  },
  {
   "locus": "SORBI_3007G020200",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA32",
+  "gene_symbols": "SbEXPA32",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -12999,8 +12999,8 @@
  },
  {
   "locus": "SORBI_3007G020400",
-  "gene_symbols": "",
-  "gene_names": "SbWAK24",
+  "gene_symbols": "SbWAK24",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13031,8 +13031,8 @@
  },
  {
   "locus": "SORBI_3007G038500",
-  "gene_symbols": "",
-  "gene_names": "SbNIP3-2",
+  "gene_symbols": "SbNIP3-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -13047,8 +13047,8 @@
  },
  {
   "locus": "SORBI_3007G039500",
-  "gene_symbols": "",
-  "gene_names": "SbNIP3-1",
+  "gene_symbols": "SbNIP3-1",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -13063,8 +13063,8 @@
  },
  {
   "locus": "SORBI_3007G039600",
-  "gene_symbols": "",
-  "gene_names": "SbNIP3-3",
+  "gene_symbols": "SbNIP3-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -13079,8 +13079,8 @@
  },
  {
   "locus": "SORBI_3007G042600",
-  "gene_symbols": "SbABCB19",
-  "gene_names": "SbPGP19",
+  "gene_symbols": "SbPGP19, SbABCB19",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -13101,8 +13101,8 @@
  },
  {
   "locus": "SORBI_3007G042700",
-  "gene_symbols": "SbABCB20",
-  "gene_names": "SbPGP20",
+  "gene_symbols": "SbPGP20, SbABCB20",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -13139,8 +13139,8 @@
  },
  {
   "locus": "SORBI_3007G046100",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK65",
+  "gene_symbols": "SbCDPK65",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -13225,8 +13225,8 @@
  },
  {
   "locus": "SORBI_3007G059600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK66",
+  "gene_symbols": "SbCDPK66",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -13257,8 +13257,8 @@
  },
  {
   "locus": "SORBI_3007G064900",
-  "gene_symbols": "",
-  "gene_names": "SbZIP9",
+  "gene_symbols": "SbZIP9",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -13273,8 +13273,8 @@
  },
  {
   "locus": "SORBI_3007G075700",
-  "gene_symbols": "",
-  "gene_names": "SbZIP4",
+  "gene_symbols": "SbZIP4",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -13349,8 +13349,8 @@
  },
  {
   "locus": "SORBI_3007G090457",
-  "gene_symbols": "",
-  "gene_names": "SbCYP79A96",
+  "gene_symbols": "SbCYP79A96",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -13365,8 +13365,8 @@
  },
  {
   "locus": "SORBI_3007G094100",
-  "gene_symbols": "",
-  "gene_names": "SbWAK25",
+  "gene_symbols": "SbWAK25",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13397,8 +13397,8 @@
  },
  {
   "locus": "SORBI_3007G105600",
-  "gene_symbols": "",
-  "gene_names": "SbWAK26",
+  "gene_symbols": "SbWAK26",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13429,8 +13429,8 @@
  },
  {
   "locus": "SORBI_3007G115300",
-  "gene_symbols": "",
-  "gene_names": "SbFLA16",
+  "gene_symbols": "SbFLA16",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -13445,8 +13445,8 @@
  },
  {
   "locus": "SORBI_3007G123500",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR1;3",
+  "gene_symbols": "SbSULTR1;3",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -13461,8 +13461,8 @@
  },
  {
   "locus": "SORBI_3007G124600",
-  "gene_symbols": "",
-  "gene_names": "SbTIP1-3",
+  "gene_symbols": "SbTIP1-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -13535,8 +13535,8 @@
  },
  {
   "locus": "SORBI_3007G140000",
-  "gene_symbols": "",
-  "gene_names": "SbWAK27",
+  "gene_symbols": "SbWAK27",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13631,8 +13631,8 @@
  },
  {
   "locus": "SORBI_3007G163800",
-  "gene_symbols": "Dw3, SbABCB21",
-  "gene_names": "SbPGP21",
+  "gene_symbols": "Dw3, SbPGP21, SbABCB21",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -13657,7 +13657,7 @@
  {
   "locus": "SORBI_3007G164400",
   "gene_symbols": "SbPHT1;11",
-  "gene_names": "Sb07g023780",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -13672,8 +13672,8 @@
  },
  {
   "locus": "SORBI_3007G166500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA33",
+  "gene_symbols": "SbEXPA33",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -13740,8 +13740,8 @@
  },
  {
   "locus": "SORBI_3007G176800",
-  "gene_symbols": "",
-  "gene_names": "SbACP7",
+  "gene_symbols": "SbACP7",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -13805,7 +13805,7 @@
  {
   "locus": "SORBI_3007G191200",
   "gene_symbols": "SbSWEET11AIII",
-  "gene_names": "Sb07g026040",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -13820,8 +13820,8 @@
  },
  {
   "locus": "SORBI_3007G208700",
-  "gene_symbols": "",
-  "gene_names": "SbWAK28",
+  "gene_symbols": "SbWAK28",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13836,8 +13836,8 @@
  },
  {
   "locus": "SORBI_3007G214300",
-  "gene_symbols": "",
-  "gene_names": "SbWAK29",
+  "gene_symbols": "SbWAK29",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13852,8 +13852,8 @@
  },
  {
   "locus": "SORBI_3007G214700",
-  "gene_symbols": "",
-  "gene_names": "SbFLA17",
+  "gene_symbols": "SbFLA17",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -13868,8 +13868,8 @@
  },
  {
   "locus": "SORBI_3007G215500",
-  "gene_symbols": "",
-  "gene_names": "SbWAK30",
+  "gene_symbols": "SbWAK30",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13884,8 +13884,8 @@
  },
  {
   "locus": "SORBI_3007G215600",
-  "gene_symbols": "",
-  "gene_names": "SbWAK31",
+  "gene_symbols": "SbWAK31",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13900,8 +13900,8 @@
  },
  {
   "locus": "SORBI_3007G215900",
-  "gene_symbols": "",
-  "gene_names": "SbWAK32",
+  "gene_symbols": "SbWAK32",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -13948,8 +13948,8 @@
  },
  {
   "locus": "SORBI_3007G221600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK68",
+  "gene_symbols": "SbCDPK68",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -13964,8 +13964,8 @@
  },
  {
   "locus": "SORBI_3007G222600",
-  "gene_symbols": "",
-  "gene_names": "SbFLA18",
+  "gene_symbols": "SbFLA18",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -14012,8 +14012,8 @@
  },
  {
   "locus": "SORBI_3008G006900",
-  "gene_symbols": "Sb08g000720",
-  "gene_names": "SbLAC23",
+  "gene_symbols": "SbLAC23",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -14124,8 +14124,8 @@
  },
  {
   "locus": "SORBI_3008G025600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK69",
+  "gene_symbols": "SbCDPK69",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -14220,8 +14220,8 @@
  },
  {
   "locus": "SORBI_3008G053300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK70",
+  "gene_symbols": "SbCDPK70",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -14236,8 +14236,8 @@
  },
  {
   "locus": "SORBI_3008G053800",
-  "gene_symbols": "",
-  "gene_names": "SbWAK33",
+  "gene_symbols": "SbWAK33",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -14252,8 +14252,8 @@
  },
  {
   "locus": "SORBI_3008G062300",
-  "gene_symbols": "",
-  "gene_names": "SbIMP-5",
+  "gene_symbols": "SbIMP-5",
+  "gene_names": "",
   "references": {
    "42787373": {
     "description": "Inositol monophosphatase (IMP),  a key enzyme in the inositol signaling pathway and ascorbic acid (AsA) biosynthesis, playing crucial roles in plant growth, development, and abiotic stress responses."
@@ -14268,8 +14268,8 @@
  },
  {
   "locus": "SORBI_3008G062400",
-  "gene_symbols": "",
-  "gene_names": "SbIMP-6",
+  "gene_symbols": "SbIMP-6",
+  "gene_names": "",
   "references": {
    "42787373": {
     "description": "Inositol monophosphatase (IMP),  a key enzyme in the inositol signaling pathway and ascorbic acid (AsA) biosynthesis, playing crucial roles in plant growth, development, and abiotic stress responses."
@@ -14316,8 +14316,8 @@
  },
  {
   "locus": "SORBI_3008G084200",
-  "gene_symbols": "",
-  "gene_names": "SbFLA19",
+  "gene_symbols": "SbFLA19",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -14364,8 +14364,8 @@
  },
  {
   "locus": "SORBI_3008G090800",
-  "gene_symbols": "Sb08g011530",
-  "gene_names": "SbLAC24",
+  "gene_symbols": "SbLAC24",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -14381,7 +14381,7 @@
  {
   "locus": "SORBI_3008G094000",
   "gene_symbols": "SbSWEET13AIII",
-  "gene_names": "Sb08g013620",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -14397,7 +14397,7 @@
  {
   "locus": "SORBI_3008G094300",
   "gene_symbols": "SbSWEET13BIII",
-  "gene_names": "Sb08g013840",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -14413,7 +14413,7 @@
  {
   "locus": "SORBI_3008G094400",
   "gene_symbols": "SbSWEET13CIII",
-  "gene_names": "Sb08g014040",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -14448,8 +14448,8 @@
  },
  {
   "locus": "SORBI_3008G116400",
-  "gene_symbols": "",
-  "gene_names": "SbACP8",
+  "gene_symbols": "SbACP8",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -14496,8 +14496,8 @@
  },
  {
   "locus": "SORBI_3008G132300",
-  "gene_symbols": "",
-  "gene_names": "SbBOR2",
+  "gene_symbols": "SbBOR2",
+  "gene_names": "",
   "references": {
    "35406892": {
     "description": "Boron transporters (BORs)"
@@ -14512,8 +14512,8 @@
  },
  {
   "locus": "SORBI_3008G133100",
-  "gene_symbols": "",
-  "gene_names": "SbWAK34",
+  "gene_symbols": "SbWAK34",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -14647,8 +14647,8 @@
  },
  {
   "locus": "SORBI_3008G147000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK71",
+  "gene_symbols": "SbCDPK71",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -14663,8 +14663,8 @@
  },
  {
   "locus": "SORBI_3008G151000",
-  "gene_symbols": "",
-  "gene_names": "SbWAK35",
+  "gene_symbols": "SbWAK35",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -14711,8 +14711,8 @@
  },
  {
   "locus": "SORBI_3008G163300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK72, SbCDPK73",
+  "gene_symbols": "SbCDPK72, SbCDPK73",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -14775,8 +14775,8 @@
  },
  {
   "locus": "SORBI_3008G171200",
-  "gene_symbols": "",
-  "gene_names": "SbWAK36",
+  "gene_symbols": "SbWAK36",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -14832,8 +14832,8 @@
  },
  {
   "locus": "SORBI_3008G183400",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα5",
+  "gene_symbols": "SbPLDα5",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -14864,8 +14864,8 @@
  },
  {
   "locus": "SORBI_3008G192800",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK74, SbCDPK75",
+  "gene_symbols": "SbCDPK74, SbCDPK75",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15004,8 +15004,8 @@
  },
  {
   "locus": "SORBI_3009G032300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK76",
+  "gene_symbols": "SbCDPK76",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15036,8 +15036,8 @@
  },
  {
   "locus": "SORBI_3009G034500",
-  "gene_symbols": "SbABCB22",
-  "gene_names": "SbPGP22",
+  "gene_symbols": "SbPGP22, SbABCB22",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "P-glycoprotein"
@@ -15058,8 +15058,8 @@
  },
  {
   "locus": "SORBI_3009G048900",
-  "gene_symbols": "",
-  "gene_names": "SbIMP-7",
+  "gene_symbols": "SbIMP-7",
+  "gene_names": "",
   "references": {
    "42787373": {
     "description": "Inositol monophosphatase (IMP),  a key enzyme in the inositol signaling pathway and ascorbic acid (AsA) biosynthesis, playing crucial roles in plant growth, development, and abiotic stress responses."
@@ -15074,8 +15074,8 @@
  },
  {
   "locus": "SORBI_3009G055900",
-  "gene_symbols": "",
-  "gene_names": "SbFLA20",
+  "gene_symbols": "SbFLA20",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -15090,8 +15090,8 @@
  },
  {
   "locus": "SORBI_3009G056400",
-  "gene_symbols": "",
-  "gene_names": "SbFLA21",
+  "gene_symbols": "SbFLA21",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -15106,8 +15106,8 @@
  },
  {
   "locus": "SORBI_3009G057700",
-  "gene_symbols": "",
-  "gene_names": "SbZIP6",
+  "gene_symbols": "SbZIP6",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -15170,8 +15170,8 @@
  },
  {
   "locus": "SORBI_3009G062600",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα6",
+  "gene_symbols": "SbPLDα6",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -15186,8 +15186,8 @@
  },
  {
   "locus": "SORBI_3009G064200",
-  "gene_symbols": "",
-  "gene_names": "SbBOR3",
+  "gene_symbols": "SbBOR3",
+  "gene_names": "",
   "references": {
    "35406892": {
     "description": "Boron transporters (BORs)"
@@ -15218,8 +15218,8 @@
  },
  {
   "locus": "SORBI_3009G073100",
-  "gene_symbols": "",
-  "gene_names": "SbZIP7",
+  "gene_symbols": "SbZIP7",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -15234,8 +15234,8 @@
  },
  {
   "locus": "SORBI_3009G074400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK78",
+  "gene_symbols": "SbCDPK78",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15266,8 +15266,8 @@
  },
  {
   "locus": "SORBI_3009G075900",
-  "gene_symbols": "",
-  "gene_names": "SbNIP1-3",
+  "gene_symbols": "SbNIP1-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -15299,7 +15299,7 @@
  {
   "locus": "SORBI_3009G080900",
   "gene_symbols": "SbSWEET3AI",
-  "gene_names": "Sb09g006950",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -15352,8 +15352,8 @@
  },
  {
   "locus": "SORBI_3009G085900",
-  "gene_symbols": "",
-  "gene_names": "SbTIP4-2",
+  "gene_symbols": "SbTIP4-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -15464,8 +15464,8 @@
  },
  {
   "locus": "SORBI_3009G119900",
-  "gene_symbols": "",
-  "gene_names": "SbACP9",
+  "gene_symbols": "SbACP9",
+  "gene_names": "",
   "references": {
    "35879672": {
     "description": "Acyl carrier protein, constitute a very conserved carrier protein family, ACP not only takes part in the fatty acid synthesis process of almost all organisms, but also participates in the regulation of plant growth, development, and metabolism, and makes plants adaptable to stresses."
@@ -15496,8 +15496,8 @@
  },
  {
   "locus": "SORBI_3009G131500",
-  "gene_symbols": "",
-  "gene_names": "SbSIP1-2",
+  "gene_symbols": "SbSIP1-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -15529,7 +15529,7 @@
  {
   "locus": "SORBI_3009G143500",
   "gene_symbols": "SbSWEET1BI",
-  "gene_names": "Sb09g020860",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -15560,8 +15560,8 @@
  },
  {
   "locus": "SORBI_3009G149900",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK79",
+  "gene_symbols": "SbCDPK79",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15576,8 +15576,8 @@
  },
  {
   "locus": "SORBI_3009G153800",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK80",
+  "gene_symbols": "SbCDPK80",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15593,7 +15593,7 @@
  {
   "locus": "SORBI_3009G156600",
   "gene_symbols": "SbLAX5",
-  "gene_names": "SbLAX5",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -15615,7 +15615,7 @@
  {
   "locus": "SORBI_3009G157700",
   "gene_symbols": "SbPHT4;6",
-  "gene_names": "Sb09g022090",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -15662,8 +15662,8 @@
  },
  {
   "locus": "SORBI_3009G162300",
-  "gene_symbols": "Sb09g022460",
-  "gene_names": "SbLAC25",
+  "gene_symbols": "SbLAC25",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -15678,8 +15678,8 @@
  },
  {
   "locus": "SORBI_3009G162800",
-  "gene_symbols": "Sb09g022510",
-  "gene_names": "SbLAC26",
+  "gene_symbols": "SbLAC26",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -15694,8 +15694,8 @@
  },
  {
   "locus": "SORBI_3009G163700",
-  "gene_symbols": "",
-  "gene_names": "SbFLA22",
+  "gene_symbols": "SbFLA22",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -15710,8 +15710,8 @@
  },
  {
   "locus": "SORBI_3009G167900",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK81",
+  "gene_symbols": "SbCDPK81",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15726,8 +15726,8 @@
  },
  {
   "locus": "SORBI_3009G170500",
-  "gene_symbols": "",
-  "gene_names": "SbZIP5",
+  "gene_symbols": "SbZIP5",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -15758,8 +15758,8 @@
  },
  {
   "locus": "SORBI_3009G173700",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA34",
+  "gene_symbols": "SbEXPA34",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -15806,8 +15806,8 @@
  },
  {
   "locus": "SORBI_3009G180000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK82",
+  "gene_symbols": "SbCDPK82",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15822,8 +15822,8 @@
  },
  {
   "locus": "SORBI_3009G180600",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK83",
+  "gene_symbols": "SbCDPK83",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -15934,8 +15934,8 @@
  },
  {
   "locus": "SORBI_3009G208100",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK84",
+  "gene_symbols": "SbCDPK84",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -16014,8 +16014,8 @@
  },
  {
   "locus": "SORBI_3009G219100",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK85",
+  "gene_symbols": "SbCDPK85",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -16126,8 +16126,8 @@
  },
  {
   "locus": "SORBI_3009G232100",
-  "gene_symbols": "",
-  "gene_names": "SbFLA23",
+  "gene_symbols": "SbFLA23",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -16142,8 +16142,8 @@
  },
  {
   "locus": "SORBI_3009G232200",
-  "gene_symbols": "",
-  "gene_names": "SbFLA24",
+  "gene_symbols": "SbFLA24",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -16190,8 +16190,8 @@
  },
  {
   "locus": "SORBI_3009G249000",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK86",
+  "gene_symbols": "SbCDPK86",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -16223,7 +16223,7 @@
  {
   "locus": "SORBI_3009G252000",
   "gene_symbols": "SbSWEET5II",
-  "gene_names": "Sb09g030270",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "sugar transport proteins"
@@ -16302,8 +16302,8 @@
  },
  {
   "locus": "SORBI_3010G006200",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA35",
+  "gene_symbols": "SbEXPA35",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -16373,8 +16373,8 @@
  },
  {
   "locus": "SORBI_3010G033800",
-  "gene_symbols": "",
-  "gene_names": "SbSULTR3;5",
+  "gene_symbols": "SbSULTR3;5",
+  "gene_names": "",
   "references": {
    "29236185": {
     "description": "sulfate transporter"
@@ -16405,8 +16405,8 @@
  },
  {
   "locus": "SORBI_3010G043200",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK87",
+  "gene_symbols": "SbCDPK87",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -16506,7 +16506,7 @@
  {
   "locus": "SORBI_3010G051000",
   "gene_symbols": "SbPIN9",
-  "gene_names": "SbPIN9",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -16543,8 +16543,8 @@
  },
  {
   "locus": "SORBI_3010G055100",
-  "gene_symbols": "",
-  "gene_names": "SbWAK37",
+  "gene_symbols": "SbWAK37",
+  "gene_names": "",
   "references": {
    "36481328": {
     "description": "Wall-associated kinase, widely involved in signal transduction, reproductive growth, responses to pathogen infection and metal ion stress in plants"
@@ -16592,7 +16592,7 @@
  {
   "locus": "SORBI_3010G080900",
   "gene_symbols": "SbPHT3;6",
-  "gene_names": "Sb10g007010",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -16607,8 +16607,8 @@
  },
  {
   "locus": "SORBI_3010G087900",
-  "gene_symbols": "",
-  "gene_names": "SbPIP1-6",
+  "gene_symbols": "SbPIP1-6",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -16623,8 +16623,8 @@
  },
  {
   "locus": "SORBI_3010G092600",
-  "gene_symbols": "",
-  "gene_names": "SbNIP2-3",
+  "gene_symbols": "SbNIP2-3",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -16656,7 +16656,7 @@
  {
   "locus": "SORBI_3010G095100",
   "gene_symbols": "SbPIN10",
-  "gene_names": "SbPIN10",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -16805,8 +16805,8 @@
  },
  {
   "locus": "SORBI_3010G118900",
-  "gene_symbols": "",
-  "gene_names": "SbFLA25",
+  "gene_symbols": "SbFLA25",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -16821,8 +16821,8 @@
  },
  {
   "locus": "SORBI_3010G120100",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB29",
+  "gene_symbols": "SbEXPB29",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -16837,8 +16837,8 @@
  },
  {
   "locus": "SORBI_3010G121800",
-  "gene_symbols": "",
-  "gene_names": "SbEXPB30",
+  "gene_symbols": "SbEXPB30",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -16886,7 +16886,7 @@
  {
   "locus": "SORBI_3010G133300",
   "gene_symbols": "SbPHT1;12",
-  "gene_names": "Sb10g012710",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -16902,7 +16902,7 @@
  {
   "locus": "SORBI_3010G138800",
   "gene_symbols": "SbPHO1;2",
-  "gene_names": "Sb10g014220",
+  "gene_names": "",
   "references": {
    "31671617": {
     "description": "phosphate transporters (PHT)"
@@ -16933,8 +16933,8 @@
  },
  {
   "locus": "SORBI_3010G146100",
-  "gene_symbols": "",
-  "gene_names": "SbTIP2-2",
+  "gene_symbols": "SbTIP2-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -17013,8 +17013,8 @@
  },
  {
   "locus": "SORBI_3010G164100",
-  "gene_symbols": "",
-  "gene_names": "SbNIP4-2",
+  "gene_symbols": "SbNIP4-2",
+  "gene_names": "",
   "references": {
    "28611797": {
     "description": "Aquaporins (AQPs) are a class of channel-forming proteins that play an important role in water transport in plants"
@@ -17029,8 +17029,8 @@
  },
  {
   "locus": "SORBI_3010G171300",
-  "gene_symbols": "",
-  "gene_names": "SbZIP10",
+  "gene_symbols": "SbZIP10",
+  "gene_names": "",
   "references": {
    "36690717": {
     "description": "Zn-regulated, iron-regulated transporter-like proteins"
@@ -17045,8 +17045,8 @@
  },
  {
   "locus": "SORBI_3010G172200",
-  "gene_symbols": "",
-  "gene_names": "CYP79A61",
+  "gene_symbols": "CYP79A61",
+  "gene_names": "",
   "references": {
    "39749417": {
     "description": ""
@@ -17141,8 +17141,8 @@
  },
  {
   "locus": "SORBI_3010G185600",
-  "gene_symbols": "",
-  "gene_names": "SbPLDα7",
+  "gene_symbols": "SbPLDα7",
+  "gene_names": "",
   "references": {
    "35910446": {
     "description": "Phospholipase D"
@@ -17173,8 +17173,8 @@
  },
  {
   "locus": "SORBI_3010G194500",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA36",
+  "gene_symbols": "SbEXPA36",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -17253,8 +17253,8 @@
  },
  {
   "locus": "SORBI_3010G215000",
-  "gene_symbols": "",
-  "gene_names": "SbFLA26",
+  "gene_symbols": "SbFLA26",
+  "gene_names": "",
   "references": {
    "40201754": {
     "description": "Fasciclin-like arabinogalactan proteins"
@@ -17269,8 +17269,8 @@
  },
  {
   "locus": "SORBI_3010G215300",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK88",
+  "gene_symbols": "SbCDPK88",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -17286,7 +17286,7 @@
  {
   "locus": "SORBI_3010G216700",
   "gene_symbols": "SbPIN11",
-  "gene_names": "SbPIN11",
+  "gene_names": "",
   "references": {
    "20528920": {
     "description": "pin-formed"
@@ -17403,8 +17403,8 @@
  },
  {
   "locus": "SORBI_3010G264400",
-  "gene_symbols": "",
-  "gene_names": "SbCDPK90",
+  "gene_symbols": "SbCDPK90",
+  "gene_names": "",
   "references": {
    "29312925": {
     "description": "Calcium dependent protein kinases (CDPKs)"
@@ -17435,8 +17435,8 @@
  },
  {
   "locus": "SORBI_3010G268500",
-  "gene_symbols": "Sb10g030340",
-  "gene_names": "SbLAC27",
+  "gene_symbols": "SbLAC27",
+  "gene_names": "",
   "references": {
    "28529519": {
     "description": "Laccase,  a key enzyme in plant lignin biosynthesis as it catalyzes the final step of monolignols polymerization."
@@ -17451,8 +17451,8 @@
  },
  {
   "locus": "SORBI_3010G268700",
-  "gene_symbols": "",
-  "gene_names": "SbEXPA37",
+  "gene_symbols": "SbEXPA37",
+  "gene_names": "",
   "references": {
    "42754850": {
     "description": "Expansin, non-enzymatic proteins that mediate cell wall loosening and play essential roles in plant growth, development, and stress responses."
@@ -17483,8 +17483,8 @@
  },
  {
   "locus": "SORBI_3010G276100",
-  "gene_symbols": "SbTST3",
-  "gene_names": "SbTMT4",
+  "gene_symbols": "SbTMT4, SbTST3",
+  "gene_names": "",
   "references": {
    "26619184": {
     "description": "Tonoplast Sugar Transporters"
@@ -17518,25 +17518,13 @@
  },
  {
   "locus": "SORBI_3K031800",
-  "gene_symbols": "",
-  "gene_names": "SbIMP-8",
+  "gene_symbols": "SbIMP-8",
+  "gene_names": "",
   "references": {
    "42787373": {
     "description": "Inositol monophosphatase (IMP),  a key enzyme in the inositol signaling pathway and ascorbic acid (AsA) biosynthesis, playing crucial roles in plant growth, development, and abiotic stress responses."
    }
   },
-  "po": [],
-  "to": [],
-  "go": [],
-  "chebi": [],
-  "evidence": {},
-  "status": ""
- },
- {
-  "locus": "Zm00001eb417390",
-  "gene_symbols": "Zm00001e040355",
-  "gene_names": "Zm00001eb417390",
-  "references": {},
   "po": [],
   "to": [],
   "go": [],
