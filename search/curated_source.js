@@ -198,9 +198,18 @@ function buildLut(opts) {
       });
     });
 
-    if (refsSeen > 0 && refsWithText / refsSeen < 0.9) {
+    // This gate exists to catch a WRONG FIELD NAME, which yields a fill rate near zero -- not
+    // curators leaving the function box empty, which is normal and runs about 10% on the CSHL
+    // sheet. The threshold was 0.9, which sat directly on that real rate: tightening the
+    // wrong-column rule in fetch_cshl_curation.js moved the fill from 1038/1153 to 1053/1176 and
+    // tripped it, so the build would have warned about a correct configuration on every run. A
+    // warning that cries wolf every time is worse than no warning.
+    if (refsSeen > 0 && refsWithText / refsSeen < 0.5) {
       console.error(label + ': WARNING only ' + refsWithText + ' of ' + refsSeen +
                     ' references have text in field "' + opts.refTextField + '" -- is refTextField right?');
+    } else if (refsSeen > refsWithText) {
+      console.error(label + ': ' + (refsSeen - refsWithText) + ' of ' + refsSeen +
+                    ' references carry no curator text (the submitter left it blank)');
     }
     console.error(label + ' lookup table: ' + Object.keys(lut).length + ' loci, ' + refsSeen +
                   ' references, ' + termCount + ' ontology terms (' + badTerms + ' unparseable, ' +
