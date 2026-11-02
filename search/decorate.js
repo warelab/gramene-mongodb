@@ -24,6 +24,9 @@ if (isGramene) {
   var rapdb = require('./rapdb')();
   var curated = require('./curated')();
   var generifs = require('./generifs')(3);
+  // Last of the literature adders on purpose: it only ever fills a blank `text`, so every source
+  // that has a real title or curator description must have had its say first.
+  var pubmedTitles = require('./pubmed_title_adder')();
   var qtls = require('./addQtlXrefs')();  // interval-tree containment: union of TO terms from ALL QTLs that fully contain the gene
 }
 var pathwayLUT = require(argv.p);
@@ -228,6 +231,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(rapdb).pipe(tap('rapdb'))
       .pipe(curated).pipe(tap('curated'))
       .pipe(generifs).pipe(tap('generifs'))
+      .pipe(pubmedTitles).pipe(tap('pubmedTitles'))
       .pipe(qtls).pipe(tap('qtls'))
   }
   stream = stream.pipe(fixTranslationLength).pipe(tap('fixTranslationLength'))
