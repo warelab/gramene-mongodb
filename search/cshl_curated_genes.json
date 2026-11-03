@@ -11,7 +11,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -27,7 +26,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -43,7 +41,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -59,7 +56,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -75,7 +71,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -91,7 +86,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -107,7 +101,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -125,9 +118,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -143,7 +138,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -159,7 +153,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -175,7 +168,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -191,7 +183,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -207,7 +198,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -223,7 +213,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -239,7 +228,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -255,7 +243,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -273,9 +260,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -293,9 +281,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -316,9 +305,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -336,9 +326,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -354,7 +345,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -370,7 +360,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -386,7 +375,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -402,7 +390,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -418,7 +405,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -434,7 +420,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -450,7 +435,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -466,7 +450,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -482,7 +465,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -498,7 +480,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -514,7 +495,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -530,7 +510,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -546,7 +525,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -562,7 +540,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -578,7 +555,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -594,7 +570,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -610,7 +585,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -626,7 +600,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -642,7 +615,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -658,7 +630,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -674,7 +645,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -690,7 +660,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -706,7 +675,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -724,9 +692,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -742,7 +711,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -758,7 +726,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -774,7 +741,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -790,7 +756,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -806,7 +771,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -822,7 +786,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -838,7 +801,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -854,7 +816,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -870,7 +831,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -886,7 +846,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -902,7 +861,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -918,7 +876,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -934,7 +891,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -950,7 +906,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -966,7 +921,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -982,7 +936,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -998,7 +951,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1014,7 +966,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1030,7 +981,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1046,7 +996,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1062,7 +1011,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1078,7 +1026,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1094,7 +1041,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1110,7 +1056,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1129,10 +1074,13 @@
   ],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "PO:0025386": "IMP",
-   "PO:0025388": "IMP"
+   "PO:0025386": [
+    "IMP"
+   ],
+   "PO:0025388": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -1150,9 +1098,10 @@
   "go": [
    "GO:0005515"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0005515": "IPI"
+   "GO:0005515": [
+    "IPI"
+   ]
   },
   "status": ""
  },
@@ -1168,7 +1117,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1184,7 +1132,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1200,7 +1147,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1216,7 +1162,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1232,7 +1177,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1248,7 +1192,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1264,7 +1207,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1280,7 +1222,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1296,7 +1237,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1314,9 +1254,10 @@
   ],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "PO:0007014": "IMP"
+   "PO:0007014": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -1332,7 +1273,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1348,7 +1288,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1364,7 +1303,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1380,7 +1318,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1396,7 +1333,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1412,7 +1348,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1428,7 +1363,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1444,7 +1378,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1460,7 +1393,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1482,7 +1414,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1498,7 +1429,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1514,7 +1444,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1530,7 +1459,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1546,7 +1474,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1562,7 +1489,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1578,7 +1504,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1594,7 +1519,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1610,7 +1534,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1626,7 +1549,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1642,7 +1564,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1658,7 +1579,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1674,7 +1594,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1690,7 +1609,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1706,7 +1624,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1722,7 +1639,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1738,7 +1654,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1754,7 +1669,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1770,7 +1684,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1786,7 +1699,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1802,7 +1714,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1820,9 +1731,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -1838,7 +1751,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1854,7 +1766,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1870,7 +1781,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1886,7 +1796,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1902,7 +1811,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1918,7 +1826,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1934,7 +1841,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1953,7 +1859,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1969,7 +1874,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -1985,7 +1889,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2001,7 +1904,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2017,7 +1919,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2033,7 +1934,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2049,7 +1949,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2065,7 +1964,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2081,7 +1979,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2097,7 +1994,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2113,7 +2009,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2129,7 +2024,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2145,7 +2039,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2161,7 +2054,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2177,7 +2069,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2193,7 +2084,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2209,7 +2099,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2225,7 +2114,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2241,7 +2129,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2257,7 +2144,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2273,7 +2159,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2289,7 +2174,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2305,7 +2189,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2321,7 +2204,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2337,7 +2219,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2353,7 +2234,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2369,7 +2249,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2385,7 +2264,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2401,7 +2279,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2417,7 +2294,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2433,7 +2309,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2449,7 +2324,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2465,7 +2339,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2481,7 +2354,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2497,7 +2369,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2513,7 +2384,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2529,7 +2399,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2545,7 +2414,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2561,7 +2429,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2583,7 +2450,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2599,7 +2465,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2615,7 +2480,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2631,7 +2495,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2647,7 +2510,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2663,7 +2525,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2679,7 +2540,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2695,7 +2555,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2711,7 +2570,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2727,7 +2585,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2743,7 +2600,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2759,7 +2615,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2775,7 +2630,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2791,7 +2645,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2807,7 +2660,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2829,7 +2681,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2845,7 +2696,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2867,10 +2717,13 @@
   ],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "PO:0025386": "IMP",
-   "PO:0025388": "IMP"
+   "PO:0025386": [
+    "IMP"
+   ],
+   "PO:0025388": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -2886,7 +2739,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2902,7 +2754,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2918,7 +2769,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2934,7 +2784,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2950,7 +2799,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2966,7 +2814,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2982,7 +2829,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -2998,7 +2844,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3014,7 +2859,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3030,7 +2874,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3046,7 +2889,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3062,7 +2904,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3078,7 +2919,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3094,7 +2934,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3110,7 +2949,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3126,7 +2964,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3142,7 +2979,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3158,7 +2994,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3174,7 +3009,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3190,7 +3024,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3208,9 +3041,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -3226,7 +3060,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3242,7 +3075,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3258,7 +3090,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3274,7 +3105,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3290,7 +3120,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3306,7 +3135,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3322,7 +3150,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3340,9 +3167,10 @@
   "go": [
    "GO:0005515"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0005515": "IPI"
+   "GO:0005515": [
+    "IPI"
+   ]
   },
   "status": ""
  },
@@ -3358,7 +3186,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3374,7 +3201,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3390,7 +3216,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3406,7 +3231,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3422,7 +3246,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3438,7 +3261,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3454,7 +3276,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3470,7 +3291,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3486,7 +3306,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3502,7 +3321,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3518,7 +3336,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3534,7 +3351,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3550,7 +3366,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3566,7 +3381,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3582,7 +3396,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3598,7 +3411,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3614,7 +3426,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3632,9 +3443,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -3650,7 +3462,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3668,9 +3479,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -3686,7 +3498,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3702,7 +3513,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3718,7 +3528,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3739,9 +3548,12 @@
   "go": [
    "GO:0019288"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019288": "IEP"
+   "GO:0019288": [
+    "IEP",
+    "ISS",
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -3757,7 +3569,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3779,10 +3590,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IGI"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -3800,9 +3615,10 @@
   "go": [
    "GO:0004557"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0004557": "IDA"
+   "GO:0004557": [
+    "IDA"
+   ]
   },
   "status": ""
  },
@@ -3818,7 +3634,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3834,7 +3649,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3850,7 +3664,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3866,7 +3679,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3882,7 +3694,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3898,7 +3709,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3914,7 +3724,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3930,7 +3739,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3946,7 +3754,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3962,7 +3769,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3978,7 +3784,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -3994,7 +3799,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4010,7 +3814,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4026,7 +3829,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4042,7 +3844,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4058,7 +3859,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4074,7 +3874,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4090,7 +3889,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4106,7 +3904,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4122,7 +3919,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4138,7 +3934,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4154,7 +3949,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4170,7 +3964,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4192,7 +3985,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4208,7 +4000,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4224,7 +4015,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4240,7 +4030,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4256,7 +4045,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4272,7 +4060,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4288,7 +4075,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4304,7 +4090,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4320,7 +4105,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4336,7 +4120,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4352,7 +4135,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4368,7 +4150,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4386,9 +4167,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IGI"
+   "GO:0016118": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -4404,7 +4186,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4420,7 +4201,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4436,7 +4216,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4452,7 +4231,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4468,7 +4246,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4484,7 +4261,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4500,7 +4276,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4516,7 +4291,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4532,7 +4306,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4548,7 +4321,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4564,7 +4336,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4582,9 +4353,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -4600,7 +4372,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4616,7 +4387,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4632,7 +4402,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4648,7 +4417,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4664,7 +4432,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4680,7 +4447,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4696,7 +4462,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4712,7 +4477,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4728,7 +4492,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4744,7 +4507,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4766,7 +4528,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4782,7 +4543,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4798,7 +4558,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4814,7 +4573,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4830,7 +4588,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4846,7 +4603,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4862,7 +4618,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4880,9 +4635,10 @@
   "go": [
    "GO:0005634"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0005634": "IDA"
+   "GO:0005634": [
+    "IDA"
+   ]
   },
   "status": ""
  },
@@ -4898,7 +4654,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4914,7 +4669,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4930,7 +4684,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4946,7 +4699,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -4968,10 +4720,16 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016117": "IEP",
-   "GO:0016120": "ISS"
+   "GO:0016117": [
+    "IEP",
+    "EXP",
+    "ISS"
+   ],
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -4987,7 +4745,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5003,7 +4760,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5019,7 +4775,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5035,7 +4790,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5051,7 +4805,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5067,7 +4820,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5083,7 +4835,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5099,7 +4850,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5115,7 +4865,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5131,7 +4880,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5147,7 +4895,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5163,7 +4910,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5179,7 +4925,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5195,7 +4940,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5211,7 +4955,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5227,7 +4970,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5243,7 +4985,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5261,9 +5002,10 @@
   "go": [
    "GO:0019288"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019288": "IGI"
+   "GO:0019288": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -5279,7 +5021,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5295,7 +5036,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5311,7 +5051,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5327,7 +5066,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5343,7 +5081,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5359,7 +5096,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5375,7 +5111,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5391,7 +5126,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5407,7 +5141,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5423,7 +5156,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5441,9 +5173,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -5459,7 +5193,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5475,7 +5208,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5491,7 +5223,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5507,7 +5238,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5523,7 +5253,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5541,9 +5270,10 @@
    "TO:0000354"
   ],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "TO:0000354": "IEP"
+   "TO:0000354": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -5559,7 +5289,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5575,7 +5304,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5591,7 +5319,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5607,7 +5334,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5623,7 +5349,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5639,7 +5364,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5655,7 +5379,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5671,7 +5394,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5687,7 +5409,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5703,7 +5424,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5719,7 +5439,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5735,7 +5454,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5751,7 +5469,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5767,7 +5484,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5783,7 +5499,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5799,7 +5514,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5815,7 +5529,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5831,7 +5544,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5847,7 +5559,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5863,7 +5574,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5879,7 +5589,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5895,7 +5604,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5911,7 +5619,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5927,7 +5634,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5943,7 +5649,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5959,7 +5664,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5975,7 +5679,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -5991,7 +5694,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6007,7 +5709,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6029,10 +5730,13 @@
    "GO:0016117",
    "GO:0019288"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016117": "IEP",
-   "GO:0019288": "IGI"
+   "GO:0016117": [
+    "IEP"
+   ],
+   "GO:0019288": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -6050,9 +5754,10 @@
   "go": [
    "GO:0019288"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019288": "IGI"
+   "GO:0019288": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -6068,7 +5773,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6084,7 +5788,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6100,7 +5803,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6116,7 +5818,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6132,7 +5833,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6148,7 +5848,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6164,7 +5863,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6180,7 +5878,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6196,7 +5893,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6212,7 +5908,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6234,7 +5929,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6250,7 +5944,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6266,7 +5959,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6282,7 +5974,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6298,7 +5989,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6314,7 +6004,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6330,7 +6019,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6346,7 +6034,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6362,7 +6049,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6378,7 +6064,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6394,7 +6079,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6410,7 +6094,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6426,7 +6109,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6442,7 +6124,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6458,7 +6139,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6474,7 +6154,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6496,7 +6175,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6512,7 +6190,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6528,7 +6205,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6544,7 +6220,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6560,7 +6235,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6579,10 +6253,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IEP"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -6598,7 +6276,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6614,7 +6291,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6630,7 +6306,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6646,7 +6321,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6662,7 +6336,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6678,7 +6351,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6694,7 +6366,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6710,7 +6381,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6728,9 +6398,11 @@
   "go": [
    "GO:0009813"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0009813": "IDA"
+   "GO:0009813": [
+    "IDA",
+    "ISA"
+   ]
   },
   "status": ""
  },
@@ -6746,7 +6418,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6768,7 +6439,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6784,7 +6454,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6800,7 +6469,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6816,7 +6484,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6832,7 +6499,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6848,7 +6514,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6864,7 +6529,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6880,7 +6544,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6896,7 +6559,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6912,7 +6574,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6928,7 +6589,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6944,7 +6604,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6966,7 +6625,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -6988,7 +6646,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7010,7 +6667,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7026,7 +6682,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7042,7 +6697,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7058,7 +6712,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7074,7 +6727,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7090,7 +6742,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7106,7 +6757,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7128,7 +6778,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7146,9 +6795,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -7164,7 +6815,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7186,7 +6836,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7202,7 +6851,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7218,7 +6866,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7234,7 +6881,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7250,7 +6896,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7268,9 +6913,10 @@
    "TO:0000354"
   ],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "TO:0000354": "IEP"
+   "TO:0000354": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -7288,9 +6934,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -7306,7 +6953,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7322,7 +6968,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7338,7 +6983,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7354,7 +6998,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7370,7 +7013,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7386,7 +7028,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7408,7 +7049,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7424,7 +7064,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7440,7 +7079,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7456,7 +7094,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7472,7 +7109,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7488,7 +7124,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7504,7 +7139,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7520,7 +7154,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7536,7 +7169,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7552,7 +7184,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7568,7 +7199,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7584,7 +7214,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7600,7 +7229,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7616,7 +7244,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7632,7 +7259,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7648,7 +7274,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7664,7 +7289,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7680,7 +7304,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7696,7 +7319,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7712,7 +7334,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7728,7 +7349,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7750,7 +7370,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7766,7 +7385,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7782,7 +7400,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7798,7 +7415,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7814,7 +7430,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7830,7 +7445,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7846,7 +7460,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7862,7 +7475,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7878,7 +7490,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7894,7 +7505,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7916,7 +7526,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7932,7 +7541,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7948,7 +7556,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7964,7 +7571,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7980,7 +7586,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -7996,7 +7601,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8012,7 +7616,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8028,7 +7631,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8044,7 +7646,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8060,7 +7661,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8076,7 +7676,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8098,7 +7697,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8114,7 +7712,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8130,7 +7727,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8146,7 +7742,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8162,7 +7757,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8178,7 +7772,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8194,7 +7787,21 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
+  "evidence": {},
+  "status": ""
+ },
+ {
+  "locus": "SORBI_3004G034000",
+  "gene_symbols": "SbGPM177",
+  "gene_names": "",
+  "references": {
+   "41539970": {
+    "description": "Starch biosynthesis"
+   }
+  },
+  "po": [],
+  "to": [],
+  "go": [],
   "evidence": {},
   "status": ""
  },
@@ -8210,7 +7817,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8229,7 +7835,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8245,7 +7850,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8261,7 +7865,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8279,9 +7882,11 @@
   "go": [
    "GO:0009813"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0009813": "IDA"
+   "GO:0009813": [
+    "IDA",
+    "ISA"
+   ]
   },
   "status": ""
  },
@@ -8297,7 +7902,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8313,7 +7917,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8329,7 +7932,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8345,7 +7947,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8368,10 +7969,13 @@
   "go": [
    "GO:0009809"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0009809": "IMP",
-   "TO:0000731": "IMP"
+   "GO:0009809": [
+    "IMP"
+   ],
+   "TO:0000731": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -8393,7 +7997,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8415,7 +8018,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8434,10 +8036,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IEP"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -8453,7 +8059,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8469,7 +8074,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8490,9 +8094,10 @@
   "go": [
    "GO:0019252"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019252": "IEP"
+   "GO:0019252": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -8508,7 +8113,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8524,7 +8128,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8543,7 +8146,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8559,7 +8161,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8575,7 +8176,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8591,7 +8191,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8607,7 +8206,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8623,7 +8221,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8639,7 +8236,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8655,7 +8251,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8671,7 +8266,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8687,7 +8281,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8703,7 +8296,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8719,7 +8311,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8735,7 +8326,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8751,7 +8341,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8767,7 +8356,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8783,7 +8371,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8799,7 +8386,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8815,7 +8401,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8831,7 +8416,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8847,7 +8431,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8863,7 +8446,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8879,7 +8461,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8895,7 +8476,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8917,7 +8497,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8933,7 +8512,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8949,7 +8527,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8965,7 +8542,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -8983,9 +8559,10 @@
   "go": [
    "GO:0015770"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0015770": "IDA"
+   "GO:0015770": [
+    "IDA"
+   ]
   },
   "status": ""
  },
@@ -9001,7 +8578,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9017,7 +8593,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9036,10 +8611,13 @@
    "GO:0019748",
    "GO:1903036"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:1903036": "IEP",
-   "GO:0019748": "IEP"
+   "GO:1903036": [
+    "IEP"
+   ],
+   "GO:0019748": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -9055,7 +8633,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9071,7 +8648,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9087,7 +8663,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9103,7 +8678,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9119,7 +8693,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9135,7 +8708,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9151,7 +8723,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9167,7 +8738,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9183,7 +8753,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9199,7 +8768,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9215,7 +8783,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9231,7 +8798,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9247,7 +8813,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9263,7 +8828,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9279,7 +8843,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9295,7 +8858,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9311,7 +8873,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9327,7 +8888,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9343,7 +8903,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9359,7 +8918,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9375,7 +8933,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9391,7 +8948,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9407,7 +8963,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9423,7 +8978,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9439,7 +8993,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9455,7 +9008,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9477,7 +9029,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9493,7 +9044,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9509,7 +9059,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9525,7 +9074,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9541,7 +9089,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9559,9 +9106,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -9579,9 +9127,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -9597,7 +9146,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9619,7 +9167,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9635,7 +9182,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9651,7 +9197,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9667,7 +9212,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9686,7 +9230,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9702,7 +9245,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9720,9 +9262,10 @@
   "go": [
    "GO:0019288"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019288": "IGI"
+   "GO:0019288": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -9740,9 +9283,10 @@
   "go": [
    "GO:0019288"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019288": "IGI"
+   "GO:0019288": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -9758,7 +9302,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9774,7 +9317,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9790,7 +9332,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9806,7 +9347,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9822,7 +9362,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9838,7 +9377,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9854,7 +9392,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9870,7 +9407,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9886,7 +9422,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9902,7 +9437,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9918,7 +9452,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9934,7 +9467,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9950,7 +9482,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9966,7 +9497,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9982,7 +9512,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -9998,7 +9527,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10014,7 +9542,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10030,7 +9557,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10046,7 +9572,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10062,7 +9587,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10078,7 +9602,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10094,7 +9617,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10110,7 +9632,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10126,7 +9647,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10142,7 +9662,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10158,7 +9677,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10174,7 +9692,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10190,7 +9707,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10206,7 +9722,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10222,7 +9737,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10238,7 +9752,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10254,7 +9767,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10270,7 +9782,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10292,10 +9803,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IGI"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -10311,7 +9826,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10327,7 +9841,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10345,9 +9858,10 @@
   "go": [
    "GO:0015770"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0015770": "IDA"
+   "GO:0015770": [
+    "IDA"
+   ]
   },
   "status": ""
  },
@@ -10363,7 +9877,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10379,7 +9892,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10400,9 +9912,11 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP",
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -10418,7 +9932,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10434,7 +9947,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10450,7 +9962,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10466,7 +9977,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10488,7 +9998,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10504,7 +10013,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10523,10 +10031,13 @@
    "GO:0000418",
    "GO:0000419"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0000418": "IBA",
-   "GO:0000419": "IBA"
+   "GO:0000418": [
+    "IBA"
+   ],
+   "GO:0000419": [
+    "IBA"
+   ]
   },
   "status": ""
  },
@@ -10542,7 +10053,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10558,7 +10068,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10574,7 +10083,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10590,7 +10098,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10606,7 +10113,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10622,7 +10128,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10644,7 +10149,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10660,7 +10164,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10676,7 +10179,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10692,7 +10194,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10708,7 +10209,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10724,7 +10224,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10740,7 +10239,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10756,7 +10254,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10772,7 +10269,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10788,7 +10284,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10804,7 +10299,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10820,7 +10314,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10836,7 +10329,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10852,7 +10344,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10868,7 +10359,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10884,7 +10374,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10900,7 +10389,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10916,7 +10404,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10932,7 +10419,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10950,9 +10436,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -10968,7 +10456,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -10984,7 +10471,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11000,7 +10486,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11016,7 +10501,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11032,7 +10516,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11048,7 +10531,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11064,7 +10546,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11080,7 +10561,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11096,7 +10576,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11112,7 +10591,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11128,7 +10606,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11144,7 +10621,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11160,7 +10636,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11176,7 +10651,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11192,7 +10666,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11208,7 +10681,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11224,7 +10696,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11242,9 +10713,10 @@
   "go": [
    "GO:1901601"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:1901601": "IDA"
+   "GO:1901601": [
+    "IDA"
+   ]
   },
   "status": ""
  },
@@ -11260,12 +10732,7 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [
-   "CHEBI:81466"
-  ],
-  "evidence": {
-   "CHEBI:81466": "EXP"
-  },
+  "evidence": {},
   "status": ""
  },
  {
@@ -11280,7 +10747,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11296,7 +10762,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11312,7 +10777,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11328,7 +10792,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11344,7 +10807,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11360,7 +10822,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11376,7 +10837,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11392,7 +10852,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11408,7 +10867,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11424,7 +10882,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11440,7 +10897,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11456,7 +10912,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11472,7 +10927,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11488,7 +10942,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11504,7 +10957,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11520,7 +10972,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11536,7 +10987,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11552,7 +11002,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11568,7 +11017,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11584,7 +11032,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11600,7 +11047,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11622,7 +11068,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11638,7 +11083,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11654,7 +11098,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11670,7 +11113,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11686,7 +11128,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11702,7 +11143,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11718,7 +11158,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11734,7 +11173,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11750,7 +11188,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11766,7 +11203,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11782,7 +11218,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11798,7 +11233,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11816,9 +11250,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -11834,7 +11270,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11850,7 +11285,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11868,9 +11302,10 @@
    "TO:0000207"
   ],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "TO:0000207": "IMP"
+   "TO:0000207": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -11886,7 +11321,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11902,7 +11336,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11918,7 +11351,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11934,7 +11366,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11950,7 +11381,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11966,7 +11396,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11982,7 +11411,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -11998,7 +11426,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12014,7 +11441,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12034,10 +11460,13 @@
   "go": [
    "GO:0010584"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0010584": "IMP",
-   "PO:0025281": "IMP"
+   "GO:0010584": [
+    "IMP"
+   ],
+   "PO:0025281": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -12053,7 +11482,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12069,7 +11497,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12087,9 +11514,11 @@
   "go": [
    "GO:0009695"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0009695": "EXP"
+   "GO:0009695": [
+    "EXP",
+    "ISS"
+   ]
   },
   "status": ""
  },
@@ -12105,7 +11534,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12128,11 +11556,18 @@
    "GO:0016120",
    "GO:1901826"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016117": "ISO",
-   "GO:1901826": "ISO",
-   "GO:0016120": "ISS"
+   "GO:0016117": [
+    "ISO",
+    "IGI"
+   ],
+   "GO:1901826": [
+    "ISO"
+   ],
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -12148,7 +11583,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12164,7 +11598,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12180,7 +11613,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12202,7 +11634,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12218,7 +11649,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12234,7 +11664,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12250,7 +11679,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12266,7 +11694,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12282,7 +11709,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12298,7 +11724,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12320,7 +11745,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12336,7 +11760,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12352,7 +11775,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12368,7 +11790,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12384,7 +11805,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12400,7 +11820,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12416,7 +11835,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12432,7 +11850,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12448,7 +11865,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12464,7 +11880,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12480,7 +11895,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12496,7 +11910,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12512,7 +11925,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12528,7 +11940,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12544,7 +11955,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12565,9 +11975,11 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IEP"
+   "GO:0016118": [
+    "IEP",
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -12583,7 +11995,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12599,7 +12010,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12615,7 +12025,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12631,7 +12040,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12647,7 +12055,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12663,7 +12070,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12679,7 +12085,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12695,7 +12100,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12711,7 +12115,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12727,7 +12130,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12746,7 +12148,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12768,10 +12169,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IGI"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -12787,7 +12192,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12809,10 +12213,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IGI"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -12828,7 +12236,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12844,7 +12251,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12860,7 +12266,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12876,7 +12281,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12892,7 +12296,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12908,7 +12311,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12924,7 +12326,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12940,7 +12341,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12956,7 +12356,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -12977,9 +12376,10 @@
   "go": [
    "GO:0009813"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0009813": "EXP"
+   "GO:0009813": [
+    "EXP"
+   ]
   },
   "status": ""
  },
@@ -13001,10 +12401,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IGI"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -13020,7 +12424,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13042,7 +12445,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13058,7 +12460,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13074,7 +12475,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13090,7 +12490,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13106,7 +12505,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13122,7 +12520,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13138,7 +12535,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13154,7 +12550,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13170,7 +12565,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13186,7 +12580,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13202,7 +12595,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13218,7 +12610,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13234,7 +12625,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13250,7 +12640,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13266,7 +12655,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13282,7 +12670,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13298,7 +12685,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13314,7 +12700,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13336,7 +12721,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13358,7 +12742,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13374,7 +12757,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13390,7 +12772,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13406,7 +12787,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13422,7 +12802,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13441,10 +12820,13 @@
    "GO:0009607",
    "GO:0019748"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0019748": "EXP",
-   "GO:0009607": "EXP"
+   "GO:0019748": [
+    "EXP"
+   ],
+   "GO:0009607": [
+    "EXP"
+   ]
   },
   "status": ""
  },
@@ -13460,7 +12842,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13476,7 +12857,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13492,7 +12872,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13508,7 +12887,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13524,7 +12902,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13540,7 +12917,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13556,7 +12932,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13572,7 +12947,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13588,7 +12962,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13604,7 +12977,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13620,7 +12992,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13636,7 +13007,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13652,7 +13022,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13668,7 +13037,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13684,7 +13052,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13700,7 +13067,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13716,7 +13082,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13735,10 +13100,14 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "IEP"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -13756,9 +13125,12 @@
   "go": [
    "GO:0009695"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0009695": "IEP"
+   "GO:0009695": [
+    "IEP",
+    "IMP",
+    "EXP"
+   ]
   },
   "status": ""
  },
@@ -13777,7 +13149,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13793,7 +13164,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13809,7 +13179,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13825,7 +13194,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13841,7 +13209,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13857,7 +13224,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13873,7 +13239,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13898,7 +13263,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13914,7 +13278,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13930,7 +13293,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13946,7 +13308,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13964,9 +13325,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IGI"
+   "GO:0016118": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -13982,7 +13344,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -13998,7 +13359,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14014,7 +13374,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14030,7 +13389,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14046,7 +13404,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14062,7 +13419,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14078,7 +13434,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14094,7 +13449,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14112,9 +13466,10 @@
   "go": [
    "GO:0015770"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0015770": "IDA"
+   "GO:0015770": [
+    "IDA"
+   ]
   },
   "status": ""
  },
@@ -14130,7 +13485,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14146,7 +13500,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14162,7 +13515,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14178,7 +13530,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14194,7 +13545,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14210,7 +13560,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14226,7 +13575,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14242,7 +13590,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14258,7 +13605,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14274,7 +13620,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14290,7 +13635,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14306,7 +13650,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14322,7 +13665,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14338,7 +13680,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14354,7 +13695,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14370,7 +13710,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14386,7 +13725,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14402,7 +13740,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14418,7 +13755,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14434,7 +13770,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14450,7 +13785,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14466,7 +13800,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14482,7 +13815,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14498,7 +13830,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14514,7 +13845,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14530,7 +13860,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14546,7 +13875,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14562,7 +13890,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14578,7 +13905,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14594,7 +13920,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14610,7 +13935,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14626,7 +13950,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14642,7 +13965,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14660,9 +13982,10 @@
   "go": [
    "GO:0005515"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0005515": "IPI"
+   "GO:0005515": [
+    "IPI"
+   ]
   },
   "status": ""
  },
@@ -14678,7 +14001,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14694,7 +14016,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14710,7 +14031,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14728,9 +14048,11 @@
   "go": [
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ]
   },
   "status": ""
  },
@@ -14746,7 +14068,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14762,7 +14083,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14778,7 +14098,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14794,7 +14113,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14810,7 +14128,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14826,7 +14143,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14842,7 +14158,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14858,7 +14173,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14874,7 +14188,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14890,7 +14203,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14906,7 +14218,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14926,10 +14237,13 @@
   "go": [
    "GO:0006694"
   ],
-  "chebi": [],
   "evidence": {
-   "PO:0025386": "EXP",
-   "GO:0006694": "EXP"
+   "PO:0025386": [
+    "EXP"
+   ],
+   "GO:0006694": [
+    "EXP"
+   ]
   },
   "status": ""
  },
@@ -14945,7 +14259,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14961,7 +14274,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14977,7 +14289,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -14993,7 +14304,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15009,7 +14319,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15025,7 +14334,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15041,7 +14349,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15057,7 +14364,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15073,7 +14379,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15095,10 +14400,15 @@
    "GO:0016117",
    "GO:0016120"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016120": "ISS",
-   "GO:0016117": "EXP"
+   "GO:0016120": [
+    "ISS",
+    "IEP"
+   ],
+   "GO:0016117": [
+    "EXP",
+    "ISS"
+   ]
   },
   "status": ""
  },
@@ -15114,7 +14424,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15130,7 +14439,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15146,7 +14454,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15162,7 +14469,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15178,7 +14484,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15194,7 +14499,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15210,7 +14514,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15226,7 +14529,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15242,7 +14544,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15258,7 +14559,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15274,7 +14574,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15290,7 +14589,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": "Accepted"
  },
@@ -15306,7 +14604,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15322,7 +14619,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15344,7 +14640,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15360,7 +14655,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15376,7 +14670,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15392,7 +14685,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15408,7 +14700,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15424,7 +14715,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15440,7 +14730,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15456,7 +14745,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15472,7 +14760,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15488,7 +14775,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15504,7 +14790,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15520,7 +14805,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15536,7 +14820,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15552,7 +14835,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15568,7 +14850,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15584,7 +14865,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15600,7 +14880,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15616,7 +14895,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15635,10 +14913,13 @@
   ],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {
-   "PO:0025386": "IMP",
-   "PO:0025388": "IMP"
+   "PO:0025386": [
+    "IMP"
+   ],
+   "PO:0025388": [
+    "IMP"
+   ]
   },
   "status": ""
  },
@@ -15654,7 +14935,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15670,7 +14950,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15686,7 +14965,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15702,7 +14980,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15718,7 +14995,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15734,7 +15010,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15750,7 +15025,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15766,7 +15040,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15782,7 +15055,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15798,7 +15070,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15814,7 +15085,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15830,7 +15100,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15846,7 +15115,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15862,7 +15130,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15878,7 +15145,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15900,7 +15166,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15916,7 +15181,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15932,7 +15196,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15948,7 +15211,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15964,7 +15226,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15980,7 +15241,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -15996,7 +15256,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16012,7 +15271,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16028,7 +15286,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16044,7 +15301,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16060,7 +15316,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16076,7 +15331,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16092,7 +15346,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16108,7 +15361,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16124,7 +15376,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16140,7 +15391,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16156,7 +15406,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16172,7 +15421,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16188,7 +15436,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16204,7 +15451,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16220,7 +15466,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16236,7 +15481,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16252,7 +15496,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16268,7 +15511,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16284,7 +15526,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16300,7 +15541,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16316,7 +15556,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16332,7 +15571,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16348,7 +15586,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16364,7 +15601,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16383,7 +15619,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16399,7 +15634,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16415,7 +15649,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16431,7 +15664,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16447,7 +15679,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16463,7 +15694,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16479,7 +15709,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16495,7 +15724,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16511,7 +15739,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16527,7 +15754,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16543,7 +15769,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16559,7 +15784,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16575,7 +15799,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16591,7 +15814,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16607,7 +15829,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16623,7 +15844,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16639,7 +15859,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16660,9 +15879,10 @@
   "go": [
    "GO:0005982"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0005982": "EXP"
+   "GO:0005982": [
+    "EXP"
+   ]
   },
   "status": ""
  },
@@ -16678,7 +15898,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16694,7 +15913,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16710,7 +15928,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16726,7 +15943,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16742,7 +15958,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16758,7 +15973,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16774,7 +15988,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16792,9 +16005,10 @@
   "go": [
    "GO:0016118"
   ],
-  "chebi": [],
   "evidence": {
-   "GO:0016118": "IGI"
+   "GO:0016118": [
+    "IGI"
+   ]
   },
   "status": ""
  },
@@ -16816,7 +16030,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16832,7 +16045,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16848,7 +16060,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16864,7 +16075,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16880,7 +16090,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16896,7 +16105,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16912,7 +16120,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16928,7 +16135,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16944,7 +16150,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16960,7 +16165,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16982,7 +16186,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -16998,7 +16201,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17014,7 +16216,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17030,7 +16231,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17046,7 +16246,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17062,7 +16261,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17078,7 +16276,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17094,7 +16291,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17113,7 +16309,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17129,7 +16324,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17145,7 +16339,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17161,7 +16354,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17177,7 +16369,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17193,7 +16384,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17209,7 +16399,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17225,7 +16414,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17241,7 +16429,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17257,7 +16444,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17273,7 +16459,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17289,7 +16474,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17305,7 +16489,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17321,7 +16504,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17337,7 +16519,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17353,7 +16534,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17369,7 +16549,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17385,7 +16564,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17401,7 +16579,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17417,7 +16594,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17433,7 +16609,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17449,7 +16624,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17465,7 +16639,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17481,7 +16654,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17497,7 +16669,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17513,7 +16684,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17529,7 +16699,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17545,7 +16714,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17561,7 +16729,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17577,7 +16744,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17593,7 +16759,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17615,7 +16780,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17631,7 +16795,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17647,7 +16810,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17663,7 +16825,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17679,7 +16840,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17695,7 +16855,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17711,7 +16870,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17727,7 +16885,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17743,7 +16900,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17759,7 +16915,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17775,7 +16930,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17791,7 +16945,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17810,7 +16963,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17826,7 +16978,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  },
@@ -17842,7 +16993,6 @@
   "po": [],
   "to": [],
   "go": [],
-  "chebi": [],
   "evidence": {},
   "status": ""
  }

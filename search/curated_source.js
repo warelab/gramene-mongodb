@@ -23,10 +23,11 @@ var _ = require('lodash');
 var FETCH_TIMEOUT_MS = 60000;
 
 // Ontology key in the feed -> xref db name. ancestor_adder.js only loads LUTs for GO/PO/TO (plus
-// domains/taxonomy), so a CHEBI term will not become an annotation; it falls through to a
-// CHEBI__xrefs field and the `xrefs` capability, which is the right outcome for a vocabulary we
-// carry no hierarchy for.
-var ONTOLOGY_DB = {po: 'PO', to: 'TO', go: 'GO', chebi: 'CHEBI'};
+// domains/taxonomy), so these are the three a curated term can usefully become. CHEBI was carried
+// here once and produced a CHEBI__xrefs field with no name, no ancestors and no hierarchy -- an
+// xref shaped like an annotation that was not one -- so it is now disregarded upstream, in
+// fetch_cshl_curation.js, where it can be counted and reported to the curators.
+var ONTOLOGY_DB = {po: 'PO', to: 'TO', go: 'GO'};
 
 // The GO evidence-code set. Anything outside it is a data-entry error: we fall back rather than
 // invent a mapping. Note the curation sheet's 14 "IPP" rows are almost certainly "IPI", but
@@ -45,6 +46,17 @@ function ontologyId(term) {
   if (typeof term !== 'string') return undefined;
   var m = /^([A-Za-z_]+:[0-9]+)/.exec(term.trim());
   return m ? m[1] : undefined;
+}
+
+// The feed carries evidence as an ARRAY of codes per term, in the order the curator typed them
+// (older artifacts carry a bare string; both are accepted). Only the first is used, because the gene
+// doc has exactly one slot: ancestor_adder.js keys usefulInfo by the term's integer id and sets
+// evidence_code on it, so a second pair for the same term overwrites rather than accumulates, and
+// mergeOntologyXref dedupes on the term alone. Narrowing here, once and on purpose, beats letting an
+// arbitrary last-write-wins decide it further down.
+function firstEvidence(ec) {
+  if (Array.isArray(ec)) return ec.length ? ec[0] : undefined;
+  return ec;
 }
 
 function normalizeEvidence(code, label, warned) {
@@ -132,7 +144,7 @@ function readLocalJson(file, label, urls) {
 
 function buildLut(opts) {
   var label = opts.label || opts.source;
-  var ontologies = opts.ontologies || ['po', 'to', 'go', 'chebi'];
+  var ontologies = opts.ontologies || ['po', 'to', 'go'];
   var source = opts.localFile
     ? readLocalJson(opts.localFile, label, opts.urls)
     : fetchJson(opts.urls, label);
@@ -191,7 +203,7 @@ function buildLut(opts) {
           // Per-term evidence code when the feed carries one (the curation sheet does); otherwise
           // IEA. Never "IDK", which is not an evidence code and which this build shipped on every
           // curated PO/TO annotation until now.
-          var ec = g.evidence && g.evidence[id];
+          var ec = g.evidence && firstEvidence(g.evidence[id]);
           entry[o][id] = normalizeEvidence(ec, label, warnedEvidence);
           termCount++;
         });
@@ -219,7 +231,7 @@ function buildLut(opts) {
 }
 
 module.exports = function (opts) {
-  var ontologies = opts.ontologies || ['po', 'to', 'go', 'chebi'];
+  var ontologies = opts.ontologies || ['po', 'to', 'go'];
   var lutPromise = buildLut(opts);
 
   return through2.obj(function (gene, enc, done) {
