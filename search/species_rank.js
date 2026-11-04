@@ -12,11 +12,17 @@
 // gene_idx in the solr core belongs to the genome mongo ranks species_idx:1. Rank 1 must therefore
 // be the genome a user expects to see first.
 //
-// The two references, in order:
-//   vitis_vinifera        taxon 29760019, the 12X VIT_-keyed reference (29,971 genes). This is the
-//                         namespace the VIT_ Plant Reactome keys and vitis_synonym_adder target.
-//   vitis_viniferapn40024 taxon 29760020, PN40024 v4, Vitvi-keyed (35,197 genes). This is where the
-//                         VVN reactome prefix sat in v4 and the only Vitis genome that had pathways.
+// The two reference assemblies are the SAME genome at two annotation versions -- which is why the
+// pathway crosswalk is called vv_orthologs.v3.v4.txt -- so the newer one leads:
+//   vitis_viniferapn40024 taxon 29760020, "PN40024 v4", Vitvi-keyed, 35,197 genes. The CURRENT
+//                         annotation, and the one the site itself targets: the grapevine entry in
+//                         gramene-meta's demo.js sets targetTaxonId: 29760020 and aims curation at
+//                         the same taxon. It is also the only Vitis genome that had pathways in v4.
+//   vitis_vinifera        taxon 29760019, "PN40024 v3", VIT_-keyed, 29,971 genes. The superseded
+//                         annotation. Still carried, and still the namespace the VIT_ Plant Reactome
+//                         keys and vitis_synonym_adder target, which is why 25_reactome duplicates
+//                         keys across the pair rather than rewriting onto one of them.
+// Ranking v3 first would lead the site with the older annotation and disagree with targetTaxonId.
 //
 // Then the 29 other Vitis assemblies alphabetically — cultivars and wild species interleaved. That
 // ordering is a deliberate default, not a biological claim: no assembly-quality or cultivated-first
@@ -25,8 +31,8 @@
 //
 // NB the maize system_name on this site is `zea_maysb73`, not the main release's `zea_mays`.
 var speciesRank = {
-  vitis_vinifera              : 1,
-  vitis_viniferapn40024       : 2,
+  vitis_viniferapn40024       : 1,
+  vitis_vinifera              : 2,
 
   // the 29 other Vitis assemblies, alphabetical (a product ordering choice, documented)
   vitis_acerifolia            : 3,
