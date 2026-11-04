@@ -25,12 +25,15 @@
 //                     published stable_id in this database has a suffix beginning 'root').
 //                     Caveat: root_id is NOT stable across compara releases, so these ids churn
 //                     between releases while family-based ones do not.
+// grapevine v5: this compara (ensembl_compara_5_87_grape1023v2) has gene_tree_root rows with
+// tree_type='tree' ONLY for clusterset_id='default' -- 34,196 of them, matching grapevine4.genetree
+// exactly -- and ZERO tree_type='supertree' rows. Its other clustersets (nj-dn, nj-ds, nj-mm,
+// phyml-aa, phyml-nt) are alternative-method trees of the same families, which Gramene does not
+// index. So there are no cultivar sets here and no supertrees; search/supertrees.js will return an
+// empty map and no gene gets homology.gene_tree.supertree. The main release's barley/oat/wheat/rice
+// cultivar sets do not exist in this database.
 var TREE_SETS = [
-  { set: 'gene_tree', clusterset: 'default',          prefix: ''             },
-  { set: 'barley',    clusterset: 'barley_cultivars', prefix: 'EplBarleyGT_' },
-  { set: 'oat',       clusterset: 'oat_cultivars',    prefix: 'EplOatGT_'    },
-  { set: 'wheat',     clusterset: 'wheat_cultivars',  prefix: 'EplWheatGT_'  },
-  { set: 'rice',      clusterset: 'rice_cultivars',   prefix: 'EplRiceGT_'   }
+  { set: 'gene_tree', clusterset: 'default',          prefix: ''             }
 ];
 
 // SQL fragment rewriting a gene_tree_root's stable_id to the id this build uses, for `alias`.

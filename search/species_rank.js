@@ -2,40 +2,78 @@
 // presented in (solr sorts on species_idx, and the genes indexes lead with it).
 //
 // It lives here because decorate.js and redecorate.js each had their own copy and they DISAGREED,
-// on both the ranks and the fallback:
-//   decorate.js    sorghum 1, maize 2, rice 3, arabidopsis 4   fallback obj.taxon_id
-//   redecorate.js  rice 1, arabidopsis 2, sorghum 3, maize 4   fallback Math.floor(taxon_id/1000)
-// so running the incremental path after a full decorate silently re-ordered every genome.
+// on both the ranks and the fallback, so running the incremental path after a full decorate
+// silently re-ordered every genome.
 //
-// GRAMENE MAIN-RELEASE ORDER (this is not the SorghumBase order, which leads with sorghum):
-//   arabidopsis, rice, maize, sorghum, grapevine,
-//   then the remaining cultivar-set reference assemblies,
-//   then every other genome.
+// GRAPEVINE SUBSITE ORDER (v5). This is NOT the Gramene main-release order, which leads with
+// arabidopsis/rice/maize; on a grapevine pan-genome site the grape references lead.
 //
-// The cultivar-set references were identified by evidence rather than by guessing at names: of the
-// ~130 oat/barley/wheat genomes in release 70, exactly 9 appear in the DEFAULT gene trees, and
-// those are the reference-quality assemblies. Of those, the four that anchor a cultivar clusterset
-// are below. The other five (triticum timopheevii/spelta/turgidum/dicoccoides/urartu) are distinct
-// SPECIES rather than aestivum cultivars, so they fall in the general tail.
+// This is load-bearing, not cosmetic: 60_solr_genes.sh's freshness gate asserts that the lowest
+// gene_idx in the solr core belongs to the genome mongo ranks species_idx:1. Rank 1 must therefore
+// be the genome a user expects to see first.
+//
+// The two references, in order:
+//   vitis_vinifera        taxon 29760019, the 12X VIT_-keyed reference (29,971 genes). This is the
+//                         namespace the VIT_ Plant Reactome keys and vitis_synonym_adder target.
+//   vitis_viniferapn40024 taxon 29760020, PN40024 v4, Vitvi-keyed (35,197 genes). This is where the
+//                         VVN reactome prefix sat in v4 and the only Vitis genome that had pathways.
+//
+// Then the 29 other Vitis assemblies alphabetically — cultivars and wild species interleaved. That
+// ordering is a deliberate default, not a biological claim: no assembly-quality or cultivated-first
+// ranking was available, so alphabetical is used and recorded here so it can be changed knowingly.
+// Then the 8 outgroups.
+//
+// NB the maize system_name on this site is `zea_maysb73`, not the main release's `zea_mays`.
 var speciesRank = {
-  arabidopsis_thaliana : 1,
-  oryza_sativa         : 2,   // rice; also the rice_cultivars reference
-  zea_mays             : 3,   // was keyed `zea_maysb73` in decorate.js, which is not a release-70
-                              // system_name, so maize never matched its rank at all
-  sorghum_bicolor      : 4,
-  vitis_vinifera       : 5,   // grapevine
+  vitis_vinifera              : 1,
+  vitis_viniferapn40024       : 2,
 
-  // remaining cultivar-set reference assemblies
-  hordeum_vulgare      : 6,   // barley_cultivars reference (Morex), 35,229 genes in the default trees
-  avena_sativa_sang    : 7,   // oat: BOTH are in the default trees, so both are references --
-  avena_sativa_ot3098  : 8,   //      sang 80,403 and ot3098 57,958 genes
-  triticum_aestivum    : 9    // wheat_cultivars reference (IWGSC), 107,319
+  // the 29 other Vitis assemblies, alphabetical (a product ordering choice, documented)
+  vitis_acerifolia            : 3,
+  vitis_aestivalis            : 4,
+  vitis_arizonica             : 5,
+  vitis_berlanderi            : 6,
+  vitis_cabfranc              : 7,
+  vitis_cabsauvignon          : 8,
+  vitis_carmenere             : 9,
+  vitis_chardonnay            : 10,
+  vitis_concord10x            : 11,
+  vitis_corinthseeded         : 12,
+  vitis_corinthseedless       : 13,
+  vitis_flamepac              : 14,
+  vitis_girdiana              : 15,
+  vitis_malbecmagdeleine      : 16,
+  vitis_malbecprunelard       : 17,
+  vitis_merlot                : 18,
+  vitis_monticola             : 19,
+  vitis_mustangensis          : 20,
+  vitis_nebbiolo              : 21,
+  vitis_riesling              : 22,
+  vitis_riparia               : 23,
+  vitis_rotundifolia          : 24,
+  vitis_rupestris             : 25,
+  vitis_sylc12                : 26,
+  vitis_syldvit3351           : 27,
+  vitis_sylvs1                : 28,
+  vitis_tempranilloalbillo    : 29,
+  vitis_tempranillobenedicto  : 30,
+  vitis_zinfandel             : 31,
+
+  // outgroups last
+  arabidopsis_thaliana        : 32,
+  oryza_sativa                : 33,
+  zea_maysb73                 : 34,
+  sorghum_bicolor             : 35,
+  solanum_lycopersicum        : 36,
+  selaginella_moellendorffii  : 37,
+  chlamydomonas_reinhardtii   : 38,
+  drosophila_melanogaster     : 39
 };
 
 // Unnamed genomes fall back to taxon_id, which is always far above the named ranks (the smallest
-// synthetic taxon id in this release is ~3702001 against a maximum rank of 9), so the named tiers
-// always sort first. decorate.js's fallback is kept; redecorate.js's /1000 variant is dropped
-// because it only existed to differ.
+// synthetic taxon id here is 3055001 against a maximum rank of 39), so the named tiers always sort
+// first. All 39 genomes of this release are named above, so the fallback should never fire — it is
+// kept so that adding a core does not silently produce an undefined species_idx.
 function rankFor(obj) {
   var r = speciesRank[obj.system_name];
   return (r === undefined) ? obj.taxon_id : r;
