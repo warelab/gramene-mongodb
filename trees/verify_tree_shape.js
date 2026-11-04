@@ -33,9 +33,22 @@ function fail(msg) { console.error('verify_tree_shape: ' + msg); process.exitCod
       console.log('  ' + sets[i] + ': ' + n + ' trees deeper than ' + DEEP_LIMIT + ' levels');
     }
     console.log('  total: ' + totalDeep + ' trees that the nested shape could not have stored');
-    if (!totalDeep) {
+    // Whether ANY tree should exceed DEEP_LIMIT is a property of the compara, not of the storage
+    // model, so it cannot be asserted unconditionally. Release 70 had 147 such trees across 267
+    // genomes; the grapevine subsite has 39 genomes of which 21 are one species, and its deepest
+    // tree is nowhere near the limit -- zero is the correct answer there, not a dropped-tree bug.
+    // EXPECT_DEEP_TREES=0 says so explicitly; unset keeps the main-release assertion, because the
+    // failure it guards against (deep trees silently dropped, or max_depth not written at all) is
+    // real and is exactly how the original 147 went missing unnoticed.
+    var expectDeep = process.env.EXPECT_DEEP_TREES === undefined
+                   ? 1 : Number(process.env.EXPECT_DEEP_TREES);
+    if (!totalDeep && expectDeep) {
       fail('no tree anywhere is deeper than ' + DEEP_LIMIT + ' levels. Release 70 had 147 of them,' +
-           ' so either the deep trees are being dropped again or max_depth is not being written.');
+           ' so either the deep trees are being dropped again or max_depth is not being written.' +
+           ' If this compara genuinely has no such trees, set EXPECT_DEEP_TREES=0.');
+    } else if (!totalDeep) {
+      console.log('  (EXPECT_DEEP_TREES=0: no trees past ' + DEEP_LIMIT +
+                  ' levels is expected for this compara)');
     }
     collections.closeMongoDatabase();
     return;
