@@ -15,12 +15,19 @@ var writer = fs.createWriteStream(argv.o);
 var binAdder = require('./bin_adder')({fixed:[100,200,500,1000],uniform:[1,2,5,10]});
 if (isGramene) {
   var fixMaizeV4 = require('./fix_maize_v5')();
+  // Runs AFTER fix_maize_v5 on purpose: that one overwrites gene.name unconditionally (no
+  // name===_id guard, unlike every curated adder), so a curated-name adder placed before it
+  // would be clobbered.
+  var maizegdb = require('./maizegdb')();
   var fixSorghumV2 = require('./fix_sorghum_v2')();
   var fixBarley = require('./fix_barley_ids')();
   var thalemine = require('./thalemine')();
   var rapdb = require('./rapdb')();
   var curated = require('./curated')();
   var generifs = require('./generifs')(3);
+  // Last of the literature adders on purpose: it only ever fills a BLANK `text`, so every source
+  // that supplies a real title or curator description must have had its say first.
+  var pubmedTitles = require('./pubmed_title_adder')();
   var qtls = require('./addQtlXrefs')();  // interval-tree containment: union of TO terms from ALL QTLs that fully contain the gene
 }
 var pathwayLUT = require(argv.p);
@@ -214,6 +221,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
   var stream = reader.pipe(parser).pipe(tap('parser'));
   if (isGramene) {
     stream = stream.pipe(fixMaizeV4).pipe(tap('fixMaizeV4'))
+      .pipe(maizegdb).pipe(tap('maizegdb'))
       .pipe(fixSorghumV2).pipe(tap('fixSorghumV2'))
       .pipe(panZeaAdder).pipe(tap('panZeaAdder'))
       .pipe(grassius).pipe(tap('grassius'))
@@ -224,6 +232,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(rapdb).pipe(tap('rapdb'))
       .pipe(curated).pipe(tap('curated'))
       .pipe(generifs).pipe(tap('generifs'))
+      .pipe(pubmedTitles).pipe(tap('pubmedTitles'))
       .pipe(qtls).pipe(tap('qtls'))
   }
   stream = stream.pipe(fixTranslationLength).pipe(tap('fixTranslationLength'))
