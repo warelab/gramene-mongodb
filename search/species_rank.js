@@ -27,11 +27,20 @@
 // The release-70 entries for vitis_vinifera, hordeum_vulgare, avena_sativa_* and triticum_aestivum
 // are dropped: barley, oat and wheat are not in this site's 63 genomes at all, and ranking vitis
 // 5th would put an outgroup ahead of 55 maize assemblies and disagree with v5.
+// A SUBSITE leads with its own reference genome. Copied unchanged from maize this map ranks
+// zea_maysb73 first -- and because the rice site hosts zea_maysb73, that silently makes the
+// RICE site lead with maize. species_idx drives gene_idx, which drives presentation order and
+// the freshness gate in 60_solr_genes (which only compares mongo's rank-1 genome against
+// solr's lowest gene_idx, so it is satisfied either way and would not catch it).
+//
+// Live v9 ranks arabidopsis 1 / oryza_sativa 2 because its rank-3 key was `zea_mays`, which
+// rice's maps do not contain -- the exact bug this file's own header describes. Rice first here.
 var speciesRank = {
-  zea_maysb73          : 1,   // B73 v5 reference, Zm00001eb-keyed
+  oryza_sativa         : 1,   // IRGSP-1.0 Japonica reference, Os####g#######-keyed
   arabidopsis_thaliana : 2,
-  oryza_sativa         : 3,   // rice
-  sorghum_bicolor      : 4
+  sorghum_bicolor      : 3,
+  zea_maysb73          : 4,   // B73 v5, an outgroup on this site
+  zea_maysb73v4        : 5
 };
 
 // Unnamed genomes fall back to taxon_id, which is always far above the named ranks (the smallest
