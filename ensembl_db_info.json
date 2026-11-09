@@ -327,7 +327,7 @@
    "port": 3306,
    "user": "gramene_web",
    "password": "gram3n3",
-   "database": "sorghum_bicolor_variation_8_108_30"
+   "database": "sorghum_bicolor_variation_11_108_30"
   }
  ]
 }
