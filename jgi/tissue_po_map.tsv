@@ -1,0 +1,47 @@
+# JGI tissue -> PO 'organism part'. CURATOR-EDITABLE; the load reads only the first 3 columns.
+# All 40 rows reviewed and accepted 2026-09-22. Rows noting 'accepted' were the
+# judgement calls: peduncle, leaf_blade, panicle, and the three leaf_*_whorl tissues
+# (mapped to shoot system, not leaf, per their descriptions).
+# Sub-regions (inner/middle/outer core, epithelial) are NOT encoded here -- they become a
+# 'sampling site' characteristic so they cannot disturb the organ panel. See condition_map.tsv.
+tissue	organism_part_label	organism_part_po	note
+elongating_internode	stem internode	PO:0020142	
+elongating_internode1	stem internode	PO:0020142	internode 3, epithelial sampling site
+elongating_internode2	stem internode	PO:0020142	internode 4, epithelial sampling site
+growing_internode	stem internode	PO:0020142	
+growing_internode_upper	stem internode	PO:0020142	upper part of growing internode
+internode	stem internode	PO:0020142	
+internode2	stem internode	PO:0020142	
+internode5	stem internode	PO:0020142	
+internode6	stem internode	PO:0020142	
+internode8	stem internode	PO:0020142	
+internode9	stem internode	PO:0020142	
+internode_mature	stem internode	PO:0020142	middle of stem
+lower_internode	stem internode	PO:0020142	
+middle_internode	stem internode	PO:0020142	internode 6
+stem_mid_internode	stem internode	PO:0020142	
+leaf_flag_1_internode	stem internode	PO:0020142	internode below the peduncle -- internode, NOT leaf, despite the name
+stem_1cm	stem	PO:0009047	whole stem 1cm, vegetative
+stem_2mm	stem	PO:0009047	whole stem 2mm, juvenile
+peduncle	peduncle	PO:0009053	accepted 2026-09-22; organ call is 'stem'; po_map entry added
+leaf	leaf	PO:0025034	
+leaf_blade	leaf lamina	PO:0020039	accepted 2026-09-22; po_map entry added
+leaf_lower	leaf lamina	PO:0020039	lower part of 3rd emerging leaf
+leaf_upper	leaf lamina	PO:0020039	upper part of 3rd emerging leaf
+leaf_lower_growing	leaf lamina	PO:0020039	lower blade, closer to sheath
+leaf_upper_growing	leaf lamina	PO:0020039	upper blade, further from sheath
+leaf_lower_whorl	shoot system	PO:0009006	accepted 2026-09-22; lower shoot region incl. sheaths, not a leaf blade
+leaf_middle_whorl	shoot system	PO:0009006	accepted 2026-09-22; middle shoot region, not a leaf blade
+leaf_upper_whorl	shoot system	PO:0009006	accepted 2026-09-22; upper shoot region incl. whorl, not a leaf blade
+leaf_sheath_growing	leaf sheath	PO:0020104	
+sheath	leaf sheath	PO:0020104	
+panicle	panicle inflorescence	PO:0030123	accepted 2026-09-22; po_map entry added
+panicle_lower	panicle inflorescence	PO:0030123	lower half
+panicle_upper	panicle inflorescence	PO:0030123	upper half
+root	root	PO:0009005	
+root_bottom	root	PO:0009005	NB description says 'middle section 2.5 cm' -- name/description disagree
+root_middle	root tip	PO:0000025	NB description says 'root tips (distal 1 cm)' -- name/description disagree
+root_top	root tip	PO:0000025	description: root tips (distal 1 cm)
+seed_dry	seed	PO:0009010	
+seed_imbibed	seed	PO:0009010	
+shoot	shoot system	PO:0009006	
