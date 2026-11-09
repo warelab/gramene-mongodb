@@ -1,0 +1,43 @@
+# JGI (experiment, condition) -> typed assay characteristic. CURATOR-EDITABLE.
+# The 'condition' column in the source sheet is overloaded; this table disambiguates it.
+# PO ids here are ADVISORY -- only 'organism part' drives the organ panel.
+experiment	condition	characteristic_type	characteristic_label	po	note
+developmental.stages	anthesis	developmental stage	whole plant flowering stage	PO:0007016	65 DAE
+developmental.stages	floral_initiation	developmental stage	inflorescence development stage	PO:0001083	44 DAE
+developmental.stages	grain_maturity	developmental stage	whole plant fruit ripening stage	PO:0007010	96 DAE
+developmental.stages	juvenile	developmental stage	seedling development stage	PO:0007131	8 DAE
+developmental.stages	vegetative	developmental stage	sporophyte vegetative stage	PO:0007134	24 DAE
+internode.timecourse	S1	sampling time point	S1		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	S10	sampling time point	S10		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	S11	sampling time point	S11		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	S2	sampling time point	S2		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	S3	sampling time point	S3		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	S6	sampling time point	S6		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	S7	sampling time point	S7		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T1	sampling time point	T1		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T10	sampling time point	T10		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T11	sampling time point	T11		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T2	sampling time point	T2		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T3	sampling time point	T3		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T4	sampling time point	T4		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T5	sampling time point	T5		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T6	sampling time point	T6		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T7	sampling time point	T7		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T8	sampling time point	T8		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	T9	sampling time point	T9		GAP 7: no numeric DAE/DAA recorded; only prose in sample.description
+internode.timecourse	epithelial	sampling site	epithelial tissue		radial/surface sub-region of the internode
+internode.timecourse	inner_core	sampling site	inner core		radial/surface sub-region of the internode
+internode.timecourse	middle_core	sampling site	middle core		radial/surface sub-region of the internode
+internode.timecourse	outer_core	sampling site	outer core		radial/surface sub-region of the internode
+nitrogen	ammonium	growth condition	ammonium sulfate (5 mM) as sole nitrogen source		treatment
+nitrogen	control_fertilized	growth condition	standard fertilized conditions		control
+nitrogen	control_water	growth condition	no nitrogen source		control
+nitrogen	nitrate	growth condition	potassium and sodium nitrate (5 mM) as sole nitrogen source		treatment
+nitrogen	urea	growth condition	urea (5 mM) as sole nitrogen source		treatment
+standard.tissue	anthesis	developmental stage	whole plant flowering stage	PO:0007016	65 DAE
+standard.tissue	expanded	developmental stage	expanded		leaf/sheath 6 of 90-day plants
+standard.tissue	grain_maturity	developmental stage	whole plant fruit ripening stage	PO:0007010	96 DAE
+standard.tissue	juvenile	developmental stage	seedling development stage	PO:0007131	8 DAE
+standard.tissue	senesced	developmental stage	vascular leaf senescent stage	PO:0001054	
+standard.tissue	vegetative	developmental stage	sporophyte vegetative stage	PO:0007134	24 DAE
+standard.tissue	young	developmental stage	young		leaf/sheath 2 of 90-day plants
