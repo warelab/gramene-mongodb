@@ -13,6 +13,18 @@ var compara = require('../ensembl_db_info.json').compara;
 //   TREE_ID_PREFIX    if set, the stable_id's leading '<CLUSTERSET>_' is replaced by this, so
 //                     barley_cultivars_PTHR10000_SF7 -> EplBarleyGT_PTHR10000_SF7. The family part
 //                     (PANTHER/TreeFam) survives, so an id stays traceable upstream.
+//   TREE_ID_ROOT_MARKER
+//                     the marker between TREE_ID_PREFIX and root_id in a SYNTHETIC id
+//                     (default 'root', giving EplWheatGT_root2002288464). Set it to the empty
+//                     string for '<prefix><root_id>'. Its only job is to keep a synthetic id from
+//                     colliding with a published one, whose suffix is always a PANTHER/TreeFam
+//                     family -- so it is safe to drop ONLY where the clusterset publishes no
+//                     stable_ids at all. That is the case on the rice compara
+//                     (ensembl_compara_7_87_rice1025), where all 45,273 default trees are
+//                     unnamed, and oryza9 accordingly served ids of the form ORYZA9GT_<root_id>.
+//                     35_genetrees asserts the no-published-id precondition rather than trusting
+//                     it, so if upstream ever names these trees the build fails instead of
+//                     minting ambiguous ids.
 //
 // EVERY tree of the clusterset is taken, named or not. The cultivar clustersets hold 162,111
 // trees with no stable_id beside 54,034 published ones; those unnamed trees get a synthetic
@@ -22,9 +34,14 @@ var compara = require('../ensembl_db_info.json').compara;
 var TREE_SET = process.env.TREE_SET || 'gene_tree';
 var CLUSTERSET = process.env.CLUSTERSET || 'default';
 var TREE_ID_PREFIX = process.env.TREE_ID_PREFIX || '';
+// Deliberately NOT `|| 'root'`: the empty string is a meaningful value here, and `||` would
+// silently turn it back into 'root'.
+var TREE_ID_ROOT_MARKER = (process.env.TREE_ID_ROOT_MARKER === undefined)
+  ? 'root' : process.env.TREE_ID_ROOT_MARKER;
 console.error('tree set: ' + TREE_SET + '  clusterset: ' + CLUSTERSET +
               '  database: ' + compara.database +
-              (TREE_ID_PREFIX ? '  id prefix: ' + TREE_ID_PREFIX : '  ids: as published'));
+              (TREE_ID_PREFIX ? '  id prefix: ' + TREE_ID_PREFIX : '  ids: as published') +
+              (TREE_ID_PREFIX ? '  synthetic: ' + TREE_ID_PREFIX + TREE_ID_ROOT_MARKER + '<root_id>' : ''));
 var isCurated = require('../curated/curated.json');
 function childNodeComparator(a, b) {
   return a.left_index < b.left_index ? 1 : -1;
@@ -529,7 +546,7 @@ collections.maps.mongoCollection().then(function(mapsCollection) {
               // by id.
               + (TREE_ID_PREFIX
                   ? "case when r.stable_id IS NULL\n"
-                    + " then CONCAT(" + comparaMysqlDb.escape(TREE_ID_PREFIX) + ", 'root', r.root_id)\n"
+                    + " then CONCAT(" + comparaMysqlDb.escape(TREE_ID_PREFIX + TREE_ID_ROOT_MARKER) + ", r.root_id)\n"
                     + " when r.stable_id LIKE " + comparaMysqlDb.escape(CLUSTERSET + '\\_%') + "\n"
                     + " then CONCAT(" + comparaMysqlDb.escape(TREE_ID_PREFIX)
                     + ", SUBSTRING(r.stable_id, " + (CLUSTERSET.length + 2) + "))\n"

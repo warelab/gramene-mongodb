@@ -286,6 +286,22 @@
    "database": "zea_maysb73v4_core_7_108_7"
   }
  ],
+ "extra_cores": [
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativamsu_otherfeatures_8_108_1"
+  },
+  {
+   "host": "cabot",
+   "port": 3306,
+   "user": "gramene_web",
+   "password": "gram3n3",
+   "database": "oryza_sativacshl_cdna_8_108_7"
+  }
+ ],
  "variations": [
   {
    "host": "cabot",

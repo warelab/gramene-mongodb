@@ -15,7 +15,8 @@
 // fires (every default tree has a stable_id), but they are not identical.
 //
 // ID RULES, which every consumer must apply identically or ids will not join:
-//   * default      -- stable_id as published (EPlGT*), no rewrite.
+//   * default      -- stable_id as published (EPlGT*), no rewrite ON A COMPARA THAT NAMES THEM.
+//                     This rice compara names none, so see the note on TREE_SETS below.
 //   * cultivar set -- compara ships 'barley_cultivars_PTHR10000_SF7'; the leading
 //                     '<clusterset>_' is replaced by `prefix`, keeping the PANTHER/TreeFam
 //                     family part so an id stays traceable upstream.
@@ -25,8 +26,14 @@
 //                     published stable_id in this database has a suffix beginning 'root').
 //                     Caveat: root_id is NOT stable across compara releases, so these ids churn
 //                     between releases while family-based ones do not.
+// RICE: the 'default' clusterset of ensembl_compara_7_87_rice1025 publishes NO stable_ids --
+// all 45,273 trees are unnamed -- so unlike release70's compara every id in this set is synthetic
+// and the prefix is not cosmetic: it is the whole id. oryza9 served ORYZA9GT_<root_id>, and the
+// public path stays /oryza_v9 across the cutover, so published tree URLs must keep resolving.
+// Paired with TREE_ID_ROOT_MARKER='' (see genetree.js and build/config.sh), which drops the
+// 'root' marker that would otherwise give ORYZA9GT_root<root_id>.
 var TREE_SETS = [
-  { set: 'gene_tree', clusterset: 'default',          prefix: ''             },
+  { set: 'gene_tree', clusterset: 'default',          prefix: 'ORYZA9GT_'    },
   { set: 'barley',    clusterset: 'barley_cultivars', prefix: 'EplBarleyGT_' },
   { set: 'oat',       clusterset: 'oat_cultivars',    prefix: 'EplOatGT_'    },
   { set: 'wheat',     clusterset: 'wheat_cultivars',  prefix: 'EplWheatGT_'  },
@@ -36,11 +43,16 @@ var TREE_SETS = [
 // SQL fragment rewriting a gene_tree_root's stable_id to the id this build uses, for `alias`.
 // `col` is the table alias (e.g. 'r'), `esc` a mysql escaper. Shared so the tree dump, the
 // supertree map and anything later cannot drift apart on the rule above.
+// The synthetic-id marker, read here so this module and genetree.js cannot disagree about it.
+// Same reason as genetree.js for not using `||`: '' is a meaningful value.
+var ROOT_MARKER = (process.env.TREE_ID_ROOT_MARKER === undefined)
+  ? 'root' : process.env.TREE_ID_ROOT_MARKER;
+
 function idSql(col, ts, esc, allowSynthetic) {
   var parts = [];
   if (allowSynthetic) {
     parts.push(' when ' + col + '.stable_id is null then concat(' +
-               esc(ts.prefix) + ", 'root', " + col + '.root_id)');
+               esc(ts.prefix + ROOT_MARKER) + ', ' + col + '.root_id)');
   }
   if (ts.prefix) {
     parts.push(' when ' + col + '.stable_id like ' + esc(ts.clusterset + '\\_%') +
