@@ -24,6 +24,10 @@ if (isGramene) {
   var rapdb = require('./rapdb')();
   var curated = require('./curated')();
   var generifs = require('./generifs')(3);
+  // Plant Reactome publications: gene -> R-OSA event -> that event AND ALL ITS ANCESTORS ->
+  // literatureReference. Must precede pubmed_title_adder: it supplies a `text` for the
+  // references whose event carries a title, and leaves the rest blank for PubMed to fill.
+  var reactomeLiterature = require('./reactome_literature_adder')();
   // Last of the literature adders on purpose: it only ever fills a blank `text`, so every source
   // that has a real title or curator description must have had its say first.
   var pubmedTitles = require('./pubmed_title_adder')();
@@ -231,6 +235,7 @@ collections.genes.mongoCollection().then(function(genesCollection) {
       .pipe(rapdb).pipe(tap('rapdb'))
       .pipe(curated).pipe(tap('curated'))
       .pipe(generifs).pipe(tap('generifs'))
+      .pipe(reactomeLiterature).pipe(tap('reactomeLiterature'))
       .pipe(pubmedTitles).pipe(tap('pubmedTitles'))
       .pipe(qtls).pipe(tap('qtls'))
   }
