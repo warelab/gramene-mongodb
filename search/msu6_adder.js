@@ -25,7 +25,10 @@ module.exports = function() {
     var hit = lut[gene._id];
     if (hit && hit.MSU_id) {
       if (!gene.hasOwnProperty('alt_id')) gene.alt_id = [];
-      gene.alt_id.push(hit.MSU_id);
+      // MSU_id is a string for the usual 1:1 case and an ARRAY for the 459 RAP loci that
+      // RAP-DB maps to more than one MSU gene. The old hand-made LUT was scalar-only and
+      // could not express those; gene.alt_id is an array and holds them all.
+      gene.alt_id = gene.alt_id.concat(hit.MSU_id);
       gene.alt_id = _.uniq(gene.alt_id);
     }
     that.push(gene);
